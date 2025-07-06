@@ -1,0 +1,341 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+\chapter{开玩Linux}\label{chap:play-with-linux}
+
+很多人是因为迫不得已而使用 Linux。更深入的想一想，还有没有其他原因呢？
+
+对于 Windows 等带图形化界面操作系统，我们所访问的其实是设计者抽象出的交互逻辑。但对于高效的系统，自底向上的彻底理解和掌握是高效使用系统的必备途径。我们得以更深入洞悉文件和文件之间的联系，获得系统更高的主动权。同时，以最小化的人机接口访问能把足够多的资源投入至计算，获得最高的资源利用率。Linux 正是带着这样的思想而诞生的。
+
+因此，学习 Linux，我们需要掌握：
+
+\begin{enumerate}
+    \item 对这一套思想有充分理解、能顺利玩一些玩具
+    \item 使用现有的工具操作命令行、把他人准备好的软件运行起来
+    \item 创造新的工具
+\end{enumerate}
+
+让我们开始吧！
+
+\section{获取Linux}
+
+不管怎么说，Linux最终还是一个操作系统。我们最终还是先要获取一个基于Linux的系统当玩具：不摸一摸，知道用起来舒不舒服，又了解它干啥呢？
+
+\subsection{CLab虚拟机}
+
+我们在这一讲推荐大家直接去 \href{https://clab.pku.edu.cn/}{CLab} 注册一个账号，根据上面的指南连接到虚拟机。这样，你就可以在不破坏自己的系统的情况下，体验 Linux 的魅力了。
+
+当然，这种情况下，我们还可以顺带着复习一下密钥的相关用法。
+
+\subsection{实机安装}
+
+如果我们有一台不怎么重要的机器和一个U盘，可以利用U盘在这台机器上面安装Linux。你可以选择任意的发行版进行安装。
+
+\subsubsection{Ubuntu}
+
+对于Linux新手，我们建议安装Ubuntu系统，因为它有着和Windows类似的图形化界面，且有着丰富的社区支持和文档。以下是一个简要步骤：
+
+\begin{enumerate}
+    \item 获取Linux发行版的ISO镜像文件。可以从（\href{https://ubuntu.com/download}{Ubuntu官网}）下载最新版本的Ubuntu ISO镜像。
+    \item 准备一个U盘，至少8GB容量。将这个镜像文件写入U盘。可以使用工具如Ultra ISO、Rufus（Windows）或Etcher（跨平台）来完成这个操作。
+    \item 将U盘插入目标机器，重启电脑并进入BIOS设置，将U盘设置为首选启动设备。
+    \item 保存设置并重启，系统将从U盘启动，进入Ubuntu安装界面，并按照提示进行安装。我们建议选择“安装Ubuntu”选项，并在安装过程中选择“擦除磁盘并安装Ubuntu”选项（注意，这将删除磁盘上的所有数据，请确保备份重要数据）。
+    \item 安装完成后，重启电脑，拔出U盘，系统将进入Ubuntu桌面环境。
+\end{enumerate}
+
+对于硬盘容量较大且熟悉分区的同学，可以使用磁盘分区工具自己划出一个分区，并将Ubuntu安装在这个分区上。这样可以保留原有的操作系统，并在需要时切换到Ubuntu。在这种情况下我们一般使用grub引导程序来管理多系统启动。
+
+\subsubsection{其他发行版}
+
+如果你对Linux有一定了解，或者想尝试其他发行版，可以选择其他发行版进行安装。对于此类学生，我们非常推荐使用Arch Linux，因为它提供了一个非常灵活和可定制的环境，适合有一定Linux基础的用户。
+
+同时，安装Arch Linux也是一个很好的学习Linux的机会，因为它的安装过程需要用户从头手动配置系统，这样可以更深入地了解Linux的工作原理。
+
+\subsection{使用虚拟机}
+
+使用虚拟机也是一个很好的选择。通过虚拟机，我们可以在现有的操作系统上运行Linux或者其它系统，而不需要重新安装或配置硬件。
+
+一般我们使用的虚拟机软件有VirtualBox、VMware等。不同的虚拟机有着不同的特点和使用方法，但是总体而言在虚拟机中安装一个Linux发行版的步骤与在实机上安装类似（只是不需要设置BIOS和U盘启动等了）。
+
+\subsection{WSL}
+
+WSL是在Windows上使用Linux的最佳方式之一。它允许用户在Windows上运行Linux发行版，并提供了与Linux相似的命令行环境。WSL的安装和配置非常简单，只需要在命令行中运行以下命令即可：
+\begin{verbatim}
+    wsl --install
+\end{verbatim}
+WSL提供了与Linux相似的命令行环境，并且可以直接访问Windows文件系统。例如：
+
+\begin{verbatim}
+    cd /mnt/c/Users/YourUsername/Documents
+\end{verbatim}
+上述命令会在Linux环境中查看Windows的文档目录。这种跨系统的文件访问方式非常方便，可以让用户在Windows和Linux之间无缝切换。这样，我们就可以在Windows上使用Linux的命令行工具和开发环境了。
+
+\section{Linux的基本操作}
+
+得了，来了啥也别说，先跑个小火车：
+
+\begin{verbatim}
+sudo apt update
+sudo apt install -y sl
+sl
+\end{verbatim}
+
+执行以上命令，我们就可以看到一个小火车在终端上跑了过去。
+
+\texttt{sl}是一个玩具软件，它的全称是Steam Locomotive，是一个在终端上显示火车动画的程序。这不仅能够展示ASCII艺术的魅力，还能矫正打错的\texttt{ls}命令（列出目录内容）。
+
+\texttt{apt}是Debian及其衍生发行版（如Ubuntu）中用于管理软件包的工具。它可以用来安装、更新和删除软件包。
+
+于是我们就能看到，一个程序就这么跑起来了。
+
+让我们看看上面内容是怎么发生的。我们刚刚输入的命令大概是这样的形式：
+\begin{verbatim}
+程序 子命令 [选项] [对象]
+\end{verbatim}
+
+其中，除了子命令，选项和对象都是可选的。我们就用第二个命令来举例说说：apt是程序，install是子命令，-y是选项，sl是对象。
+
+看起来很明确。
+
+那么，我们怎么知道有什么程序，我们又怎么使用它们呢？对于第一个问题，我们可以通过搜索来解决；对于第二个问题，我们可以通过手册来解决。
+
+\begin{itemize}
+    \item \texttt{<program> -h}：这是最简单的方式，直接查看程序的帮助信息。通常会列出所有可用的子命令和选项。
+    \item \texttt{man <program>}：这是查看程序手册的方式。手册通常会提供更详细的信息，包括子命令的用法、选项的含义等。但是这个手册可能会比较长，需要耐心阅读。
+    \item \texttt{tldr <program>}：这个命令会给出一些常用的命令示例和简要说明。当然，\texttt{tldr}需要自己安装，当然，安装方法和\texttt{sl}类似。
+\end{itemize}
+
+\section{Linux的文件系统}
+
+好的，我们刚刚已经知道怎么使用Linux了。接下来，我们来看看Linux的文件系统。我们不会涉及到任何复杂的概念，只会介绍一些最基本的内容。
+
+思考以下问题：我们刚刚确实输入了\texttt{sl}命令，但是我们并没有输入\texttt{sl}的路径。那这个\texttt{sl}到底在哪里呢？我们怎么知道它在哪里？（其实我们知不知道真无所谓）终端又怎么知道它在哪里？小火车又是怎么跑起来的？
+
+为了解决这一问题，计算机前辈们发挥了聪明才智：只要把所有的东西都归纳为一个概念，那么不就可以方便的管理了吗？于是，文件系统就诞生了。
+
+Unix和Linux认为，所有的东西都是\textbf{文件}。文件系统就是用来管理这些文件的。这时候，我们就可以使用同样的方式来对所有的东西进行操作了。但是我们又出现了其他问题：
+
+\begin{enumerate}
+    \item 文件怎么组织？
+    \item 文件是谁的？怎么反映不同类型的特性？
+    \item 文件怎么相互联系？
+\end{enumerate}
+
+接下来我们将会逐个回答以上问题。
+
+\subsection{文件的组织}
+
+我们在上一章中提到，Windows系统下，物理先于文件存在，所以有盘符一说。但是Linux不这么认为：Linux认为什么都是文件。于是，Linux的根目录\text{/}就成了所有文件的起点。所有的文件都在这个根目录下。
+
+于是，我们就能够通过目录来解决这一问题。目录是一个特殊的文件，它可以包含其他文件和子目录。我们可以使用\texttt{ls}命令来查看当前目录下的文件和子目录，也可以使用\texttt{cd}命令来切换目录。
+
+Linux的目录结构和Windows极其相似，只是没有盘符，并且使用\texttt{/}作为分隔符，而不是\texttt{\textbackslash}。我们可以使用\texttt{/}来表示根目录，使用\texttt{..}来表示上一级目录，使用\texttt{./}来表示当前目录。需要注意的是，Linux的文件系统是区分大小写的，所以\texttt{/home}和\texttt{/Home}是两个不同的目录。
+
+Linux还有一个重要的目录：用户的家目录。每个用户都有一个家目录，通常位于\texttt{/home/username}。在这个目录下，用户可以存放一些配置文件。我们可以使用\texttt{~}来表示当前用户的家目录。我们不推荐把自己的杂七杂八文件放在根目录或者家目录下，而是放在家目录的子目录下。这样可以更好地组织文件，并且避免与系统文件冲突。
+
+我们在上一章提到，处于安全性考虑，对于可执行文件，如果没有提供路径，系统会在一些特定的目录下查找。因此假如有一个可执行文件\texttt{hello}，我们应当使用\texttt{./hello}来运行它，而不是直接使用\texttt{hello}。
+
+如果我们想要在任何地方都能运行这个程序，我们可以把它加入PATH环境变量中去。PATH是一个环境变量，它包含了一些目录的路径，系统会在未提供路径时去这些目录下查找可执行文件。我们可以使用\texttt{echo \$PATH}命令来查看当前的PATH变量。
+
+\subsection{文件是谁的，有什么属性}
+
+作为多机系统，Linux 中文件如果对每个访问者都相同，那就没有安全性可言了。Linux 的做法是，抽象出了“用户”这个实体（其实就是在 \texttt{/etc/passwd} 里面定义的一行 UID 和用户名的对应而已）。为了方便用户的文件共享，同时抽象出了组（Group）的概念，代表一组互相信任的用户。
+
+对文件的基本操作有读、写、执行三种。我们使用权限位4、2、1来表示这三种操作。每个文件都有三个权限位，分别对应所有者、组和其他用户。我们可以使用\texttt{ls -l}命令来查看文件的权限。
+
+举例：750，表示所有者有读、写、执行权限（7=4+2+1），组有读和执行权限（5=4+1），其他用户没有任何权限（0）。
+
+我们可以使用\texttt{chmod}命令来修改文件的权限。例如，\texttt{chmod 777 file.txt}将会把\texttt{file.txt}的权限设置为777。
+
+\emph{注意：修改文件权限需要有相应的权限，否则会报错。同时，不要执行这类抽象的命令：\texttt{chmod 777 /}，这会导致系统无法正常工作。}
+
+所以可执行文件并不是因为这个文件本身有什么特别，而是这个文件被你赋予了可执行的性质。一个简单的文本文件也可以被加上可执行的权限，也可以发挥操作其他文件的作用。
+
+例如，如果你会写 Python 的话，写一个从输入读取 2 个数字，输出他们和的程序，输出结果到控制台。在本地跑起来这个程序之后，把 \texttt{\#!/usr/bin/env python3} 放在脚本的第一行（这个特殊的一行叫 Shebang）。给这个脚本加上可执行的属性，然后直接运行这个文本！
+
+\subsection{文件的联系}
+
+文件间的联系，主要是通过文件系统的链接来实现的。Linux 中有两种链接：硬链接和软链接。硬链接是指在文件系统中，一个文件可以有多个文件名，存在于多个位置，但是文件系统中只有一份文件副本，所有链接均指向这一副本。删除其中一个文件名并不会影响文件内容，只有所有位置下的文件链接均被删除时，此文件副本才会被最终移除。软链接是指一个文件名指向另一个文件名，删除原文件名会影响软链接的有效性。
+
+硬链接和软链接的区别在于，硬链接是文件系统的一个特性，而软链接是文件系统的一个单独的文件。硬链接只能在同一个文件系统下，而软链接可以在不同文件系统下。硬链接不能链接目录，而软链接可以链接目录。
+
+\section{Linux的进一步使用}
+
+\subsection{root权限的配置}
+
+root 用户是超级用户，拥有着 Linux 系统内最高的权限，在终端内使用su命令即可以超级用户开启终端，root 用户的权限最高，而其他账户则可能会有以能以超级用户身份执行命令的授权（可以类比 Windows 中的管理员权限），但即使是拥有授权的账户在终端输入的命令也不会以超级用户身份执行，如果需要以超级用户的身份运行则需要在此命令前加 sudo。
+
+第一种情况，如果你所选择的发行版在安装过程中没有设置 root 密码的环节（如 Ubuntu），则新创建的用户会拥有管理员权限，一般不需要使用 root 账户，直接使用 sudo 命令即可。
+
+第二种情况，如果你所选择的发行版在安装过程中已经设置了 root 密码，但是自己的账户并没有管理员权限（如 Debian），为了用起来方便一般会用 root 账户给自己的账户添加管理员权限，具体操作如下（\$号后的为输入的命令）：
+
+\begin{verbatim}
+    yourusername@yourcomputer$ su
+    root@yourcomputer$ /usr/sbin/usermod -aG sudo yourusername
+\end{verbatim}
+
+前者表示切换至 root 账户，后者表示为你指定的账户添加管理员权限。有些发行版中 wheel 组表示有 sudo 权限的用户组（例如Arch），也可以用 visudo 编辑 sudo 配置。
+
+\subsection{软件的安装及其源的配置}
+
+如果你的系统在安装的时候已经选择过了国内源则忽略，否则默认源来自于国外。从国外的服务器更新软件包会很慢，可以根据自己系统的版本自行搜索匹配的源并更换。具体参考\href{https://mirrors.pku.edu.cn/Help}{北大开源镜像站的帮助文档}。
+
+以采用 apt 包管理器为例，更新源后需要重新更新软件索引，请执行以下操作：
+
+\begin{verbatim}
+sudo apt-get update
+sudo apt-get upgrade # 如果需要升级软件包
+\end{verbatim}
+
+如果你需要安装软件包，可以使用以下命令：
+\begin{verbatim}
+sudo apt-get install <package-name>
+\end{verbatim}
+
+如果想要卸载软件包，可以使用以下命令：
+\begin{verbatim}
+sudo apt-get remove <package-name>
+\end{verbatim}
+
+有时候，我们不得不使用一些其他安装方式，例如从\texttt{*.deb}包安装。对于这些情况，我们可以使用以下命令：
+
+\begin{verbatim}
+sudo dpkg -i <package-name>.deb # 安装 .deb 包
+sudo apt-get install -f # 修复依赖问题
+\end{verbatim}
+
+有时，软件自带安装脚本，我们直接运行这些脚本即可。
+
+特别注意：我们请尽可能地使用包管理器来安装软件，而不是直接下载二进制文件或源码编译安装。包管理器可以自动处理依赖关系，并且可以方便地进行软件的更新和卸载。如果一定要手动安装软件，请确保你了解该软件的安装过程和依赖关系，并尽可能在虚拟环境或容器中进行测试，以避免对系统造成不必要的影响。
+
+\subsection{再临终端命令行}
+
+在表\ref{tab:terminal-commands}中，我们初步认识了一些常用的命令。接下来我们会对它们进行一定的扩展。
+
+\subsubsection{列出类命令}
+
+\texttt{pwd}命令用于显示当前工作目录的绝对路径。它可以帮助我们了解当前所在的位置。
+
+\texttt{ls}命令用于列出目录中的文件和子目录。我们可以使用一些选项来改变输出的格式：
+
+\begin{itemize}
+    \item \texttt{-l}：以长格式列出文件和目录的详细信息，包括权限、所有者、大小和修改时间等。
+    \item \texttt{-a}：列出所有文件和目录，包括以点号开头的隐藏文件。
+    \item \texttt{-h}：以人类可读的格式显示文件大小，例如将字节转换为KB、MB等。
+    \item \texttt{-R}：递归地列出子目录中的文件和目录。
+    \item \texttt{-t}：按修改时间排序，最新的文件排在最前面。
+\end{itemize}
+
+\subsubsection{文件系统操作类}
+
+\texttt{cd}命令用于切换当前工作目录。
+
+\texttt{mkdir}命令用于创建新目录。我们可以使用一些选项来改变创建目录的方式：
+\begin{itemize}
+    \item \texttt{-p}：递归地创建多级目录，如果上级目录不存在则一并创建。
+    \item \texttt{-v}：显示创建目录的详细信息。
+    \item \texttt{-m}：设置新目录的权限。
+    \item \texttt{-Z}：设置 SELinux 上下文。
+\end{itemize}
+
+\texttt{touch}命令用于创建新文件或更新现有文件的修改时间。我们可以使用一些选项来改变创建文件的方式：
+\begin{itemize}
+    \item \texttt{-a}：只更新访问时间。
+    \item \texttt{-m}：只更新修改时间。
+    \item \texttt{-c}：如果文件不存在则不创建。
+    \item \texttt{-t}：设置文件的时间戳。
+    \item \texttt{-r}：使用指定文件的时间戳。
+\end{itemize}
+
+\texttt{rm}命令用于删除文件或目录。我们可以使用一些选项来改变删除的方式：
+\begin{itemize}
+    \item \texttt{-r}：递归地删除目录及其内容。
+    \item \texttt{-f}：强制删除文件或目录，不提示确认。
+    \item \texttt{-i}：在删除前提示确认。
+    \item \texttt{-v}：显示删除的详细信息。
+\end{itemize}
+
+\texttt{rmdir}命令用于删除空目录。
+
+\texttt{cp}命令用于复制文件或目录。我们可以使用一些选项来改变复制的方式：
+\begin{itemize}
+    \item \texttt{-r}：递归地复制目录及其内容。
+    \item \texttt{-f}：强制覆盖目标文件。
+    \item \texttt{-i}：在覆盖前提示确认。
+    \item \texttt{-v}：显示复制的详细信息。
+    \item \texttt{-u}：只在源文件比目标文件新时才进行复制。
+\end{itemize}
+
+\texttt{mv}命令用于移动或重命名文件或目录。我们可以使用一些选项来改变移动的方式：
+\begin{itemize}
+    \item \texttt{-f}：强制覆盖目标文件。
+    \item \texttt{-i}：在覆盖前提示确认。
+    \item \texttt{-v}：显示移动的详细信息。
+    \item \texttt{-u}：只在源文件比目标文件新时才进行移动。
+\end{itemize}
+
+\texttt{ln}命令用于创建链接。我们可以使用一些选项来改变链接的方式：
+\begin{itemize}
+    \item \texttt{-s}：创建软链接（符号链接）。
+    \item \texttt{-f}：强制覆盖目标链接。
+    \item \texttt{-i}：在覆盖前提示确认。
+    \item \texttt{-v}：显示链接的详细信息。
+    \item \texttt{-T}：将目标视为一个普通文件，而不是目录。
+\end{itemize}
+
+\texttt{tar}命令用于打包和解包文件。我们可以使用一些选项来改变打包和解包的方式：
+\begin{itemize}
+    \item \texttt{-c}：创建一个新的归档文件。
+    \item \texttt{-x}：从归档文件中提取文件。
+    \item \texttt{-f}：指定归档文件的名称。
+    \item \texttt{-v}：显示详细的操作信息。
+    \item \texttt{-z}：使用 gzip 压缩或解压缩归档文件。
+    \item \texttt{-j}：使用 bzip2 压缩或解压缩归档文件。
+    \item \texttt{-J}：使用 xz 压缩或解压缩归档文件。
+    \item \texttt{-p}：保留文件的权限和时间戳。
+    \item \texttt{-C}：切换到指定目录后再进行打包或解包。
+\end{itemize}
+
+\subsubsection{其他命令}
+
+\texttt{cat}命令用于连接文件并打印到标准输出。我们可以使用一些选项来改变输出的方式：
+\begin{itemize}
+    \item \texttt{-n}：为每一行添加行号。
+    \item \texttt{-b}：为非空行添加行号。
+    \item \texttt{-s}：压缩连续的空行。
+    \item \texttt{-E}：在每行末尾显示\texttt{\$}符号。
+    \item \texttt{-T}：将制表符显示为\texttt{\^I}。
+    \item \texttt{-v}：显示不可见字符。
+    \item \texttt{-A}：显示所有不可见字符，包括空格和制表符。
+    \item \texttt{-e}：等同于\texttt{-vE}，显示不可见字符并在行末添加\texttt{\$}符号。
+\end{itemize}
+
+\texttt{echo}命令用于在终端输出文本。我们可以使用一些选项来改变输出的方式：
+\begin{itemize}
+    \item \texttt{-n}：不在输出末尾添加换行符。
+    \item \texttt{-e}：启用转义字符的解释，例如\texttt{\textbackslash n}表示换行，\texttt{\t}表示制表符。
+    \item \texttt{-E}：禁用转义字符的解释。
+    \item \texttt{-c}：不输出任何内容。
+    \item \texttt{-C}：将输出内容转换为大写字母。
+    \item \texttt{-l}：将输出内容转换为小写字母。
+    \item \texttt{-a}：将输出内容转换为首字母大写字母。
+    \item \texttt{-s}：将输出内容转换为首字母小写字母。
+    \item \texttt{-p}：将输出内容转换为首字母大写字母，并将其他字母转换为小写字母。
+\end{itemize}
+
+\texttt{ps}命令用于显示当前运行的进程。我们可以使用一些选项来改变输出的方式：
+\begin{itemize}
+    \item \texttt{-e}：显示所有进程。
+    \item \texttt{-f}：以全格式显示进程信息，包括父进程ID、用户等。
+    \item \texttt{-l}：以长格式显示进程信息。
+    \item \texttt{-u}：显示指定用户的进程。
+    \item \texttt{-p}：显示指定进程ID的进程。
+    \item \texttt{-o}：自定义输出格式。
+    \item \texttt{-H}：以树形结构显示进程之间的关系。
+    \item \texttt{-j}：以作业控制格式显示进程信息。
+    \item \texttt{-x}：显示所有进程，包括没有控制终端的进程。
+\end{itemize}
+
+
+
+\end{document}

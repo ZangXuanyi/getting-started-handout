@@ -1,0 +1,74 @@
+\documentclass[12pt]{report}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage[UTF8, heading=true]{ctex}
+\usepackage{fontspec}
+\usepackage{subfiles}
+\usepackage{hyperref}
+
+\usepackage{xcolor}
+
+% 魔法改造开始喵！
+\makeatletter
+\let\oldhref\href
+\renewcommand{\href}[2]{%
+  \oldhref{#1}{%
+    \color{blue}\underline{#2}%
+    \raisebox{0.2ex}{\tiny$\nearrow$}% 右上箭头
+  }%
+}
+\makeatother
+
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, shapes, calc}
+
+\geometry{a4paper, margin=1in}
+
+\title{计算概论衔接课讲义}
+\author{臧炫懿}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\newpage
+
+\chapter*{引言}
+
+计算机基础科学教育是北京大学近些年一直努力推进的教育之一，体现在北京大学的所有学生都应修习《计算概论》这一门课程。然而，因为众所周知的原因，高中乃至初中对于计算机的教育水平参差不齐，因此同学们的基础也不尽相同，这导致部分基础较差的同学在学习《计算概论》时会遇到困难。同时，值得吐槽的是，大学计算机基础教育的内容往往过于理论化，缺乏实用性，这使得同学们在学习过程中感到枯燥乏味，在学习之后也很难将所学知识灵活应用到实际生产与生活中。
+
+一方面为了帮助同学们修习《计算概论》，另一方面为了帮助同学们更好地了解计算机以方便同学们在之后的学习和科研，北京大学学生Linux俱乐部（LCPU）开设了《LCPU先导课》这一门课程。比起“CPU是怎么构成的”“软件是怎么工作的”这种理论知识，这门课更注重于“我们应该购买什么CPU”“我们应该怎么搭建一个软件开发平台”这类的实用知识。简而言之，我们在这节课上会讲一些\textbf{正课不会讲、但是用处极大}的知识。比起理论知识，我们依然将会更注重于实用。
+
+本课程的目标是将同学们的计算机水平快速提升至能够接受大学计算机基础教育的水平。我们认为来上本课程的同学都已经具备了最基本的计算机操作能力，也就是说我们不会安排类似“怎样使用鼠标”这种内容。
+
+本课程以\textbf{本人实践和经验}为基底讲授。如果本课程中的内容和正课中的内容或要求有差异，请以正课为准。
+
+该讲义集成了LCPU衔接课（暑假）的内容，并删去了购机指南一节。当然，我们在线下不会讲述这些内容。
+
+希望本课程能够对同学们有所帮助。
+
+\part{暑假基础课讲义}
+
+\subfile{chapters/01-encounter.tex}
+
+\subfile{chapters/02-knowledge-acquirement.tex}
+
+\subfile{chapters/03-initial-usage.tex}
+
+\part{线下进阶课讲义}
+
+\subfile{chapters/05-coding.tex}
+
+\subfile{chapters/06-text-processing.tex}
+
+\subfile{chapters/07-drive-your-pc.tex}
+
+\subfile{chapters/08-play-with-linux.tex}
+
+\end{document}

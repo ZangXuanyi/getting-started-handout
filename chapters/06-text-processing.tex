@@ -1,0 +1,684 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+\chapter{文字排版}
+
+文本编辑工具是我们表达思想、传递知识的重要手段。无论是在科研、写作还是展示中，排版都是重要且必要的内容；我们需要选择合适的排版工具，以大大提高作品质量。
+
+目前最常用的排版工具或语言有 Microsoft Word、Markdown、LaTeX 和 Typst 等。每种工具都有其特点和适用场景：在日常生活中，Microsoft Word因其简单易用、所见即所得的特点而广受欢迎；Markdown因为其轻量级和易于学习的特点而在技术文档和博客中广泛使用；在科研写作中，又属 LaTeX 最为常用，因为它提供了强大的排版功能，尤其是在处理复杂的数学公式和图表时；而 Typst 则是近年来新兴的排版工具，旨在提供一种更直观、更易于使用的排版方式，正在年轻一代技术人中逐渐流行开来。
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{||c||c|c|c|c||}
+\hline\hline
+\textbf{特性} & \textbf{MS Word} & \textbf{Markdown} & \textbf{LaTeX} & \textbf{Typst} \\
+\hline\hline
+安装 & 简单 & 简单 & 难 & 简单 \\
+\hline
+语法复杂度 & 非常简单 & 简单 & 高 & 中 \\
+\hline
+编译速度 & 较快 & 快 & 慢 & 快 \\
+\hline
+排版能力 & 较强 & 一般 & 极强 & 较强 \\
+\hline
+模板能力 & 几乎没有 & 中等 & 强 & 强 \\
+\hline
+编程能力 & 无 & 无 & 强，风格古老 & 强，风格现代 \\
+\hline
+方言 & 无 & 极多 & 有 & 较少 \\
+\hline\hline
+\end{tabular}
+\caption{不同排版工具的对比}
+\end{table}
+
+\section{Markdown}
+
+Markdown 是一种轻量级的标记语言，可用于在纯文本文档中添加格式化元素。和其他排版工具相比，它仅仅使用十几个记号进行排版。这使得它易于学习，使得使用者能够更专注于内容的同时，快速地进行美观大方的排版。
+
+Markdown 无需安装，用户使用任何文本编辑器即可编写 Markdown 文档。一般的，VS Code已经集成了MD的语法高亮和预览功能，用户只需要安装Markdown插件即可。
+
+\subsection{Markdown 的语法}
+
+Markdown 的内容输入和纯文本文件几乎一模一样，接下来我们将逐个介绍 Markdown 排版所用到的控制符号。值得注意的是，常用的标点符号（逗号、句号、问号等）均不是控制符号。不过，在此之前，请把你的输入法标点符号切换为半角，防止出现类似于￥￥的臭名昭著的错误。
+
+值得注意的是，Markdown 的语法并不是固定的，不同的 Markdown 渲染器可能会有一些差异，这被称作\textbf{方言性}。我们在这里介绍的是最常见也最通用的 Markdown 语法。同时，你在不同的地方看到的 MarkDown 渲染结果可能会不同，这也是正常现象。
+
+\subsubsection{分段、换行、分割线}
+
+在 Markdown 中，必须通过空行来进行分段。也就是说，如果你想要对文件进行分段，需要在两段之间加入一个空行。特别注意，Markdown 不接受缩进或者首行缩进，所以不要使用 Tab 键或者空格进行缩进！（否则会编译为代码块）
+
+而如果希望仅仅换行而不分段，则仅仅在行尾加入两个空格，然后另起一行，在新的行中书写; 或者使用 HTML 标记，也就是 <br> 符号，该符号无需另起一行也可以进行换行操作。
+
+对于分割线 (你经常会在知乎看见这种分割线)，请在单独一行上使用三个或多个星号 (***)、连接号 (---) 或下划线 (\_\_\_) ，并且不能包含其他内容。为了兼容性考虑，请在该分割线前后加上空行。
+
+\subsubsection{标题}
+
+Markdown 使用井号（\#）来表示标题。井号的数量表示标题的层级，例如：
+
+\begin{verbatim}
+# 一级标题
+## 二级标题
+### 三级标题
+\end{verbatim}
+
+\subsubsection{强调、删除}
+
+在 Markdown 中，可以使用星号 (*) 或下划线 (\_) 来表示强调。单个星号或下划线表示斜体，两个星号或下划线表示粗体。同时，还可以使用波浪号(~)来表示删除线，例如：
+
+\begin{verbatim}
+*斜体文本*
+**粗体文本**
+***粗斜体文本***
+~~删除线文本~~
+\end{verbatim}
+
+\subsubsection{转义}
+
+在 Markdown 中，如果需要输入特殊字符（例如星号、井号等），可以使用反斜杠 (\textbackslash) 来进行转义。例如，\textbackslash* 代表一个星号。
+
+\subsubsection{代码和代码块}
+
+在 Markdown 中，可以使用反引号来表示代码。单个反引号表示行内代码，三个反引号表示代码块。例如：
+
+\begin{verbatim}
+`行内代码`
+
+```
+代码块
+```
+\end{verbatim}
+
+如果需要在代码块中打出反引号且防止此反引号被编译，只要保证用于包装的反引号数量比防止编译的反引号数量多就可以了。
+
+\subsubsection{引用}
+
+在 Markdown 中，可以使用大于号 (>) 来表示引用。引用块也是可以嵌套的，只需要在每一行的开头添加一个大于号即可。例如：
+
+\begin{verbatim}
+> 这是一段引用文本。
+> > 这是一段嵌套的引用文本。
+\end{verbatim}
+
+\subsubsection{列表}
+
+在 Markdown 中，可以使用减号 (-) 来表示无序列表。例如：
+
+\begin{verbatim}
+- 列表项 1
+- 列表项 2
+- 列表项 3
+\end{verbatim}
+
+有序列表则使用数字加点的方式表示，例如：
+
+\begin{verbatim}
+1. 列表项 1
+2. 列表项 2
+3. 列表项 3
+\end{verbatim}
+
+\subsubsection{表格}
+
+在 Markdown 中，可以使用竖线 (|) 来表示表格。表格的第一行是表头，第二行是分隔线，后面的行是表格内容。例如：
+
+\begin{verbatim}
+| 列表项 1 | 列表项 2 | 列表项 3 |
+| -------- | -------- | -------- |
+| 内容 1  | 内容 2  | 内容 3  |
+\end{verbatim}
+
+\subsubsection{外部资源：链接、图片}
+
+在 Markdown 中，可以使用方括号和圆括号来表示链接。例如：
+
+\begin{verbatim}
+[链接文本](https://www.example.com)
+\end{verbatim}
+
+在 Markdown 中，可以使用感叹号、方括号和圆括号来表示图片。例如：
+
+\begin{verbatim}
+![图片描述](https://www.example.com/image.png)
+\end{verbatim}
+
+\subsubsection{数学公式}
+
+在 Markdown 中，可以使用美元符号 (\$) 来表示行内公式。例如：
+
+\begin{verbatim}
+这是一个行内公式 $E=mc^2$ 的示例。
+\end{verbatim}
+
+如果需要输入块级公式，可以使用两个美元符号 (\$\$) 来包裹公式。例如：
+
+\begin{verbatim}
+这是一个块级公式的示例：
+$$ E=mc^2 $$
+\end{verbatim}
+
+大多数的 Markdown 编译器都会正确渲染 LaTeX 公式，但是不排除少数编译器不支持渲染 LaTeX。一般而言，不支持渲染的编译器将会原样显示公式内容。开始写作前试试编辑器能否正常渲染公式总是好的选择。
+
+\section{\LaTeX}
+
+\LaTeX 是一种基于 TeX 的排版系统，广泛用于学术论文、书籍和其他需要高质量排版的文档。与 Markdown 相比，\LaTeX 提供了更强大的排版功能，尤其是在处理复杂的数学公式和图表时。
+
+它的源文档与 Markdown 的简洁干净不同，而是充斥了各种各样的反斜杠，大括号和宏。这表明了如果直接使用 LaTeX 进行文本编辑的话会令人极度头大乃至效率降低；因此我个人建议同学们在使用上述工具时，最好是心中打好腹稿然后再进行工作。
+
+\subsection{LaTeX 的安装}
+
+虽然 LaTeX 功能强大，但是其安装过程非常缓慢且困难。对于不愿意在自己电脑上本地安装这东西的读者，笔者建议使用一些线上编译器，例如著名的 Overleaf 等。PKU LaTeX 也是一个线上编译器，由 LCPU 开发并维护，欢迎大家使用！
+
+LaTeX的安装冗长且复杂，通常需要安装一个完整的 TeX 发行版，例如 TeX Live。
+
+\subsubsection{Windows机器}
+
+在安装新的 TexLive 之前，笔者建议彻底删除任何旧版的 CTeX 套装，同时检查环境变量中有没有C:\textbackslash Windows \textbackslash System32。如无，请将上述路径添加回环境变量中去。
+
+然后，检查自己的用户名是不是无空格的英文。如果不是，建议修改，这是一个一劳永逸的办法。另一个办法是执行以下命令（注意：PowerShell 用户请自行替换命令为正确的命令）:
+
+\begin{verbatim}
+  mkdir C:\temp
+  set TEMP=C:\temp
+  set TMP=C:\temp
+\end{verbatim}
+
+如无意外，用户可以从最近的 CTAN 源下载 TexLive 的相关镜像（这个镜像大小高达 6GB）。当然，官网下载过程是非常缓慢的，如果实在是无法忍受其速度，可以考虑改用其他镜像站。
+
+由于未知原因，如果计算机上提前安装了jdk、mingw或Cygwin，建议暂时先把以上软件从环境变量中剔除，等整个安装好了以后再加回去。2345 好压可能也会导致类似的错误，本人建议彻底卸载之，并从此以后不要碰相关的东西；笔者推荐使用 7z 这个压缩软件。
+
+将下载下来的虚拟光驱镜像装载到虚拟光驱中，然后执行其中的批处理文件进行安装。安装过程中，建议选择“安装所有包”以防出现各种未知的错误。之后，在弹出的窗口中选择清华源（校外）或者北大源（校内，速度更快）并进行下载安装。安装过程可能需要较长时间，请耐心等待。
+
+如果你不希望安装在默认的 C:\textbackslash texlive 目录下，可以在安装过程中选择自定义安装路径。但是，该目录不应包含任何非 ASCII 字符，或者说不应包含空格或其他非英文特殊字符。安装完成后，建议将 TeX Live 的 bin 目录添加到系统的环境变量中，以便在命令行中直接使用 LaTeX 命令。我们不建议安装TexLive 的 GUI 前端，因为它不易于使用。
+
+\subsubsection{Linux: 以Ubuntu为例}
+
+在安装前，建议将Ubuntu源更改至国内源以提高下载速度。建议直接去清华大学源提供的现成配置文件。
+
+然后，下载光盘镜像，并进行装载。
+
+\begin{verbatim}
+  sudo apt install fontconfig gedit 
+  sudo mkdir /mnt/texlive 
+  sudo mount ./texlive2025.iso /mnt/texlive 
+  sudo /mnt/texlive/install-tl
+\end{verbatim}
+
+之后，终端会弹出大量内容，我们可以按照提示进行操作。安装完毕后，将安装镜像卸载：
+
+\begin{verbatim}
+  sudo umount /mnt/texlive
+  sudo rm -r /mnt/texlive # 删除临时挂载目录
+\end{verbatim}
+
+在安装完毕后，安装程序会提示用户将一些目录添加到环境变量中。用户可以按照提示进行操作。
+
+之后，我们应当配置字体。如果用户改变了安装路径，应将path/改为自己的实际安装路径。
+
+\begin{verbatim}
+  sudo cp path/texmf-var/fonts/conf/texlive-fontconfig.conf \
+    /etc/fonts/conf.d/09-texlive.conf
+  sudo fc-cache -fsv
+\end{verbatim}
+
+\subsection{LaTeX 在VS Code的配置}
+
+一般情况下，LaTeX 有两个编译器：pdfLaTeX 和 XeLaTeX。前者是传统的 LaTeX 编译器，适合简单的英文文档；后者则支持 Unicode 字符和 OpenType 字体，适合处理中文文档。我们建议通过手动配置来指定使用 XeLaTeX 编译器。
+
+首先，我们应当下载并安装 VS Code 的 LaTeX Workshop 插件。该插件提供了 LaTeX 的语法高亮、自动补全、编译和预览等功能。之后，打开你的Code的用户设置json文件，并添加以下配置：
+
+\begin{verbatim}
+    "latex-workshop.latex.tools": [
+        {
+            "name": "xelatex",
+            "command": "xelatex",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "%DOC%"
+            ]
+        }
+    ],
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "xelatex",
+            "tools": [
+                "xelatex"
+            ]
+        }
+    ],
+\end{verbatim}
+
+然后，如果没有什么问题的话，VS Code 就会使用 XeLaTeX 编译器来编译你的 LaTeX 文档了。
+
+我们非常建议关闭LaTeX Workshop的自动清理功能，因为它会在每次编译后删除所有的辅助文件，这会导致目录、参考文献等相关功能难以正常工作——这些工作往往要求连续编译两次，因此辅助文件是很必要的。为了关闭这一功能，我们可以在用户设置json文件中添加以下配置：
+\begin{verbatim}
+    "latex-workshop.latex.autoClean.run": "never",
+\end{verbatim}
+
+如果我们不编译很长的文章的话，可以打开自动编译功能，这样每次保存文档时，VS Code 都会自动编译 LaTeX 文档。但是对于超长文档，自动编译会导致每次习惯性按下保存时都要等待许久。我们需要按需开启或关闭自动编译功能。可以在用户设置json文件中添加以下配置：
+\begin{verbatim}
+    "latex-workshop.latex.autoBuild.run": "onSave",
+\end{verbatim}
+这样每次保存文档时，VS Code 都会自动编译 LaTeX 文档。将 "onSave" 改为 "never" 则可以关闭自动编译功能。
+
+\subsection{LaTeX 的语法}
+
+一个 LaTeX 文档通常由以下几个部分组成：
+\begin{itemize}
+  \item 文档类声明：指定文档的类型和格式。
+  \item 导言区：加载宏包和设置文档的全局参数。
+  \item 正文：实际的内容部分。
+\end{itemize}
+
+一个简单的 LaTeX 文档示例如下：
+\begin{verbatim}
+  \documentclass{article}
+  \usepackage{amsmath}
+
+  \begin{document}
+  \title{我的第一篇 LaTeX 文档}
+  \author{张三}
+  \date{\today}
+  \maketitle
+  \section{引言}
+  这是一篇 LaTeX 文档。我们可以在这里写一些数学公式：
+  \begin{equation}
+  E=mc^2
+  \end{equation}
+  \section{结论}
+  LaTeX 是一种强大的排版工具，适用于学术论文和书籍等文档的排版。
+  \end{document}
+\end{verbatim}
+
+\subsubsection{文档类声明}
+文档类声明是 LaTeX 文档的第一行，指定了文档的类型和格式。常用的文档类包括：
+\begin{itemize}
+  \item article：文章。最基本的文档类型。用于排版不太长（几页）的文字。
+  \item report：报告。用于排版较长（数十页）的文章。支持章节和附录。
+  \item book：书籍。用于排版更长（数百页或者更多）的文章或者书籍，支持章节、索引和目录等功能。
+  \item letter：信件。通常用于排版纸质的正式信件。
+  \item beamer：幻灯片（Beamer是德语）。用于制作幻灯片演示文稿。
+  \item moderncv：现代英式简历。
+\end{itemize}
+
+要声明一个文档类，只需在文档的第一行使用 \texttt{\textbackslash documentclass} 命令。例如，要声明一个文章类型的文档，可以使用以下命令：
+\begin{verbatim}
+  \documentclass{article}
+\end{verbatim}
+
+\subsubsection{导言区}
+导言区是 LaTeX 文档的第二部分，用于加载宏包和设置文档的全局参数。宏包是 LaTeX 的扩展功能，可以提供额外的排版功能和样式。
+在导言区，可以使用 \texttt{\textbackslash usepackage} 命令来加载宏包。例如，要加载 amsmath 宏包以支持数学公式，可以使用以下命令：
+\begin{verbatim}
+  \usepackage{amsmath}
+\end{verbatim}
+
+除此之外，还可以通过其他命令来设置文档的全局参数，例如字体、行距、页边距等。一些常用的全局参数设置命令可以在\ref{sec:latex-packages}中找到。
+
+\subsubsection{正文}
+正文是 LaTeX 文档的主要内容部分。在正文中，可以使用各种命令来添加标题、段落、列表、表格、图片等内容。
+
+\subsection{LaTeX 的常用命令}
+
+\subsubsection{标题}
+
+使用 \texttt{\textbackslash section}、\texttt{\textbackslash subsection} 和 \texttt{\textbackslash subsubsection} 命令来添加标题，这三个命令分别可以添加一级标题、二级标题和三级标题，这些标题会自动标号。对于\texttt{report}和\texttt{book}文档类，还可以使用 \texttt{\textbackslash chapter} 命令添加章节标题，这些标题也会编号。
+
+我们还可以使用 \texttt{\textbackslash title}、\texttt{\textbackslash author} 和 \texttt{\textbackslash date} 命令来设置文档的标题、作者和日期。然后使用 \texttt{\textbackslash maketitle} 命令来生成标题页。同时，诸如 \texttt{\textbackslash section*}等命令可以生成无编号的标题。
+
+\subsubsection{段落}
+
+在 LaTeX 中，段落是通过空行来分隔的。要开始一个新段落，只需在上一段的末尾添加一个空行即可。
+
+\subsubsection{换行}
+
+如果需要在段落中换行，可以使用 \texttt{\textbackslash newline} 命令，或者在行尾添加两个空格后再换行。也可以使用 \texttt{\textbackslash \textbackslash} 来换行，我们一般使用的是这一种方式。
+
+\subsubsection{强制空格}
+
+对于纯英语的文本，LaTeX 会自动处理空格。但有时在英汉混写或纯汉语的文档中，代码中的空格不会编译，此时我们需要在文本中插入一个强制空格。可以使用 \texttt{\textbackslash } 命令来实现，这个反斜杠前后都应该加上空格。例如：
+\begin{verbatim}
+  这是一个强制 \ 空格的例子。
+\end{verbatim}
+
+\subsubsection{转义字符和反斜杠}
+
+在 LaTeX 中，反斜杠 (\textbackslash) 是一个特殊字符，用于引入命令和转义。例如\texttt{\textbackslash \$}可以强制输出美元符号而不是将其视为数学公式的开始。如果需要在文本中输入反斜杠本身，不可以使用两个反斜杠 (\textbackslash\textbackslash)，而是需要使用 \texttt{\textbackslash textbackslash} 命令来实际地打出一个反斜杠。
+
+\subsubsection{数学公式}
+
+LaTeX 对数学公式的支持非常强大。可以使用美元符号 (\$) 来包裹行内公式，或者使用两个美元符号 (\$\$) 来包裹块级公式。例如：
+\begin{verbatim}
+  这是一个行内公式 $E=mc^2$ 的示例。
+  
+  这是一个块级公式的示例：
+  $$ E=mc^2 $$
+\end{verbatim}
+
+除此之外，也可以使用 \texttt{\textbackslash begin\{equation\}} 和 \texttt{\textbackslash end\{equation\}} 来包裹数学公式，这样可以自动编号公式。例如：
+\begin{verbatim}
+  \begin{equation}
+  E=mc^2
+  \end{equation}
+\end{verbatim}
+
+对于多行公式\footnote{需要宏包\texttt{amsmath}}，可以使用 \texttt{\textbackslash begin\{align\}} 和 \texttt{\textbackslash end\{align\}} 来包裹公式，并使用 \texttt{\&} 符号来对齐公式。例如：
+\begin{verbatim}
+  \begin{align}
+  E &= mc^2 \\
+  F &= ma
+  \end{align}
+\end{verbatim}
+
+LaTeX 还支持各种数学符号和运算符，例如乘号 (\texttt{\textbackslash times})、除号 (\texttt{\textbackslash div})、积分符号 (\texttt{\textbackslash int}) 等。可以通过查阅 LaTeX 的数学符号手册来了解更多数学符号的用法。
+
+\subsubsection{文本强调}
+
+可以使用 \texttt{\textbackslash emph\{文本\}} 命令来强调文本，通常会将文本设置为斜体，实际情况下可能会根据文档类和宏包的不同而有所变化。除此之外：
+\begin{itemize}
+  \item \texttt{\textbackslash textbf\{文本\}} ：粗体。
+  \item \texttt{\textbackslash textit\{文本\}} ：斜体。
+  \item \texttt{\textbackslash texttt\{文本\}} ：等宽字体。
+  \item \texttt{\textbackslash textsf\{文本\}} ：无衬线字体。
+  \item \texttt{\textbackslash textsc\{文本\}} ：小型大写字母。
+  \item \texttt{\textbackslash underline\{文本\}} ：下划线。
+\end{itemize}
+
+\subsubsection{列表}
+
+使用 \texttt{itemize} 环境来创建无序列表，使用 \texttt{enumerate} 环境来创建有序列表。这个列表也是可以嵌套的，例如：
+\begin{verbatim}
+  \begin{itemize}
+  \item 列表项 1
+  \item 列表项 2
+  \begin{itemize}
+    \item 嵌套列表项 1
+    \item 嵌套列表项 2
+  \end{itemize}
+  \item 列表项 3
+  \end{itemize}
+\end{verbatim}
+
+\subsubsection{表格}
+
+使用 \texttt{table} 环境来创建表格。以下是一个示例：
+
+\begin{verbatim}
+  \begin{table}
+    \centering
+    \begin{tabular}{lr}
+    列1 & 列2 \\
+    \hline
+    内容1 & 内容2 \\
+    内容3 & 内容4 \\
+    \end{tabular}
+    \caption{一个简单的表格}
+    \label{tab:simple-table}
+  \end{table}
+\end{verbatim}
+
+上述代码创建了一个简单的表格，其中 \texttt{tabular} 环境用于定义表格的列格式，\texttt{l} 表示左对齐，\texttt{r} 表示右对齐；如果需要居中对齐，可以使用 \texttt{c}。上述\texttt{lr}意思是第一列左对齐，第二列右对齐，两列中间没有竖线，表格左右两边也没有竖线。如果需要添加竖线，可以使用 \texttt{|} 符号，例如 \texttt{|l|r|} 表示第一列左对齐，第二列右对齐，并且两列之间有一条竖线，表格的左右两边也有竖线。
+
+表格中的每一行使用 \texttt{\\} 来分隔，列之间使用 \texttt{\&} 来分隔（实际上是制表符）。
+用 \texttt{\textbackslash hline} 命令来添加水平线。如果想要添加粗线，可以使用 \texttt{\textbackslash hline\textbackslash hline}。
+
+caption 命令用于添加表格的标题，label 命令用于给表格添加标签\footnote{需要hyperref宏包}，以便在文档中引用。上述代码展示的标签是一个标签的习惯命名方式，不必严格按照这个格式来命名标签。
+
+\subsubsection{图片}
+
+使用 \texttt{graphicx} 宏包来插入图片。首先，在导言区加载这个宏包，然后使用 \texttt{figure} 环境来插入图片。例如：
+\begin{verbatim}
+  \usepackage{graphicx}
+
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{example-image}
+    \caption{一个示例图片}
+    \label{fig:example}
+  \end{figure}
+\end{verbatim}
+
+上述代码中，\texttt{includegraphics} 命令用于插入图片，\texttt{width} 参数用于设置图片的宽度，可以使用相对宽度（例如 \texttt{0.5\textbackslash textwidth} 表示图片宽度为文本宽度的一半）或者绝对宽度（例如 5cm）。\texttt{caption} 和 \texttt{label} 命令的用法与表格类似。
+
+\subsubsection{超链接与标签引用}
+
+可以使用 \texttt{hyperref} 宏包来创建超链接。首先，在导言区加载这个宏包，然后使用 \texttt{\textbackslash href\{链接地址\}\{链接文本\}} 命令来创建超链接。例如：
+\begin{verbatim}
+  这是一个超链接：\href{https://www.example.com}{超链接文本}
+\end{verbatim}
+
+标签引用则与超链接类似，可以使用 \texttt{\textbackslash label\{标签名\}} 命令来创建标签，然后使用 \texttt{\textbackslash ref\{标签名\}} 命令来引用标签。例如：
+\begin{verbatim}
+  \section{引言}
+  \label{sec:introduction}
+
+  ....（此处略去许多正文内容）....
+
+  在\ref{sec:introduction}节中，我们介绍了 LaTeX 的基本用法。
+\end{verbatim}
+
+\subsubsection{目录}
+
+使用 \texttt{\textbackslash tableofcontents} 命令可以生成文档的目录。LaTeX 会自动根据文档中的标题生成目录，并在需要时自动更新。
+
+目录也属于标签引用的一种，因此在使用目录之前，需要先编译一次文档以生成目录文件。之后再编译一次，目录就会出现在文档中。
+
+\subsubsection{脚注}
+
+可以使用 \texttt{\textbackslash footnote\{脚注内容\}} 命令来添加脚注。
+
+\subsubsection{引用}
+
+可以使用 \texttt{\textbackslash quote\{引用内容\}} 命令来添加引用。LaTeX 还支持使用 \texttt{\textbackslash cite\{文献标签\}} 命令来引用文献，这需要在导言区加载 \texttt{biblatex} 。
+
+\subsubsection{参考文献}
+
+可以使用 BibTeX 或 BibLaTeX 来管理参考文献。可以在导言区加载 \texttt{biblatex} 宏包，并使用 \texttt{\textbackslash addbibresource\{*.bib\}} 命令来添加参考文献文件。
+
+在正文中，可以使用 \texttt{\textbackslash cite\{文献标签\}} 命令来引用文献。文献标签通常是一个唯一的标识符，用于在参考文献列表中查找对应的文献条目。
+
+在文档末尾使用 \texttt{\textbackslash printbibliography} 命令来生成参考文献列表。
+
+bib文件需要遵循一定的格式来编写，我们可以自行查找相关资料。
+
+\subsection{LaTeX 的宏包}\label{sec:latex-packages}
+
+LaTeX 的宏包是扩展 LaTeX 功能的重要工具。通过加载不同的宏包，可以实现各种排版效果和功能。除了我们刚刚提到的 \texttt{amsmath}、\texttt{graphicx}、\texttt{hyperref} 和 \texttt{biblatex} 等常用宏包外，还有许多其他有用的宏包。例如：
+
+\begin{itemize}
+  \item \texttt{geometry}：用于设置页面布局和边距。
+  \item \texttt{fontspec}：用于设置字体，特别是在 XeLaTeX 中。
+  \item \texttt{tikz}：用于绘制图形和图表。
+  \item \texttt{pgfplots}：用于绘制函数图像和数据可视化。
+  \item \texttt{listings}：用于排版代码。
+  \item \texttt{algorithm2e}：用于排版算法。
+\end{itemize}
+
+\subsection{LaTeX 与汉语专题}
+
+非常遗憾的是，LaTeX对于汉语、日语、朝鲜语等非字母语言的支持稍差。因此我们在使用LaTeX排版中文文档的时候，请确保使用 XeLaTeX 编译器，并且在导言区加载 \texttt{ctex} 宏包。这个宏包提供了对中文的支持，包括中文字体、段落格式等，这也是LaTeX主流的中文排版方式，其底层宏包是 \texttt{xeCJK}（C指中，J指日，K指韩）。
+
+LaTeX的字体分三种：常规字体、无衬线字体和等宽字体。常规字体是指普通的衬线字体，通常用于正文；无衬线字体是指没有衬线的字体，通常用于标题或强调；等宽字体是指每个字符宽度相同的字体，通常用于代码或表格。对于Windows下的中文字体，默认情况下 LaTeX 使用的是宋体（SimSun）作为常规字体，微软雅黑（Microsoft YaHei）作为无衬线字体，等宽字体则使用仿宋（FangSong）。
+
+需要指出的是，Windows 系统中，在 LaTeX 中对宋体（SimSun）进行加粗，实际上得到的是黑体（SimHei）；同理斜体是楷体（KaiTi）。而在 Linux 中，宋体（FandolSong-Regular）的粗体是真粗体（FandolSong-Bold）。这和MS Word 中的宋体加粗是不同的：MS Word 中的宋体加粗实际上是“伪粗体”，只是通过加粗字形来实现的。因此，同学们在使用 LaTeX 排版中文文档时，请注意这一点。
+
+我们可以使用 \texttt{ctex} 宏包来设置中文文档的格式和字体。以下是一个简单的示例：
+
+\begin{verbatim}
+  \documentclass{article}
+  \usepackage[UTF8, heading=true]{ctex} 
+  % 这里的heading=true的意思是“采用中式标题”，没有的话会报错
+
+  \title{\zihao{0} 标题} % 这里的意思是用小初号标题
+
+  \ctexset{
+      section = {
+          format += \zihao{4}\kaishu\raggedright, 
+          % 这里的+=指的是在原有格式上增加以下内容，
+          % \kaishu在XeCJK中指的就是\zhkai.
+          name = {第,节},
+          number = \arabic{section},
+          aftername = \hspace{0.5em},
+          beforeskip = 1.5ex plus .2ex minus .2ex,
+          afterskip = 1.5ex plus .2ex minus .2ex
+      }
+  } 
+  % 这段代码的意思是把section的默认写法从一个数字变成：“第X节”，
+  % 并设置前后垂直间距等。
+\end{verbatim}
+
+\subsection{LaTeX 与多文件}
+
+我们在\ref{sec:code-style}中提到过，对于非常长的代码文件，建议将其拆分成多个文件进行管理。LaTeX 也不例外，虽然tex文件是以文本内容为主的，但是对于动辄几十页上万行的文档，拆分成多个文件也是必要的，LaTeX也支持这种做法。
+
+一些比较经典的手段是使用 \texttt{\textbackslash input\{文件名\}} 或 \texttt{\textbackslash include\{文件名\}} 命令来引入其他 LaTeX 文件。但是这两个命令风格比较老，不建议使用。
+
+现代的LaTeX，我们建议使用 \texttt{\textbackslash subfile\{文件名\}} 命令来引入其他 LaTeX 文件，这个命令是由 \texttt{subfiles} 宏包提供的。这样能够较好地保证文件的独立性，不仅可以在主文件中编译，也可以在子文件中独立编译，使得调试更加方便。
+
+举例说明：我们可以写一个主要文件 main.tex，内容如下：
+\begin{verbatim}
+  \documentclass{article}
+  \usepackage{subfiles}
+
+  \begin{document}
+  \title{我的 LaTeX 文档}
+  \author{张三}
+  \date{\today}
+  \maketitle
+
+  \section{引言}
+  这是一个 LaTeX 文档的示例。
+
+  \subfile{section1.tex} % 引入 section1.tex 文件
+  \subfile{section2.tex} % 引入 section2.tex 文件
+
+  \end{document}
+\end{verbatim}
+
+然后，我们可以创建两个子文件 section1.tex 和 section2.tex，内容如下：
+\begin{verbatim}
+  \documentclass[main.tex]{subfiles} % 指定主文件是main.tex
+
+  \section{第一节}
+  这是第一节的内容。
+
+  \subsection{子节}
+  这是第一节的子节内容。
+\end{verbatim}
+
+需要注意的是，采用多文件来管理文档的时候，我们在应对多文件引用时，需要多次编译才能得到正确的引用和目录，一般来说是三次。（而单文件文档只需要两次编译即可。）
+
+\section{Typst*}
+
+Typst 是一种新兴的排版语言，由著名的语言神Rust编写，旨在提供一种更直观、更易于使用的排版方式。它的完备性与 LaTeX 类似，但语法更简洁，易于上手，和MarkDown类似。Typst 的设计理念是让用户能够专注于内容，而不是被复杂的语法和命令所困扰。
+
+\subsection{Typst 的安装}
+
+Typst 没有官方的包。但是，官方提供了Typst的WebAPP，我们可以直接使用之，但是其中文字体和版本控制都不优秀。如果希望在本地使用，则可以在VS Code中安装插件 Tinymist Typst。安装完成后，用户可以在 VS Code 中创建 .typ 文件，并使用 Typst 语法进行排版。
+
+\subsection{Typst 的语法}
+
+Typst 有两类语言模式：标记模式和脚本模式，而本质上都可以归结为脚本模式。
+
+在默认情况下，Typst 使用标记模式进行排版，使用类似于MarkDown的简单语法来编写文档。如果希望进入脚本模式，可以使用井号\# 来切换到脚本模式，例如\texttt{\#heading(strong([加粗]))}是一个合法的语法。大段的脚本代码则可以使用花括号，例如\texttt{\#\{1+1\}}。
+
+在脚本模式中，也可以使用方括号来进入标记模式，这将成为脚本模式的“内容块”或者标记元素。
+
+\subsubsection{标记模式}
+
+对于 Typst，所有的标记其实都是语法糖。这样能像 Markdown 一样做到内容和格式的彻底分离，也方便了我们的控制。在标记模式中，用户可以使用以下语法来进行排版：
+
+\begin{verbatim}
+  = 一级标题
+  上述文本等价于
+  #heading(level: 1, [一级标题])
+
+  == 二级标题
+  上述文本等价于
+  #heading(level: 2, [二级标题])
+
+  *加粗* 等价于 #strong[加粗]
+  _强调_ 等价于 #emph[强调]
+  需要注意，没有标记下划线，需要用#underline[下划线]来进行。
+
+  - 无序列表
+  + 有序列表
+  /术语: 术语列表
+  上述文本等价于
+  #list.item[无序列表]
+  #enum.item[有序列表]
+  #terms.item[术语][术语列表]
+
+  ```py
+  print("Hello, World!")
+  ```
+  上述代码块等价于
+  #raw(lang: "py", block: true, "print("Hello, World!")")
+
+  还有一种特殊的语法糖：
+  #fn(ZZZ)[XXX][YYY] 是 #fn(ZZZ, XXX, YYY) 的语法糖。
+\end{verbatim}
+
+\subsubsection{脚本模式}
+
+在脚本模式中，用户可以使用类似于 Python 的语法来编写代码。主要有三个最重要的脚本：set、show和let。
+
+set可以设置样式，也就是“为参数设置默认值”的能力。例如：
+\begin{verbatim}
+  #set heading(numbering: "1.")
+\end{verbatim}
+上述代码设置了标题的编号。
+
+show 用于全局替换和样式设计等，例如：
+\begin{verbatim}
+  #show "114": "514"
+\end{verbatim}
+上述代码可以把整篇文档中的所有“114”在编译出的文档都显示成“514”。
+\begin{verbatim}
+  #show heading.where(level: 1): body =>{
+    set align(center)
+    body
+  }
+\end{verbatim}
+这里的heading.where()有sqlalchemy库的影子，大家应该可以意会到它是一个选择器，选择标题中等级为 1 的所有元素。body则是检索到的原始内容，这里的箭头则是一个函数，指的是接受箭头前面的内容，然后返回修改后的内容，也就是大括号内部的东西。在大括号内部，我们使用set调整了样式，使其居中。
+
+let 用于定义变量和函数等，很像它在JavaScript中的亲戚。主要有以下几种使用方式：
+
+\begin{verbatim}
+// 存储基本值
+#let x = 10
+#let name = "Typst"
+#let is-active = true
+The value of x is #x. // 输出: The value of x is 10
+
+// 存储内容块
+#let warning = [**Warning:** This is important!]
+#warning // 输出: **Warning:** This is important!
+
+// 定义函数
+#let add(a, b) = a + b
+#let greet(name) = [Hello, #name!]
+#add(5, 3) // 输出: 8
+#greet("Alice") // 输出: Hello, Alice!
+
+// 定义样式
+#let emph-style = set text(red, weight: "bold")
+#emph-style
+This is *emphasized* text. // 红色加粗
+
+// 多式综合
+#let base-style = set text(font: "Helvetica", size: 12pt)
+#let title-style = base-style.with(size: 16pt, weight: "bold") 
+// 这里的*.with()可以扩展或者覆盖原有的样式
+
+#title-style
+= This is a title // 使用 Helvetica, 16pt, 加粗
+\end{verbatim}
+
+特别注意：默认情况下，该方法定义的变量是有类似 C 系的变量作用域的。let和show结合使用，则可以制作出各种各样的模板。
+
+对于更进一步的使用（例如 Touying 和 Pinit 等著名包的使用），我们不做更多介绍了，感兴趣的同学可以自行查找相关资料进行了解。
+
+\end{document}
