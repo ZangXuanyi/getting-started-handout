@@ -8,6 +8,7 @@
 \usepackage{fontspec}
 \usepackage{subfiles}
 \usepackage{hyperref}
+\usepackage{authblk}
 
 \usepackage{xcolor}
 
@@ -25,10 +26,18 @@
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta, positioning, shapes, calc}
 
+\usepackage{draftwatermark}         % 所有页加水印
+% \usepackage[firstpage]{draftwatermark} % 只有第一页加水印
+\SetWatermarkText{LCPU-2025}           % 设置水印内容
+%\SetWatermarkText{\includegraphics{fig/texlion.png}}         % 设置水印logo
+\SetWatermarkLightness{0.975}             % 设置水印透明度 0-1
+\SetWatermarkScale{1}                   % 设置水印大小 0-1  
+
 \geometry{a4paper, margin=1in}
 
-\title{计算概论衔接课讲义}
-\author{臧炫懿}
+\title{\Huge\textbf{计算概论衔接课讲义}}
+\author[a]{臧炫懿}
+\affil[a]{北京大学信息科学技术学院}
 \date{\today}
 
 \begin{document}
@@ -49,9 +58,13 @@
 
 本课程以\textbf{本人实践和经验}为基底讲授。如果本课程中的内容和正课中的内容或要求有差异，请以正课为准。
 
-该讲义集成了LCPU衔接课（暑假）的内容，并删去了购机指南一节。当然，我们在线下不会讲述这些内容。
+本人在编写本课程时，参考了\href{https://missing.lcpu.dev}{LCPU Getting Started}以及诸多博文、指南的内容，并在此基础上进行了增删和修改。
+
+该讲义集成了LCPU衔接课（暑假）的内容，并删去了购机指南一节。我们在线下也不会重复讲述暑假课的内容。
 
 希望本课程能够对同学们有所帮助。
+
+如有疑问，欢迎向本文作者发送电子邮件反馈：zangxuanyi@stu.pku.edu.cn。
 
 \part{暑假基础课讲义}
 

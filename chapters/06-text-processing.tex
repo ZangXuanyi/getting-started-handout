@@ -40,7 +40,7 @@ Markdown 无需安装，用户使用任何文本编辑器即可编写 Markdown �
 
 \subsection{Markdown 的语法}
 
-Markdown 的内容输入和纯文本文件几乎一模一样，接下来我们将逐个介绍 Markdown 排版所用到的控制符号。值得注意的是，常用的标点符号（逗号、句号、问号等）均不是控制符号。不过，在此之前，请把你的输入法标点符号切换为半角，防止出现类似于￥￥的臭名昭著的错误。
+Markdown 的内容输入和纯文本文件几乎一模一样，接下来我们将逐个介绍 Markdown 排版所用到的控制符号。不过，在此之前，请把你的输入法标点符号切换为半角，防止出现类似于￥￥的臭名昭著的错误。
 
 值得注意的是，Markdown 的语法并不是固定的，不同的 Markdown 渲染器可能会有一些差异，这被称作\textbf{方言性}。我们在这里介绍的是最常见也最通用的 Markdown 语法。同时，你在不同的地方看到的 MarkDown 渲染结果可能会不同，这也是正常现象。
 
@@ -48,9 +48,9 @@ Markdown 的内容输入和纯文本文件几乎一模一样，接下来我们�
 
 在 Markdown 中，必须通过空行来进行分段。也就是说，如果你想要对文件进行分段，需要在两段之间加入一个空行。特别注意，Markdown 不接受缩进或者首行缩进，所以不要使用 Tab 键或者空格进行缩进！（否则会编译为代码块）
 
-而如果希望仅仅换行而不分段，则仅仅在行尾加入两个空格，然后另起一行，在新的行中书写; 或者使用 HTML 标记，也就是 <br> 符号，该符号无需另起一行也可以进行换行操作。
+而如果希望仅仅换行而不分段，则仅仅在行尾加入两个空格，然后另起一行，在新的行中书写; 或者使用 HTML 标记，也就是 \texttt{<br>} 符号，该符号无需另起一行也可以进行换行操作。
 
-对于分割线 (你经常会在知乎看见这种分割线)，请在单独一行上使用三个或多个星号 (***)、连接号 (---) 或下划线 (\_\_\_) ，并且不能包含其他内容。为了兼容性考虑，请在该分割线前后加上空行。
+对于分割线 (你经常会在知乎看见这种分割线)，请在单独一行上使用三个或多个星号 (\texttt{***})、连接号 (\texttt{---}) 或下划线 (\texttt{\_\_\_}) ，并且不能包含其他内容。为了兼容性考虑，请在该分割线前后加上空行。
 
 \subsubsection{标题}
 
@@ -75,7 +75,7 @@ Markdown 使用井号（\#）来表示标题。井号的数量表示标题的层
 
 \subsubsection{转义}
 
-在 Markdown 中，如果需要输入特殊字符（例如星号、井号等），可以使用反斜杠 (\textbackslash) 来进行转义。例如，\textbackslash* 代表一个星号。
+在 Markdown 中，如果需要输入特殊字符（例如星号、井号等），可以使用反斜杠 (\texttt{\textbackslash}) 来进行转义。例如，\texttt{\textbackslash*} 代表一个星号。
 
 \subsubsection{代码和代码块}
 
@@ -93,7 +93,7 @@ Markdown 使用井号（\#）来表示标题。井号的数量表示标题的层
 
 \subsubsection{引用}
 
-在 Markdown 中，可以使用大于号 (>) 来表示引用。引用块也是可以嵌套的，只需要在每一行的开头添加一个大于号即可。例如：
+在 Markdown 中，可以使用大于号 (\texttt{>}) 来表示引用。引用块也是可以嵌套的，只需要在每一行的开头添加一个大于号即可。例如：
 
 \begin{verbatim}
 > 这是一段引用文本。
@@ -378,12 +378,12 @@ LaTeX 还支持各种数学符号和运算符，例如乘号 (\texttt{\textbacks
 
 可以使用 \texttt{\textbackslash emph\{文本\}} 命令来强调文本，通常会将文本设置为斜体，实际情况下可能会根据文档类和宏包的不同而有所变化。除此之外：
 \begin{itemize}
-  \item \texttt{\textbackslash textbf\{文本\}} ：粗体。
-  \item \texttt{\textbackslash textit\{文本\}} ：斜体。
-  \item \texttt{\textbackslash texttt\{文本\}} ：等宽字体。
-  \item \texttt{\textbackslash textsf\{文本\}} ：无衬线字体。
-  \item \texttt{\textbackslash textsc\{文本\}} ：小型大写字母。
-  \item \texttt{\textbackslash underline\{文本\}} ：下划线。
+  \item \texttt{\textbackslash textbf\{文本\}} ：\textbf{粗体，Bold}。
+  \item \texttt{\textbackslash textit\{文本\}} ：\textit{斜体，Italic}。
+  \item \texttt{\textbackslash texttt\{文本\}} ：\texttt{等宽字体，Typewriter}。
+  \item \texttt{\textbackslash textsf\{文本\}} ：\textsf{无衬线字体，Sans-serif}。
+  \item \texttt{\textbackslash textsc\{文本\}} ：小型大写字母，\textsc{Small caps}。
+  \item \texttt{\textbackslash underline\{文本\}} ：\underline{下划线，Underline}。
 \end{itemize}
 
 \subsubsection{列表}
