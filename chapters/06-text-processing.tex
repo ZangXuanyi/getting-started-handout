@@ -318,13 +318,23 @@ LaTeX的安装冗长且复杂，通常需要安装一个完整的 TeX 发行版�
 除此之外，还可以通过其他命令来设置文档的全局参数，例如字体、行距、页边距等。一些常用的全局参数设置命令可以在\ref{sec:latex-packages}中找到。
 
 \subsubsection{正文}
-正文是 LaTeX 文档的主要内容部分。在正文中，可以使用各种命令来添加标题、段落、列表、表格、图片等内容。
+正文是 LaTeX 文档的主要内容部分。在正文中，可以使用各种命令来添加标题、段落、列表、表格、图片等内容。正文部分被包裹在 \texttt{\textbackslash begin\{document\}} 到 \texttt{\textbackslash end\{document\}} 的块中间。
+
+LaTeX其实还有“注释”部分，这些部分仅在tex源码中存在，但是不会出现在最终的pdf文档中。注释部分以百分号（\%）开头，本行后面的内容会被 LaTeX 忽略。例如：
+
+\begin{verbatim}
+  \begin{document}
+    ...正文...
+    % 这是一个注释
+    ...正文...
+  \end{document}
+\end{verbatim}
 
 \subsection{LaTeX 的常用命令}
 
 \subsubsection{标题}
 
-使用 \texttt{\textbackslash section}、\texttt{\textbackslash subsection} 和 \texttt{\textbackslash subsubsection} 命令来添加标题，这三个命令分别可以添加一级标题、二级标题和三级标题，这些标题会自动标号。对于\texttt{report}和\texttt{book}文档类，还可以使用 \texttt{\textbackslash chapter} 命令添加章节标题，这些标题也会编号。
+使用 \texttt{\textbackslash section}、\texttt{\textbackslash subsection} 和 \texttt{\textbackslash subsubsection} 命令来添加标题，这三个命令分别可以添加一级标题、二级标题和三级标题，这些标题会自动标号。对于\texttt{report}和\texttt{book}文档类，还可以使用 \texttt{\textbackslash chapter} 命令添加章节标题、\texttt{\textbackslash part} 命令添加部分标题，这些标题也会编号。
 
 我们还可以使用 \texttt{\textbackslash title}、\texttt{\textbackslash author} 和 \texttt{\textbackslash date} 命令来设置文档的标题、作者和日期。然后使用 \texttt{\textbackslash maketitle} 命令来生成标题页。同时，诸如 \texttt{\textbackslash section*}等命令可以生成无编号的标题。
 
