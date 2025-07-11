@@ -1,4 +1,4 @@
-\documentclass[12pt]{report}
+\documentclass[12pt, openany]{book}
 
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -45,11 +45,9 @@
 
 \maketitle
 
-\tableofcontents
+\frontmatter
 
-\newpage
-
-\chapter*{引言}
+\chapter{引言}
 
 计算机基础科学教育是北京大学近些年一直努力推进的教育之一，体现在北京大学的所有学生都应修习《计算概论》这一门课程。然而，因为众所周知的原因，高中乃至初中对于计算机的教育水平参差不齐，因此同学们的基础也不尽相同，这导致部分基础较差的同学在学习《计算概论》时会遇到困难。同时，值得吐槽的是，大学计算机基础教育的内容往往过于理论化，缺乏实用性，这使得同学们在学习过程中感到枯燥乏味，在学习之后也很难将所学知识灵活应用到实际生产与生活中。
 
@@ -66,6 +64,12 @@
 希望本课程能够对同学们有所帮助。
 
 如有疑问，欢迎向本文作者发送电子邮件反馈：zangxuanyi@stu.pku.edu.cn。
+
+\mainmatter
+
+\tableofcontents
+
+% \newpage
 
 \part{暑假基础课讲义}
 
@@ -85,7 +89,9 @@
 
 \subfile{chapters/08-play-with-linux.tex}
 
-\chapter*{致谢}
+\backmatter 
+
+\chapter{致谢}
 
 本讲义的编写完成，离不开众多个人与组织的无私帮助与鼎力支持。在此，谨向所有给予我们指导、鼓励与便利的朋友们致以最诚挚的谢意。
 
