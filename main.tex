@@ -1,5 +1,6 @@
-\documentclass[12pt, openany]{ctexbook}
+\documentclass[12pt, openany]{book}
 
+\usepackage[UTF8, heading=true]{ctex}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{graphicx}
@@ -22,18 +23,15 @@
 \geometry{a4paper, margin=1in}
 \usepackage{hyperref}
 % 魔法改造开始喵！
-\ExplSyntaxOn
-\cs_set_eq:NN \__old_href:nn \href
-\RenewDocumentCommand { \href } { m m }
-  {
-    \__old_href:nn {#1}
-      {
-        \color { blue }
-        \underline{#2}
-        \raisebox { 0.2 ex } { \tiny $\nearrow$ }
-      }
-  }
-\ExplSyntaxOff
+\makeatletter
+\let\oldhref\href
+\renewcommand{\href}[2]{%
+  \oldhref{#1}{%
+    \color{blue}\underline{#2}%
+    \raisebox{0.2ex}{\tiny$\nearrow$}% 右上箭头
+  }%
+}
+\makeatother
 \title{\Huge\textbf{计算概论衔接课讲义}}
 \author[a]{臧炫懿}
 \affil[a]{北京大学信息科学技术学院}
