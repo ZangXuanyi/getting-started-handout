@@ -1,18 +1,27 @@
 \documentclass[12pt, openany]{book}
 
+\usepackage[UTF8, heading=true]{ctex}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{graphicx}
 \usepackage{geometry}
-\usepackage[UTF8, heading=true]{ctex}
-\usepackage{fontspec}
 \usepackage{subfiles}
-\usepackage{hyperref}
 \usepackage{authblk}
 \usepackage{fontawesome}
-
 \usepackage{xcolor}
 
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, shapes, calc}
+
+\usepackage{draftwatermark}         % 所有页加水印
+% \usepackage[firstpage]{draftwatermark} % 只有第一页加水印
+\SetWatermarkText{LCPU-2025}           % 设置水印内容
+%\SetWatermarkText{\includegraphics{fig/texlion.png}}         % 设置水印logo
+\SetWatermarkLightness{0.975}             % 设置水印透明度 0-1
+\SetWatermarkScale{1}                   % 设置水印大小 0-1
+
+\geometry{a4paper, margin=1in}
+\usepackage{hyperref}
 % 魔法改造开始喵！
 \makeatletter
 \let\oldhref\href
@@ -23,19 +32,6 @@
   }%
 }
 \makeatother
-
-\usepackage{tikz}
-\usetikzlibrary{arrows.meta, positioning, shapes, calc}
-
-\usepackage{draftwatermark}         % 所有页加水印
-% \usepackage[firstpage]{draftwatermark} % 只有第一页加水印
-\SetWatermarkText{LCPU-2025}           % 设置水印内容
-%\SetWatermarkText{\includegraphics{fig/texlion.png}}         % 设置水印logo
-\SetWatermarkLightness{0.975}             % 设置水印透明度 0-1
-\SetWatermarkScale{1}                   % 设置水印大小 0-1  
-
-\geometry{a4paper, margin=1in}
-
 \title{\Huge\textbf{计算概论衔接课讲义}}
 \author[a]{臧炫懿}
 \affil[a]{北京大学信息科学技术学院}
@@ -91,7 +87,7 @@
 
 \subfile{chapters/08-play-with-linux.tex}
 
-\backmatter 
+\backmatter
 
 \chapter{致谢}
 
@@ -101,7 +97,7 @@
 
 \begin{itemize}
   \item LCPU Getting Started 全体成员
-  \item \faGithub\href{https://github.com/Elkeid-mer}{Elkeid-mer}
+  \item \faGithub\href{https://github.com/Elkeid-me}{Elkeid-me}
 \end{itemize}
 
 最后，感谢每一位愿意花时间阅读、使用并反馈这份讲义的同学。愿你们在代码与终端的世界里，既能脚踏实地，又能仰望星空；既能把系统玩得风生水起，也能把生活过得热气腾腾。
