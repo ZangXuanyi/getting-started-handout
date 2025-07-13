@@ -1,17 +1,22 @@
 name: Compile LaTeX Document
 
 on:
-  push:
-    branches: [ main ]  # 在推送到 main 分支时触发
   pull_request:
-    branches: [ main ]  # 在针对 main 分支的 PR 时也触发
+    branches:
+      - main
+    types: 
+      - closed
 
 jobs:
-  build:
+  build-and-release:
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
     runs-on: ubuntu-latest
+
     steps:
-    - name: Checkout repository
+    - name: Checkout repository (full)
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # 获取完整的提交历史
 
     - name: Set up TeX Live
       uses: xu-cheng/texlive-action@v3
@@ -31,9 +36,41 @@ jobs:
         name: main.pdf
         path: main.pdf
 
+    - name: Generate release notes
+      id: generate-notes
+      run: |
+        # 获取最新 Release 的 Tag（如果没有则从初始提交开始）
+        LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+        
+        if [ -z "$LATEST_TAG" ]; then
+          # 如果是第一次发布，获取所有 dev 分支的合并提交
+          COMMITS=$(git log --merges --first-parent dev --pretty=format:"- %h %s (%an)")
+        else
+          # 否则获取自上次 Release 后合并到 dev 的提交
+          COMMITS=$(git log --merges --first-parent dev "$LATEST_TAG..HEAD" --pretty=format:"- %h %s (%an)")
+        fi
+
+        # 格式化 Release Note
+        RELEASE_NOTES=$(cat <<EOF
+        ### Changes since $LATEST_TAG
+
+        $COMMITS
+
+        _Auto-generated on $(date +'%Y-%m-%d')_
+        EOF
+        )
+
+        # 输出供后续步骤使用
+        echo "notes<<EOF" >> $GITHUB_OUTPUT
+        echo "$RELEASE_NOTES" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+
     - name: Create GitHub Release
-      if: github.ref == 'refs/heads/main'  # 仅在推送到 main 分支时创建发布
       uses: softprops/action-gh-release@v1
       with:
+        tag_name: "release-$(date +'%Y.%m.%d')"
+        name: "Release $(date +'%Y-%m-%d')"
+        body: "${{ steps.generate-notes.outputs.notes }}"
         files: main.pdf
-        generate_release_notes: true
+        draft: false
+        prerelease: false
