@@ -1,0 +1,42 @@
+name: Compile LaTeX Document
+
+on:
+  push:
+    branches: [ main ]  # 在推送到 main 分支时触发
+  pull_request:
+    branches: [ main ]  # 在针对 main 分支的 PR 时也触发
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up TeX Live
+      uses: xu-cheng/texlive-action@v2
+      with:
+        texlive_version: 'latest'  # 使用最新版 TeX Live
+        scheme: 'full'             # 完整安装以支持 XeLaTeX 和中文
+        cache: true                # 启用缓存加快后续构建
+
+    - name: Compile with XeLaTeX
+      run: |
+        xelatex -interaction=nonstopmode -file-line-error -synctex=1 main.tex
+        # 如果需要参考文献，取消下面两行的注释
+        # bibtex main
+        # xelatex -interaction=nonstopmode -file-line-error -synctex=1 main.tex
+        xelatex -interaction=nonstopmode -file-line-error -synctex=1 main.tex
+
+    - name: Upload PDF artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: main.pdf
+        path: main.pdf
+
+    - name: Create GitHub Release
+      if: github.ref == 'refs/heads/main'  # 仅在推送到 main 分支时创建发布
+      uses: softprops/action-gh-release@v1
+      with:
+        files: main.pdf
+        generate_release_notes: true
