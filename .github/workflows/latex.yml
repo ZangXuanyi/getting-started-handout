@@ -22,7 +22,7 @@ jobs:
     - name: Compile with XeLaTeX
       uses: xu-cheng/latex-action@v3
       with:
-        compiler: XeLaTeX
+        latexmk_use_xelatex: true
         root_file: main.tex # 替换为你的主 LaTeX 文件名
 
     - name: Upload PDF artifact
