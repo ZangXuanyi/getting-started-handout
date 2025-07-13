@@ -66,7 +66,14 @@
 
 虽然终端是一个非常古老的工具，但是使用它依然可以提高工作效率，尤其是在处理大量文件或者进行复杂操作时。它还可以用于远程连接到其他计算机，进行远程管理和维护等操作。
 
-对于Linux和macOS，我们建议使用Zsh或Fish等更加友好的shell，他们能够进行语法高亮、自动补全等操作。对于Windows，我们建议使用Windows PowerShell。PowerShell的命令统一采用的是动词-名词的格式，和Linux Shell的简单缩写形式有很大的不同。这是因为PowerShell的设计理念是模仿C\#的“对象”，而不是Linux Shell的文本流。不过也正因此，PowerShell本身就是一门完备的语言，功能非常强大，在处理复杂的任务上更为简单。
+一般情况下，一条命令满足以下结构：
+\begin{verbatim}
+    <命令> [<选项>] [<参数>]
+\end{verbatim}
+
+其中，命令是要执行的操作，选项是对命令的修改（例如 -h 表示帮助信息），参数是命令的输入（例如文件名）。选项和参数往往都是可选的。
+
+对于Linux和macOS，我们建议使用Zsh或Fish等更加友好的shell，他们能够进行语法高亮、自动补全等操作。对于Windows，我们建议使用Windows PowerShell。PowerShell的命令统一采用的是动词-名词的格式，和Linux Shell的简单缩写形式有很大的不同。这是因为PowerShell的设计理念是模仿C\#的“对象”，而不是Linux Shell的文本流。不过也正因此，PowerShell本身就是一门完备的语言，功能非常强大，在处理复杂的任务上更为简单。表\ref{tab:terminal-commands}是一些常见的命令。
 
 \begin{table}[htbp]
     \centering
