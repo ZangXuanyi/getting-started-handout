@@ -18,15 +18,11 @@ jobs:
       with:
         texlive_version: 'latest'  # 使用最新版 TeX Live
         scheme: 'full'             # 完整安装以支持 XeLaTeX 和中文
-        cache: true                # 启用缓存加快后续构建
 
     - name: Compile with XeLaTeX
-      run: |
-        xelatex -interaction=nonstopmode -file-line-error -synctex=1 main.tex
-        # 如果需要参考文献，取消下面两行的注释
-        # bibtex main
-        # xelatex -interaction=nonstopmode -file-line-error -synctex=1 main.tex
-        xelatex -interaction=nonstopmode -file-line-error -synctex=1 main.tex
+      uses: xu-cheng/latex-action@v3
+      with:
+        root_file: main.tex # 替换为你的主 LaTeX 文件名
 
     - name: Upload PDF artifact
       uses: actions/upload-artifact@v4
