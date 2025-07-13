@@ -11,10 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Set up TeX Live
-      uses: xu-cheng/texlive-action@v2
+      uses: xu-cheng/texlive-action@v3
       with:
         texlive_version: 'latest'  # 使用最新版 TeX Live
         scheme: 'full'             # 完整安装以支持 XeLaTeX 和中文
@@ -29,7 +29,7 @@ jobs:
         xelatex -interaction=nonstopmode -file-line-error -synctex=1 main.tex
 
     - name: Upload PDF artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: main.pdf
         path: main.pdf
