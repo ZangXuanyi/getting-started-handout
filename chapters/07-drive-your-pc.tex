@@ -14,7 +14,7 @@
 
 有时候我们想同时开发新功能，并且调优以前的代码，这样可能就需要两条线进行开发。这时，分支相关的功能就会很有帮助。Git 的分支功能允许我们在同一个仓库中创建多个独立的开发线，每个分支可以独立地进行提交和修改。
 
-我们可以做如下假设：已经有一个名为main的分支，并已经有了一列提交记录C1、C2、C3。现在，我希望开发一个新的功能，但是不想影响到main分支上的代码。这时，我们可以创建一个新的分支，例如feature，并在该分支上进行开发。
+我们可以做如下假设：已经有一个名为main的分支，并已经有了一列提交记录A、B、C。现在，我希望开发一个新的功能，但是不想影响到main分支上的代码。这时，我们可以创建一个新的分支，例如feature，并在该分支上进行开发。
 
 \subsubsection{创建和切换分支}
 
@@ -25,7 +25,7 @@ git checkout -b feature
 
 以上等价于执行
 \begin{verbatim}
-git branch feature <commit-hash of C3>
+git branch feature <commit-hash of C>
 git checkout feature
 \end{verbatim}
 
@@ -36,12 +36,19 @@ git checkout main
 
 \subsubsection{分支变基}
 
-如果我们已经在feature分支上进行了多次提交C4、C5、C6，同时C3在main分支上也有了新的提交C7。现在想要将feature这些提交变基到main分支上，可以使用以下命令：
+如果我们已经在feature分支上进行了多次提交F、G，同时在main分支上也有了新的提交D、E。现在想要将feature这些提交变基到main分支上，可以使用以下命令：
 \begin{verbatim}
   git rebase main
   git checkout main
 \end{verbatim}
-这样会把上述feature上的三个提交从C3变基到C7，变成C4'，C5'和C6'。
+这样会把上述feature上的三个提交从C变基到G，变成F'和G'。我们可以用图解来理解这个过程：
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{images/git-rebase.png}
+\caption{分支变基示意图}
+\label{fig:git-rebase}
+\end{figure}
 
 特别注意：变基操作会改变提交的哈希值。
 
@@ -55,6 +62,13 @@ git merge feature
 \end{verbatim}
 
 这时候我们在main分支上，并试图将C7和C6合并在一起。
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.75\textwidth]{images/git-merge.png}
+\caption{分支合并示意图}
+\label{fig:git-merge}
+\end{figure}
 
 如果这两个提交没有冲突，那么合并会自动完成。但是如果有冲突（例如两个分支涉及到同一行的修改），Git 会提示我们解决冲突。此时，我们不得不手动解决冲突。我们会看到以下内容（或者其英文版本）：
 \begin{verbatim}
@@ -88,6 +102,16 @@ git branch -d feature
 \end{verbatim}
 
 一般不建议直接删除分支，而是使用 \texttt{-d} 选项来删除已经合并的分支。如果分支没有被合并，可以使用 \texttt{-D} 选项强制删除。
+
+\subsubsection{压缩提交}
+
+有时候，我们在开发过程中，可能会有很多小的提交，这些提交可能是一些临时的修改或者调试信息。为了保持代码和版本库的整洁，我们可以使用 Git 的压缩提交功能，将多个提交合并为一个提交。这个压缩功能被称作是\textbf{Squash}，但是特别注意：没有\texttt{git squash}命令。
+
+我们一般只在分支合并和分支变基的时候使用压缩提交。可以使用以下命令中的一个来压缩提交：
+\begin{verbatim}
+git merge --squash feature
+git rebase -i HEAD~X # X是一个数字，代表要压缩几个提交
+\end{verbatim}
 
 \subsection{标签管理}
 标签（Tag）是 Git 中用于标记特定提交的功能。标签通常用于标记版本发布或重要的里程碑。与分支不同，标签是静态的，不会随着提交而移动。
@@ -328,7 +352,7 @@ GitHub的有两种托管代码的方式：HTTPS 和 SSH。HTTPS 是通过用户�
 
 我们需要将公钥添加到 GitHub 的 SSH 密钥列表中。可以在 GitHub 的设置页面中找到 SSH 密钥列表，然后点击“添加 SSH 密钥”按钮，将公钥粘贴到文本框中。
 
-特别注意：如果你使用的是 Windows 系统，可能需要将公钥转换为 OpenSSH 格式。可以使用以下命令将公钥转换为 OpenSSH 格式：
+如果你使用的是 Windows 系统，可能需要将公钥转换为 OpenSSH 格式。可以使用以下命令将公钥转换为 OpenSSH 格式：
 \begin{verbatim}
 ssh-keygen -i -f ~/.ssh/id_rsa.pub
 \end{verbatim}
@@ -339,6 +363,18 @@ ssh-add ~/.ssh/id_rsa
 \end{verbatim}
 
 这样可以免去每次连接远程服务器时指定密钥文件的麻烦。
+
+\subsection{使用VS Code建立SSH连接}
+
+除了使用终端建立SSH连接到远程服务器以外，还可以使用一些其他的工具来建立SSH连接。这时候我们还要请出那位大神：VS Code（怎么哪都有你）。
+
+VS Code 提供了一个名为 Remote-SSH 的扩展，可以帮助我们通过 SSH 连接到远程服务器，并在远程服务器上进行开发。这样，可以在SSH连接中使用一个很方便的图形化界面，以进行和Windows相似的便捷操作。
+
+安装 Remote-SSH 扩展后，我们可以在 VS Code 的界面找到远程连接的选项，一般是左下角的蓝色按钮，图标类似这个$\lessgtr$数学符号。点击这个按钮后，会弹出一个菜单，点选“连接到主机”选项，会让你输入\texttt{user\@host}类似的远程服务器地址。输入完成后，如果是一个新的远程服务器，Code会让你把它加入到已知主机列表中，用户可以视情况添加到系统配置文件或者其他的配置文件中。
+
+然后，Code会弹出一个新的窗口，试图连接到远程服务器，可能会要求你输入远程服务器的密码和系统类型等信息。连接完成后，就可以在远程服务器上进行开发了。此时，Code会在左侧的资源管理器中显示远程服务器的文件系统（当然你需要打开一个文件夹）。
+
+在Code中，如果不是用终端而是用Code的图形界面来打开新的文件夹，那么每一次打开文件夹都会重新进行一次身份验证。如果你使用的是密码，则需要反复输入，非常麻烦。这时我们一定要尽可能地使用密钥进行登录。
 
 \section{玩转Windows之文件管理和自动化操作}\label{sec:windows-file-management}
 

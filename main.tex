@@ -31,7 +31,7 @@
   }%
 }
 \makeatother
-\title{\Huge\textbf{北京大学计算机基础科学大中衔接手册}}
+\title{\Huge\textbf{北京大学计算机基础科学与开发手册}}
 \author[a]{臧炫懿}
 \affil[a]{北京大学信息科学技术学院、北京大学学生Linux俱乐部}
 \date{2025年版本}
@@ -42,31 +42,7 @@
 
 \frontmatter
 
-\chapter{引言}
-
-\begin{center}
-  \emph{"把丢失的初高中计算机基础知识补回来"}
-\end{center}
-
-计算机基础科学教育是我国近些年一直努力推进的教育之一，北京大学的所有学生都应修习《计算概论》课程。然而，大学计算机基础教育的内容往往过于理论化，缺乏实用性，这使得同学们在学习过程中容易感到枯燥乏味，在学习之后也很难将所学知识灵活应用到实际生产与生活中。
-
-在本手册正式编写之前，已经有很多学长做出了相关的努力。几个广为人知的项目：北京大学为新生提供了《计算概论衔接课》，旨在帮助同学们快速入门计算机基础知识（这门课的前半部分由我所讲授）；北京大学学生Linux俱乐部（LCPU）启动了Getting Started项目，旨在帮助同学们快速入门Linux和计算机科学（该项目亦由我全权负责）；一位\faGithub\href{https://github.com/PKUFlyingPig}{学长}发起了\href{https://csdiy.wiki/}{CS自学指南}项目，受到了广泛的关注和认可，该项目迄今已有一百五十余位贡献者；PKUHub等其他官方或非官方的组织也在积极推动计算机基础教育的普及。
-
-然而，Getting Started和自学指南对于大一新生而言，存在的最大不足之处就是：不够基础。我国初高中乃至小学阶段，计算机的教育水平参差不齐，同学们的基础也不尽相同，这导致部分基础较差的同学在学习《计算概论》时会遇到困难，遑论上述进阶课程。而对于有能力就读北大的学生而言，大约是已经不再幻想上课有用了，真正有用的知识还是要靠自己去学习实践。因此，我认为给同学们一本手册要比给同学们数小时的课程视频有用得多。笔者最终决定：制作这份手册，帮助同学们把缺失的计算机知识补回来。
-
-比起“CPU是怎么构成的”“软件是怎么工作的”这种理论知识，本手册更注重于“我们应该购买什么CPU”“我们应该怎么搭建一个软件开发平台”这类的实用知识。简而言之，我们手册中会讲一些\textbf{正课几乎不会讲、但是用处极大}的知识。
-
-本手册的目标是将同学们的计算机水平快速提升至能够接受大学计算机基础教育的水平。我们认为使用本手册的同学都已经具备了最基本的计算机操作能力，也就是说我们不会涉及诸如“怎样使用鼠标”“怎样关机”这种内容。
-
-本手册以\textbf{本人实践和经验}为基底讲授。如果本手册中的内容和正课中的内容或要求有差异，请以正课为准。
-
-本手册参考了\href{https://missing.lcpu.dev}{LCPU Getting Started}以及诸多博文、指南的内容，并在此基础上进行了增删和修改。
-
-希望本手册能够对同学们有所帮助。
-
-如有疑问，欢迎向手册作者发送电子邮件反馈：zangxuanyi@stu.pku.edu.cn。
-
-也欢迎来我的GitHub主页（\faGithub\href{https://github.com/ZangXuanyi/getting-started-handout}{ZangXuanyi/getting-started-handout}）查看本手册的源代码，并提出Issue与Pull Request。所有的贡献者都会被列在最后的致谢名单中。
+\subfile{chapters/00-introduction.tex}
 
 \mainmatter
 
@@ -74,17 +50,17 @@
 
 % \newpage
 
-\part{暑假基础课讲义}
+\part{零基础起步}
 
 \subfile{chapters/01-encounter.tex}
-
-\subfile{chapters/09-buy.tex}
 
 \subfile{chapters/02-knowledge-acquirement.tex}
 
 \subfile{chapters/03-initial-usage.tex}
 
-\part{线下进阶课讲义}
+\subfile{chapters/04-buy.tex}
+
+\part{大学计算机前置}
 
 \subfile{chapters/05-coding.tex}
 
@@ -94,32 +70,10 @@
 
 \subfile{chapters/08-play-with-linux.tex}
 
+\part{走向开发}
+
 \backmatter
 
-\chapter{致谢}
-
-本讲义的编写完成，离不开众多个人与组织的无私帮助与鼎力支持。在此，谨向所有给予我们指导、鼓励与便利的朋友们致以最诚挚的谢意。
-
-这份手册的前身是《计算概论衔接课》第一部分的讲义。后经过本人的思考、修改和扩充，最终形成了近百页的手册。其中，LCPU和PKUHub的同学们为我提供了许多宝贵的意见和建议，帮助我完善了手册的内容；也有许多同学在暑假课提出了问题和建议，也踩过不少坑，帮助我在编写手册时细化了许多内容、避免了许多错误。
-
-感谢以下为本手册提供过贡献的人们（按提交时间排序）：
-
-\begin{itemize}
-  \item LCPU Getting Started 全体成员
-  \item PKUHub 全体成员
-  \item \faGithub\href{https://github.com/wszqkzqk}{wszqkzqk}为MSYS2部分提供了极为宝贵的建议，指出了一个严重的错误
-  \item \faGithub\href{https://github.com/Elkeid-me}{Elkeid-me}提供了一些常用软件的推荐
-  \item \faGithub\href{https://github.com/AsTonyshment}{AsTonyshment}指出了本文的落后之处：计算中心已经启用\texttt{pku.edu.cn}域名的邮箱的二次验证和客户端专用密码功能
-\end{itemize}
-
-最后，感谢每一位愿意花时间阅读、使用并反馈这份手册的同学。愿你们在代码与终端的世界里，既能脚踏实地，又能仰望星空；既能把系统玩得风生水起，也能把生活过得热气腾腾。
-
-再次致谢！
-
-\vspace{2em}
-\begin{flushright}
-  臧炫懿 \\
-  2025年7月，在燕园
-\end{flushright}
+\subfile{chapters/99-postscript.tex}
 
 \end{document}
