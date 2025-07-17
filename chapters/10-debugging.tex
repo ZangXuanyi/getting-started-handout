@@ -1,0 +1,59 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+
+\chapter{调试和测试}
+
+我们在前面的章节中已经知道，代码中出现错误是难免的事情。无论是语法错误、语义错误，还是不能称得上错误但是不符合预期的行为，我们都需要进行调试和测试来找出问题所在。
+
+一些大公司专门有“测试工程师”这类岗位来负责代码正式上线之前的测试工作，以检查代码的正确性和可靠性；但是对于大多数小型项目而言，这些工作往往是由开发人员自己完成的。在本章节中，我们会介绍一些常用的调试和测试方法，帮助同学们更好地理解和解决代码中的问题。
+
+总得说来，调试和测试就像诊治一个危重病人（值得庆幸的是，这个病人能够复活）一样。此时，我们需要四步走：先救命、再治病、再调养，最后购买医疗保险。顺序不要乱，一步都不能少。
+
+\section{先救命}
+
+最常见的情况是：代码崩溃了，程序完全无法执行。对于Python而言，它的报错信息非常详细，通常可以直接定位到出错的行数和错误类型，因此往往只需要根据报错信息进行修复即可。
+
+而对于C/C++这类语言而言，它们是静态的，运行时错误能过编译，而且它们的报错信息通常非常简洁，仅凭报错信息很难定位到具体的错误地点。因此，我们需要使用一些调试工具来帮助我们定位错误。
+
+\emph{什么，你问我怎么确定编译错误？我认为编译错误应该由编译器来判断，而不是我们来判断；编译过一次以后，你的代码编辑器应该也能够显示哪里有编译错误！}
+
+\subsection{使用调试器}
+
+我们在开发的过程中可以使用VS Code调试器，但是有时候我们无法获取程序源码。在这种情况下，我建议同学们使用那个最经典的调试工具——\texttt{gdb}。它是GNU项目的一部分，支持多种编程语言，包括C、C++、Fortran等。当然对于一些会读汇编的同学们而言，我觉得可以用objdump这类反汇编器来反汇编程序，并对这些汇编代码进行阅读；常见的反汇编器还有著名的IDA Pro，它是一个商业软件，价格很贵，但是功能绝对对得起它的价格：它甚至能够对反汇编出来的东西进行自动分析！
+\begin{verbatim}
+    objdump -d ./your_program > asm.s
+\end{verbatim}
+
+当然大多数人是没这个能力也没这个毅力去读汇编的，因此GDB最终还是我们最常用的动态调试工具。例如，以下命令可以启动GDB并加载程序：
+\begin{verbatim}
+    gdb ./your_program
+\end{verbatim}
+
+在GDB中，我们可以使用以下命令来设置断点、运行程序、查看变量等：
+\begin{itemize}
+    \item \texttt{break}：设置断点，可以简写为\texttt{b}，例如\texttt{break main}在\texttt{main}函数处设置断点。也可以在特定的某一行设置断点，例如\texttt{break 42}在第42行设置断点；也可以利用偏移量来设置断点，例如\texttt{break +10}在当前行的往前数10行设置断点。
+    \item \texttt{run}：运行程序。可以简写为\texttt{r}。
+    \item \texttt{next}：执行下一行代码，可以简写为\texttt{n}。如果当前行是函数调用，则不会进入函数内部，而是把这个函数视为一个整体往下执行一行。该命令有一个变体\texttt{ni}，它是汇编级别的断点定位，也就是执行下一条汇编指令。
+    \item \texttt{step}：也是执行下一行代码，可以简写为\texttt{s}。如果当前行是函数调用，则会进入函数内部，逐行执行函数内部的代码。\texttt{si}是它的变体，表示汇编级别的单步执行。
+    \item \texttt{continue}：继续运行直到下一个断点，可以简写为\texttt{c}。
+    \item \texttt{print}：打印变量的值，例如\texttt{print variable}，可以简写为\texttt{p variable}。如果变量是一个结构体或类的实例，可以使用\texttt{print variable.field}来打印某个字段的值。
+    \item \texttt{backtrace}：查看函数调用栈，可以简写为\texttt{bt}。这对于定位程序崩溃时的调用路径非常有用。
+    \item \texttt{layout}：切换到图形界面模式，可以使用\texttt{layout src}来显示源代码，使用\texttt{layout asm}来显示汇编代码。
+    \item \texttt{info}：查看程序的状态，例如\texttt{info breakpoints}查看断点信息，\texttt{info registers}查看寄存器状态，\texttt{info locals}查看局部变量等。
+    \item \texttt{watch}：设置观察点，当某个变量的值发生变化时暂停执行，例如\texttt{watch variable}。这对于调试复杂的逻辑错误非常有用。
+    \item \texttt{set}：强制设置变量的值，例如\texttt{set variable = value}。这对于调试时修改变量的值非常有用。
+    \item \texttt{list}：查看源代码（带行号），可以简写为\texttt{l}。
+    \item \texttt{quit}：退出GDB。
+\end{itemize}
+
+当然，如果想要显示行号的话，我们编译代码的时候需要加上\texttt{-g}选项，例如：
+\begin{verbatim}
+    gcc -g -o your_program your_program.c
+\end{verbatim}
+也只有加上了\texttt{-g}选项，GDB才能够显示源代码和行号，\texttt{s}和\texttt{n}命令才能够逐行执行源代码，但是\texttt{si}和\texttt{ni}命令仍然能够正常执行。
+
+以上命令其实很复杂，需要同学们多加练习才能熟练掌握。这里我推荐一个GDB的小练习：CMU ICS Lab2：BombLab。这个练习的目的是让同学们通过GDB来调试一个被加密的程序，找到正确的输入来“拆弹”。这个练习非常有趣，而且可以帮助同学们熟悉GDB的使用。
+
+
+
+\end{document}
