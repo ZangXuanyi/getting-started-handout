@@ -364,7 +364,76 @@ cout << "Name: " << student1.name << ", Age: " << student1.age << ", GPA: " << s
 
 结构体可以帮助我们更好地组织数据，使得代码更易读。
 
-\subsection{函数和作用域}
+\subsection{联合体}
+
+联合体（union）是一个特殊的结构体，它的所有成员共享同一块内存空间。联合体的基本格式如下：
+\begin{verbatim}
+union 联合体名 {
+    类型 成员名1;
+    类型 成员名2;
+    // ...
+};
+\end{verbatim}
+以上代码的意思是：声明一个名为联合体名的联合体，它可以存储多个不同类型的数据，但它们共享同一块内存空间。联合体的成员可以是任意类型，包括基本类型、数组、字符串等。
+
+例如，我们可以声明一个表示数据的联合体：
+\begin{verbatim}
+union Data {
+    int intValue;       // 整数值
+    float floatValue; // 双精度浮点数值
+};
+Data data;  // 声明一个数据变量
+data.intValue = 42;  // 设置整数值  
+cout << "Int Value: " << data.intValue << endl;  
+\end{verbatim}
+以上代码的意思是：声明一个名为Data的联合体，它可以存储整数值、双精度浮点数值和字符值。我们可以通过访问联合体的成员来获取数据。
+
+当然，对于上述代码中使得data为int的值为42的情况，data中的其他成员也已经随之确定：也就是把floatValue的二进制表示设定为42的二进制表示。但是，根据Mini ICS的知识我们知道，整数和浮点数的二进制表示是不同的，因此这个浮点数是一个确定的值，但它并不是42。
+
+\subsection{指针}
+
+指针可以说是奠定C和C++地位的最重要特性之一，它允许用户像汇编一样直接操作内存地址。
+
+指针实际上也是一个变量，但是它并不是像前文所说的变量“存储数据”，而是“存储地址”。例如，我们\texttt{int a = 10}，这个a确实是一片内存空间，但是我们没办法利用a访问这片内存空间的地址。指针可以做到这一点。比如说，\texttt{int* p = \&a}，这个p就是一个指针，它存储了变量a的地址（\&a）。我们可以通过\texttt{*p}来访问这个地址上的数据。
+
+如果依然云里雾里，可以试着print一下\texttt{p}和\texttt{*p}的值。我们发现，前者输出的是一串十六进制数，而后者输出的是10。
+
+我们可以利用指针进行一些较为高级的控制。例如控制数组的访问、动态内存分配等。比方说：
+
+\begin{verbatim}
+int arr[5] = {1, 2, 3, 4, 5};  // 声明一个数组
+int* p = arr;  // 声明一个指针，指向数组的首元素
+for (int i = 0; i < 5; i++) {
+    cout << *(p + i) << " ";  // 通过指针访问数组元素
+}
+\end{verbatim}
+
+指针是一种非常强大的工具，但也需要小心使用。错误地使用指针可能会导致程序崩溃或内存泄漏，有时候也有可能会导致悬空指针（俗称“野指针”）的问题。悬空指针是指指向已经释放的内存空间的指针，这种指针无法访问有效的数据，可能会导致程序崩溃或产生不可预知的后果。
+
+\emph{野指针不是空指针！空指针是指向空地址的指针，是安全的；野指针是指向已经释放的内存空间（现在可能已经装进去一些其他数据）的指针，是不安全的。}
+
+在C++中，有一些比较高级的指针特性，例如智能指针（smart pointer）。它可以自动管理内存，避免内存泄漏和野指针等问题。常见的智能指针有\texttt{std::unique\_ptr}、\texttt{std::shared\_ptr}和\texttt{std::weak\_ptr}。
+
+\subsection{引用}
+
+引用是C++中的一个重要特性，它允许我们创建一个变量的别名。引用的基本格式如下：
+\begin{verbatim}
+类型& 引用名 = 原变量名;
+\end{verbatim}
+以上代码的意思是：声明一个名为引用名的引用，它是原变量名的别名。引用的作用是可以通过别名来访问原变量。例如，我们可以声明一个整数的引用：
+\begin{verbatim}
+int a = 10;  // 声明一个整数变量
+int& ref = a;  // 声明一个整数的引用
+cout << "a: " << a << ", ref: " << ref << endl;  // 输出a和ref的值
+ref = 20;  // 修改引用的值
+cout << "a: " << a << ", ref: " << ref << endl;  // 输出修改后的a和ref的值
+\end{verbatim}
+
+以上代码的意思是：声明一个名为ref的引用，它是变量a的别名。我们可以通过ref来访问a。当我们修改ref的值时，实际上也修改了a的值。
+
+引用的本质其实也是一个指针，但是它的语法简洁得多。引用可以用于函数参数传递、返回值等场景，可以避免不必要的内存拷贝，提高程序性能。在C++中，比起指针，我们更推荐使用安全、简洁的引用。
+
+\subsection{函数和变量的作用域}
 
 有时候，我们需要在这个地方使用一些代码，在另外一个地方也使用同样的代码。为了避免重复编写代码，我们可以将这些代码封装成一个函数。函数是一个可以重复调用的代码块，它可以接受参数并返回结果。
 
@@ -394,6 +463,409 @@ int main() {
 }
 \end{verbatim}
 
+函数可以有任意数量的参数，也可以没有参数。函数的返回类型可以是任意类型，包括基本类型、结构体、数组等。如果函数不需要返回值，可以将返回类型设置为\texttt{void}。
 
+我们发现，在上述方法add中定义的变量a和b只能在函数add内部使用，不能在其他地方使用。这是因为函数的作用域是局部的。这说明，变量具有一定的可访问范围，我们把这个可访问范围叫做“作用域”。一般来说，全局变量在任何位置都可以访问，而局部变量只能在它所在的函数或代码块中访问。
+
+\subsection{函数的递归调用}
+
+函数可以调用自己，这种调用方式叫做递归。递归函数通常用于解决一些具有重复结构的问题，例如计算阶乘、斐波那契数列等。
+递归函数的基本格式如下：
+\begin{verbatim}
+int foo(){
+    if (base_case) {
+        return base_value;  // 基础情况，直接返回结果
+    } else {
+        return foo();  // 递归调用
+    }
+}
+\end{verbatim}
+
+以上代码：在执行第一个foo的时候，会判断是不是基本情况，如果是则直接结束；如果不是，则会调用foo函数本身。这个过程会一直重复，直到满足基本情况为止。某种程度上，递归也是一种循环的形式。
+
+例如，我们可以使用递归来求某数列的第n项。假设这个数列的定义是：第1项为1，第2项为1，从第3项开始，每一项都是前两项之和。我们可以写出它的递归公式：$fibonacci(n) = fibonacci(n-1) + fibonacci(n-2)$，其中$fibonacci(1) = 1$，$fibonacci(2) = 1$。然后，我们就可以用程序语言来描述这个数学语言：
+\begin{verbatim}
+int fibonacci(int n) {
+    if (n == 1 || n == 2) {
+        return 1;  // 基础情况
+    } else {
+        return fibonacci(n - 1) + fibonacci(n - 2);  // 递归调用
+    }
+}
+\end{verbatim}
+
+\subsection{函数的传参}
+
+刚刚说到，函数可以接受一些参数。一般情况下，有三个传参方式：值传递、引用传递和指针传递。
+\begin{itemize}
+    \item 值传递：函数接收参数的副本，修改参数不会影响原变量。基本类型（如int、double等）默认使用值传递。
+    \item 引用传递：函数接收参数的引用，修改参数会影响原变量。可以通过在参数类型前加\texttt{\&}来实现。
+    \item 指针传递：函数接收参数的指针，修改参数会影响原变量。可以通过在参数类型前加\texttt{*}来实现。
+\end{itemize}
+例如，我们可以使用引用传递来交换两个整数的值：
+\begin{verbatim}
+void swap(int& a, int& b) {
+    int temp = a;  // 使用临时变量交换
+    a = b;
+    b = temp;
+}
+\end{verbatim}
+使用传指针其实也可以实现同样的功能。但是，传值不能实现同样的功能：传值的本质是复制参数的值到函数内部，因此在函数内部修改参数不会影响原变量。至于引用和指针，则对应的可以理解为剪切，因此能够直接修改原变量的值。
+
+\subsection{小练}
+
+素数在数学中是一个非常重要的概念，它指的是只能被1和它本身整除的自然数。素数在密码学、数据加密等领域有着广泛的应用。一般我们可以使用筛法找到素数：在一系列整数中，先找到最小的素数（2），然后将它的倍数都去掉；然后再找到下一个最小的素数（3），再将它的倍数都去掉；如此反复，直到所有的数都被处理完。
+
+请编写一个C++程序，输入一些整数n1，n2，...，然后输出这些整数是不是素数。n的数值在0到1000之间。
+
+\subsubsection{边写边说}
+
+同样的，写程序就像说话一样。我们阅读题目：在一系列整数中，这个“一系列”整数提示我们可以使用数组来存储这些整数；先找到最小的素数，然后将它的倍数都去掉；然后再找到下一个最小的素数（3），再将它的倍数都去掉；如此反复，直到所有的数都被处理完，这句话提示我们需要使用循环来处理这些整数。
+
+数组的索引天然是自然数集合，因此我们可以使用索引表示整数。我们可以声明一个比较大的数组，来存储从1到n的整数。假设n不超过1000，我们可以声明一个大小为1000的数组来存储这些整数，并将它们全部初始化为0（表示未处理）。对于数组中的每一个元素，我们都可以将他的索引作为整数的值，而元素的值为0说明是素数，1说明不是素数。
+
+。然后我们可以使用一个循环来遍历这个数组，找到素数。写成代码就是：
+\begin{verbatim}
+bool arr[1000] = {};  // 声明一个数组来存储0和1，并将全部数值初始化为0
+arr[0] = 1;  // 0不是素数
+arr[1] = 1;  // 1不是素数
+for (int i = 2; i < 1000; i++){
+    if (arr[i] == 0) {  // 如果这个数是素数
+        for (int j = 2; j < 1000; j++) {  // 将它的倍数都标记为1
+            arr[j * i] = 1;
+        }
+    }
+}
+\end{verbatim}
+
+接下来，我们需要输出素数。我们可以直接查询n1，n2，...是否在数组中对应的索引处的值为0，如果是，则说明这个数是素数。写成代码就是：
+\begin{verbatim}
+if (arr[i] == 0) {  // 如果这个数是素数
+    cout << i << " 是素数" << endl;
+}
+else {
+    cout << i << " 不是素数" << endl;
+}
+\end{verbatim}
+最后，我们需要将这些代码组合起来，形成一个完整的C++程序。我们可以将输入n的部分放在main函数中，然后调用上面的代码来处理素数。写成代码就是：
+\begin{verbatim}
+#include <iostream>
+using namespace std;
+
+bool arr[1000] = {};  // 声明一个数组来存储0和1，并将全部数值初始化为0
+
+int findPrimes() {
+    arr[0] = 1;  // 0不是素数
+    arr[1] = 1;  // 1不是素数
+    for (int i = 2; i < 1000; i++) {
+        if (arr[i] == 0) {  // 如果这个数是素数
+            for (int j = 2; j * i < n; j++) {  // 将它的倍数都标记为1
+                arr[j * i] = 1;
+            }
+        }
+    }
+    return 0;
+}
+
+int main() {
+    int n;
+    cin >> n;  // 输入一个整数n
+    findPrimes(n);  // 调用函数来处理素数
+    if (arr[i] == 0) {  // 如果这个数是素数
+        cout << i << " 是素数" << endl;
+    }
+    else {
+        cout << i << " 不是素数" << endl;
+    }
+    return 0;  // 返回0，表示程序正常结束
+}
+\end{verbatim}
+思考：不使用筛法的情况下，还有没有其他的算法？
+
+\section{C++的高级特性}
+C++提供了许多高级特性，可以帮助我们更好地组织代码和数据。
+
+\subsection{命名空间}
+
+命名空间（namespace）是C++中的一个重要特性，它允许我们将代码组织在不同的命名空间中，以避免名称冲突。命名空间的基本格式如下：
+\begin{verbatim}
+namespace 命名空间名 {
+    // 代码
+}
+\end{verbatim}
+以上代码的意思是：声明一个名为命名空间名的命名空间，命名空间中的代码可以在这个命名空间内访问。我们可以在不同的命名空间中定义同名的变量、函数等，而不会发生冲突。
+
+
+\subsection{面向对象编程}
+
+面向对象编程是C++的最重要特性之一。它允许我们将数据和操作数据的函数封装在一起，形成一个对象。对象是一个包含数据和方法的实体，它可以表示现实世界中的事物。同时，面向对象编程还提供了继承、多态等特性，可以帮助我们更好地组织代码和数据。
+
+\subsubsection{类和属性}
+
+类是面向对象编程的基本操作单位。如果不熟悉类，可以把类当成“超级struct”来理解，这里面除了存储数据（C++叫“属性”）以外，还可以顺便把函数（C++叫“方法”）也打包进去。
+\begin{verbatim}
+class Point2D{
+public:
+    static const int DIMENSION = 2;  // 类的常量属性
+    static int count;  // 类的静态属性
+    int x, y;
+    void move(int dx, int dy) {
+        x += dx;
+        y += dy;
+    }
+    Point2D(int x = 0, int y = 0) : x(x), y(y) { count++; }  // 构造函数
+    ~Point2D() { count--; }  // 析构函数
+}
+\end{verbatim}
+于是，这下变量和函数成了一家人：
+\begin{verbatim}
+Point2D p(1, 2);  // 创建一个Point2D对象p，x=1, y=2
+p.move(5, -3);  // 移动点p，它自己知道怎么动！
+cout << Point2D::count << endl;  // 输出类的静态属性
+\end{verbatim}
+这就是“把数据和对数据的操作绑在一起”——面向对象的核心思想。
+
+在类中，你可以看到我打了一个\texttt{public}，这说明以下属性和方法是公开的，其他所有类或者类外的东西都可以访问它。如果你不打\texttt{public}，那么默认是私有的（private），只有这个类内部可以访问；另一种访问权限是\texttt{protected}，它允许子类访问，但不允许类外的东西访问。（至于什么是子类，请先收起疑问，往下看就懂了）
+
+部分属性前面，你可以发现打了\texttt{static}符号。这说明这个属性是静态的，属于\texttt{类本身}，而不是类的实例（实例指的就是可操作的对象，例如上面的p）。静态属性可以通过类名直接访问，例如\texttt{Point2D::count}。静态属性在所有实例之间共享，因此它们的值是全局的。
+
+\subsubsection{构造和析构}
+
+类的构造函数和析构函数是特殊的方法，用于对象的初始化和清理。构造函数在创建对象（也叫实例化）时自动调用，而析构函数在对象销毁时自动调用。构造函数的名称与类名相同，并且没有返回值；析构函数的名称是类名加上波浪号（~），也没有返回值。
+
+构造函数可以有参数，用于初始化对象的属性；析构函数通常用于释放对象占用的资源。
+
+一般情况下，类有着默认的构造和析构函数。如果我们写了自己的构造和析构函数，那么默认的就会被覆盖掉。
+
+\subsubsection{封装}
+
+封装是面向对象编程的一个重要特性，它允许我们将数据和方法封装在一起，形成一个对象。封装的目的是隐藏实现细节，只暴露必要的接口给外部使用。这样可以提高代码的可维护性和可重用性。
+
+比方说：
+\begin{verbatim}
+class BankAccount {
+private:
+    int balance;  // 私有属性，外部无法直接访问
+public:
+    BankAccount(int initialBalance) : balance(initialBalance) {}  // 构造函数
+    void deposit(int amount) {  // 公共方法，允许外部调用
+        if (amount > 0) {
+            balance += amount;  // 增加余额
+        }
+    }
+    void withdraw(int amount) {  // 公共方法，允许外部调用
+        if (amount > 0 && amount <= balance) {
+            balance -= amount;  // 减少余额
+        }
+    }
+    int getBalance() const {  // 公共方法，允许外部查询余额
+        return balance;  // 返回余额
+    }
+};
+\end{verbatim}
+这样可以阻止外部直接修改余额，只能通过存款和取款方法来操作余额。问我为什么余额用int而不是double或者float的，建议重读Mini ICS。
+
+\emph{
+    在C\#中，对于封装有一个非常优雅的名词：Getter和Setter。Getter是获取属性值的方法，Setter是设置属性值的方法，同样是上述的代码我们在C\#中可以写成\texttt{public int Balance \{ get; private set; \}}，意思是只有类内可以设置这个属性的值，而类内外可以获取这个属性的值。这样就实现了封装，同时又不失优雅。C++中没有这个优雅的语法，因此我们只能像上述代码中手动定义getter。
+}
+
+\subsubsection{继承}
+
+继承是面向对象编程的一个重要特性，它允许我们创建一个新的类（子类），它继承了另一个类（父类）的属性和方法。子类可以添加自己的属性和方法，也可以重写父类的方法。被重写的方法必须是\textbf{虚方法}，也就是在父类中声明为\texttt{virtual}的方法。
+
+继承的基本格式如下：
+\begin{verbatim}
+class Shape { public: virtual double area() = 0; };
+class Circle : public Shape { ... };
+\end{verbatim}
+以上代码的意思是：声明一个名为Shape的类，它有一个纯虚函数area()，表示这个类是一个抽象类。然后声明一个名为Circle的类，它继承了Shape类，并实现了area()方法。
+
+在实际操作中，子类一般属于父类的一个特例，或者说\textbf{子类真包含于父类}。例如，我们要创建一个“大舅”类和一个“二舅”类，一个非常差的设计是让“二舅”继承自“大舅”，因为二舅并不是大舅的一个特例（或者说二舅不是大舅），反过来也一样。一个好的设计是让这两个类都继承自一个“舅舅”类（他大舅他二舅都是他舅），这样就可以避免这种问题。
+
+\subsubsection{多态}
+
+多态指的是同一个方法在不同的对象上有不同的表现。多态是通过继承和虚函数实现的。当我们调用一个虚函数时，实际调用的是子类中重写的方法，而不是父类中的方法。这种特性使得我们可以使用父类指针或引用来调用子类的方法。
+
+以继承中涉及到的Shape和Circle类为例：
+\begin{verbatim}
+Shape* shape = new Circle();  // 创建一个Circle对象，并将其赋值给Shape指针
+shape->area();  // 调用Circle类的area()方法
+\end{verbatim}
+上述代码中会自动调用Circle类的area()方法，而不是Shape类的area()方法。这就是多态的体现，而不用去关心具体的对象类型，省去了switch语句的麻烦。
+
+\subsection{重载}
+
+重载是C++中的一个重要特性，它允许我们定义多个同名的函数或运算符，但它们的参数列表或返回类型不同。写一个例子就好了：
+
+\begin{verbatim}
+class Tensor{
+    int x, y;
+public:
+    Tensor(int x, int y) : x(x), y(y) {}
+    Tensor operator+(const Tensor& other) {  // 重载加法运算符
+        return Tensor(x + other.x, y + other.y);
+    }
+}
+Tensor t1(1, 2);
+Tensor t2(3, 4);
+Tensor t3 = t1 + t2;  // 调用重载的加法运算符
+cout << t3.x << ", " << t3.y << endl;  // 输出结果
+\end{verbatim}
+以上代码就是重载的一个鲜活实例。我们重载了加法运算符，这使得我们能够对Tensor类的对象进行加法运算。合适的重载可以使代码更简洁、更易读。
+
+除了重载运算符，还可以重载流运算符来实现自定义输入输出，重载函数实现对不同参数的处理等。重载的关键是参数列表的不同，返回类型可以相同或不同。
+
+\subsection{模板}
+
+模板也是一个很重要的特性，它允许我们编写通用的代码，可以处理不同类型的数据。模板可以分为函数模板和类模板。
+
+比方说我们想写一个加法：
+\begin{verbatim}
+template <typename T>
+T add(T a, T b) {
+    return a + b;  // 返回a和b的和
+}
+int main() {
+    int x = 5, y = 10;
+    cout << add(x, y) << endl;  // 调用add函数，输出15
+    double a = 3.14, b = 2.71;
+    cout << add(a, b) << endl;  // 调用add函数，输出5.85
+    return 0;
+}
+\end{verbatim}
+这个函数就可以对任何类型的数据进行加法操作，只要这个类型支持加法运算符。对于不支持加法运算符的类型，编译器会报错（但是我们可以为这些类型重载加法运算符）。
+
+类模板的语法类似，只不过是定义一个类而不是一个函数：
+\begin{verbatim}
+template <typename T>
+class Box {
+public:
+    T value;  // 存储一个值
+    Box(T v) : value(v) {}  // 构造函数
+    T getValue() const { return value; }  // 获取值的方法
+};
+Box<int> intBox(42);  // 创建一个存储整数的Box对象
+Box<double> doubleBox(3.14);  // 创建一个存储双精度浮点数的Box对象
+\end{verbatim}
+使用模板可以显著降低代码量，提高代码的可重用性。
+
+\subsection{类型推断}
+
+类型推断是C++11引入的一个特性，它允许编译器根据变量的初始值自动推断变量的类型。使用类型推断可以使代码更简洁、更易读。
+类型推断的基本语法是使用\texttt{auto}关键字：
+\begin{verbatim}
+auto x = 5;  // 编译器推断x的类型为int
+auto y = 3.14;  // 编译器推断y的类型为double
+auto str = "Hello, World!";  // 编译器推断str的类型为const char*
+\end{verbatim}
+以上代码中，编译器会根据初始值自动推断变量的类型。但是我们并不推荐在定义变量的时候使用类型推断，因为这会使得代码的可读性降低，尤其是当变量的类型不明显时。
+
+那么我为什么要讲这个？请看下一节，这一节将会是使得整个C++成功获得“没有人能够真正精通”称号的关键特性。
+
+\section{STL}
+
+STL（Standard Template Library）是C++的最重要特性，它提供了一组通用的模板类和函数，可以帮助我们更高效地处理数据结构和算法。STL包含了许多常用的数据结构和算法，例如向量（vector）、链表（list）、集合（set）、映射（map）等。
+
+简单地说，STL可以看作是：容器+迭代器+算法。容器把数据结构当变量类型用，迭代器把指针当普通函数用，算法把现成高复杂的轮子当函数用，这玩意能让你用三行代码完成 C 里三十行甚至三百行的工作，还自带内存管理和类型安全。
+
+于是，C++开发就变成了：打开编辑器，敲下头文件，剩下的一律交给STL。
+
+\subsection{容器}
+
+举个最常见的例子：
+\begin{verbatim}
+std::vector<int> v = {3,1,4};   // 自动扩容的数组
+std::set<int> s = {3,1,4};      // 自动排序的红黑树
+std::unordered_map<std::string,int> m;  // 哈希表
+\end{verbatim}
+以上代码中，我们使用了STL提供的向量（vector）、集合（set）和映射（unordered\_map）容器。它们都是模板类，可以存储任意类型的数据。使用它们非常容易：头文件即声明、自动管理内存、接口几乎全STL统一。
+
+常见的容器有以下几种：（如果我没记错的话，C++正课会要求全部掌握这些容器，我只能说：祝你好运！）
+\begin{itemize}
+    \item \texttt{vector}：动态数组（向量），可以自动扩容，支持随机访问。
+    \item \texttt{list}：双向链表，支持高效的插入和删除操作，但不支持随机访问。
+    \item \texttt{deque}：双端队列，支持在两端高效地插入和删除操作。
+    \item \texttt{set}：集合，存储唯一元素，并自动排序。
+    \item \texttt{map}：映射，存储键值对，并根据键自动排序。
+    \item \texttt{unordered\_set}：无序集合，存储唯一元素，不自动排序，查询效率高。
+    \item \texttt{unordered\_map}：无序映射，存储键值对，不自动排序，查询效率高。
+    \item \texttt{stack}：栈，后进先出（LIFO）。
+    \item \texttt{queue}：队列，先进先出（FIFO）。
+    \item \texttt{priority\_queue}：优先队列，支持按优先级访问元素。
+    \item \texttt{array}：固定大小的数组，类似于C风格的数组，但提供了更多的功能。
+    \item \texttt{bitset}：位集合，支持高效的位操作。
+    \item \texttt{tuple}：元组，可以存储不同类型的多个值。
+    \item \texttt{forward\_list}：单向链表，类似于list，但只支持单向遍历。
+    \item \texttt{unordered\_multiset}：无序多重集合，存储可以重复的元素，不自动排序。
+    \item \texttt{unordered\_multimap}：无序多重映射，存储可以重复的键值对，不自动排序。
+\end{itemize}
+其实遇事不决的情况下，我们可以按照需求选择容器：
+\begin{itemize}
+    \item 速查：如果需要快速查找元素（建哈希表），使用\texttt{unordered\_set}或\texttt{unordered\_map}。
+    \item 排序：如果需要自动排序，\texttt{priority\_queue}是最好的选择，其次是\texttt{set}和\texttt{map}。
+    \item 频繁插入删除：如果需要频繁插入和删除元素，使用\texttt{list}。
+    \item 只关心两头：如果只关心两端的插入和删除，使用\texttt{deque}。如果能确定用的是栈或队列，使用\texttt{stack}或\texttt{queue}。
+    \item 遇事不决：如果不确定用什么容器，使用\texttt{vector}。
+\end{itemize}
+
+\subsection{迭代器}
+
+迭代器可以认为是指针的语法糖。一个示例：
+\begin{verbatim}
+for(auto it=v.begin(); it!=v.end(); ++it) cout<<*it<<' ';
+// 或者直接：
+for(auto x : v) cout<<x<<' '; // auto最应该这么用！
+\end{verbatim}
+
+所有容器风格完全一致，完全不必关心装的是什么玩意。一些常见的迭代器和方法：
+\begin{itemize}
+    \item \texttt{begin()}：返回容器的起始迭代器。
+    \item \texttt{end()}：返回容器的结束迭代器。
+    \item \texttt{rbegin()}：返回容器的反向起始迭代器。
+    \item \texttt{rend()}：返回容器的反向结束迭代器。
+    \item \texttt{cbegin()}：返回容器的常量起始迭代器。
+    \item \texttt{cend()}：返回容器的常量结束迭代器。
+    \item \texttt{next(it)}：返回迭代器it的下一个位置。
+    \item \texttt{prev(it)}：返回迭代器it的上一个位置。
+    \item \texttt{distance(it1, it2)}：返回迭代器it1和it2之间的距离。
+\end{itemize}
+
+迭代器也可以加减，例如\texttt{it+1}表示下一个元素，\texttt{it-1}表示上一个元素。
+
+\subsection{算法}
+STL提供了许多常用的算法，可以帮助我们更高效地处理数据，直接拿出来用就行：
+\begin{verbatim}
+std::sort(v.begin(), v.end());           // 快排
+std::binary_search(v.begin(), v.end(), 4);  // 二分
+std::reverse(v.begin(), v.end());        // 原地翻转
+\end{verbatim}
+
+以上代码中，我们使用了STL提供的排序（sort）、二分查找（binary\_search）和翻转（reverse）算法。STL的算法通常是模板函数，可以处理任意类型的数据。
+
+除此之外，还有一些常用的算法：
+\begin{itemize}
+    \item \texttt{std::find}：查找元素。
+    \item \texttt{std::count}：统计元素出现的次数。
+    \item \texttt{std::accumulate}：计算元素的累加和。
+    \item \texttt{std::max\_element}：找到最大元素。
+    \item \texttt{std::min\_element}：找到最小元素。
+    \item \texttt{std::shuffle}：随机打乱元素顺序。
+    \item \texttt{std::unique}：去除重复元素。
+    \item \texttt{std::merge}：合并两个已排序的范围。
+    \item \texttt{std::partition}：对元素进行分区。
+    \item \texttt{std::transform}：对元素进行转换。
+    \item \texttt{std::for\_each}：对每个元素执行操作。
+    \item \texttt{std::set\_union}：计算两个集合的
+    \item \texttt{std::set\_intersection}：计算两个集合的交集。
+    \item \texttt{std::set\_difference}：计算两个集合的差集。
+    \item \texttt{std::set\_symmetric\_difference}：计算两个集合的对称差集。
+    \item \texttt{std::nth\_element}：找到第n小的元素。
+    \item \texttt{std::lower\_bound}：找到第一个不小于给定值的元素。
+    \item \texttt{std::upper\_bound}：找到第一个大于给定值的元素。
+\end{itemize}
+
+利用头文件\texttt{<algorithm>}可以使用这些算法。STL的算法通常是模板函数，可以处理任意类型的数据；配合迭代器，算法和容器原地解耦。
+
+以上，就是C++的全部内容了（也不是全部内容，毕竟C++14、C++17等版本有越来越多的新特性，但是能掌握C++11的全部特性就已经不得了了）。C++的语法和特性非常丰富，学习曲线较陡，但一旦掌握，就可以编写高效、可维护的代码。
 
 \end{document}
