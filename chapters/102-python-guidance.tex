@@ -1,0 +1,490 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+\chapter{Python高速入门}
+
+本章会快速带领大家过一遍Python的基本语法和常用特性。除了用作预习材料以外，还可以在期末考试复习的时候来快速回顾其基本语法与常用特性。
+
+在PKU，Python主要是文科生学习较多，因此我这一章的节奏会比C++的慢许多，也不会像C++一样涉及那么多的名词（内存空间、指针、引用等）。
+
+\section{Python的基本语法}
+
+我在C++的章节中提过，写代码的本质是和计算机说话。如果说C++更像正式信件，有信头、正文、落款，那么Python更像是口语化的对话。
+
+比方说，我们写一个最基本的程序：
+
+\begin{verbatim}
+str = "Hello, world!"
+print(str)
+\end{verbatim}
+
+执行以上代码，我们会看到输出：“Hello, world!”。
+
+逐行拆解代码，第一行的意思是，我告诉计算机“我有一个变量叫做str，它的值是Hello, world!”；第二行，则告诉计算机“请把变量str的值打印出来”。
+
+看起来非常简单。
+
+\subsection{Python的变量}
+
+Python的变量非常简单，并不需要遵从“先声明再使用”的规则，而是直接就可以拿出来用。同时，Python的语法也非常宽松，对于变量并不需要指定其类型，一个变量可以是任何类型的值。
+
+\begin{verbatim}
+a = 10 # 整数
+a = 3.14 # 浮点数
+a = 1 + 2j # 复数
+a = "Hello, world!" # 字符串
+a = [1, 2, 3] # 列表
+a = (1, 2, 3) # 元组
+a = {1, 2, 3} # 集合
+a = {"name": "Alice", "age": 30} # 字典
+a = True # 布尔值
+a = None # 空值
+\end{verbatim}
+这么直接拿出来就可以用。这里面的等号\texttt{=}不是数学上的等号，它的意思是“把右边的值赋给左边的变量”。而且，Python并不需要担心像C++一样的溢出问题，Python会自动处理大数。
+
+一切都比C++简单得多。
+
+\subsection{Python的运算}
+
+有时候，我们需要计算机帮助我们执行一些运算。例如：
+\begin{verbatim}
+a = 10
+b = 3
+print(a + b) # 输出13
+print(a - b) # 输出7
+a += b # 相当于a = a + b
+\end{verbatim}
+a+b的意思就是“把a和b相加”，而a+=b的意思是“把b加到a上”。
+
+Python支持许多常见的运算符：
+\begin{itemize}
+    \item 四则运算：加\texttt{+}、减\texttt{-}、乘\texttt{*}、除\texttt{/}（浮点除法）和取整除\texttt{//}（整数除法）。
+    \item 乘方：使用\texttt{**}表示乘方运算。
+    \item 取余数：使用\texttt{\%}表示取余数运算。
+\end{itemize}
+
+对于字符串类型的变量，使用加法\texttt{+}可以连接两个字符串，例如：
+\begin{verbatim}
+str1 = "Hello, "
+str2 = "world!"
+print(str1 + str2) # 输出"Hello, world!"
+\end{verbatim}
+
+\subsection{输入、输出}
+Python的输入输出非常简单。我们可以使用\texttt{print()}函数来输出内容，而使用\texttt{input()}函数来获取用户输入。input函数会暂停程序的执行，等待用户输入内容，并将输入的内容作为字符串返回。
+
+input里面的内容是提示用户输入的文本。
+
+例如：
+\begin{verbatim}
+name = input("请输入你的名字：")
+print("Hello, " + name + "!")
+\end{verbatim}
+
+我们还可以使用一些格式化字符串的方式来输出内容，例如：
+\begin{verbatim}
+name = "Alice"
+age = 30
+print(f"Hello, {name}! You are {age} years old.")
+\end{verbatim}
+这会输出“Hello, Alice! You are 30 years old.”。这个f+字符串的语法表示这是一个格式化字符串，可以直接在字符串中使用变量。
+
+我们还可以使用一些参数来进一步格式化输出内容，例如：
+\begin{verbatim}
+print("Hello, World!", end="") # 不换行输出
+print("Hello, 1", "Hello, 2", sep=", ") # 使用逗号分隔输出
+print("Hello, World!", file=open("output.txt", "w")) # 输出到文件
+\end{verbatim}
+
+上述代码中的第二个print函数使用了\texttt{sep}参数来指定输出内容之间的分隔符，默认是空格。它的输出将会是：“Hello, 1, Hello, 2”。
+
+上述输出到文件的例子会将“Hello, World!”写入同目录下的output.txt文件中，这个w的意思是“写入模式”，如果文件不存在则会创建，如果存在则会覆盖原有内容。如果改成\texttt{a}，则会以追加模式打开文件，即在文件末尾添加内容。
+
+\section{控制程序的执行流程}
+
+\subsection{条件语句}
+
+有时候，我们需要让计算机根据条件来执行不同的操作。Python提供了\texttt{if}语句来实现这一点。
+
+例如，我们可以根据用户输入的年龄来判断是否成年：
+\begin{verbatim}
+age = int(input("请输入你的年龄："))
+if age >= 18:
+    print("你是成年人。")
+else:
+    print("你是未成年人。")
+\end{verbatim}
+在这个例子中，\texttt{if}语句后面跟着一个条件表达式（\texttt{age >= 18}），如果条件为真，则执行冒号后面的代码块；否则，执行\texttt{else}后面的代码块。
+
+Python使用\textbf{缩进}来表示代码块的层次结构，且对缩进要求极为严格。通常情况下，我们用一个制表符或者四个空格来表示一个缩进层级。要打出制表符，可以按下Tab键。
+
+\subsection{循环语句}
+
+有时候，我们需要让计算机重复执行某些操作。Python提供了\texttt{for}和\texttt{while}两种循环语句。
+
+比方说我们使用for循环来输出1到10的数字：
+\begin{verbatim}
+for i in range(1, 11):
+    print(i)
+\end{verbatim}
+在这个例子中，\texttt{range(1, 11)}生成了一个从1到10的整数序列，\texttt{for}循环会依次将每个数字赋值给变量\texttt{i}，并执行代码块中的操作。
+
+我们也可以使用\texttt{while}循环来实现类似的功能：
+\begin{verbatim}
+i = 1
+while i <= 10:
+    print(i)
+    i += 1
+\end{verbatim}
+在这个例子中，\texttt{while}循环内的代码块会一直循环执行，直到条件\texttt{i <= 10}不再满足为止。
+
+可以看到，我们在这个循环内部对i进行了增加操作。如果没有这个操作，循环将会无限进行下去，技术上一般叫做“死循环”。表现在程序上，上述程序会不断地输出1，直到你强制终止程序。而一般for循环则不会出现这种情况，因为它会自动处理循环变量和循环条件。
+
+有时候，我们在使用for循环的时候并不关心循环变量的值，只是想要重复执行某些操作。这时，我们可以使用下划线作为循环变量的占位符：
+\begin{verbatim}
+for _ in range(5):
+    print("Hello, World!")
+\end{verbatim}
+在这个例子中，循环会执行5次，但我们并不关心循环变量的值，只是简单地输出“Hello, World!”，于是使用下划线将其“丢弃”。
+
+\texttt{break}和\texttt{continue}语句可以用来控制循环的执行流程。使用\texttt{break}可以提前退出循环，而使用\texttt{continue}可以跳过当前迭代，继续下一次循环。
+例如：
+\begin{verbatim}
+for i in range(1, 11):
+    if i == 5:
+        break  # 当i等于5时，退出循环
+    print(i)
+for i in range(1, 11):
+    if i == 5:
+        continue  # 当i等于5时，跳过当前迭代
+    print(i)
+\end{verbatim}
+上述两个循环中，第一个循环会输出1到4，然后退出循环；第二个循环会输出1到4、6到10，但跳过5。
+
+\section{复合数据类型：列表、元组、集合、字典}
+
+Python提供了多种复合数据类型，用于存储多个值。最常用的有列表（list）、元组（tuple）、集合（set）和字典（dict）。
+
+\subsection{列表（list）}
+列表是一个有序的可变集合，可以存储任意类型的元素。我们可以使用方括号\texttt{[]}来创建一个列表，并使用索引来访问元素。索引从0开始，如果我们试图访问一个不存在的索引，会抛出\texttt{IndexError}异常。
+例如：
+\begin{verbatim}
+my_list = [1, 2, 3, "Hello", True]
+print(my_list[0])  # 输出1
+print(my_list[3])  # 输出"Hello"
+print(my_list[-1]) # 输出True（负索引从后往前计数）
+print(my_list[5])  # 抛出IndexError异常
+\end{verbatim}
+
+我们可以使用\texttt{append()}方法向列表添加元素，使用\texttt{remove()}方法删除元素，使用\texttt{sort()}方法对列表进行排序等。
+例如：
+\begin{verbatim}
+my_list = [1, 2, 3, "Hello"]
+my_list.append(4)  # 添加元素4
+my_list.remove("Hello")  # 删除元素"Hello" 
+my_list.sort()  # 对列表进行排序
+print(my_list)  # 输出[1, 2, 3, 4]
+\end{verbatim}
+
+\subsection{元组（tuple）}
+元组和列表类似，但是它不可以被修改（不可变）。我们可以使用圆括号\texttt{()}来创建一个元组。元组的元素也可以通过索引访问。
+例如：
+\begin{verbatim}
+my_tuple = (1, 2, 3, "Hello", True)
+print(my_tuple[0])  # 输出1
+print(my_tuple[3])  # 输出"Hello"
+print(my_tuple[-1]) # 输出True
+print(my_tuple[5])  # 抛出IndexError异常
+\end{verbatim}
+
+元组的元素不能被修改，但我们可以通过重新赋值来创建一个新的元组。
+例如：
+\begin{verbatim}
+my_tuple = (1, 2, 3)
+my_tuple_1 = my_tuple + (4,)  # 创建一个新的元组
+print(my_tuple_1)  # 输出(1, 2, 3, 4)
+\end{verbatim}
+
+\subsection{集合（set）}
+集合是一个无序的可变集合，不能包含重复元素。我们可以使用花括号\texttt{{}}来创建一个集合。集合的元素也可以通过索引访问，但由于集合是无序的，所以集合没有索引这种东西。
+
+集合也有类似于列表的添加和删除元素的方法，例如\texttt{add()}和\texttt{remove()}。但是集合不支持排序：我们无法对一个本来就没有“顺序”这个定义的东西进行排序。
+
+例如：
+\begin{verbatim}
+my_set = {1, 2, 3, "Hello", True}
+print(my_set)  # 输出{1, 2, 3, "Hello", True}
+my_set.add(4)  # 添加元素4
+my_set.remove("Hello")  # 删除元素"Hello"
+print(my_set)  # 输出{1, 2, 3, 4, True}
+\end{verbatim}
+
+\subsection{字典（dict）}
+字典是一个无序的可变集合，存储键值对（key-value pairs）。我们可以使用花括号\texttt{{}}来创建一个字典，并使用键来访问值。字典的键必须是不可变类型（如字符串、整数等），而值可以是任意类型。
+例如：
+\begin{verbatim}
+my_dict = {"name": "Alice", "age": 30, "is_student": False}
+print(my_dict["name"])  # 输出"Alice"
+print(my_dict["age"])   # 输出30
+print(my_dict["is_student"])  # 输出False
+my_dict["age"] = 31  # 修改键"age"对应的值
+print(my_dict)  # 输出{"name": "Alice", "age": 31, "is_student": False}
+\end{verbatim}
+
+对于字典，我们可以使用\texttt{keys()}方法获取所有的键，使用\texttt{values()}方法获取所有的值，使用\texttt{items()}方法获取所有的键值对。每一个键值对都是一个元组。
+例如：
+
+\begin{verbatim}
+print(my_dict.keys())  # 输出dict_keys(['name', 'age', 'is_student'])
+print(my_dict.values())  # 输出dict_values(['Alice', 31, False])
+print(my_dict.items())  
+# 输出dict_items([('name', 'Alice'), ('age', 31), ('is_student', False)])
+\end{verbatim}
+
+\subsection{高级操作：遍历、切片和列表推导式}
+
+我们可以使用for循环来对以上各种复合数据类型进行遍历：
+\begin{verbatim}
+for item in my_list:
+    print(item)  # 遍历列表
+for item in my_tuple:
+    print(item)  # 遍历元组
+for item in my_set:
+    print(item)  # 遍历集合
+for key, value in my_dict.items():
+    print(key, value)  # 遍历字典
+for value in my_dict.values():
+    print(value)  # 遍历字典的值
+\end{verbatim}
+
+我们还可以使用对这些复合数据类型进行切片。切片的语法是\texttt{start:end:step}，其中\texttt{start}是起始索引，\texttt{end}是结束索引（不包含），\texttt{step}是步长（可以省略）。
+例如：
+\begin{verbatim}
+my_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+print(my_list[2:5])  # 输出[3, 4, 5]
+print(my_list[::2])  # 输出[1, 3, 5, 7, 9]（步长为2）
+print(my_list[::-1])  # 输出[10, 9, 8, 7, 6, 5, 4, 3, 2, 1]（反转列表）
+\end{verbatim}
+
+我们还可以使用列表推导式（list comprehension）来创建新的列表。列表推导式是一种简洁的语法，可以在一行代码中创建一个新的列表。
+例如：
+\begin{verbatim}
+squares = [x**2 for x in range(1, 11)] 
+print(squares)  # 输出[1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
+evens = [x for x in range(1, 11) if x % 2 == 0]  
+print(evens)  # 输出[2, 4, 6, 8, 10]
+\end{verbatim}
+
+以上代码中，列表推导式的通用语法是\texttt{[expression for item in iterable if condition]}，其中\texttt{expression}是要计算的表达式，\texttt{iterable}是可迭代对象（如列表、元组等），\texttt{condition}是可选的条件。
+
+看起来真就像说话一样。
+
+\subsection{字符串}
+
+字符串指的是一串字符的序列。Python中的字符串是不可变的，这意味着一旦创建，就不能修改其内容。
+
+比方说一个字符串：
+\begin{verbatim}
+my_string = "Hello, world!"
+\end{verbatim}
+我们可以使用索引来访问字符串中的字符，索引从0开始。例如：
+\begin{verbatim}
+print(my_string[0])  # 输出'H'
+print(my_string[7])  # 输出'w'
+print(my_string[-1]) # 输出'!'
+print(my_string[13]) # 抛出IndexError异常
+my_string[0] = 'h'  # 抛出TypeError异常，因为字符串是不可变的
+\end{verbatim}
+
+字符串可以看作是一个字符的元组，因此我们可以使用切片来获取字符串的子串：
+\begin{verbatim}
+print(my_string[0:5])  # 输出'Hello'
+print(my_string[7:])    # 输出'world!'
+print(my_string[:5])    # 输出'Hello'
+print(my_string[::2])   # 输出'Hlo ol!'
+print(my_string[::-1])  # 输出'!dlrow ,olleH'（反转字符串）
+\end{verbatim}
+
+我们还可以使用字符串的各种特有方法来操作字符串，例如：
+\begin{verbatim}
+my_string.lower()  # 'hello, world!'（转换为小写）
+my_string.upper()  # 'HELLO, WORLD!'（转换为大写）
+my_string.strip()  # 'Hello, world!'（去除首尾空格）
+my_string.replace("world", "Python")  # 'Hello, Python!'（替换子串）
+my_string.split(", ")  # ['Hello', 'world!']（按逗号分割字符串）
+my_string.find("world")  # 7（查找子串的位置）
+my_string.startswith("Hello")  # True（检查字符串是否以指定子串开头）
+my_string.endswith("!")  # True（检查字符串是否以指定子串结尾）
+my_string.count("o")  # 2（统计子串出现的次数）
+\end{verbatim}
+
+除了使用双引号来定义字符串，我们还可以使用单引号来定义字符串。两者完全等价。当然，由双引号框起来的字符串中包含单引号是可行的，反过来也可行，这个可以用来避免转义字符的使用。
+
+\begin{verbatim}
+my_string = 'Hello, world!'
+print(my_string)  # 输出'Hello, world!'
+\end{verbatim}
+
+我们还可以使用三引号（单引号或双引号）来定义多行字符串，这样就可以在字符串中包含换行符了：
+\begin{verbatim}
+my_string = """Hello,world!"""
+print(my_string)  # 输出'Hello, world!'
+my_string = '''Hello,
+world!'''
+print(my_string)  # 输出'Hello,\nworld!'
+\end{verbatim}
+
+\texttt{\textbackslash n}指的是换行。
+
+\section{函数和模块}
+
+\subsection{函数}
+
+有时候，我们有一个功能需要多次使用，这时我们可以将其封装成一个函数。Python使用\texttt{def}关键字来定义函数。简单地说，函数可以把套路打包成一句话，就像汉语中的成语。
+
+例如，我们可以定义一个函数来计算两个数的和：
+\begin{verbatim}
+def add(a, b):
+    return a + b
+\end{verbatim}
+
+一个函数应该以def开头，后面跟着函数名和参数列表。函数体使用缩进来表示。一个函数应该包含一个返回值，使用\texttt{return}关键字来返回结果就可以了。
+
+例如：
+
+\begin{verbatim}
+result = add(3, 5)
+print(result)  # 输出8  
+\end{verbatim}
+
+我们也可以在函数中使用默认参数，这样在调用函数时可以省略某些参数：
+\begin{verbatim}
+def greet(name="World"):
+    print(f"Hello, {name}!")
+
+
+greet()  # 输出"Hello, World!"
+greet("Alice")  # 输出"Hello, Alice!"
+\end{verbatim}
+
+函数还可以使用递归来解决问题，即函数在其内部调用自身。例如计算阶乘：
+\begin{verbatim}
+def factorial(n):
+    if n == 0:
+        return 1
+    else:
+        return n * factorial(n - 1)
+
+
+print(factorial(5))  # 输出120
+\end{verbatim}
+
+递归从某种程度上说也可以认为是循环的一种形式。同样的，递归也要有终止条件，否则会导致无限递归，和死循环一样。
+
+\subsection{模块}
+有时候，一些功能大家都在用。这时候，为了防止重复工作，程序员们把这些功能打包成一个模块，供大家使用；而我们使用者只需要使用\texttt{import}关键字来导入模块，就可以使用模块中的许多方便的方法了。
+
+例如，我们可以导入Python的内置模块\texttt{math}来使用数学模块：
+\begin{verbatim}
+import math
+print(math.sqrt(16))  # 输出4.0（计算平方根）
+print(math.pi)  # 输出3.141592653589793（圆周率）
+print(math.factorial(5))  # 输出120（计算阶乘）
+\end{verbatim}
+
+有时候，我们只需要导入模块中的某个函数或类，可以使用\texttt{from ... import ...}语法：
+\begin{verbatim}
+from math import sqrt, pi
+print(sqrt(16))  # 输出4.0
+print(pi)  # 输出3.141592653589793
+print(factorial(5))  # 抛出NameError异常，因为factorial没有被导入
+\end{verbatim}
+
+还有一些时候，模块名称太长（例如matplotlib），我们可以使用\texttt{as}关键字来给模块起一个别名：
+\begin{verbatim}
+import matplotlib.pyplot as plt
+plt.plot([1, 2, 3], [4, 5, 6])  # 画一条线
+plt.show()  # 显示图形
+\end{verbatim}
+
+\section{文件操作}
+
+有时候，我们需要将数据保存到文件中，或者从文件中读取数据。Python提供了简单的文件操作接口。
+例如，我们可以使用\texttt{open()}函数打开一个文件，并使用\texttt{read()}方法读取文件内容：
+\begin{verbatim}
+with open("example.txt", "r") as file:
+    content = file.read()
+    print(content)  # 输出文件内容
+with open("example.txt", "w") as file:
+    file.write("Hello, world!")  # 写入内容到文件
+with open("example.txt", "a") as file:
+    file.write("\nThis is a new line.")  # 追加内容到文件
+\end{verbatim}
+
+我们可以使用\texttt{with}语句来自动管理文件的打开和关闭，这样可以避免忘记关闭文件导致资源泄漏的问题。
+
+\section{文科生的Python}
+
+对于文科生来说，Python的语法和特性已经足够简单了。我们可以使用Python来处理文本、数据分析等。同时，Python有着非常蓬勃的生态，同学们可以调用许多现成的库来完成各种任务。
+
+一般而言，文科生的Python缺不了三件套：超级Excel（Pandas）、数据可视化（Matplotlib）和自然语言处理（jieba）。这三件套可以帮助文科生处理数据、分析数据和可视化数据。
+
+\subsection{Pandas}
+
+Pandas是一个强大的数据分析库，可以帮助我们处理表格数据。
+
+Pandas比较喜欢的文件是CSV（逗号分隔的值）文件，我们可以使用\texttt{read\_csv()}函数来读取CSV文件，并将其转换为DataFrame对象。当然，Pandas也支持其他格式的文件，如Excel、JSON等。
+
+\begin{verbatim}
+import pandas as pd
+df = pd.read_csv("data.csv")  # 读取CSV文件
+print(df.head())  # 输出前5行数据
+df.to_csv("output.csv", index=False)  # 将DataFrame保存为CSV文件
+\end{verbatim}
+
+然后，对于这个DataFrame对象，我们可以使用各种方法来处理数据，例如筛选、排序、分组等：
+\begin{verbatim}
+filtered_df = df[df["age"] > 18]  # 筛选年龄大于18的数据
+sorted_df = df.sort_values(by="name")  # 按照姓名排序
+df[df['朝代'] == '唐']['作者'].value_counts()  # 输出唐代谁被提及最多
+pd.merge(df1, df2, on='书名')  # 合并两个表，随意拼接
+\end{verbatim}
+
+\subsection{Matplotlib}
+
+Matplotlib是一个强大的数据可视化库，可以帮助我们绘制各种图表：折线图看朝代更替与词频变化，柱状图比不同译本字数，词云图让关键词自己“跳出”屏幕。
+
+比方说：
+\begin{verbatim}
+import matplotlib.pyplot as plt
+plt.plot(df['年份'], df['酒'])
+plt.title('唐诗中“酒”字频率变化')
+plt.show()
+\end{verbatim}
+
+只需要四行代码，就可以轻轻松松绘制成一张折线图。
+
+当然，plt有两个常见的小坑：
+\begin{itemize}
+    \item 中文乱码？调包下面加一行\texttt{plt.rcParams['font.sans-serif'] = ['SimHei']}完事。
+    \item 颜色太理工？\texttt{plt.style.use('seaborn-v0\_8-pastel')}一键切换温柔色调。
+\end{itemize}
+
+\subsection{jieba}
+jieba是一个中文分词库，可以帮助我们对中文文本进行分词处理。它可以将一段连续的中文文本切分成一个个单独的词语。
+
+比方说，我想要把一整段《红楼梦》切成“贾宝玉”“林黛玉”“葬花”等词语，并统计频次：
+\begin{verbatim}
+import jieba
+with open("book.txt", "r", encoding="utf-8") as file:
+    text = file.read()
+words = jieba.cut("林黛玉葬花")  # 分词，精确模式
+jieba.add_word("林黛玉葬花")  # 添加新词，这个词会被识别为一个整体
+\end{verbatim}
+
+当然，三件套最好一起用：Pandas读数据$\rightarrow$jieba分词$ \rightarrow $Pandas统计$ \rightarrow $Matplotlib可视化。这样可以轻松地完成论文中最让文科生们头痛的“数据分析”部分了！不过以上三件套的使用方法只是冰山一角，文科生们可以通过查阅相关文档和教程来深入学习。
+
+当然，Python也是一门语言，所有的语言都需要大量的练习和实践才能掌握；仅仅是看完这一章可能只需要一天，但是真正熟练应用语法可能需要一周的时间，熟练玩转文科生三板斧可能需要一个学期甚至还要多的时间。不过，不用担心：路在脚下，行则将至，只要你坚持下去，就一定能骄傲地说出：我是文科生，但我Python用得也很好。
+
+\end{document}
