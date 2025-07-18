@@ -356,6 +356,8 @@ LaTeX其实还有“注释”部分，这些部分仅在tex源码中存在，但
 
 在 LaTeX 中，反斜杠 (\textbackslash) 是一个特殊字符，用于引入命令和转义。例如\texttt{\textbackslash \$}可以强制输出美元符号而不是将其视为数学公式的开始。如果需要在文本中输入反斜杠本身，不可以使用两个反斜杠 (\textbackslash\textbackslash)，而是需要使用 \texttt{\textbackslash textbackslash} 命令来实际地打出一个反斜杠。
 
+除此之外，LaTeX支持飘号\textasciitilde ，但是默认的飘号极不美观。我们可以使用 \texttt{\textbackslash textasciitilde} 命令来打出一个美观的飘号。
+
 \subsubsection{数学公式}
 
 LaTeX 对数学公式的支持非常强大。可以使用美元符号 (\$) 来包裹行内公式，或者使用两个美元符号 (\$\$) 来包裹块级公式。例如：
