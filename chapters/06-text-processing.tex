@@ -10,24 +10,24 @@
 
 \begin{table}[htbp]
 \centering
-\begin{tabular}{||c||c|c|c|c||}
-\hline\hline
+\begin{tabular}{c|cccc}
+\hline
 \textbf{特性} & \textbf{MS Word} & \textbf{Markdown} & \textbf{LaTeX} & \textbf{Typst} \\
-\hline\hline
+\hline
 安装 & 简单 & 简单 & 难 & 简单 \\
-\hline
+
 语法复杂度 & 非常简单 & 简单 & 高 & 中 \\
-\hline
+
 编译速度 & 较快 & 快 & 慢 & 快 \\
-\hline
+
 排版能力 & 较强 & 一般 & 极强 & 较强 \\
-\hline
+
 模板能力 & 几乎没有 & 中等 & 强 & 强 \\
-\hline
+
 编程能力 & 无 & 无 & 强，风格古老 & 强，风格现代 \\
-\hline
+
 方言 & 无 & 极多 & 有 & 较少 \\
-\hline\hline
+\hline
 \end{tabular}
 \caption{不同排版工具的对比}
 \end{table}
@@ -56,22 +56,22 @@ Markdown 的内容输入和纯文本文件几乎一模一样，接下来我们�
 
 Markdown 使用井号（\#）来表示标题。井号的数量表示标题的层级，例如：
 
-\begin{verbatim}
+\begin{lstlisting}
 # 一级标题
 ## 二级标题
 ### 三级标题
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{强调、删除}
 
 在 Markdown 中，可以使用星号 (*) 或下划线 (\_) 来表示强调。单个星号或下划线表示斜体，两个星号或下划线表示粗体。同时，还可以使用波浪号(~)来表示删除线，例如：
 
-\begin{verbatim}
+\begin{lstlisting}
 *斜体文本*
 **粗体文本**
 ***粗斜体文本***
 ~~删除线文本~~
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{转义}
 
@@ -81,13 +81,13 @@ Markdown 使用井号（\#）来表示标题。井号的数量表示标题的层
 
 在 Markdown 中，可以使用反引号来表示代码。单个反引号表示行内代码，三个反引号表示代码块。例如：
 
-\begin{verbatim}
+\begin{lstlisting}
 `行内代码`
 
 ```
 代码块
 ```
-\end{verbatim}
+\end{lstlisting}
 
 如果需要在代码块中打出反引号且防止此反引号被编译，只要保证用于包装的反引号数量比防止编译的反引号数量多就可以了。
 
@@ -95,67 +95,66 @@ Markdown 使用井号（\#）来表示标题。井号的数量表示标题的层
 
 在 Markdown 中，可以使用大于号 (\texttt{>}) 来表示引用。引用块也是可以嵌套的，只需要在每一行的开头添加一个大于号即可。例如：
 
-\begin{verbatim}
+\begin{lstlisting}
 > 这是一段引用文本。
 > > 这是一段嵌套的引用文本。
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{列表}
 
 在 Markdown 中，可以使用减号 (-) 来表示无序列表。例如：
 
-\begin{verbatim}
+\begin{lstlisting}
 - 列表项 1
 - 列表项 2
 - 列表项 3
-\end{verbatim}
+\end{lstlisting}
 
 有序列表则使用数字加点的方式表示，例如：
 
-\begin{verbatim}
-1. 列表项 1
+\begin{lstlisting}
 2. 列表项 2
 3. 列表项 3
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{表格}
 
 在 Markdown 中，可以使用竖线 (|) 来表示表格。表格的第一行是表头，第二行是分隔线，后面的行是表格内容。例如：
 
-\begin{verbatim}
+\begin{lstlisting}
 | 列表项 1 | 列表项 2 | 列表项 3 |
 | -------- | -------- | -------- |
 | 内容 1  | 内容 2  | 内容 3  |
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{外部资源：链接、图片}
 
 在 Markdown 中，可以使用方括号和圆括号来表示链接。例如：
 
-\begin{verbatim}
+\begin{lstlisting}
 [链接文本](https://www.example.com)
-\end{verbatim}
+\end{lstlisting}
 
 在 Markdown 中，可以使用感叹号、方括号和圆括号来表示图片。例如：
 
-\begin{verbatim}
+\begin{lstlisting}
 ![图片描述](https://www.example.com/image.png)
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{数学公式}
 
 在 Markdown 中，可以使用美元符号 (\$) 来表示行内公式。例如：
 
-\begin{verbatim}
+\begin{lstlisting}
 这是一个行内公式 $E=mc^2$ 的示例。
-\end{verbatim}
+\end{lstlisting}
 
 如果需要输入块级公式，可以使用两个美元符号 (\$\$) 来包裹公式。例如：
 
-\begin{verbatim}
+\begin{lstlisting}
 这是一个块级公式的示例：
 $$ E=mc^2 $$
-\end{verbatim}
+\end{lstlisting}
 
 大多数的 Markdown 编译器都会正确渲染 LaTeX 公式，但是不排除少数编译器不支持渲染 LaTeX。一般而言，不支持渲染的编译器将会原样显示公式内容。开始写作前试试编辑器能否正常渲染公式总是好的选择。
 
@@ -177,11 +176,11 @@ LaTeX的安装冗长且复杂，通常需要安装一个完整的 TeX 发行版�
 
 然后，检查自己的用户名是不是无空格的英文。如果不是，建议修改，这是一个一劳永逸的办法。另一个办法是执行以下命令（注意：PowerShell 用户请自行替换命令为正确的命令）:
 
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
   mkdir C:\temp
   set TEMP=C:\temp
   set TMP=C:\temp
-\end{verbatim}
+\end{lstlisting}
 
 如无意外，用户可以从最近的 CTAN 源下载 TexLive 的相关镜像（这个镜像大小高达 6GB）。当然，官网下载过程是非常缓慢的，如果实在是无法忍受其速度，可以考虑改用其他镜像站。
 
@@ -197,29 +196,29 @@ LaTeX的安装冗长且复杂，通常需要安装一个完整的 TeX 发行版�
 
 然后，下载光盘镜像，并进行装载。
 
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
   sudo apt install fontconfig gedit 
   sudo mkdir /mnt/texlive 
   sudo mount ./texlive2025.iso /mnt/texlive 
   sudo /mnt/texlive/install-tl
-\end{verbatim}
+\end{lstlisting}
 
 之后，终端会弹出大量内容，我们可以按照提示进行操作。安装完毕后，将安装镜像卸载：
 
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
   sudo umount /mnt/texlive
   sudo rm -r /mnt/texlive # 删除临时挂载目录
-\end{verbatim}
+\end{lstlisting}
 
 在安装完毕后，安装程序会提示用户将一些目录添加到环境变量中。用户可以按照提示进行操作。
 
 之后，我们应当配置字体。如果用户改变了安装路径，应将path/改为自己的实际安装路径。
 
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
   sudo cp path/texmf-var/fonts/conf/texlive-fontconfig.conf \
     /etc/fonts/conf.d/09-texlive.conf
   sudo fc-cache -fsv
-\end{verbatim}
+\end{lstlisting}
 
 \subsection{LaTeX 在VS Code的配置}
 
@@ -227,7 +226,7 @@ LaTeX的安装冗长且复杂，通常需要安装一个完整的 TeX 发行版�
 
 首先，我们应当下载并安装 VS Code 的 LaTeX Workshop 插件。该插件提供了 LaTeX 的语法高亮、自动补全、编译和预览等功能。之后，打开你的Code的用户设置json文件，并添加以下配置：
 
-\begin{verbatim}
+\begin{lstlisting}
     "latex-workshop.latex.tools": [
         {
             "name": "xelatex",
@@ -248,19 +247,19 @@ LaTeX的安装冗长且复杂，通常需要安装一个完整的 TeX 发行版�
             ]
         }
     ],
-\end{verbatim}
+\end{lstlisting}
 
 然后，如果没有什么问题的话，VS Code 就会使用 XeLaTeX 编译器来编译你的 LaTeX 文档了。
 
 我们非常建议关闭LaTeX Workshop的自动清理功能，因为它会在每次编译后删除所有的辅助文件，这会导致目录、参考文献等相关功能难以正常工作——这些工作往往要求连续编译两次，因此辅助文件是很必要的。为了关闭这一功能，我们可以在用户设置json文件中添加以下配置：
-\begin{verbatim}
+\begin{lstlisting}
     "latex-workshop.latex.autoClean.run": "never",
-\end{verbatim}
+\end{lstlisting}
 
 如果我们不编译很长的文章的话，可以打开自动编译功能，这样每次保存文档时，VS Code 都会自动编译 LaTeX 文档。但是对于超长文档，自动编译会导致每次习惯性按下保存时都要等待许久。我们需要按需开启或关闭自动编译功能。可以在用户设置json文件中添加以下配置：
-\begin{verbatim}
+\begin{lstlisting}
     "latex-workshop.latex.autoBuild.run": "onSave",
-\end{verbatim}
+\end{lstlisting}
 这样每次保存文档时，VS Code 都会自动编译 LaTeX 文档。将 "onSave" 改为 "never" 则可以关闭自动编译功能。
 
 \subsection{LaTeX 的语法}
@@ -273,7 +272,7 @@ LaTeX的安装冗长且复杂，通常需要安装一个完整的 TeX 发行版�
 \end{itemize}
 
 一个简单的 LaTeX 文档示例如下：
-\begin{verbatim}
+\begin{lstlisting}
   \documentclass{article}
   \usepackage{amsmath}
 
@@ -290,7 +289,7 @@ LaTeX的安装冗长且复杂，通常需要安装一个完整的 TeX 发行版�
   \section{结论}
   LaTeX 是一种强大的排版工具，适用于学术论文和书籍等文档的排版。
   \end{document}
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{文档类声明}
 文档类声明是 LaTeX 文档的第一行，指定了文档的类型和格式。常用的文档类包括：
@@ -304,16 +303,15 @@ LaTeX的安装冗长且复杂，通常需要安装一个完整的 TeX 发行版�
 \end{itemize}
 
 要声明一个文档类，只需在文档的第一行使用 \texttt{\textbackslash documentclass} 命令。例如，要声明一个文章类型的文档，可以使用以下命令：
-\begin{verbatim}
+\begin{lstlisting}
   \documentclass{article}
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{导言区}
 导言区是 LaTeX 文档的第二部分，用于加载宏包和设置文档的全局参数。宏包是 LaTeX 的扩展功能，可以提供额外的排版功能和样式。
 在导言区，可以使用 \texttt{\textbackslash usepackage} 命令来加载宏包。例如，要加载 amsmath 宏包以支持数学公式，可以使用以下命令：
-\begin{verbatim}
-  \usepackage{amsmath}
-\end{verbatim}
+\begin{lstlisting}
+\end{lstlisting}
 
 除此之外，还可以通过其他命令来设置文档的全局参数，例如字体、行距、页边距等。一些常用的全局参数设置命令可以在\ref{sec:latex-packages}中找到。
 
@@ -322,13 +320,13 @@ LaTeX的安装冗长且复杂，通常需要安装一个完整的 TeX 发行版�
 
 LaTeX其实还有“注释”部分，这些部分仅在tex源码中存在，但是不会出现在最终的pdf文档中。注释部分以百分号（\%）开头，本行后面的内容会被 LaTeX 忽略。例如：
 
-\begin{verbatim}
+\begin{lstlisting}
   \begin{document}
     ...正文...
     % 这是一个注释
     ...正文...
   \end{document}
-\end{verbatim}
+\end{lstlisting}
 
 \subsection{LaTeX 的常用命令}
 
@@ -349,9 +347,9 @@ LaTeX其实还有“注释”部分，这些部分仅在tex源码中存在，但
 \subsubsection{强制空格}
 
 对于纯英语的文本，LaTeX 会自动处理空格。但有时在英汉混写或纯汉语的文档中，代码中的空格不会编译，此时我们需要在文本中插入一个强制空格。可以使用 \texttt{\textbackslash } 命令来实现，这个反斜杠前后都应该加上空格。例如：
-\begin{verbatim}
+\begin{lstlisting}
   这是一个强制 \ 空格的例子。
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{转义字符和反斜杠}
 
@@ -360,27 +358,27 @@ LaTeX其实还有“注释”部分，这些部分仅在tex源码中存在，但
 \subsubsection{数学公式}
 
 LaTeX 对数学公式的支持非常强大。可以使用美元符号 (\$) 来包裹行内公式，或者使用两个美元符号 (\$\$) 来包裹块级公式。例如：
-\begin{verbatim}
+\begin{lstlisting}
   这是一个行内公式 $E=mc^2$ 的示例。
   
   这是一个块级公式的示例：
   $$ E=mc^2 $$
-\end{verbatim}
+\end{lstlisting}
 
 除此之外，也可以使用 \texttt{\textbackslash begin\{equation\}} 和 \texttt{\textbackslash end\{equation\}} 来包裹数学公式，这样可以自动编号公式。例如：
-\begin{verbatim}
+\begin{lstlisting}
   \begin{equation}
   E=mc^2
   \end{equation}
-\end{verbatim}
+\end{lstlisting}
 
 对于多行公式\footnote{需要宏包\texttt{amsmath}}，可以使用 \texttt{\textbackslash begin\{align\}} 和 \texttt{\textbackslash end\{align\}} 来包裹公式，并使用 \texttt{\&} 符号来对齐公式。例如：
-\begin{verbatim}
+\begin{lstlisting}
   \begin{align}
   E &= mc^2 \\
   F &= ma
   \end{align}
-\end{verbatim}
+\end{lstlisting}
 
 LaTeX 还支持各种数学符号和运算符，例如乘号 (\texttt{\textbackslash times})、除号 (\texttt{\textbackslash div})、积分符号 (\texttt{\textbackslash int}) 等。可以通过查阅 LaTeX 的数学符号手册来了解更多数学符号的用法。
 
@@ -399,7 +397,7 @@ LaTeX 还支持各种数学符号和运算符，例如乘号 (\texttt{\textbacks
 \subsubsection{列表}
 
 使用 \texttt{itemize} 环境来创建无序列表，使用 \texttt{enumerate} 环境来创建有序列表。这个列表也是可以嵌套的，例如：
-\begin{verbatim}
+\begin{lstlisting}
   \begin{itemize}
   \item 列表项 1
   \item 列表项 2
@@ -409,13 +407,13 @@ LaTeX 还支持各种数学符号和运算符，例如乘号 (\texttt{\textbacks
   \end{itemize}
   \item 列表项 3
   \end{itemize}
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{表格}
 
 使用 \texttt{table} 环境来创建表格。以下是一个示例：
 
-\begin{verbatim}
+\begin{lstlisting}
   \begin{table}
     \centering
     \begin{tabular}{lr}
@@ -427,7 +425,7 @@ LaTeX 还支持各种数学符号和运算符，例如乘号 (\texttt{\textbacks
     \caption{一个简单的表格}
     \label{tab:simple-table}
   \end{table}
-\end{verbatim}
+\end{lstlisting}
 
 上述代码创建了一个简单的表格，其中 \texttt{tabular} 环境用于定义表格的列格式，\texttt{l} 表示左对齐，\texttt{r} 表示右对齐；如果需要居中对齐，可以使用 \texttt{c}。上述\texttt{lr}意思是第一列左对齐，第二列右对齐，两列中间没有竖线，表格左右两边也没有竖线。如果需要添加竖线，可以使用 \texttt{|} 符号，例如 \texttt{|l|r|} 表示第一列左对齐，第二列右对齐，并且两列之间有一条竖线，表格的左右两边也有竖线。
 
@@ -439,7 +437,7 @@ caption 命令用于添加表格的标题，label 命令用于给表格添加标
 \subsubsection{图片}
 
 使用 \texttt{graphicx} 宏包来插入图片。首先，在导言区加载这个宏包，然后使用 \texttt{figure} 环境来插入图片。例如：
-\begin{verbatim}
+\begin{lstlisting}
   \usepackage{graphicx}
 
   \begin{figure}
@@ -448,26 +446,26 @@ caption 命令用于添加表格的标题，label 命令用于给表格添加标
     \caption{一个示例图片}
     \label{fig:example}
   \end{figure}
-\end{verbatim}
+\end{lstlisting}
 
 上述代码中，\texttt{includegraphics} 命令用于插入图片，\texttt{width} 参数用于设置图片的宽度，可以使用相对宽度（例如 \texttt{0.5\textbackslash textwidth} 表示图片宽度为文本宽度的一半）或者绝对宽度（例如 5cm）。\texttt{caption} 和 \texttt{label} 命令的用法与表格类似。
 
 \subsubsection{超链接与标签引用}
 
 可以使用 \texttt{hyperref} 宏包来创建超链接。首先，在导言区加载这个宏包，然后使用 \texttt{\textbackslash href\{链接地址\}\{链接文本\}} 命令来创建超链接。例如：
-\begin{verbatim}
+\begin{lstlisting}
   这是一个超链接：\href{https://www.example.com}{超链接文本}
-\end{verbatim}
+\end{lstlisting}
 
 标签引用则与超链接类似，可以使用 \texttt{\textbackslash label\{标签名\}} 命令来创建标签，然后使用 \texttt{\textbackslash ref\{标签名\}} 命令来引用标签。例如：
-\begin{verbatim}
+\begin{lstlisting}
   \section{引言}
   \label{sec:introduction}
 
   ....（此处略去许多正文内容）....
 
   在\ref{sec:introduction}节中，我们介绍了 LaTeX 的基本用法。
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{目录}
 
@@ -516,7 +514,7 @@ LaTeX的字体分三种：常规字体、无衬线字体和等宽字体。常规
 
 我们可以使用 \texttt{ctex} 宏包来设置中文文档的格式和字体。以下是一个简单的示例：
 
-\begin{verbatim}
+\begin{lstlisting}
   \documentclass{article}
   \usepackage[UTF8, heading=true]{ctex} 
   % 这里的heading=true的意思是“采用中式标题”，没有的话会报错
@@ -537,7 +535,7 @@ LaTeX的字体分三种：常规字体、无衬线字体和等宽字体。常规
   } 
   % 这段代码的意思是把section的默认写法从一个数字变成：“第X节”，
   % 并设置前后垂直间距等。
-\end{verbatim}
+\end{lstlisting}
 
 \subsection{LaTeX 与多文件}
 
@@ -548,7 +546,7 @@ LaTeX的字体分三种：常规字体、无衬线字体和等宽字体。常规
 现代的LaTeX，我们建议使用 \texttt{\textbackslash subfile\{文件名\}} 命令来引入其他 LaTeX 文件，这个命令是由 \texttt{subfiles} 宏包提供的。这样能够较好地保证文件的独立性，不仅可以在主文件中编译，也可以在子文件中独立编译，使得调试更加方便。
 
 举例说明：我们可以写一个主要文件 main.tex，内容如下：
-\begin{verbatim}
+\begin{lstlisting}
   \documentclass{article}
   \usepackage{subfiles}
 
@@ -565,10 +563,10 @@ LaTeX的字体分三种：常规字体、无衬线字体和等宽字体。常规
   \subfile{section2.tex} % 引入 section2.tex 文件
 
   \end{document}
-\end{verbatim}
+\end{lstlisting}
 
 然后，我们可以创建两个子文件 section1.tex 和 section2.tex，内容如下：
-\begin{verbatim}
+\begin{lstlisting}
   \documentclass[main.tex]{subfiles} % 指定主文件是main.tex
 
   \section{第一节}
@@ -576,7 +574,7 @@ LaTeX的字体分三种：常规字体、无衬线字体和等宽字体。常规
 
   \subsection{子节}
   这是第一节的子节内容。
-\end{verbatim}
+\end{lstlisting}
 
 需要注意的是，采用多文件来管理文档的时候，我们在应对多文件引用时，需要多次编译才能得到正确的引用和目录，一般来说是三次。（而单文件文档只需要两次编译即可。）
 
@@ -600,7 +598,7 @@ Typst 有两类语言模式：标记模式和脚本模式，而本质上都可�
 
 对于 Typst，所有的标记其实都是语法糖。这样能像 Markdown 一样做到内容和格式的彻底分离，也方便了我们的控制。在标记模式中，用户可以使用以下语法来进行排版：
 
-\begin{verbatim}
+\begin{lstlisting}
   = 一级标题
   上述文本等价于
   #heading(level: 1, [一级标题])
@@ -629,34 +627,34 @@ Typst 有两类语言模式：标记模式和脚本模式，而本质上都可�
 
   还有一种特殊的语法糖：
   #fn(ZZZ)[XXX][YYY] 是 #fn(ZZZ, XXX, YYY) 的语法糖。
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{脚本模式}
 
 在脚本模式中，用户可以使用类似于 Python 的语法来编写代码。主要有三个最重要的脚本：set、show和let。
 
 set可以设置样式，也就是“为参数设置默认值”的能力。例如：
-\begin{verbatim}
+\begin{lstlisting}
   #set heading(numbering: "1.")
-\end{verbatim}
+\end{lstlisting}
 上述代码设置了标题的编号。
 
 show 用于全局替换和样式设计等，例如：
-\begin{verbatim}
+\begin{lstlisting}
   #show "114": "514"
-\end{verbatim}
+\end{lstlisting}
 上述代码可以把整篇文档中的所有“114”在编译出的文档都显示成“514”。
-\begin{verbatim}
+\begin{lstlisting}
   #show heading.where(level: 1): body =>{
     set align(center)
     body
   }
-\end{verbatim}
+\end{lstlisting}
 这里的heading.where()有sqlalchemy库的影子，大家应该可以意会到它是一个选择器，选择标题中等级为 1 的所有元素。body则是检索到的原始内容，这里的箭头则是一个函数，指的是接受箭头前面的内容，然后返回修改后的内容，也就是大括号内部的东西。在大括号内部，我们使用set调整了样式，使其居中。
 
 let 用于定义变量和函数等，很像它在JavaScript中的亲戚。主要有以下几种使用方式：
 
-\begin{verbatim}
+\begin{lstlisting}
 // 存储基本值
 #let x = 10
 #let name = "Typst"
@@ -685,7 +683,7 @@ This is *emphasized* text. // 红色加粗
 
 #title-style
 = This is a title // 使用 Helvetica, 16pt, 加粗
-\end{verbatim}
+\end{lstlisting}
 
 特别注意：默认情况下，该方法定义的变量是有类似 C 系的变量作用域的。let和show结合使用，则可以制作出各种各样的模板。
 

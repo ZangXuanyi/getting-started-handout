@@ -6,6 +6,5 @@
 *.blg
 *.pdf
 *.synctex.gz
-elegant-main.bcf
-.gitignore
 elegant-main.run.xml
+elegant-main.bcf
