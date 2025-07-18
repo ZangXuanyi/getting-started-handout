@@ -6,3 +6,5 @@
 *.blg
 *.pdf
 *.synctex.gz
+elegant-main.run.xml
+elegant-main.bcf

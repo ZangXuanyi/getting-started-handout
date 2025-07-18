@@ -20,14 +20,14 @@
 \subsection{使用调试器}
 
 我们在开发的过程中可以使用VS Code调试器，但是有时候我们无法获取程序源码。在这种情况下，我建议同学们使用那个最经典的调试工具——\texttt{gdb}。它是GNU项目的一部分，支持多种编程语言，包括C、C++、Fortran等。当然对于一些会读汇编的同学们而言，我觉得可以用objdump这类反汇编器来反汇编程序，并对这些汇编代码进行阅读；常见的反汇编器还有著名的IDA Pro，它是一个商业软件，价格很贵，但是功能绝对对得起它的价格：它甚至能够对反汇编出来的东西进行自动分析！
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
     objdump -d ./your_program > asm.s
-\end{verbatim}
+\end{lstlisting}
 
 当然大多数人是没这个能力也没这个毅力去读汇编的，因此GDB最终还是我们最常用的动态调试工具。例如，以下命令可以启动GDB并加载程序：
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
     gdb ./your_program
-\end{verbatim}
+\end{lstlisting}
 
 在GDB中，我们可以使用以下命令来设置断点、运行程序、查看变量等：
 \begin{itemize}
@@ -47,9 +47,9 @@
 \end{itemize}
 
 当然，如果想要显示行号的话，我们编译代码的时候需要加上\texttt{-g}选项，例如：
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
     gcc -g -o your_program your_program.c
-\end{verbatim}
+\end{lstlisting}
 也只有加上了\texttt{-g}选项，GDB才能够显示源代码和行号，\texttt{s}和\texttt{n}命令才能够逐行执行源代码，但是\texttt{si}和\texttt{ni}命令仍然能够正常执行。
 
 以上命令其实很复杂，需要同学们多加练习才能熟练掌握。这里我推荐一个GDB的小练习：CMU ICS Lab2：BombLab。这个练习的目的是让同学们通过GDB来调试一个被加密的程序，找到正确的输入来“拆弹”。这个练习非常有趣，而且可以帮助同学们熟悉GDB的使用。
