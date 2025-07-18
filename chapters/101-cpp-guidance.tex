@@ -81,7 +81,7 @@ int main() {
 是不是非常简单？
 
 \subsection{判断和循环}
-有时候，代码需要根据不同的条件来执行不同的操作；有时候，一段代码需要执行很多次，但是并不知道具体要执行多少次。C++提供了条件语句和循环语句来实现这些功能。
+有时候，代码需要根据不同的条件或不同的输入来执行不同的操作；有时候，一段代码需要执行很多次，但是并不知道具体要执行多少次。C++提供了条件语句和循环语句来实现这些功能。
 
 \subsubsection{条件表达式}
 条件表达式是一个布尔表达式，它的值要么是true（真），要么是false（假）。在C++中，条件表达式通常用于控制程序的执行流程。一般情况下，认为false等价于0，true等价于1。
@@ -96,7 +96,7 @@ int main() {
     \item \texttt{>=}：大于等于运算符。
     \item \texttt{\&\&}：逻辑与运算符。如果前后两个条件都为真，则结果为真；有一个是假的话，结果为假。
     \item \texttt{||}：逻辑或运算符。如果前后两个条件至少有一个为真，则结果为真；如果两个都为假，结果为假。
-    \item \texttt{!}：逻辑非运算符。如果后面跟着的条件是真的，那么结果为假；反之为假
+    \item \texttt{!}：逻辑非运算符。如果后面跟着的条件是真的，那么结果为假；反之为假。
 \end{itemize}
 
 
@@ -146,7 +146,16 @@ string result = (n % 2 == 0) ? "偶数" : "奇数";
 \end{verbatim}
 以上代码的意思是：如果n是偶数，就把字符串“偶数”赋值给result；否则把字符串“奇数”赋值给result。
 
-如果使用
+如果使用if语句来实现同样的功能，可以写成：
+\begin{verbatim}
+int n = 5;
+string result;
+if (n % 2 == 0) {
+    result = "偶数";
+} else {
+    result = "奇数";
+}
+\end{verbatim}
 
 \subsubsection{切换语句}
 有时候，我们需要根据一个变量的值来执行不同的操作。C++提供了\texttt{switch}语句来实现这个功能。它的基本格式如下：
@@ -232,6 +241,68 @@ do {
     i++;
 } while (i <= 10);
 \end{verbatim}
+
+\subsection{break和continue语句}
+
+有时候，我们需要在循环中提前跳出循环或者跳过当前的迭代。C++提供了\texttt{break}和\texttt{continue}语句来实现这些功能，它们也叫做循环控制语句。
+
+\texttt{break}语句用于跳出循环，通常用于满足某个条件时立即结束循环。例如：
+\begin{verbatim}
+for (int i = 1; i <= 10; i++) {
+    if (i == 5) {
+        break;  // 当i等于5时跳出循环
+    }
+    cout << i << " ";
+}
+\end{verbatim}
+上述代码如果不写break一句，那么会输出1到10；如果写了break一句，那么会输出1到4。
+
+而continue语句只用于跳过当前循环，继续下一次迭代。例如：
+\begin{verbatim}
+for (int i = 1; i <= 10; i++) {
+    if (i == 5) {
+        continue;  // 当i等于5时跳过当前迭代
+    }
+    cout << i << " ";
+}
+\end{verbatim}
+上述代码的输出应该是1 2 3 4 6 7 8 9 10。因为当i等于5时，continue语句会跳过当前迭代。
+
+\subsection{输入输出}
+
+在C++中，我们建议使用更安全的输入输出流\texttt{cin}和\texttt{cout}来进行输入输出操作。它们分别用于从标准输入（通常是键盘）读取数据和向标准输出（通常是屏幕）打印数据。
+
+\texttt{cin}和\texttt{cout}的基本用法如下：
+\begin{verbatim}
+#include <iostream>
+using namespace std;
+int main() {
+    int age;
+    cout << "请输入你的年龄：";  // 输出提示信息
+    cin >> age;  // 从标准输入读取数据
+    cout << "你输入的年龄是：" << age << endl;  // 输出读取到的数据
+    return 0;
+}
+\end{verbatim}
+以上代码的意思是：先输出提示信息“请输入你的年龄：”，然后从标准输入读取一个整数值并存储到变量age中。接着输出“你输入的年龄是：”以及读取到的年龄值。
+
+C风格的输入输出分别是\texttt{printf}和\texttt{scanf}，它们的用法如下：
+\begin{verbatim}
+#include <cstdio>
+// 也可以写成 #include <stdio.h>
+using namespace std;
+int main() {
+    int age;
+    printf("请输入你的年龄：");  // 输出提示信息
+    scanf("%d", &age);  // 从标准输入读取数据
+    printf("你输入的年龄是：%d\n", age);  // 输出读取到的数据
+    return 0;
+}
+\end{verbatim}
+以上代码中，\texttt{\%d}的意思是“这里要输出一个整数”，而\texttt{\&age}的意思是“把age的地址传给scanf”。前者叫做“格式化输出”，后者叫做“地址传递”。\texttt{printf}和\texttt{scanf}的速度更快，因为不需要流操作；但是它们存在一些安全隐患，例如格式化字符串攻击和缓冲区溢出等问题。现代C编程中，更推荐使用\texttt{scanf\_s}和\texttt{printf\_s}来代替\texttt{scanf}和\texttt{printf}，它们允许一个额外的参数来指定缓冲区的大小，从而避免缓冲区溢出的问题。
+
+不过，虽然在做题的时候确实可以使用\texttt{scanf}和\texttt{printf}来压榨时间，但是我们仍然建议在C++工程上使用更安全的\texttt{cin}和\texttt{cout}。
+
 
 这些看起来都非常简单。而以上内容就是C++的全部基本语法了：是的，你已经学完了！
 
@@ -328,7 +399,7 @@ int arr[10];
 以上的数组arr中的元素可以通过索引来访问，例如arr[0]表示第一个元素，arr[1]表示第二个元素，以此类推，一直到arr[9]表示第十个元素。没有arr[10]，访问这个会出错。
 
 \subsubsection{字符串}
-C++系的字符串类型是\texttt{string}，它可以存储一串字符。字符串的基本格式如下：
+C++风格的字符串类型是\texttt{string}，它可以存储一串字符。字符串的基本格式如下：
 \begin{verbatim}
 #include <string>   // 引入字符串库
 string str = "Hello, World!";
@@ -338,6 +409,8 @@ string str = "Hello, World!";
 字符串的本质是一个数组，存储了一串字符（C风格的字符串正是char[]）。我们可以通过索引来访问字符串中的字符，例如str[0]表示第一个字符，str[1]表示第二个字符，以此类推。
 
 字符串的长度可以通过\texttt{str.length()}方法来获取。除此以外，还有很多字符串操作方法，例如\texttt{str.substr()}（获取子串）、\texttt{str.find()}（查找子串）等。
+
+字符串是一个复杂类，和以上提到的所有数据类型都有区别。具体为什么是“复杂类”，这涉及到C++的面向对象编程（OOP）特性。我们会在后续章节中详细介绍。
 
 \subsubsection{结构体}
 结构体是一个可以存储多个不同类型数据的变量。它的基本格式如下：
@@ -361,7 +434,8 @@ Student student1;  // 声明一个学生变量
 student1.name = "Alice";  // 设置学生姓名
 student1.age = 20;  // 设置学生年龄
 student1.gpa = 3.5;  // 设置学生绩点
-cout << "Name: " << student1.name << ", Age: " << student1.age << ", GPA: " << student1.gpa << endl;
+cout << "Name: " << student1.name << ", Age: "
+     << student1.age << ", GPA: " << student1.gpa << endl;
 \end{verbatim}
 
 以上内容很好地展示了怎么定义、声明、使用一个结构体。结构体的成员可以通过点（.）运算符来访问，例如\texttt{student1.name}表示学生1的姓名。
@@ -633,13 +707,44 @@ cout << Point2D::count << endl;  // 输出类的静态属性
 
 部分属性前面，你可以发现打了\texttt{static}符号。这说明这个属性是静态的，属于\texttt{类本身}，而不是类的实例（实例指的就是可操作的对象，例如上面的p）。静态属性可以通过类名直接访问，例如\texttt{Point2D::count}。静态属性在所有实例之间共享，因此它们的值是全局的。
 
-\subsubsection{构造和析构}
+\subsubsection{自指}
 
-类的构造函数和析构函数是特殊的方法，用于对象的初始化和清理。构造函数在创建对象（也叫实例化）时自动调用，而析构函数在对象销毁时自动调用。构造函数的名称与类名相同，并且没有返回值；析构函数的名称是类名加上波浪号（~），也没有返回值。
+类可以包含指向自身的指针或引用，这种特性称为自指，用\texttt{this}可以访问当前对象的指针。自指允许我们在类中定义链表、树等数据结构。自指的基本格式如下：
+\begin{verbatim}
+class Node {
+public:
+    int data;  // 节点数据
+    Node* next;  // 指向下一个节点的指针
+    Node(int value) : data(value), next(nullptr) {}  // 构造函数
+};
+\end{verbatim}
 
-构造函数可以有参数，用于初始化对象的属性；析构函数通常用于释放对象占用的资源。
+\subsubsection{构造、析构、拷贝和赋值}
 
-一般情况下，类有着默认的构造和析构函数。如果我们写了自己的构造和析构函数，那么默认的就会被覆盖掉。
+类的构造函数和析构函数是特殊的方法，用于对象的初始化和清理。构造函数在创建对象（也叫实例化）时自动调用，而析构函数在对象销毁时自动调用。构造函数的名称与类名相同，并且没有返回值；析构函数的名称是类名加上波浪号（$\sim$），也没有返回值。
+
+构造函数可以有参数，用于初始化对象的属性；析构函数通常用于释放对象占用的资源。\textbf{这是C++的一个重要特性：RAII（Resource Acquisition Is Initialization），资源获取在初始化中获取、在析构中释放。}我们在C++中不需要像C一样手动malloc和free内存，而是通过构造函数和析构函数来自动管理资源，代码更简洁也更安全。
+
+一般情况下，类有着默认的构造和析构函数，它们不含有任何参数，且不执行任何操作。默认的构造函数会将所有属性初始化为默认值（例如整数为0，布尔值为false等），析构函数则不会做任何事情。满足这种条件的类也叫做\textbf{POD类型，Plain Old Data}：没有自定义构造函数、析构函数和拷贝构造函数，它们的行为类似于C语言中的结构体。
+
+如果我们写了自己的构造和析构函数，那么默认的就会被覆盖掉。比方说，在上文\texttt{Point2D}类中，我们定义了一个带参数的构造函数和一个析构函数。这样，当我们创建一个\texttt{Point2D}对象时，就会调用这个构造函数来初始化对象的属性（将全局点数量增加1）；当对象被销毁时，就会调用析构函数来干点别的（将全局点数量减1），然后清理资源。
+
+\emph{需要注意的一点是：由于在C++中对象的资源管理由构造函数和析构函数自动完成，因此我们不要在构造函数中malloc，也不要在析构函数中free或者delete this。前者有可能导致内存泄漏，后者可能会导致双重释放，这是非常危险的。}
+
+拷贝函数是一个特殊的构造函数，它用来复制对象。一般情况下，C++会自动生成一个拷贝构造函数，它会逐个复制对象的属性。但是，如果类中有指针或动态分配的资源，我们需要自定义拷贝构造函数来正确地复制对象。拷贝构造函数的参数是类本身的常量引用，而对方法本身没有什么要求。
+
+一般拷贝分为浅拷贝和深拷贝。浅拷贝只是复制指针的值，而深拷贝则会复制指针指向的内容。对于包含指针的类，我们通常需要实现深拷贝，以避免多个对象的指针指向同一块内存空间，导致资源管理混乱。默认情况下，C++的拷贝形式是浅拷贝。
+
+拷贝赋值运算符是一个特殊的运算符，用于将一个对象的值赋给另一个对象。它的基本格式如下：
+\begin{verbatim}
+类名& operator=(const 类名& other) {
+    if (this != &other) {  // 防止自赋值
+        // 复制属性
+    }
+    return *this;  // 返回当前对象的引用
+}
+\end{verbatim}
+由此，我们看到了我们对\texttt{=}进行了重载。这实际上是定义了一个赋值函数。
 
 \subsubsection{封装}
 
@@ -695,7 +800,7 @@ class Circle : public Shape { ... };
 Shape* shape = new Circle();  // 创建一个Circle对象，并将其赋值给Shape指针
 shape->area();  // 调用Circle类的area()方法
 \end{verbatim}
-上述代码中会自动调用Circle类的area()方法，而不是Shape类的area()方法。这就是多态的体现，而不用去关心具体的对象类型，省去了switch语句的麻烦。
+上述代码中会自动调用Circle类的area()方法，而不是Shape类的area()方法。这就是多态的体现：不用去关心具体的对象类型，省去了switch语句的麻烦。
 
 \subsection{重载}
 
