@@ -311,6 +311,7 @@ LaTeX的安装冗长且复杂，通常需要安装一个完整的 TeX 发行版�
 导言区是 LaTeX 文档的第二部分，用于加载宏包和设置文档的全局参数。宏包是 LaTeX 的扩展功能，可以提供额外的排版功能和样式。
 在导言区，可以使用 \texttt{\textbackslash usepackage} 命令来加载宏包。例如，要加载 amsmath 宏包以支持数学公式，可以使用以下命令：
 \begin{lstlisting}
+  \usepackage{amsmath}
 \end{lstlisting}
 
 除此之外，还可以通过其他命令来设置文档的全局参数，例如字体、行距、页边距等。一些常用的全局参数设置命令可以在\ref{sec:latex-packages}中找到。
@@ -429,7 +430,7 @@ LaTeX 还支持各种数学符号和运算符，例如乘号 (\texttt{\textbacks
 
 上述代码创建了一个简单的表格，其中 \texttt{tabular} 环境用于定义表格的列格式，\texttt{l} 表示左对齐，\texttt{r} 表示右对齐；如果需要居中对齐，可以使用 \texttt{c}。上述\texttt{lr}意思是第一列左对齐，第二列右对齐，两列中间没有竖线，表格左右两边也没有竖线。如果需要添加竖线，可以使用 \texttt{|} 符号，例如 \texttt{|l|r|} 表示第一列左对齐，第二列右对齐，并且两列之间有一条竖线，表格的左右两边也有竖线。
 
-表格中的每一行使用 \texttt{\\} 来分隔，列之间使用 \texttt{\&} 来分隔（实际上是制表符）。
+表格中的每一行使用 \texttt{\textbackslash\textbackslash} 来分隔，列之间使用 \texttt{\&} 来分隔（实际上是制表符）。
 用 \texttt{\textbackslash hline} 命令来添加水平线。如果想要添加粗线，可以使用 \texttt{\textbackslash hline\textbackslash hline}。
 
 caption 命令用于添加表格的标题，label 命令用于给表格添加标签\footnote{需要hyperref宏包}，以便在文档中引用。上述代码展示的标签是一个标签的习惯命名方式，不必严格按照这个格式来命名标签。
