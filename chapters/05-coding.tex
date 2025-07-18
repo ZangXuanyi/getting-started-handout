@@ -58,10 +58,10 @@ Linux和Mac用户可以通过包管理器安装特定的编译器，在暑假课
 
 你可以在MSYS2终端中运行以下命令来安装GCC和GDB（建议使用UCRT64终端，不建议用其他的几个，它们即将停止支持）：
 
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
 pacman -S mingw-w64-ucrt-x86_64-gcc
 pacman -S mingw-w64-ucrt-x86_64-gdb
-\end{verbatim}
+\end{lstlisting}
 
 在MSYS2中安装完成后，用户如果想要在Windows终端中使用GCC，则需要设置环境变量，以便在命令行中直接使用编译器命令。
 
@@ -76,7 +76,7 @@ pacman -S mingw-w64-ucrt-x86_64-gdb
 
 \emph{特别注意：有的同学可能不是按照上述推荐的方式安装GCC的，而是通过其他方式（例如直接下载预编译版本）安装的GCC。如果是这种情况，务必记住GCC和非ASCII字符是死敌，因此请不要将GCC安装在包含非ASCII字符（如汉字、空格）的路径下！（最大的坑可能是你的用户名中包含非ASCII字符，例如汉字！）}
 
-\subsection{虚拟环境及其配置：以Python为例}
+\subsection{虚拟环境及其配置}
 
 开发，尤其是生产类开发有一个重要的原则：不重复造轮子。以Python为例，作为一门流行的编程语言，它拥有丰富的第三方库和框架，可以帮助我们快速实现各种功能，并不需要从零开始开发。
 
@@ -99,39 +99,39 @@ conda有两个发行版，一个是Anaconda，另一个是Miniconda。Anaconda�
 接下来，因为一些原因，我们应当重启计算机（或者终端），以确保环境变量生效。
 
 然后，我们需要进行终端初始化，例如在Windows上，我们可以使用以下命令：
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
     conda init powershell
-\end{verbatim}
+\end{lstlisting}
 
 你应该将上述命令替换为你所使用的终端类型，例如在Linux上可以使用\texttt{bash}或\texttt{zsh}。然后你需要重启终端，以使初始化生效。
 
 我们可以创建一个新的虚拟环境，例如：
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
     conda create -n myenv python=3.10
-\end{verbatim}
+\end{lstlisting}
 这样就可以创建一个名为\texttt{myenv}的虚拟环境，并安装Python 3.10的尽可能新的版本。
 
 下面我们需要激活虚拟环境：
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
     conda activate myenv
-\end{verbatim}
+\end{lstlisting}
 这样就进入了虚拟环境，你可以在终端上看到提示符前面有\texttt{(myenv)}，表示当前处于\texttt{myenv}虚拟环境中。如没有，可能是终端配置失败或者其他原因，安装OhMyPosh的部分主题也可能会导致这个问题（最大的可能是你的主题没有Python虚拟环境对应的section）。
 
 现在在Python中我们一般流行使用\texttt{pip}来安装包，它从PyPI安装和管理第三方库。现在不流行直接使用conda管理包了。
 
 我们可以使用以下命令安装一个包，例如安装\texttt{Numpy}库：
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
     pip install numpy
-\end{verbatim}
+\end{lstlisting}
 这将会在当前虚拟环境中安装Numpy库，而不会影响全局的Python环境。
 
 如果你需要安装多个包，可以将它们写在一个文件中，例如\texttt{requirements.txt}，然后使用以下命令安装：
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
     pip install -r requirements.txt
-\end{verbatim}
+\end{lstlisting}
 以上命令也常用于项目的依赖管理，可以方便地安装和更新项目所需的所有包；同时也可以通过修改\texttt{requirements.txt}文件来管理项目的依赖版本，适宜分发。
 
-\section{选择合适的集成开发环境或者文本编辑器}
+\section{选择合适的IDE或者文本编辑器}
 
 IDE（集成开发环境）或者文本编辑器是编程的核心工具之一，用于编写代码、调试和测试等功能。选择合适的IDE或编辑器可以提高编程效率和代码质量。
 
@@ -184,7 +184,7 @@ VS Code是一个非常灵活的编辑器，可以通过安装插件来增强其�
 
 以下是一个简单的\texttt{tasks.json}文件示例（其实就是上面自动生成的那个，按照笔者的计算机环境稍微改了改）：
 
-\begin{verbatim}
+\begin{lstlisting}
 {
   "version": "2.0.0",
   "tasks": [
@@ -207,11 +207,11 @@ VS Code是一个非常灵活的编辑器，可以通过安装插件来增强其�
     }
   ]
 }
-\end{verbatim}
+\end{lstlisting}
 
 以下是一个简单的\texttt{launch.json}文件示例：
 
-\begin{verbatim}
+\begin{lstlisting}
 {
   "version": "0.2.0",
   "configurations": [
@@ -238,7 +238,7 @@ VS Code是一个非常灵活的编辑器，可以通过安装插件来增强其�
       }
   ]
 }
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{在VS Code中配置Python}
 
@@ -260,19 +260,19 @@ VS Code是一个非常灵活的编辑器，可以通过安装插件来增强其�
 
 我们建议使用winget来安装Oh My Posh。你可以在PowerShell中运行以下命令来安装：
 
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
   winget install JanDeDobbeleer.OhMyPosh
-\end{verbatim}
+\end{lstlisting}
 
 安装完成后，你需要在PowerShell中运行以下命令来初始化Oh My Posh：
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
   oh-my-posh init pwsh
-\end{verbatim}
+\end{lstlisting}
 
 在配置Oh My Posh的时候，很多的命令涉及到执行脚本。默认情况下，Windows PowerShell会阻止执行脚本以保护系统安全。因此，你需要先修改执行策略来允许执行脚本。在PowerShell中运行以下命令：
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
   Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-\end{verbatim}
+\end{lstlisting}
 就可以允许当前用户执行远程签名的脚本。
 
 如果你使用的是其他终端，例如cmd或者Git Bash，你可以在Oh My Posh的\href{https://ohmyposh.dev/docs/installation}{安装文档}中找到相应的安装方法。
@@ -282,9 +282,9 @@ VS Code是一个非常灵活的编辑器，可以通过安装插件来增强其�
 首先，你应该安装OMP推荐使用的字体，例如Nerd Font。这是因为Oh My Posh使用了一些特殊的图标，如果没有合适的字体，可能会导致图标无法正常显示。
 
 你可以在\href{https://www.nerdfonts.com/}{Nerd Fonts官网}下载最新的字体包。安装完成后，你需要在终端中设置字体为Nerd Font，以便能够正确显示Oh My Posh的图标。另一个办法是利用OhMyPosh安装这个字体：
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
   oh-my-posh font install meslo
-\end{verbatim}
+\end{lstlisting}
 
 安装完成后，你需要在终端中设置字体为Nerd Font。以PowerShell为例，你可以右键点击窗口标题栏，选择“属性”，然后在“字体”选项卡中选择Nerd Font即可。
 
@@ -312,26 +312,26 @@ VS Code内置了终端功能，可以方便地在编辑器中运行命令。终�
 
 对于C++，我们可以使用以下代码来编写第一个程序。你可以在VS Code中创建一个新的C++文件，例如\texttt{hello.cpp}（\textbf{该文件的路径不能包含空格和中文！}），然后输入以下代码：
 
-\begin{verbatim}
+\begin{lstlisting}[language=C++]
 #include <iostream>
 int main() {
     std::cout << "Hello, World!" << std::endl;
     return 0;
 }
-\end{verbatim}
+\end{lstlisting}
 
 然后如果配置得当，我们就可以通过按下F5键来编译并运行这个程序了。VS Code会自动调用编译器进行编译，并在终端中显示输出结果。如果一切顺利，你应该会看到“Hello, World!”的输出。
 
 在一些极端情况下（例如无GUI环境），你可能需要手动编译和运行程序。可以使用以下命令来编译和运行程序：
 
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
 g++ -o hello hello.cpp
 ./hello
-\end{verbatim}
+\end{lstlisting}
 
 请使用类似的方式\textbf{手敲}、编译、运行以下代码：
 
-\begin{verbatim}
+\begin{lstlisting}[language=C++]
 #include <iostream>
 int main() {
     int a, b;
@@ -342,29 +342,29 @@ int main() {
     std::cout << "Their sum is: " << a + b << std::endl;
     return 0;
 }
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{Python}
 
 对于Python，我们同样可以使用以下代码来编写第一个程序：
 
-\begin{verbatim}
+\begin{lstlisting}[language=Python]
 print("Hello, World!")
-\end{verbatim}
+\end{lstlisting}
 
 同样，如果配置得当，我们就可以通过按下F5键来运行这个程序了。VS Code会自动调用Python解释器运行，并在终端中显示输出结果。同样的，如果希望使用命令行来运行程序，可以使用以下命令：
 
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
 python hello.py
-\end{verbatim}
+\end{lstlisting}
 
 请使用类似的方式\textbf{手敲}、编译、运行以下代码：
 
-\begin{verbatim}
+\begin{lstlisting}[language=Python]
 a = int(input("Enter the first integer: "))
 b = int(input("Enter the second integer: "))
 print("Their sum is:", a + b)
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{这两个语言有什么区别？}
 
@@ -382,7 +382,7 @@ print("Their sum is:", a + b)
 
 例如，以下是C++初学者常见的错误：
 
-\begin{verbatim}
+\begin{lstlisting}[language=C++]
   #include<iostream>
   using namespace std;
   int mian()
@@ -390,23 +390,23 @@ print("Their sum is:", a + b)
       cout<<"Hello World!"<<endl;
       return 0;
   }
-\end{verbatim}
+\end{lstlisting}
 
 而它的错误信息是在编译时报出：
 
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
 > g++ example.cpp -o example.exe
 
 ld.exe: *.a(lib64_libmingw32_a-crtexewin.o): in function `main':
 C:/.../crtexewin.c:70: undefined reference to `WinMain'
 collect2.exe: error: ld returned 1 exit status
-\end{verbatim}
+\end{lstlisting}
 
 虽然信息略显抽象，但我们还是可以看到很多有用的信息。 ld 是 C++ 中的链接器，再往上看可以发现对 WinMain 的引用是未定义的。这提示我们去看 main 函数，从而发现这里将\texttt{main}函数写成了\texttt{mian}，因此链接器无法找到 main 函数，从而引发错误。
 
 而Python给出的错误信息则更为直观，例如以下代码：
 
-\begin{verbatim}
+\begin{lstlisting}[language=Python]
 def calc(numbers):
   total = sum(numbers)
   count = len(numbers)
@@ -417,10 +417,10 @@ print("Average:", calc(numbers))
 
 numbers.append("60")
 print("Updated Average:", calc(numbers))
-\end{verbatim}
+\end{lstlisting}
 
 其报错是：
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
 Average: 30.0
 Traceback (most recent call last):
   File "example.py", line 10, in <module>
@@ -428,13 +428,13 @@ Traceback (most recent call last):
   File "example.py", line 2, in calc
     total = sum(numbers)
 TypeError: unsupported operand type(s) for +: 'int' and 'str'
-\end{verbatim}
+\end{lstlisting}
 
 可以看到，解释器对第10行和第2行进行了报错。第10行的报错是因为在调用\texttt{calc}函数时，传入的\texttt{numbers}列表中包含了一个字符串“60”，而\texttt{calc}函数期望的是一个数字列表，因此在计算平均值时出现了类型错误（TypeError）。而第2行的报错则是因为在计算总和时，无法将整数和字符串相加。于是我们发现了问题所在：在第9行，我们向\texttt{numbers}列表中添加了一个字符串“60”，而不是一个数字。我们可以通过将其改为\texttt{numbers.append(60)}来解决这个问题。
 
 顺便一提，这段代码在C++这种强类型语言中是无法通过编译的（\texttt{List<int>}类型不能进行append(string)），但 Python 的解释器还是运行代码直到遇到了具体的问题，在输出信息中可以看到第一个 \texttt{print()} 语句仍然被正常地执行。
 
-\subsection{学会调试}
+\subsection{学会调试}\label{subsec:debugging}
 
 调试（技术人一般直接说debug）是我们发现和修复代码中隐藏起来的错误的最有力工具。调试可以帮助我们理解代码的执行流程，从而\textbf{定位}问题所在。
 
@@ -452,7 +452,7 @@ C系有着自己的调试器：GDB（GNU Debugger），它是一个强大的调�
 
 新人常常不喜欢这种手段，因为它需要在代码中添加额外的打印语句，很丑陋、不优雅，且会影响代码的可读性和维护性。但是打日志是一个非常有效的调试手段，尤其是在工程量巨大、无法或者很难打断点的情况下。
 
-例如我在调试某数万行的大型项目时，出现assert错误。于是本人在代码中添加了以下打印语句：
+例如我在调试某数万行的大型项目时，出现断言错误。于是本人在代码中添加了以下打印语句：
 
 \begin{figure}[htbp]
 \centering
@@ -463,15 +463,6 @@ C系有着自己的调试器：GDB（GNU Debugger），它是一个强大的调�
 这样我就知道了程序在执行到这里的时候，返回的不是预期的200，而是404。于是这让我顺藤摸瓜，排查可能会导致404的原因，最终发现是因为某个API的返回值发生了变化，导致程序无法正常运行。
 
 这是打日志的一个典型例子。通过在代码中添加打印语句，我们可以快速定位问题所在，并进行修复。
-
-使用print语句是很初级的一种打日志手段，通常我们还会使用更高级的日志库，例如Python的logging模块或者C++的spdlog库等。这些日志库可以提供更丰富的功能，例如日志级别、日志格式化、日志输出到文件等。使用这些日志库可以让我们的代码更加优雅，同时也能更好地管理日志信息。通常说来，日志有以下几个级别（从低到高）：
-\begin{itemize}
-  \item \textbf{DEBUG}：调试信息，通常用于开发阶段，记录一些调试信息。
-  \item \textbf{INFO}：普通信息，记录一些程序运行的基本信息。
-  \item \textbf{WARNING}：警告信息，记录一些可能导致问题的情况，但不影响程序的正常运行。
-  \item \textbf{ERROR}：错误信息，记录一些导致程序无法正常运行的错误。
-  \item \textbf{CRITICAL}：严重错误信息，记录一些导致程序崩溃的错误。
-\end{itemize}
 
 \subsubsection{打断点}
 
@@ -504,23 +495,5 @@ C系有着自己的调试器：GDB（GNU Debugger），它是一个强大的调�
 debug 最重要的一件事是缩小错误出现的范围，为达成这一目的我们通常会跟踪代码的行为，直到发现代码的行为与预期不符。实际上最棘手的情况是，代码只在特定的数据上出现错误，尤其是当我们无法获取程序执行日志的时候。这种情况尤见于我们在POJ上做题的时候：POJ的测试数据是不可见的，只会告诉你结果是WA、RTE还是TLE、MLE。
 
 这时最应该做的是重新审视自己的预期（以及 OJ 题的题面），寻找是否遗漏了什么约束条件或关键信息。一份貌似运行正常的代码很有可能会在边界条件或复杂数据的情况下出问题，可以尝试手写一些处于边界条件之下的数据，或编写一个数据生成器来生成更复杂的数据。实在手足无措时，休息一下放空大脑也是很好的选择。实在走投无路之时，摇人求助也不是什么大不了的事情。debug 很可能会占用比编写代码更多的时间和精力，保持良好的心态才是 debug 的关键。
-
-\subsection{维持代码风格}\label{sec:code-style}
-
-代码风格（码风）是指代码的书写规范和格式化方式。良好的代码风格可以提高代码的可读性和可维护性，使得其他人（包括未来的自己）能够更容易地理解和修改代码。一般情况下，我们会遵循一些通用的代码风格规范，例如 Google C++ Style Guide 或 PEP 8（Python Enhancement Proposal 8）等。而在团队协作的时候，我们则尽可能保证码风和团队的码风一致。
-
-一般情况下，有几个值得注意的点：
-\begin{itemize}
-  \item \textbf{缩进}：使用空格或制表符进行缩进，通常使用2个空格或4个空格或1个制表符。不要混用空格和制表符。
-  \item \textbf{命名}：使用有意义的变量名和函数，不要使用单个字母或无意义的名称。同时，使用统一的命名风格，例如大驼峰（CamelCase）、小驼峰（camelCase）、下划线（snake\_case）等。
-  \item \textbf{注释}：在代码中添加适当的注释，解释代码的逻辑和意图。注释应该简洁明了，不要过于冗长。同时，注释应该与代码保持同步，避免出现过时的注释。避免使用\texttt{\#if 0}和\texttt{\#endif}来注释代码，这种方式风格很老，现在已经不推荐使用了。
-  \item \textbf{空行}：适当使用空行来分隔代码块。通常情况下，在类、函数之间使用一个空行，在逻辑相关的代码块之间使用两个空行；有时候在类、函数之间使用两个空行，而在逻辑相关的代码块之间使用\texttt{\#region}和\texttt{\#endregion}或者类似物来分隔代码块。（这取决于你使用的语言和编辑器）
-  \item \textbf{括号}：使用一致的括号风格，例如 K\&R 风格（函数定义的左括号在同一行）或 Allman 风格（函数定义的左括号在新的一行）。注意不要在括号前面添加空格。
-  \item \textbf{空格}：在运算符两边添加空格，例如\texttt{a + b}而不是\texttt{a+b}。在逗号、分号等符号后面添加空格，例如\texttt{a, b}而不是\texttt{a,b}。在函数调用时，函数名和左括号之间不添加空格，例如\texttt{func()}而不是\texttt{func ()}。
-  \item \textbf{行长度}：尽量保持每行代码的长度在80-120个字符之间，避免过长的行导致代码难以阅读。可以使用换行符或者其他手段来分割长行。如果懒得数，也可以用半个屏幕为换行基准。
-  \item \textbf{文件长度}：尽量保持每个文件的长度在1500行以内，避免过长的文件导致代码难以阅读。可以将相关的代码分成多个文件，或者使用模块化的方式来组织代码。
-\end{itemize}
-
-我们自己写代码的时候虽然不能强制要求自己遵循某种风格，但是在团队协作中，保持一致的代码风格是非常重要的。我们可以使用一些工具来自动格式化代码，VS Code的C++插件就提供了代码格式化功能，可以通过快捷键（通常是Shift + Alt + F）来自动格式化代码。而Python一般很少有代码格式化工具，我们要在自己书写时多加注意。
 
 \end{document}
