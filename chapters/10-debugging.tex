@@ -1,13 +1,13 @@
 \documentclass[../main.tex]{subfiles}
 \begin{document}
 
-\chapter{调试和测试}
+\chapter{调试、测试和部署}
 
 我们在前面的章节中已经知道，代码中出现错误是难免的事情。无论是语法错误、语义错误，还是不能称得上错误但是不符合预期的行为，我们都需要进行调试和测试来找出问题所在。
 
 一些大公司专门有“测试工程师”这类岗位来负责代码正式上线之前的测试工作，以检查代码的正确性和可靠性；但是对于大多数小型项目而言，这些工作往往是由开发人员自己完成的。在本章节中，我们会介绍一些常用的调试和测试方法，帮助同学们更好地理解和解决代码中的问题。
 
-总得说来，调试和测试就像诊治一个危重病人（值得庆幸的是，这个病人能够复活）一样。此时，我们需要四步走：先救命、再治病、再调养，最后购买医疗保险。顺序不要乱，一步都不能少。
+总得说来，调试和测试就像诊治一个危重病人（值得庆幸的是，这个病人能够复活）一样。此时，我们需要四步走：先救命、再治病、再调养，最后购买医疗保险，然后让他去工作。顺序不要乱，一步都不能少。
 
 \section{先救命}
 
@@ -54,6 +54,218 @@
 
 以上命令其实很复杂，需要同学们多加练习才能熟练掌握。这里我推荐一个GDB的小练习：CMU ICS Lab2：BombLab。这个练习的目的是让同学们通过GDB来调试一个被加密的程序，找到正确的输入来“拆弹”。这个练习非常有趣，而且可以帮助同学们熟悉GDB的使用。
 
+当然，GDB的TUI界面还是太老了，我推荐装个插件\texttt{pwndbg}，它可以让GDB的TUI现代化得多。
 
+\subsection{尸检}
+
+有时候程序确实崩了，救不活了，这时候我们需要“死后验尸”，确定程序真正的“死因”。当然，我们在解剖尸体之前，至少得对死因了解个大概，例如是段错误、内存泄漏、未定义行为，还是什么奇奇怪怪的东西。
+
+\subsubsection{段错误}
+
+段错误可以使用core dump来分析。core dump是程序崩溃时操作系统生成的一个文件，包含了程序的内存状态和寄存器状态等信息。我们可以使用GDB来分析core dump文件。
+
+\texttt{ulimit -c unlimited}命令可以设置core dump文件的大小限制为无限制。然后运行崩溃的程序，等着程序再崩溃一次。然后运行：\texttt{gdb ./your\_program core}。这会加载core dump文件，并且可以使用\texttt{bt}命令查看函数调用栈，使用\texttt{info locals}查看局部变量等。
+
+\subsubsection{内存泄漏}
+
+内存泄漏可以使用Valgrind来分析。Valgrind是一个开源的内存调试工具，可以检测内存泄漏、未初始化内存读取等问题。使用Valgrind非常简单，只需要在运行程序时加上\texttt{valgrind}命令即可，例如：
+\begin{lstlisting}[language=bash]
+    valgrind --leak-check=full ./your_program
+\end{lstlisting}
+
+Valgrind会输出内存泄漏的详细信息，包括泄漏的内存地址、大小、调用栈等信息。我们可以根据这些信息来定位内存泄漏的代码。
+
+Valgrind跑完以后别急着关，如果是开源项目或者协作项目，把definitely lost那行抄下来贴到issue上面，省得以后再犯同样的错误。
+
+\subsubsection{未定义行为}
+
+越界和未定义行为可以使用ASan和UBSan来分析。ASan（AddressSanitizer）是一个内存错误检测工具，可以检测越界访问、使用后释放等问题。UBSan（UndefinedBehaviorSanitizer）是一个未定义行为检测工具，可以检测整数溢出、空指针解引用等问题。
+
+我们在编译文件的时候，可以加上\texttt{-fsanitize=address}和\texttt{-fsanitize=undefined}选项来启用ASan和UBSan。
+
+\section{再治病}
+
+有些时候，程序没有崩溃的风险，但它的执行不符合预期且占用了过多的资源。这时候，我们需要进行性能调优和资源使用分析。以下是一些常见的性能问题和资源使用问题，以及相应的分析工具。
+
+\subsection{CPU吃满但是程序显然不应该吃满CPU}
+
+这种情况可以使用perf来分析问题，由Linux内核提供。只需要在运行程序时加上\texttt{perf}命令即可，例如：
+\begin{lstlisting}[language=bash]
+    perf record -g ./your_program && perf report
+\end{lstlisting}
+
+\subsection{内存吃满但是程序显然不应该吃满内存}
+
+这种情况可以使用massif来分析问题，该工具由Valgrind提供。例如：
+\begin{lstlisting}[language=bash]
+    valgrind --tool=massif ./your_program
+\end{lstlisting}
+
+运行完毕后，可以使用\texttt{ms\_print}命令来查看内存使用情况，例如：
+\begin{lstlisting}[language=bash]
+    ms_print massif.out.<pid>
+\end{lstlisting}
+
+\subsection{IO卡死}
+
+IO卡死通常是因为程序在等待某个IO操作完成，例如网络请求、文件读写等。我们可以使用iotop来分析IO卡死问题，只需要:
+\begin{lstlisting}[language=bash]
+    sudo iotop -o
+\end{lstlisting}
+然后盯着它看，找谁疯狂IO就可以了。
+
+当然，对于Node.js和Python服务，可以使用\texttt{--inspect}模式；然后打开Chrome浏览器，输入\texttt{chrome://inspect}，火焰图和前端一样香。
+
+\section{再调养}
+
+经过以上的两步骤，我们总算是把程序的主要问题解决了个差不多。但是，为了保证程序的稳定性和可靠性，我们还需要进行一些额外的调养工作——测试。
+
+\subsection{测试第一步：隔离}
+
+我们最好是找个地方把需要测试的代码隔离开来，放到一个单独的地方，防止其他代码或者文件影响测试结果；对于服务类型的项目，则更是如此。我们可以使用tmux、screen或者Docker来隔离测试环境。
+
+\subsubsection{使用tmux和screen}
+
+tmux和screen是两个常用的终端复用工具，可以在一个终端中创建多个会话，方便我们进行隔离测试。使用方法非常简单，只需要在终端中输入\texttt{tmux}或\texttt{screen}即可进入一个新的会话。
+
+在tmux中，我们可以使用以下命令来创建新的窗口、分割窗口等：
+\begin{lstlisting}
+    tmux new session -s session_name # 创建一个新的会话
+    tmux ls # 列出所有会话
+    tmux attach -t session_name # 连接到指定的会话
+\end{lstlisting}
+会这三个就行。在screen中的相同功能命令是：
+\begin{lstlisting}
+    screen -S session_name # 创建一个新的会话
+    screen -ls # 列出所有会话
+    screen -r session_name # 连接到指定的会话
+\end{lstlisting}
+
+\subsubsection{使用Docker}
+
+docker和上述两个东西不太一样。上述两个东西只能做到“守护终端”，但是对于环境的变化无能为力。而使用docker可以做到隔离环境，甚至可以做到“守护进程”。我们可以使用Docker来创建一个隔离的测试环境，例如：
+\begin{lstlisting}[language=bash]
+    docker run -it --rm -v $(pwd):/app -w /app python:3.9 bash
+\end{lstlisting}
+
+以上代码的含义是创建一个Python 3.9的Docker容器，并将当前目录挂载到容器的/app目录下，然后进入容器的bash终端。这样，我们就可以在隔离的环境中进行测试了。
+
+我们也可以让测试代码在docker容器里面跑起来以后，再退出来，使用其他代码（例如测试代码）来访问这个容器。此时我们需要再docker容器中预留端口，也就是：
+\begin{lstlisting}[language=bash]
+    docker run -it --rm -p 8000:8000 -v $(pwd):/app -w /app python:3.9 bash
+\end{lstlisting}
+上述命令是做了一个端口映射，我们可以在本地的8000端口访问容器中的8000端口。
+
+默认情况下，离开容器不会关闭容器，除非服务挂了。这时候我们可以使用\texttt{docker exec}命令来进入容器，例如：
+\begin{lstlisting}[language=bash]
+    docker exec -it container_name bash
+\end{lstlisting}
+
+如果我们不想要这个容器了，可以使用\texttt{docker rm}命令来删除它，例如：
+\begin{lstlisting}[language=bash]
+    docker rm container_name
+\end{lstlisting}
+
+\subsection{单元测试}
+
+单元测试是对代码的最小可测试单元进行验证的过程。它通常是自动化的，可以帮助我们快速发现代码中的问题。Python和C/C++都有很好的单元测试框架。
+
+对于Python，我们可以使用unittest框架来编写单元测试。以下是一个简单的示例：
+\begin{lstlisting}[language=python]
+import unittest
+class TestMyFunction(unittest.TestCase):
+    def test_case_1(self):
+        self.assertEqual(my_function(1, 2), 3)
+
+    def test_case_2(self):
+        self.assertRaises(ValueError, my_function, -1, 2)
+if __name__ == '__main__':
+    unittest.main()
+\end{lstlisting}
+在这个示例中，我们定义了一个测试类\texttt{TestMyFunction}，它继承自\texttt{unittest.TestCase}。我们在这个类中定义了两个测试用例，分别测试了\texttt{my\_function}函数的正确性和异常处理。最后，我们使用\texttt{unittest.main()}来运行所有的测试用例。这是一个非常简单的单元测试示例，实际的单元测试可能会更加复杂，要涉及几乎所有的代码逻辑。因此测试工程师这个职业也不是什么轻松的工作。
+
+在编写测试用例的时候，除了涉及到大多数的常规数据以外，也要尽可能地考虑一些特殊值（例如边界情况等），也需要故意混入一些显然错误的数据来测试程序的健壮性和异常处理能力。
+
+\subsection{集成测试}
+
+集成测试则指的是对整个系统进行测试，验证各个模块之间的交互是否正常。集成测试通常是手动进行的，一般是编写一些集成测试代码，然后用这个代码来测试整个系统的功能是否正常。
+
+对于Python，我们可以使用pytest框架来编写集成测试。以下是一个简单的示例：
+\begin{lstlisting}[language=python]
+import pytest
+def test_my_function():
+    assert my_function(1, 2) == 3
+    assert my_function(-1, 2) == 1
+    assert my_function(0, 0) == 0
+    with pytest.raises(ValueError):
+        my_function(-1, -2)
+@pytest.mark.parametrize("a, b, expected", [
+    (1, 2, 3),
+    (-1, 2, 1),
+    (0, 0, 0),
+])
+def test_my_function_parametrized(a, b, expected):
+    assert my_function(a, b) == expected
+\end{lstlisting}
+
+对于服务类项目，我们的测试代码可以是自动调用这个服务来做一些事情，看看能不能产生符合预期的结果。比如说，我们可以使用\texttt{requests}库来发送HTTP请求，验证服务的响应是否正确。
+
+\section{买保险}
+
+大多数时候，我们的程序经过一大堆调试和测试后，已经可以正常运行，并得到了充分的优化。但是为了保证程序确实得到了优化，我们还需要进行一些额外的测试工作。比方说，我们使用Python的pytest-benchmark装饰器来进行性能测试：
+\begin{lstlisting}
+    @pytest.mark.benchmark
+    def test_my_function(benchmark):
+        result = benchmark(my_function, *args, **kwargs)
+        assert result == expected_result
+        return result
+\end{lstlisting}
+跑就完了。
+
+对于所有程序，我们都可以使用hyperfine来进行性能测试：
+\begin{lstlisting}[language=bash]
+    hyperfine 'python old.py' 'python new.py' --warmup 5 --runs 50
+\end{lstlisting}
+加上这个选项把东西抄下来：
+\begin{lstlisting}
+    --export-markdown results.md
+\end{lstlisting}
+然后PR里面贴出“优化完成”和这张表，老板登时点赞。
+
+\section{去工作}
+
+代码调试完成了，现在该把代码部署到生产环境了。部署代码的方式有很多种，具体取决于项目的类型和规模。对于小型项目，我们可以直接将代码上传到服务器上运行；对于大型项目，我们可以使用CI/CD工具来自动化部署流程。
+
+GitHub Actions是一个常用的CI/CD工具，可以帮助我们自动化部署流程。我们可以编写一个GitHub Actions工作流文件，定义部署的步骤和条件。例如：
+\begin{lstlisting}
+name: Deploy
+on:
+    push:
+        branches:
+        - main
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+        - name: Checkout code
+          uses: actions/checkout@v2
+        - name: Set up Python
+          uses: actions/setup-python@v2
+          with:
+            python-version: '3.9'
+        - name: Install dependencies
+          run: |
+            python -m pip install --upgrade pip
+            pip install -r requirements.txt
+        - name: Run tests
+          run: pytest
+        - name: Deploy to server
+          run: |
+            scp -r . user@server:/path/to/deploy
+            ssh user@server 'cd /path/to/deploy && ./deploy.sh'
+\end{lstlisting}
+在这个示例中，我们定义了一个名为\texttt{Deploy}的工作流，当代码推送到\texttt{main}分支时触发。工作流包含了几个步骤：检出代码、设置Python环境、安装依赖、运行测试和部署到服务器。当然，具体的部署步骤需要根据项目的实际情况进行调整。
+
+除了自动部署以外，CI/CD工具还可以帮助我们进行代码质量检查、性能测试等工作。我们可以在工作流中添加相应的步骤来实现这些功能。
 
 \end{document}
