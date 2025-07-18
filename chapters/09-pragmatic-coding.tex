@@ -33,13 +33,13 @@
 不要什么都手动缩进。人类不是打字机，机器比我们人打的整齐十倍甚至九倍。
 
 除了这些以外，不同的岗位也有一些不同的码风需求，例如对于后端而言一个非常常见的差代码：
-\begin{verbatim}
+\begin{lstlisting}[language=C++]
     for(int i = 0; i<s.length(); i++){
         if(s[i] == 'a'){
             s[i] = 'b';
         }
     }
-\end{verbatim}
+\end{lstlisting}
 以上代码的意图是将字符串中的所有字母a替换为b，但是它的效率非常低下，因为每次替换都需要调用一遍\texttt{s.length()}，而且每次替换都需要重新构建字符串，前端得等半天才能看到结果。而前端也有可能出现类似错误，前端的差代码可能是把SQL语句写进了HTML中，这直接导致了SQL注入漏洞，后端同学估计会直接气炸。
 
 为了规避这些错误，同学们需要在实际项目中不断积累经验，才能写出更好的代码，我就不啰嗦了。
@@ -49,17 +49,17 @@
 很多人都不喜欢写注释，认为代码本身就应该是自解释的，实则不然。当代码逻辑复杂或者涉及到一些特定的业务逻辑时，注释就显得尤为重要；要是码风再差一点，代码就更不能自解释了。
 
 于是我们赌气一般地写了以下注释：
-\begin{verbatim}
+\begin{lstlisting}[language=Python]
     i += 1  # 增加 i 的值
-\end{verbatim}
+\end{lstlisting}
 
 对以上注释，我的看法是不如不写，因为只要是认识 \texttt{+=}的人都知道这行代码的意思，这句话本质上是在重复代码本身，没有什么用处。
 
 因此，注释的原则是：\textbf{注释应该解释代码的意图}，或者说，\textbf{说清楚为什么这么写（在做什么）}而不是“这是什么”。或者举个例子：
 
-\begin{verbatim}
+\begin{lstlisting}[language=Python]
     i += 1 # 跳过表头行，数据从下一行开始
-\end{verbatim}
+\end{lstlisting}
 
 这行注释就比上面的注释有用得多，后续在做代码评审的时候也很容易复现当时的思路。
 
@@ -78,7 +78,7 @@
 程序员中经常流传着一首歌曲（尤其是C\#程序员）：“死了都要Try……”\footnote{来自著名歌曲《死了都要爱》}，说明了异常处理机制的重要性。异常处理机制可以帮助我们捕获和处理运行时错误，避免程序崩溃；换句话说，异常处理机制的思路是“晚崩溃，晚挨骂”。
 
 一个经典的C\#异常处理结构如下：
-\begin{verbatim}
+\begin{lstlisting}
     try{
         // 可能有毛病的代码
         // 我们甚至可以人造异常
@@ -90,16 +90,16 @@
     finally{
         // 无论如何都会执行的代码
     }
-\end{verbatim}
+\end{lstlisting}
 
 一般finally可以省略，在其他语言中语法也差不多。一个示例是：
-\begin{verbatim}
+\begin{lstlisting}[language=Python]
 try:
     user = User.get_by_id(user_id)
 except UserNotFoundError:
     logger.error(f"用户{user_id}不存在")
     return {"error": "用户不存在"}
-\end{verbatim}
+\end{lstlisting}
 
 这种代码在查询的时候非常常见，能够有效地防止查到空对象并尽早暴露问题，同时还能防止程序崩溃，防止笨蛋甲方在酒吧点炒饭的时候不停地输入不存在的用户ID导致程序崩溃。
 
@@ -111,41 +111,41 @@ except UserNotFoundError:
 
 比方说以下代码：
 
-\begin{verbatim}
+\begin{lstlisting}[language=Python]
 def divide(a, b):
     return a / b
-\end{verbatim}
+\end{lstlisting}
 
 然后某在酒吧点炒饭的笨蛋甲方输入了0作为第二个参数，导致程序崩溃，然后甲方开骂，乙方只能默默挨骂。
 
 这时候，我们可以使用断言来解决这个问题：
-\begin{verbatim}
+\begin{lstlisting}[language=Python]
 def divide(a, b):
     assert b != 0, "除数不能为零！"
     return a / b
-\end{verbatim}
+\end{lstlisting}
 
 如果甲方输入了0作为第二个参数，程序就会抛出异常（一个“断言错误”），并且输出“除数不能为零！”的错误信息。这样就可以避免程序崩溃，并且可以更好地定位问题。（甲方估计也不会因为这个错误而开骂了）
 
 这个代码如果用raise来写的话就会变成：
-\begin{verbatim}
+\begin{lstlisting}[language=Python]
 def divide(a, b):
     if b == 0:
         raise ValueError("除数不能为零！")
     return a / b
-\end{verbatim}
+\end{lstlisting}
 raise是Python中手动抛出异常的语句，和C\#的throw很像。上述代码和使用断言的区别有两点：一个是代码量变大了（多了一行，不够优雅），另一个是这个异常抛出的是“值错误”而不是“断言错误”。不过在实际操作中，这两个区别不大，且在查询等需要更多信息的场景中，使用raise会更好一些（生产环境中往往禁用断言，优雅不能当饭吃）。
 
 在C系中，也有这样的断言，包括运行时断言和编译时断言。运行时断言指的是在运行时会检查某些条件是否成立，对编译进程没有影响；编译时断言则是在编译阶段就检查某些条件是否成立，如果不成立直接掐断编译。
 
 下文是一个运行时断言：
-\begin{verbatim}
+\begin{lstlisting}[language=C]
 #include <assert.h>
 void divide(int a, int b) {
     assert(b != 0 && "除数不能为零！");
     printf("%d\n", a / b);
 }
-\end{verbatim}
+\end{lstlisting}
 
 \section{监控程序的运行情况}\label{sec:monitoring}
 
@@ -163,9 +163,9 @@ void divide(int a, int b) {
 \end{itemize}
 
 日志通常遵循一定的结构：时间-模块-级别-消息。例如：
-\begin{verbatim}
+\begin{lstlisting}
     2025-07-16 14:30:00 [user.py:45] ERROR 用户123登录失败：密码错误
-\end{verbatim}
+\end{lstlisting}
 
 日志的格式化可以使用一些工具来实现，例如Python的logging模块提供了丰富的格式化选项，可以自定义日志的输出格式。
 

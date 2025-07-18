@@ -58,10 +58,10 @@ Linux和Mac用户可以通过包管理器安装特定的编译器，在暑假课
 
 你可以在MSYS2终端中运行以下命令来安装GCC和GDB（建议使用UCRT64终端，不建议用其他的几个，它们即将停止支持）：
 
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
 pacman -S mingw-w64-ucrt-x86_64-gcc
 pacman -S mingw-w64-ucrt-x86_64-gdb
-\end{verbatim}
+\end{lstlisting}
 
 在MSYS2中安装完成后，用户如果想要在Windows终端中使用GCC，则需要设置环境变量，以便在命令行中直接使用编译器命令。
 
@@ -76,7 +76,7 @@ pacman -S mingw-w64-ucrt-x86_64-gdb
 
 \emph{特别注意：有的同学可能不是按照上述推荐的方式安装GCC的，而是通过其他方式（例如直接下载预编译版本）安装的GCC。如果是这种情况，务必记住GCC和非ASCII字符是死敌，因此请不要将GCC安装在包含非ASCII字符（如汉字、空格）的路径下！（最大的坑可能是你的用户名中包含非ASCII字符，例如汉字！）}
 
-\subsection{虚拟环境及其配置：以Python为例}
+\subsection{虚拟环境及其配置}
 
 开发，尤其是生产类开发有一个重要的原则：不重复造轮子。以Python为例，作为一门流行的编程语言，它拥有丰富的第三方库和框架，可以帮助我们快速实现各种功能，并不需要从零开始开发。
 
@@ -99,39 +99,39 @@ conda有两个发行版，一个是Anaconda，另一个是Miniconda。Anaconda�
 接下来，因为一些原因，我们应当重启计算机（或者终端），以确保环境变量生效。
 
 然后，我们需要进行终端初始化，例如在Windows上，我们可以使用以下命令：
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
     conda init powershell
-\end{verbatim}
+\end{lstlisting}
 
 你应该将上述命令替换为你所使用的终端类型，例如在Linux上可以使用\texttt{bash}或\texttt{zsh}。然后你需要重启终端，以使初始化生效。
 
 我们可以创建一个新的虚拟环境，例如：
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
     conda create -n myenv python=3.10
-\end{verbatim}
+\end{lstlisting}
 这样就可以创建一个名为\texttt{myenv}的虚拟环境，并安装Python 3.10的尽可能新的版本。
 
 下面我们需要激活虚拟环境：
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
     conda activate myenv
-\end{verbatim}
+\end{lstlisting}
 这样就进入了虚拟环境，你可以在终端上看到提示符前面有\texttt{(myenv)}，表示当前处于\texttt{myenv}虚拟环境中。如没有，可能是终端配置失败或者其他原因，安装OhMyPosh的部分主题也可能会导致这个问题（最大的可能是你的主题没有Python虚拟环境对应的section）。
 
 现在在Python中我们一般流行使用\texttt{pip}来安装包，它从PyPI安装和管理第三方库。现在不流行直接使用conda管理包了。
 
 我们可以使用以下命令安装一个包，例如安装\texttt{Numpy}库：
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
     pip install numpy
-\end{verbatim}
+\end{lstlisting}
 这将会在当前虚拟环境中安装Numpy库，而不会影响全局的Python环境。
 
 如果你需要安装多个包，可以将它们写在一个文件中，例如\texttt{requirements.txt}，然后使用以下命令安装：
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
     pip install -r requirements.txt
-\end{verbatim}
+\end{lstlisting}
 以上命令也常用于项目的依赖管理，可以方便地安装和更新项目所需的所有包；同时也可以通过修改\texttt{requirements.txt}文件来管理项目的依赖版本，适宜分发。
 
-\section{选择合适的集成开发环境或者文本编辑器}
+\section{选择合适的IDE或者文本编辑器}
 
 IDE（集成开发环境）或者文本编辑器是编程的核心工具之一，用于编写代码、调试和测试等功能。选择合适的IDE或编辑器可以提高编程效率和代码质量。
 
@@ -184,7 +184,7 @@ VS Code是一个非常灵活的编辑器，可以通过安装插件来增强其�
 
 以下是一个简单的\texttt{tasks.json}文件示例（其实就是上面自动生成的那个，按照笔者的计算机环境稍微改了改）：
 
-\begin{verbatim}
+\begin{lstlisting}
 {
   "version": "2.0.0",
   "tasks": [
@@ -207,11 +207,11 @@ VS Code是一个非常灵活的编辑器，可以通过安装插件来增强其�
     }
   ]
 }
-\end{verbatim}
+\end{lstlisting}
 
 以下是一个简单的\texttt{launch.json}文件示例：
 
-\begin{verbatim}
+\begin{lstlisting}
 {
   "version": "0.2.0",
   "configurations": [
@@ -238,7 +238,7 @@ VS Code是一个非常灵活的编辑器，可以通过安装插件来增强其�
       }
   ]
 }
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{在VS Code中配置Python}
 
@@ -260,19 +260,19 @@ VS Code是一个非常灵活的编辑器，可以通过安装插件来增强其�
 
 我们建议使用winget来安装Oh My Posh。你可以在PowerShell中运行以下命令来安装：
 
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
   winget install JanDeDobbeleer.OhMyPosh
-\end{verbatim}
+\end{lstlisting}
 
 安装完成后，你需要在PowerShell中运行以下命令来初始化Oh My Posh：
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
   oh-my-posh init pwsh
-\end{verbatim}
+\end{lstlisting}
 
 在配置Oh My Posh的时候，很多的命令涉及到执行脚本。默认情况下，Windows PowerShell会阻止执行脚本以保护系统安全。因此，你需要先修改执行策略来允许执行脚本。在PowerShell中运行以下命令：
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
   Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-\end{verbatim}
+\end{lstlisting}
 就可以允许当前用户执行远程签名的脚本。
 
 如果你使用的是其他终端，例如cmd或者Git Bash，你可以在Oh My Posh的\href{https://ohmyposh.dev/docs/installation}{安装文档}中找到相应的安装方法。
@@ -282,9 +282,9 @@ VS Code是一个非常灵活的编辑器，可以通过安装插件来增强其�
 首先，你应该安装OMP推荐使用的字体，例如Nerd Font。这是因为Oh My Posh使用了一些特殊的图标，如果没有合适的字体，可能会导致图标无法正常显示。
 
 你可以在\href{https://www.nerdfonts.com/}{Nerd Fonts官网}下载最新的字体包。安装完成后，你需要在终端中设置字体为Nerd Font，以便能够正确显示Oh My Posh的图标。另一个办法是利用OhMyPosh安装这个字体：
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
   oh-my-posh font install meslo
-\end{verbatim}
+\end{lstlisting}
 
 安装完成后，你需要在终端中设置字体为Nerd Font。以PowerShell为例，你可以右键点击窗口标题栏，选择“属性”，然后在“字体”选项卡中选择Nerd Font即可。
 
@@ -312,26 +312,26 @@ VS Code内置了终端功能，可以方便地在编辑器中运行命令。终�
 
 对于C++，我们可以使用以下代码来编写第一个程序。你可以在VS Code中创建一个新的C++文件，例如\texttt{hello.cpp}（\textbf{该文件的路径不能包含空格和中文！}），然后输入以下代码：
 
-\begin{verbatim}
+\begin{lstlisting}[language=C++]
 #include <iostream>
 int main() {
     std::cout << "Hello, World!" << std::endl;
     return 0;
 }
-\end{verbatim}
+\end{lstlisting}
 
 然后如果配置得当，我们就可以通过按下F5键来编译并运行这个程序了。VS Code会自动调用编译器进行编译，并在终端中显示输出结果。如果一切顺利，你应该会看到“Hello, World!”的输出。
 
 在一些极端情况下（例如无GUI环境），你可能需要手动编译和运行程序。可以使用以下命令来编译和运行程序：
 
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
 g++ -o hello hello.cpp
 ./hello
-\end{verbatim}
+\end{lstlisting}
 
 请使用类似的方式\textbf{手敲}、编译、运行以下代码：
 
-\begin{verbatim}
+\begin{lstlisting}[language=C++]
 #include <iostream>
 int main() {
     int a, b;
@@ -342,29 +342,29 @@ int main() {
     std::cout << "Their sum is: " << a + b << std::endl;
     return 0;
 }
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{Python}
 
 对于Python，我们同样可以使用以下代码来编写第一个程序：
 
-\begin{verbatim}
+\begin{lstlisting}[language=Python]
 print("Hello, World!")
-\end{verbatim}
+\end{lstlisting}
 
 同样，如果配置得当，我们就可以通过按下F5键来运行这个程序了。VS Code会自动调用Python解释器运行，并在终端中显示输出结果。同样的，如果希望使用命令行来运行程序，可以使用以下命令：
 
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
 python hello.py
-\end{verbatim}
+\end{lstlisting}
 
 请使用类似的方式\textbf{手敲}、编译、运行以下代码：
 
-\begin{verbatim}
+\begin{lstlisting}[language=Python]
 a = int(input("Enter the first integer: "))
 b = int(input("Enter the second integer: "))
 print("Their sum is:", a + b)
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{这两个语言有什么区别？}
 
@@ -382,7 +382,7 @@ print("Their sum is:", a + b)
 
 例如，以下是C++初学者常见的错误：
 
-\begin{verbatim}
+\begin{lstlisting}[language=C++]
   #include<iostream>
   using namespace std;
   int mian()
@@ -390,23 +390,23 @@ print("Their sum is:", a + b)
       cout<<"Hello World!"<<endl;
       return 0;
   }
-\end{verbatim}
+\end{lstlisting}
 
 而它的错误信息是在编译时报出：
 
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
 > g++ example.cpp -o example.exe
 
 ld.exe: *.a(lib64_libmingw32_a-crtexewin.o): in function `main':
 C:/.../crtexewin.c:70: undefined reference to `WinMain'
 collect2.exe: error: ld returned 1 exit status
-\end{verbatim}
+\end{lstlisting}
 
 虽然信息略显抽象，但我们还是可以看到很多有用的信息。 ld 是 C++ 中的链接器，再往上看可以发现对 WinMain 的引用是未定义的。这提示我们去看 main 函数，从而发现这里将\texttt{main}函数写成了\texttt{mian}，因此链接器无法找到 main 函数，从而引发错误。
 
 而Python给出的错误信息则更为直观，例如以下代码：
 
-\begin{verbatim}
+\begin{lstlisting}[language=Python]
 def calc(numbers):
   total = sum(numbers)
   count = len(numbers)
@@ -417,10 +417,10 @@ print("Average:", calc(numbers))
 
 numbers.append("60")
 print("Updated Average:", calc(numbers))
-\end{verbatim}
+\end{lstlisting}
 
 其报错是：
-\begin{verbatim}
+\begin{lstlisting}[language=bash]
 Average: 30.0
 Traceback (most recent call last):
   File "example.py", line 10, in <module>
@@ -428,7 +428,7 @@ Traceback (most recent call last):
   File "example.py", line 2, in calc
     total = sum(numbers)
 TypeError: unsupported operand type(s) for +: 'int' and 'str'
-\end{verbatim}
+\end{lstlisting}
 
 可以看到，解释器对第10行和第2行进行了报错。第10行的报错是因为在调用\texttt{calc}函数时，传入的\texttt{numbers}列表中包含了一个字符串“60”，而\texttt{calc}函数期望的是一个数字列表，因此在计算平均值时出现了类型错误（TypeError）。而第2行的报错则是因为在计算总和时，无法将整数和字符串相加。于是我们发现了问题所在：在第9行，我们向\texttt{numbers}列表中添加了一个字符串“60”，而不是一个数字。我们可以通过将其改为\texttt{numbers.append(60)}来解决这个问题。
 
