@@ -71,7 +71,7 @@ pacman -S mingw-w64-ucrt-x86_64-gdb
   \item 找到MSYS2的安装目录，通常是\texttt{C:\textbackslash msys64}。
   \item 将\texttt{C:\textbackslash msys64\textbackslash ucrt64\textbackslash bin}添加到系统的PATH环境变量中。（请按照你的实际安装路径进行调整，下同）
   \item 在PowerShell或者CMD中运行以下命令来验证是否配置成功：\texttt{gcc --version}。如果输出了GCC的版本信息，则说明配置成功。
-  \item 需要在Windows的PowerShell或者CMD中运行POSIX风格工具时，也可以将\texttt{C:\textbackslash msys64\textbackslash usr\textbackslash bin}也添加到用户的PATH环境变量中。但这样具有环境冲突风险，需要注意保证该变量的查找顺序在比ucrt64的bin目录更靠后，以避免冲突。
+  \item 需要在Windows的PowerShell或者CMD中运行POSIX风格工具时，也可以将下列路径也添加到用户的PATH环境变量中：\texttt{C:\textbackslash msys64\textbackslash usr\textbackslash bin}。但这样具有环境冲突风险，需要注意保证该变量的查找顺序在比ucrt64的bin目录更靠后，以避免冲突。
 \end{itemize}
 
 \emph{特别注意：有的同学可能不是按照上述推荐的方式安装GCC的，而是通过其他方式（例如直接下载预编译版本）安装的GCC。如果是这种情况，务必记住GCC和非ASCII字符是死敌，因此请不要将GCC安装在包含非ASCII字符（如汉字、空格）的路径下！（最大的坑可能是你的用户名中包含非ASCII字符，例如汉字！）}
