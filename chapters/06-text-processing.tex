@@ -613,6 +613,7 @@ Typst 有两类语言模式：标记模式和脚本模式，而本质上都可�
   *加粗* 等价于 #strong[加粗]
   _强调_ 等价于 #emph[强调]
   需要注意，没有标记下划线，需要用#underline[下划线]来进行。
+  #strike[删除线]，没有标记删除线
 
   - 无序列表
   + 有序列表
@@ -621,6 +622,13 @@ Typst 有两类语言模式：标记模式和脚本模式，而本质上都可�
   #list.item[无序列表]
   #enum.item[有序列表]
   #terms.item[术语][术语列表]
+
+  $x^2/a^2 + y^2/b^2 = 1$ 公式两边不空空格是行内公式
+  $ sum_(k=0)^n k
+    &= 1 + ... + n \
+    &= (n(n+1)) / 2 $
+  公式两边空格是行间公式
+  你可能注意到了 Typst 公式与 \LaTeX 公式有差异。
 
   ```py
   print("Hello, World!")
@@ -690,6 +698,5 @@ This is *emphasized* text. // 红色加粗
 
 特别注意：默认情况下，该方法定义的变量是有类似 C 系的变量作用域的。let和show结合使用，则可以制作出各种各样的模板。
 
-对于更进一步的使用（例如 Touying 和 Pinit 等著名包的使用），我们不做更多介绍了，感兴趣的同学可以自行查找相关资料进行了解。
-
+对于更进一步的使用（例如 Touying 和 Pinit 等著名包的使用），我们不做更多介绍了，感兴趣的同学可以自行查找相关资料进行了解。函数文档可以去查看\href{https://typst.app/docs/}{Typst 官方文档}，已经发布的包可以在\href{https://typst.app/universe/}{Typst Universe}上查看，对于中文问题可以查看\href{https://guide.typst.dev/FAQ.html}{Typst中文社区导航}，对了还有Typst非官方中文交流群（QQ群号：793548390），欢迎来交流。
 \end{document}
