@@ -14,20 +14,46 @@
 
 代码风格（码风）是指代码的书写规范和格式化方式。良好的代码风格可以提高代码的可读性和可维护性，使得其他人（包括未来的自己）能够更容易地理解和修改代码。一般情况下，我们会遵循一些通用的代码风格规范，例如 Google C++ Style Guide 或 PEP 8（Python Enhancement Proposal 8）等。而在团队协作的时候，我们则尽可能保证码风和团队的码风一致。
 
-\subsection{命名和代码风格}
+\subsection{通用代码风格指南}
 
-一般情况下，有几个值得注意的点：（不同的语言有着不同的要求，不要把以下内容奉为圭臬，例如Vala就习惯在函数名和左括号之间添加空格。）
+尽管不同语言和项目有不同的风格，但以下几点是相对普适的、值得注意的基本素养：
 \begin{itemize}
-  \item \textbf{缩进}：使用空格或制表符进行缩进，通常使用2个空格或4个空格或1个制表符。不要混用空格和制表符。
-  \item \textbf{命名}：使用有意义的变量名（\texttt{int user\_count}）和函数（\texttt{calc\_total\_price()}），不要使用单个字母（\texttt{a1}）、过度缩写（\texttt{cal()}）或无意义的名称（\texttt{tmp1}）。同时，使用统一的命名风格，例如大驼峰（CamelCase）、小驼峰（camelCase）、下划线（snake\_case）等。
+  \item \textbf{缩进}：使用空格或制表符进行缩进，通常使用2个空格或4个空格或1个制表符。关键是 \textbf{不要混用} 空格和制表符。
+  \item \textbf{命名}：使用有意义的变量名（\texttt{int user\_count}）和函数（\texttt{calc\_total\_price()}），不要使用单个字母（\texttt{a1}）、过度缩写（\texttt{cal()}）或无意义的名称（\texttt{tmp1}）。此外，在同一个项目中，对于同一种程序实体（例如，类、函数、变量），应当采用统一的命名风格。例如大驼峰（CamelCase）、小驼峰（camelCase）、下划线（snake\_case）等。绝大多数时候，常量通常使用全大写字母和下划线分隔（例如\texttt{MAX\_VALUE}）。
   \item \textbf{注释}：在代码中添加适当的注释，解释代码的逻辑和意图。注释应该简洁明了，不要过于冗长。同时，注释应该与代码保持同步，避免出现过时的注释。避免使用\texttt{\#if 0}和\texttt{\#endif}来注释代码，这种方式风格很老，现在已经不推荐使用了。
-  \item \textbf{空行}：适当使用空行来分隔代码块。通常情况下，在类、函数之间使用一个空行，在逻辑相关的代码块之间使用两个空行；有时候在类、函数之间使用两个空行，而在逻辑相关的代码块之间使用\texttt{\#region}和\texttt{\#endregion}或者类似物来分隔代码块。（这取决于你使用的语言和编辑器）
-  \item \textbf{括号}：使用一致的括号风格，例如 K\&R 风格（函数定义的左括号在同一行）或 Allman 风格（函数定义的左括号在新的一行）。注意不要在括号前面添加空格。
-  \item \textbf{空格}：在运算符两边添加空格，例如\texttt{a + b}而不是\texttt{a+b}。在逗号、分号等符号后面添加空格，例如\texttt{a, b}而不是\texttt{a,b}。在函数调用时，函数名和左括号之间不添加空格，例如\texttt{func()}而不是\texttt{func ()}。
-  \item \textbf{行长度}：尽量保持每行代码的长度在80-120个字符之间，避免过长的行导致代码难以阅读。可以使用换行符或者其他手段来分割长行。如果懒得数，也可以用半个屏幕为换行基准。
-  \item \textbf{文件长度}：尽量保持每个文件的长度在1500行以内，避免过长的文件导致代码难以阅读。可以将相关的代码分成多个文件，或者使用模块化的方式来组织代码。
+  \item \textbf{空行}：适当使用空行来分隔代码块，以提高可读性。通常在逻辑相关的代码块之间、函数之间、类之间使用一到两个空行。
+  \item \textbf{括号}：使用一致的括号风格，例如 K\&R 风格（函数定义的左括号在同一行）或 Allman 风格（函数定义的左括号在新的一行）。
+  \item \textbf{空格}：在运算符两边添加空格，例如\texttt{a + b}而不是\texttt{a+b}。在逗号、分号等符号后面添加空格，例如\texttt{a, b}而不是\texttt{a,b}。
+  \item \textbf{行长度}：尽量保持每行代码的长度在80-120个字符之间，避免过长的行导致代码难以阅读。
+  \item \textbf{文件长度}：尽量保持每个文件的长度在合理范围内（例如不超过1500行），避免过长的文件导致代码难以阅读和维护。
 \end{itemize}
 
+\subsection{特定语言与社区风格指南}
+
+代码风格并非放之四海而皆准的真理。不同的编程语言、社区和公司都有自己独特的代码风格规范。无论是开源社区项目还是公司内部项目，当你参与时，都应该优先遵循其既有的代码风格。这有助于你更好地融入团队，并与他人高效协作。
+
+以下是一些常见语言的知名代码风格指南，可供参考：
+
+\subsubsection{Python: PEP 8}
+Python社区广泛遵循\href{https://www.python.org/dev/peps/pep-0008/}{PEP 8}（Python Enhancement Proposal 8）规范。它对命名约定、缩进、行长度、注释格式等都做了详细规定。PEP 8推荐使用4个空格进行缩进，函数和变量名使用下划线命名法（snake\_case）。
+
+\subsubsection{C: K\&R, GNU, and Linux Kernel Style}
+作为一门历史悠久的系统编程语言，C语言形成了多种常见的代码风格。
+\begin{itemize}
+    \item \textbf{K\&R风格}：源自C语言的作者Brian Kernighan和Dennis Ritchie的著作\href{https://en.wikipedia.org/wiki/The_C_Programming_Language}{《The C Programming Language》}。它的特点是括号风格紧凑，左大括号跟在函数名或控制语句的同一行。这是许多后续风格的基础。
+    \item \textbf{GNU风格}：由\href{https://www.gnu.org/prep/standards/standards.html}{GNU项目}推广。它对代码的布局和注释有非常详细的规定。其括号风格很独特，大括号需要单独成行并缩进。
+    \item \textbf{Linux内核风格}：由Linus Torvalds主导，用于\href{https://www.kernel.org/doc/html/latest/process/coding-style.html}{Linux内核的开发}。它基于K\&R风格，但有自己独特的规则，例如使用制表符（tab）进行缩进（且一个tab等于8个空格），并严格限制行长为80个字符。
+\end{itemize}
+
+\subsubsection{C++: Google Style Guide \& LLVM Style}
+C++ 社区存在多种代码风格。其中，\href{https://google.github.io/styleguide/cppguide.html}{Google C++ Style Guide} 是一个非常著名且详尽的指南，被广泛应用于Google内部及其开源项目。它规定了包括文件命名、类设计、函数参数顺序在内的方方面面。另一个有影响力的风格是 \href{https://llvm.org/docs/CodingStandards.html}{LLVM Coding Standards}，它在开源编译器社区中非常流行。
+
+\subsubsection{关注项目与社区习惯}
+即便是相对小众的语言，其社区也往往会形成自己的代码风格。例如，Vala语言的社区就有一套流行的\href{https://docs.elementary.io/develop/writing-apps/code-style}{elementary编码风格}，它在函数调用时推荐在函数名和括号间加空格（例如\texttt{print ("Hello");}），这与许多其他语言的习惯可能不同。
+
+当你加入一个新项目时，至关重要的第一步往往是花时间阅读并理解其代码风格指南。如果项目没有成文的规范，那么就通过阅读现有代码来学习和模仿其风格。\textbf{保持一致性是关键，不要将个人偏好随意带入项目中。}这不仅是对项目和其他贡献者的尊重，也能让你的代码更快地被他人接受。
+
+\subsubsection{自动化工具的重要性}
 我们自己写代码的时候虽然不能强制要求自己遵循某种风格，但是在团队协作中，保持一致的代码风格是非常重要的。我们可以使用一些工具来自动格式化代码，VS Code的C++插件就提供了代码格式化功能，可以通过快捷键（通常是Shift + Alt + F）来自动格式化代码。至于python，我们\texttt{pip install black}，然后\texttt{black .}就可以自动格式化当前目录下的所有python文件了。
 
 不要什么都手动缩进。人类不是打字机，机器比我们人打的整齐十倍甚至九倍。

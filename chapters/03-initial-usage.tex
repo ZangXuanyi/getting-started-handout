@@ -97,12 +97,30 @@
 
 这仅仅是最基本的命令使用方法，实际上终端的命令系统非常复杂，功能也非常强大。感兴趣的同学可以自行查找相关资料进一步学习。
 
+\section{包管理器}
+
+包管理器是用于管理软件包的工具。它可以自动下载、安装、升级和卸载软件包，并且可以解决软件包之间的依赖关系。
+
+在Linux和macOS中，包管理器是非常常用的工具。它可以帮助用户快速安装和管理软件包，避免手动下载和安装软件包的麻烦。比如我希望在Arch Linux下安装GCC，只需要执行以下命令即可：
+
+\begin{lstlisting}
+    sudo pacman -S gcc
+\end{lstlisting}
+
+在Windows中，包管理器的使用不普遍。虽然有一个官方的包管理器winget，但是支持的软件包较少，且无法自动管理依赖（但也基本够用）；还有一些例如Chocolatey、Scoop等第三方包管理器。除此以外，使用MSYS2、Cygwin等类Unix环境也可以从某种程度上当成包管理器使用。例如后文讲的安装GCC的过程，我们就是使用MSYS2来安装的，比下载预编译版本简单许多。
 
 \section{Git初步}\label{sec:git}
 
 试想以下环境：我们正在写一项作业，开发工作已经基本完成，试运行也能够得到90分。此时我们希望进一步精进代码，使得分数达到95分以上；但是经过一通修改以后，发现程序再也运行不起来了。这时候距离ddl只有1小时，我们决定摆烂，提交能够得到90分的代码。然后我们根据记忆改回原来的代码的时候，发现我们再也想不起来旧代码是怎么写的了！这无疑是令人极为懊恼的。
 
 为了避免以上问题，我们引入了版本控制系统。目前最常用的版本控制系统是Git。
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{images/git.png}
+\caption{一个典型的Git工作流程}
+\label{fig:git-workflow}
+\end{figure}
 
 \subsection{Git的工作原理}
 
@@ -129,7 +147,7 @@ Git有三个目录共同完成版本控制：工作区、暂存区、版本库�
 
 \subsection{Git信息设置}
 
-安装并使用Git的第一步是先编辑本地的一些提交信息。Git的提交需要一个用户名和一个邮箱，来对应每次提交的作者。我们可以使用以下命令来设置这些信息：
+安装并使用Git的第一步是先编辑本地的一些信息。Git的提交需要一个用户名和一个邮箱，来对应每次提交的作者。我们可以使用以下命令来设置这些信息：
 
 \begin{lstlisting}[language=bash]
     git config --global user.name "Your Name"
@@ -147,7 +165,7 @@ Git有三个目录共同完成版本控制：工作区、暂存区、版本库�
 
 \subsection{Git的最基本使用}
 
-\subsubsection{版本控制：提交}
+\subsubsection{提交}
 
 要具体地在某一目录下进行版本控制，我们需要在命令行中进入到我们希望使用Git的目录下。然后我们可以使用以下命令来初始化一个Git仓库：
 
@@ -176,7 +194,7 @@ Git有三个目录共同完成版本控制：工作区、暂存区、版本库�
 
 上述内容中，-m后面是提交信息。提交信息是对本次提交的简要描述。我们建议每次提交都写上简要的提交信息，这样可以帮助我们更好地理解代码的修改历史。
 
-\subsubsection{版本控制：回退}
+\subsubsection{回退}
 
 如果出现了先前我们说的不小心写坏了的情况，这时候就可以进行版本回退了。我们可以使用以下命令来查看当前的版本信息：
 
@@ -198,7 +216,25 @@ Git有三个目录共同完成版本控制：工作区、暂存区、版本库�
     用--soft替代时，不会清空暂存区。
 \end{lstlisting}
 
-\subsubsection{版本控制：排除相关文件}
+使用图解来表示一下：
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{images/git-reset.png}
+\caption{Git的回退操作}
+\label{fig:git-reset}
+\end{figure}
+可以看到，回退操作虽然会把指针回退到指定的版本并丢弃之后的版本，但是之后的版本提交依然存在于版本库中，只是被从树上摘下来了。这些提交被称为“孤立提交”。如果希望恢复或者删除这些孤立提交，可以执行以下命令：
+\begin{lstlisting}[language=bash]
+    git fsck --lost-found # 查看孤立提交、孤立分支等
+    git checkout <commit_hash> # 进入分离头模式
+    git branch <branch_name> # 创建一个分支来恢复孤立提交
+
+    git gc --prune=now # 清理孤立提交
+\end{lstlisting}
+即使我们不使用\texttt{git gc}手动清理孤立提交，随着时间的推移（一般是90天提交记录过期），孤立提交也会被Git逐渐自动清理掉。
+
+
+\subsubsection{排除相关文件}
 
 有时候我们版本跟踪的时候不需要跟踪一些文件，例如具有敏感信息的文件（如密码），或者构建文件等。此时，我们可以创建一个文件 .gitignore 来阻止跟踪。例如，在Linux下，构建文件往往是*.o。那么我们可以在上述文件中加入 *.o ,之后git就会忽略这些文件。
 

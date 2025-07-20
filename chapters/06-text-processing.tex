@@ -311,6 +311,7 @@ LaTeX的安装冗长且复杂，通常需要安装一个完整的 TeX 发行版�
 导言区是 LaTeX 文档的第二部分，用于加载宏包和设置文档的全局参数。宏包是 LaTeX 的扩展功能，可以提供额外的排版功能和样式。
 在导言区，可以使用 \texttt{\textbackslash usepackage} 命令来加载宏包。例如，要加载 amsmath 宏包以支持数学公式，可以使用以下命令：
 \begin{lstlisting}
+  \usepackage{amsmath}
 \end{lstlisting}
 
 除此之外，还可以通过其他命令来设置文档的全局参数，例如字体、行距、页边距等。一些常用的全局参数设置命令可以在\ref{sec:latex-packages}中找到。
@@ -354,6 +355,8 @@ LaTeX其实还有“注释”部分，这些部分仅在tex源码中存在，但
 \subsubsection{转义字符和反斜杠}
 
 在 LaTeX 中，反斜杠 (\textbackslash) 是一个特殊字符，用于引入命令和转义。例如\texttt{\textbackslash \$}可以强制输出美元符号而不是将其视为数学公式的开始。如果需要在文本中输入反斜杠本身，不可以使用两个反斜杠 (\textbackslash\textbackslash)，而是需要使用 \texttt{\textbackslash textbackslash} 命令来实际地打出一个反斜杠。
+
+除此之外，LaTeX支持飘号\textasciitilde ，但是默认的飘号极不美观。我们可以使用 \texttt{\textbackslash textasciitilde} 命令来打出一个美观的飘号。
 
 \subsubsection{数学公式}
 
@@ -429,7 +432,7 @@ LaTeX 还支持各种数学符号和运算符，例如乘号 (\texttt{\textbacks
 
 上述代码创建了一个简单的表格，其中 \texttt{tabular} 环境用于定义表格的列格式，\texttt{l} 表示左对齐，\texttt{r} 表示右对齐；如果需要居中对齐，可以使用 \texttt{c}。上述\texttt{lr}意思是第一列左对齐，第二列右对齐，两列中间没有竖线，表格左右两边也没有竖线。如果需要添加竖线，可以使用 \texttt{|} 符号，例如 \texttt{|l|r|} 表示第一列左对齐，第二列右对齐，并且两列之间有一条竖线，表格的左右两边也有竖线。
 
-表格中的每一行使用 \texttt{\\} 来分隔，列之间使用 \texttt{\&} 来分隔（实际上是制表符）。
+表格中的每一行使用 \texttt{\textbackslash\textbackslash} 来分隔，列之间使用 \texttt{\&} 来分隔（实际上是制表符）。
 用 \texttt{\textbackslash hline} 命令来添加水平线。如果想要添加粗线，可以使用 \texttt{\textbackslash hline\textbackslash hline}。
 
 caption 命令用于添加表格的标题，label 命令用于给表格添加标签\footnote{需要hyperref宏包}，以便在文档中引用。上述代码展示的标签是一个标签的习惯命名方式，不必严格按照这个格式来命名标签。
@@ -610,6 +613,7 @@ Typst 有两类语言模式：标记模式和脚本模式，而本质上都可�
   *加粗* 等价于 #strong[加粗]
   _强调_ 等价于 #emph[强调]
   需要注意，没有标记下划线，需要用#underline[下划线]来进行。
+  #strike[删除线]，没有标记删除线
 
   - 无序列表
   + 有序列表
@@ -618,6 +622,13 @@ Typst 有两类语言模式：标记模式和脚本模式，而本质上都可�
   #list.item[无序列表]
   #enum.item[有序列表]
   #terms.item[术语][术语列表]
+
+  $x^2/a^2 + y^2/b^2 = 1$ 公式两边不空空格是行内公式
+  $ sum_(k=0)^n k
+    &= 1 + ... + n \
+    &= (n(n+1)) / 2 $
+  公式两边空格是行间公式
+  你可能注意到了 Typst 公式与 \LaTeX 公式有差异。
 
   ```py
   print("Hello, World!")
@@ -687,6 +698,5 @@ This is *emphasized* text. // 红色加粗
 
 特别注意：默认情况下，该方法定义的变量是有类似 C 系的变量作用域的。let和show结合使用，则可以制作出各种各样的模板。
 
-对于更进一步的使用（例如 Touying 和 Pinit 等著名包的使用），我们不做更多介绍了，感兴趣的同学可以自行查找相关资料进行了解。
-
+对于更进一步的使用（例如 Touying 和 Pinit 等著名包的使用），我们不做更多介绍了，感兴趣的同学可以自行查找相关资料进行了解。函数文档可以去查看\href{https://typst.app/docs/}{Typst 官方文档}，已经发布的包可以在\href{https://typst.app/universe/}{Typst Universe}上查看，对于中文问题可以查看\href{https://guide.typst.dev/FAQ.html}{Typst中文社区导航}，对了还有Typst非官方中文交流群（QQ群号：793548390），欢迎来交流。
 \end{document}
