@@ -86,6 +86,20 @@ GitHub是一个代码托管平台，用户可以在上面存储和分享代码�
 
 部分LLM支持多模态，能够处理文本、图像等多种输入，这些LLM也被称作是VLM。它们在处理图像和文本的时候，能够提供丰富的信息和更好的交互体验，有广泛的应用。
 
+\subsection{选择LLM}
+
+市面上有许多LLM可供选择，不同的LLM在性能和擅长用途上都有所不同。为了帮助我们选择合适的LLM，我们可以参考一些主流的LLM评测榜单。这些榜单通过标准化的测试来评估不同模型的性能，为我们提供了有价值的参考。
+
+以下是一些推荐的适合初学者大致了解情况的LLM评测榜单：
+
+\begin{itemize}
+    \item \textbf{综合性能榜单}：\href{https://artificialanalysis.ai/leaderboards/models}{Artificial Analysis LLM Leaderboard} 是一个综合性的LLM性能排行榜。它从多个维度评估模型解决问题的能力，包括数学能力、推理能力、知识水平、代码能力等，适合用于了解一个模型的综合实力。榜单中还包含了各项具体测试的分数和排名，帮助我们更好地比较不同场景下模型的性能。
+    \item \textbf{模型幻觉评估}：\href{https://vectara-leaderboard.hf.space/}{HHEM Leaderboard} (Hughes Hallucination Evaluation Model, HHEM) 是一个专门评估LLM“幻觉”程度的榜单。LLM的幻觉指的是模型会生成一些看似合理但实际上是错误的或者无中生有的信息。这个榜单对于那些对信息准确性要求较高的应用场景非常有参考价值。
+    \item \textbf{上下文性能评估}：\href{https://contextarena.ai/}{Context Arena} 和 \href{https://fiction.live/stories/Fiction-liveBench-May-22-2025/oQdzQvKHw8JyXbN87}{Fiction.liveBench} 这两个榜单专注于评估模型处理长上下文的能力。如果你的应用需要处理大量的文本，例如长篇文档分析或者需要模型记住很长的对话历史，那么这两个榜单的结果会很有帮助。
+\end{itemize}
+
+需要强调的是，我们应该理性看待这些LLM榜单。榜单的排名是基于特定的测试集和评估方法得出的，不一定能完全反映模型在所有场景下的表现。因此，在选择LLM时，除了参考榜单，我们还应该结合自己的具体需求、应用场景和预算来进行综合考量。最好的方法是亲自试用几个排名靠前的模型，感受它们的实际表现。
+
 \subsection{使用LLM的基本原则}
 
 LLM目前依然只是一个按照概率分布生成文本的模型，而不是一个真正“理解”语言的东西；它的输出是基于统计数据和模式，而不是基于对世界的真正理解。而这个概率除了受到语法、语义等语言学因素的影响和模型本身的影响以外，还受到输入的Prompt（提示词）的影响，因此我们可以通过优化Prompt来在不改进模型性能的条件下尽量优化LLM的输出。这个领域被称为“提示词工程”（Prompt Engineering）。
