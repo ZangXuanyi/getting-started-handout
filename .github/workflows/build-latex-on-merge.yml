@@ -1,0 +1,41 @@
+# .github/workflows/build-latex-on-merge.yml
+name: Build LaTeX & Release PDF
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+jobs:
+  build-and-release:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Compile LaTeX to PDF
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: main.tex          # 改成你的主文件
+          # 可按需添加其他参数
+
+      - name: Generate tag
+        id: tag
+        run: |
+          # 生成 yymmdd 格式的 tag，例如 250720
+          TAG=$(date -u +"%y%m%d")
+          echo "TAG=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tag.outputs.TAG }}
+          name: Release ${{ steps.tag.outputs.TAG }}
+          body: |
+            Auto-generated release via GitHub Actions.
+            LaTeX document compiled on merge to main.
+          files: main.pdf
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
