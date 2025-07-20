@@ -116,6 +116,24 @@ print("Hello, world!") # 这也是一个注释
 
 在阻止部分代码执行的时候，我们一般不习惯于直接删除这些代码，而是使用注释。这样做的好处是可以留痕，便于以后的恢复（解注释）；这就是程序员们常说的“注释掉”代码。在VS Code等编辑器中，常用的一键注释是\texttt{Ctrl + /}，它会自动将光标所在的一行或多行代码注释掉。
 
+\subsection{类型强转}
+
+虽然Python是动态类型语言，同一个变量可以在不同的时间点上拥有不同的类型，但是在某一个确定的时刻，一个变量的类型是确定的。例如我们给a赋值\texttt{a = "12321"}，那么这个时候a的类型就是字符串。如果对该变量进行和数的加减操作，代码将会无法执行。
+
+有些时候，我们希望把一些变量的类型转换为其他类型，例如把字符串“12321”转换为整数12321。我们可以使用一些函数来实现类型转换：
+
+\begin{lstlisting}[language=python]
+    a = "12321"
+    print(a+1)  # 报错，因为a是字符串，1是整数，不能直接相加
+    b = int(a)  # 将字符串转换为整数，现在b是整数12321
+    print(b+1)  # 能执行，输出12322
+\end{lstlisting}
+
+我们可以使用\texttt{int()}函数将字符串转换为整数，使用\texttt{float()}函数将字符串转换为浮点数，使用\texttt{str()}函数将其他类型转换为字符串等。
+
+
+
+
 \section{控制程序的执行流程}
 
 \subsection{条件语句}
@@ -291,7 +309,7 @@ evens = [x for x in range(1, 11) if x % 2 == 0]
 print(evens)  # 输出[2, 4, 6, 8, 10]
 \end{lstlisting}
 
-以上代码中，列表推导式的通用语法是\texttt{[thing for item in iterable if condition]}，其中\texttt{expression}是要计算的表达式，\texttt{iterable}是可迭代对象（如列表、元组等），\texttt{condition}是可选的条件。
+以上代码中，列表推导式的通用语法是\texttt{[thing for item in iterable if condition]}，其中\texttt{thing}是你要的东西，\texttt{iterable}是可迭代对象（如列表、元组等），\texttt{condition}是可选的条件。
 
 看起来真就像说话一样。
 
@@ -394,7 +412,16 @@ def factorial(n):
 print(factorial(5))  # 输出120
 \end{lstlisting}
 
-递归从某种程度上说也可以认为是循环的一种形式。同样的，递归也要有终止条件，否则会导致无限递归，和死循环一样。
+递归从某种程度上说也可以认为是循环的一种形式。同样的，递归也要有终止条件，否则会导致无限递归。
+
+有些时候，我们希望函数参数只能存入某种类型的数据，或者使得某些函数返回某类特定的值。这个时候，类型注释就派上了用场。类型注释一般遵循冒号+类型或者箭头+类型的形式，例如：
+\begin{lstlisting}[language=python]
+def add(a: int, b: int) -> int:
+    return a + b
+\end{lstlisting}
+上述代码的意思是，函数\texttt{add}接受两个整数参数\texttt{a}和\texttt{b}，并返回一个整数。类型注释可以帮助我们更好地理解函数的输入输出类型，也可以在IDE中提供更好的代码提示。
+
+但是我们需要注意一个问题：\textbf{类型注释不会强制执行类型检查}，换句话说它实际上依然是个注释而已——是给人方便开发用的，不是给电脑看的！
 
 \subsection{模块}
 有时候，一些功能大家都在用。这时候，为了防止重复工作，程序员们把这些功能打包成一个模块，供大家使用；而我们使用者只需要使用\texttt{import}关键字来导入模块，就可以使用模块中的许多方便的方法了。安装模块的方法参见正文部分\ref{sec:virtualenv}。

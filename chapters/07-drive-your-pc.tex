@@ -41,7 +41,7 @@ git checkout main
   git rebase main
   git checkout main
 \end{lstlisting}
-这样会把上述feature上的三个提交从C变基到G，变成F'和G'。我们可以用图解来理解这个过程：
+这样会把上述feature上的三个提交从C变基到E，变成F'和G'。我们可以用图解来理解这个过程：
 
 \begin{figure}[htbp]
 \centering
@@ -61,7 +61,7 @@ git checkout main
 git merge feature
 \end{lstlisting}
 
-这时候我们在main分支上，并试图将C7和C6合并在一起。
+这时候我们在main分支上，并试图将E和G合并在一起。这时，会自动创建一个特殊的提交Merge，它有两个父提交。之后的提交就会以Merge为父提交，而不是E或G中的任何一个。
 
 \begin{figure}[htbp]
 \centering

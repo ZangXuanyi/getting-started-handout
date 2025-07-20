@@ -115,6 +115,13 @@
 
 为了避免以上问题，我们引入了版本控制系统。目前最常用的版本控制系统是Git。
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{images/git.png}
+\caption{一个典型的Git工作流程}
+\label{fig:git-workflow}
+\end{figure}
+
 \subsection{Git的工作原理}
 
 Git有三个目录共同完成版本控制：工作区、暂存区、版本库。工作区是项目目录，暂存区是一个隐藏的文件夹.git，版本库是一个隐藏的文件夹.git/objects。工作区是我们平时使用的目录，暂存区是Git用来存储修改的地方，版本库是Git用来存储所有版本信息的地方。版本库有一个指针，指向当前版本的某一节点（一般指向最新的节点）。每个节点都有一个唯一的哈希值，用来标识该节点。每个节点包含了该版本的所有文件和目录的信息，以及指向上一个版本的指针。Git使用哈希值来标识每个版本，这样可以保证每个版本都是唯一的。
@@ -208,6 +215,24 @@ Git有三个目录共同完成版本控制：工作区、暂存区、版本库�
     # 我们更加推荐这个回退方式，--mixed可以省略，或者用--soft替代。
     用--soft替代时，不会清空暂存区。
 \end{lstlisting}
+
+使用图解来表示一下：
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{images/git-reset.png}
+\caption{Git的回退操作}
+\label{fig:git-reset}
+\end{figure}
+可以看到，回退操作虽然会把指针回退到指定的版本并丢弃之后的版本，但是之后的版本提交依然存在于版本库中，只是被从树上摘下来了。这些提交被称为“孤立提交”。如果希望恢复或者删除这些孤立提交，可以执行以下命令：
+\begin{lstlisting}[language=bash]
+    git fsck --lost-found # 查看孤立提交、孤立分支等
+    git checkout <commit_hash> # 进入分离头模式
+    git branch <branch_name> # 创建一个分支来恢复孤立提交
+
+    git gc --prune=now # 清理孤立提交
+\end{lstlisting}
+即使我们不使用\texttt{git gc}手动清理孤立提交，随着时间的推移（一般是90天提交记录过期），孤立提交也会被Git逐渐自动清理掉。
+
 
 \subsubsection{排除相关文件}
 

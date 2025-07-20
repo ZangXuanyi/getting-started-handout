@@ -1,0 +1,473 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+\chapter{常用构建工具链概览}
+
+讲完了开发的各个方面，现在该讲讲怎么把你的代码构建成可执行的文件（或包），以便于之后的发布和使用。
+
+一个比较古老的构建方法是使用\texttt{makefile}构建，这是非常经典的构建方式，几乎所有的编程语言都可以使用。但是因为风格过老，现在已经不大流行。目前较为常见的构建方式是\texttt{CMake}和\texttt{XMake}，它们风格现代，功能强大。
+
+\section{CMake}
+
+C系语言功能非常强大是公认的不争事实。但是它的构建一直是一个巨大的痛点：使用include来链接库是非常麻烦的事情，文件一多，gcc直接变成一种折磨（\texttt{gcc a.c b.c ... -o project}，还得管依赖关系，还得管编译顺序），困难得让人完全不想用。
+
+在2000年左右，CMake作为一个跨平台的构建工具被提出。它的主要目标是提供一个简单的方式来管理大型项目的构建过程。在当时，autotools难写，Makefile难以跨平台，而CMake“描述意图”代替“描述过程”，使得构建过程变得更简单。
+
+好风凭借力。随着CMake渐渐进入人们的视野，KDE、LLVM、OpenCV、Qt6、ROS2等项目全都开始使用CMake作为构建工具，社区生态空前繁荣，直接将CMake推上了构建工具的顶峰。直到现在，CMake依然是面向生产环境的“事实标准”，VS、CLion、QtCreator、VS Code全部将CMake作为一级公民，GH Actions、Docker、Conan、vcpkg无需装包，默认识别CMake项目。
+
+因此，不学会CMake，你在今日的开发世界中寸步难行：除非你愿意用Makefile这种玩意为每个IDE和平台写一大堆构建脚本！
+
+\subsection{最小运行实例}
+
+CMake的文件名称默认是\texttt{CMakeLists.txt}。除非特殊情况，以后不再提及文件名称。
+
+\subsubsection{单一文件}
+
+假设现在存在一个\texttt{main.cpp}文件（不管内容是什么了）。在同一目录下新建一个CMake文件，内容如下：
+
+\begin{lstlisting}
+cmake_minimum_required(VERSION 3.10) # 声明最低CMake版本
+project(hello LANGUAGES CXX) # 声明项目名称和使用的语言
+add_executable(hello main.cpp) # 声明可执行文件hello，源文件为main.cpp
+\end{lstlisting}
+
+然后构建：
+\begin{lstlisting}[language=bash]
+    cmake -B build # 生成构建系统
+    cmake --build build # 构建
+    ./build/hello # 运行可执行文件（Linux和mac）
+    ./build/Debug/hello.exe # 运行可执行文件（Windows）
+\end{lstlisting}
+
+爽。
+
+\subsubsection{多个目录}
+
+假设现在有一个目录结构：
+\begin{lstlisting}
+src/
+- main.cpp
+- math/
+    - add.cpp
+    - add.hpp
+- io/
+    - print.cpp
+    - print.hpp
+\end{lstlisting}
+
+根目录CMake文件如下：
+\begin{lstlisting}
+cmake_minimum_required(VERSION 3.10)
+project(multidir)
+
+add_subdirectory(src) # 告诉CMake：src里面还有东西
+\end{lstlisting}
+
+src/CMake文件如下：
+\begin{lstlisting}
+    add_library(math STATIC math/add.cpp) # 声明静态库math，源文件为add.cpp
+    add_library(io STATIC io/print.cpp) # 声明静态库io，源文件为print.cpp
+    add_executable(app main.cpp) # 声明可执行文件app，源文件为main.cpp
+    target_link_libraries(app PRIVATE math io) # 将math和io库链接到app
+\end{lstlisting}
+
+构建同单文件一样，不打第二遍。
+
+我们看到一个问题：CMake需要每个目录一个，职责清晰；同时，库和可执行文件都是“目标”。目标这个词在CMake中非常重要，几乎所有的操作都是针对目标进行的，后文会反复出现。
+
+\subsection{语法}
+
+\subsubsection{目标和作用域}
+
+现代的CMake的语法基于目标，把属性贴在目标上，谁链接谁可见。比如说：
+\begin{lstlisting}
+add_library(foo STATIC foo.cpp) # 告诉CMake，这有个库foo，是静态的
+target_include_directories(foo PUBLIC include) # foo库的头文件在include目录下
+target_compile_features(foo PUBLIC cxx_std_20) # foo库需要C++20特性
+target_link_libraries(foo PUBLIC bar) # foo库需要链接bar库
+\end{lstlisting}
+
+这里的\texttt{PUBLIC}是一个作用域，表示这个属性对链接到foo的目标可见。作用域有三个：
+\begin{itemize}
+    \item \texttt{PRIVATE}：给自己用
+    \item \texttt{INTERFACE}：给下游用，自己不用
+    \item \texttt{PUBLIC}：自己和下游都用
+\end{itemize}
+
+一般情况下，除非显式传递，否则子目录自动继承父目录作用域；而对于一个特定的目标，属性自动跟随，跨目录也能传递。类似\texttt{link\_directories}这样的命令是全局的命令，在现代CMake中非常不推荐使用。
+
+\subsubsection{变量、缓存、生成器}
+
+对于CMake而言，我们可以声明一些变量，使得CMake源码更简洁。例如：
+\begin{lstlisting}
+    set(SOURCE_FILES main.cpp math/add.cpp io/print.cpp) # 声明变量SOURCE_FILES
+    add_executable(app ${SOURCE_FILES}) # 使用变量
+\end{lstlisting}
+这样可以省去很多重复的代码。
+
+CMake的变量分为两种：缓存变量和普通变量。普通变量用户是修改不了的，而缓存变量可以通过命令行或CMake GUI修改。缓存变量通常用于配置选项，比如：
+\begin{lstlisting}
+option(BUILD_TESTS "Build tests" ON) # 声明一个缓存变量BUILD_TESTS，默认值为ON
+set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Build type") # 声明一个缓存变量CMAKE_BUILD_TYPE，默认值为Release
+\end{lstlisting}
+
+用户可以修改这些缓存变量的值，以定制构建过程。
+\begin{lstlisting}[language=bash]
+cmake -B build -DBUILD_TESTS=OFF -DCMAKE_BUILD_TYPE=Debug # 修改缓存变量，将BUILD_TESTS设置为OFF，将CMAKE_BUILD_TYPE设置为Debug
+\end{lstlisting}
+
+生成器决定了CMake生成的构建系统类型。CMake支持多种生成器，比如Makefile、Ninja、Visual Studio等。可以通过\texttt{-G}选项指定生成器。目前较为常见的生成器有：
+
+\begin{itemize}
+    \item \texttt{Ninja}：一个快速的构建系统，CMake默认生成的构建系统。跨平台最快。
+    \item \texttt{Unix Makefiles}：传统的Makefile生成器，Linux服务器默认。
+    \item \texttt{Visual Studio}：Windows下的Visual Studio生成器。
+    \item \texttt{Xcode}：macOS下的Xcode生成器。
+\end{itemize}
+使用这些生成器非常简单：
+\begin{lstlisting}[language=bash]
+cmake -B build -G Ninja # 使用Ninja生成器
+\end{lstlisting}
+
+\subsubsection{条件判断、执行命令、输出信息}
+
+在CMake中，我们可以使用条件判断来控制构建过程。这在使用了缓存变量的时候非常有用：
+\begin{lstlisting}
+if(BUILD_TESTS) # 如果BUILD_TESTS为真
+    enable_testing() # 启用测试
+    add_subdirectory(tests) # 添加tests目录
+endif() # 结束条件判断
+\end{lstlisting}
+
+这个if的条件写法和C++的if类似，也可以写\texttt{elseif()}（没有空格）和\texttt{else()}，含义也相同；但是不支持运算符。所有的运算符都应该用字符串表示：
+\begin{itemize}
+    \item AND、OR、NOT：御三家，不用解释都知道这是什么
+    \item EQUAL、LESS、GREATER：比较运算符，分别表示等于、小于、大于
+    \item EXIST：后面的东西（绝对路径）若存在，则为真；否则为假
+    \item DEFINED：后面的变量若已定义，则为真；否则为假
+    \item COMMAND：后面的命令（宏、函数）若存在并能执行，则为真；否则为假
+    \item STREQUAL、STRLESS、STRGREATER：字符串比较运算符，分别表示等于、小于、大于。使用前提是字符串必须是有效的数字。
+\end{itemize}
+
+我们可以使用\texttt{execute\_process}命令来执行外部命令：
+\begin{lstlisting}
+execute_process(COMMAND echo "Hello, World!" OUTPUT_VARIABLE output RESULT_VARIABLE result) # 执行命令，输出到output变量，结果状态码到result变量
+\end{lstlisting}
+一次可以同时执行许多命令，这些命令是并行的；每一个子进程的标准输出都会映射到下一个进程的标准输入；所有的子进程公用一个标准错误输出管道。除了COMMAND外，其余关键字均可以省略。
+
+有时候，我们需要输出一些信息到控制台上（例如错误信息等）。CMake提供了\texttt{message}命令来输出信息：
+\begin{lstlisting}
+message(STATUS "This is a status message") # 输出状态信息
+message(WARNING "This is a warning message") # 输出警告信息
+message(ERROR "This is an error message") # 输出错误信息
+message(FATAL_ERROR "This is a fatal error message") # 输出致命错误信息并终止构建
+\end{lstlisting}
+
+\subsubsection{列表}
+
+CMake支持列表（list）。列表一般需要使用set来定义。以下是一些常用的列表操作命令：
+\begin{lstlisting}
+set(SOURCES main.cpp math/add.cpp io/print.cpp) # 定义一个列表SOURCES
+list(APPEND SOURCES io/scan.cpp) # 向列表SOURCES添加一个元素
+list(REMOVE_ITEM SOURCES io/scan.cpp) # 从列表SOURCES中移除一个元素
+list(LENGTH SOURCES length) # 获取列表SOURCES的长度，存储到length
+list(GET SOURCES 0 first) # 获取列表SOURCES的第一个元素，存储到first
+list(SORT SOURCES) # 对列表SOURCES进行排序
+list(FIND SOURCES main.cpp index) # 查找列表SOURCES中元素main.cpp的位置，存储到index
+list(INSERT SOURCES 0 "io/scan.cpp") # 在列表SOURCES的开头插入元素io/scan.cpp
+list(JOIN SOURCES ", " joined) # 将列表SOURCES用逗号和空格连接成一个字符串，存储到joined
+\end{lstlisting}
+
+基本上是所见即所得。可以看到，列表操作和C++ STL的vector类似。
+
+\subsubsection{调库}
+
+有时候我们需要调外部库，例如OpenCV等。我们把调库分为两种：系统库和第三方库。
+
+如果系统已经安装，使用\texttt{find\_package}命令即可：
+\begin{lstlisting}
+find_package(fmt REQUIRED) # 查找fmt库，REQUIRED表示必须找到
+target_link_libraries(app PRIVATE fmt::fmt) # 将fmt库链接到app
+\end{lstlisting}
+上述提到的\texttt{fmt}库是一个常用的C++格式化库，Linux发行版可以通过包管理器安装（例如Ubuntu的\texttt{apt install libfmt-dev}）。
+
+如果系统没安装，则需要使用FetchContent来当场下载。FetchContent是CMake 3.11引入的模块。示例代码如下：
+\begin{lstlisting}
+include(FetchContent) # 引入FetchContent模块
+FetchContent_Declare(
+    googletest
+    GIT_REPOSITORY https://github.com/google/googletest.git
+    GIT_TAG ? # 指定版本，这里没有指定，实际应当指定一个
+)
+FetchContent_MakeAvailable(googletest) # 下载并编译googletest库
+\end{lstlisting}
+FetchContent会自动下载并编译googletest库，并将其链接到当前项目。这样构建的好处是不需要预装库，直接构建时下载并编译，适合CI/CD等场景。缺点：首次编译时间长。
+
+除此之外，CMake还支持使用Conan、vcpkg等包管理器来管理第三方库。Conan和vcpkg都是非常流行的C++包管理器，可以自动处理依赖关系和版本问题。
+\begin{lstlisting}
+    vcpkg install fmt # 使用vcpkg安装fmt库
+    cmake -B build -DCMAKE_TOOLCHAIN_FILE=$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake # 使用vcpkg的CMake工具链文件
+\end{lstlisting}
+vcpkg会将库链接到当前项目，例如上文会将fmt::fmt暴露给\texttt{find\_package}。
+
+\subsection{工具链}
+
+工具链文件（ToolChain文件）是一段纯粹的CMake脚本，在project命令之前被CMake加载，用于通知当前线索的重要信息：目标平台是什么？使用什么交叉编译器？头文件什么的在哪？默认编译、链接flags是什么？
+
+闲的没事的人可以使用cmake -D一个个传。这么做最大的问题是：太多了，先不说传错、传漏的可能性，光说脚本的可读性就够我们喝一壶了。
+
+假设我们现在希望在Linux机器上编译一个Win32程序，那么工具链文件可以是这样的：
+\begin{lstlisting}
+# 文件名：cross-mingw.cmake
+# 1. 目标系统
+set(CMAKE_SYSTEM_NAME Windows)        # 告诉 CMake “我要生成 Windows PE”
+set(CMAKE_SYSTEM_PROCESSOR i686)      # 目标 CPU
+
+# 2. 交叉编译器
+set(CMAKE_C_COMPILER   i686-w64-mingw32-gcc)
+set(CMAKE_CXX_COMPILER i686-w64-mingw32-g++)
+
+# 3. sysroot / 搜索根目录
+set(CMAKE_FIND_ROOT_PATH /usr/i686-w64-mingw32)
+
+# 4. 查找策略：头文件/库只在目标环境里找，可执行程序在宿主环境里找
+set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+\end{lstlisting}    
+之后编译：
+\begin{lstlisting}[language=bash]
+cmake -B build-win -DCMAKE_TOOLCHAIN_FILE=cross-mingw.cmake
+cmake --build build-win
+./build-win/hello.exe # 运行可执行文件
+\end{lstlisting}
+上述代码会在Linux上编译一个Win32程序，但是可以直接拷贝到Windows上运行。
+
+当然，这只是一个最基本的示例，实际上工具链的使用相当复杂，甚至超过了CMake本身的复杂度。但是，交叉编译的脏活累活全是它做的，正是工具链的使得我们无需使用一大堆\texttt{-D}参数来传递信息。因此将来如果有的同学有志于从事嵌入式开发等工作，建议还是去官方网站上学习一下工具链的使用。
+
+\subsection{安装、导出、打包}
+
+CMake支持安装、导出和打包功能。安装功能可以将构建好的目标安装到指定目录，导出功能可以将目标导出为一个CMake包，打包功能可以将目标打包为一个可分发的文件。
+
+安装功能使用\texttt{install}命令：
+\begin{lstlisting}
+install(TARGETS foo EXPORT fooTargets # 安装foo目标，并导出为fooTargets
+    RUNTIME DESTINATION bin # 可执行文件安装到bin目录
+    LIBRARY DESTINATION lib # 动态库安装到lib目录
+    ARCHIVE DESTINATION lib # 静态库安装到lib目录
+)
+install(DIRECTORY include/ DESTINATION include) # 头文件安装到include目录
+\end{lstlisting}
+
+导出功能使用\texttt{export}命令：
+\begin{lstlisting}
+install(EXPORT fooTargets
+    FILE foo-config.cmake
+    NAMESPACE foo::
+    DESTINATION lib/cmake/foo) # 导出fooTargets为foo-config.cmake文件，命名空间为foo::
+\end{lstlisting}
+导出后下游项目可以直接\texttt{find\_package(foo REQUIRED)}来使用foo库。
+
+打包功能使用\texttt{cpack}命令：
+\begin{lstlisting}
+set(CPACK_GENERATOR "DEB")
+set(CPACK_PACKAGE_NAME "mylib")
+include(CPack)
+\end{lstlisting}
+上述代码会生成一个DEB包，包名为mylib。构建的时候，使用以下命令可以得到打包文件：
+\begin{lstlisting}[language=bash]
+cmake --build build --target package # 构建并打包
+\end{lstlisting}
+
+\subsection{常见坑}
+CMake虽然强大，但也有一些常见的坑需要注意：
+\begin{itemize}
+    \item 缓存残留：目录改了名，CMake仍然记得旧值，这时候把整个build目录全删了就可以了。
+    \item 找不到头文件：看看target\_include\_directories是否正确设置了作用域，八成是错写成了\texttt{PRIVATE}。
+    \item 找不到dll（Windows特供）：把bin目录加入PATH，或者运行以下命令后运行\texttt{install/ bin}下的可执行文件：
+\begin{lstlisting}
+    cmake --install build --prefix install
+\end{lstlisting}
+    \item 生成器表达式看不懂：在在 CMakeLists 里 \texttt{message(STATUS "\$<TARGET\_FILE:foo>")} 打印调试。
+\end{itemize}
+
+以上内容仅仅是给CMake的一个概览。虽然可以让同学们理解CMake的基本用法，但要深入使用CMake，还是需要阅读官方文档和相关教程。毕竟CMake的命令非常多（就一个\texttt{execute\_process}就有一大堆选项，合起来能占满半个屏幕），而且每个命令的用法也非常灵活。
+
+这里帮各位把\href{https://cmake.org/cmake/help/latest/guide/tutorial/}{CMake官方说明文档}贴出来了，感兴趣的同学可以去看看；也可以看看这本电子书：Professional CMake: A Practical Guide（作者：Craig Scott），这本书是CMake的权威指南，内容非常全面，适合深入学习CMake。
+
+\section{XMake}
+
+不少同学可能会疑惑：怎么又来一个XMake？
+
+这是因为，CMake虽然已经很好了，但是语法还是有些复杂，有点像“外星语”。而XMake比CMake现代的多，语法也更简单，使用lua脚本而不是CMake特有的脚本，更容易上手。同时，XMake把CMake的configure、generate、build等步骤压成一步，且自带包管理，非常舒适。当然，也因为它太新了，所以大多数情况下使用CMake已经可以满足需求了；不过在这里我还是简单讲一下吧，毕竟PKU的部分课程提供的引擎需要我们手写XMake脚本。
+
+安装非常简单，包管理器直接解决，不管用的winget还是apt，都可以直接安装XMake：
+\begin{lstlisting}[language=bash]
+winget install xmake # Windows
+apt install xmake # Ubuntu
+brew install xmake # macOS
+\end{lstlisting}
+
+\subsection{最小运行实例}
+
+XMake的构建文件名称默认是\texttt{xmake.lua}，本章不再赘述。
+
+运行以下命令看看模板：
+\begin{lstlisting}
+xmake create -l c++ hello # 创建一个C++项目hello
+xmake create -l c++ -t static hello_lib # 创建一个C++静态库项目hello_lib
+\end{lstlisting}
+
+我们发现当前目录多了个hello文件夹，结构是这样的：
+\begin{lstlisting}
+hello/
+- xmake.lua # 构建文件
+- src/
+    - main.cpp # 源文件
+\end{lstlisting}
+
+如果希望构建并运行这玩意，直接运行以下命令：
+\begin{lstlisting}[language=bash]
+    cd hello # 进入hello目录
+    xmake # 构建
+    xmake run # 运行
+    xmake run -d # 调试运行
+\end{lstlisting}
+
+\subsection{语法速通}
+\subsubsection{最小示例}
+\begin{lstlisting}
+-- xmake.lua
+set_project("hello")
+set_version("1.0.0")
+add_rules("mode.debug", "mode.release")   -- 自动生成 debug/release 配置
+
+target("app")                             -- 一个目标
+    set_kind("binary")                    -- 可执行文件
+    add_files("src/*.cpp")                -- 通配符
+    set_languages("c++20")                -- 标准
+    add_packages("fmt")                   -- 依赖 fmt 头文件+库
+\end{lstlisting}
+我们发现，对比CMake，XMake的语法更加简洁，没有复杂的概念；无需手写类似于\texttt{if (WIN32)}这样的系统条件判断，XMake会自动根据宿主处理；虽然也有目标的概念（\texttt{target}块），但是这一个块就相当于CMake的\texttt{add\_executable}（或者\texttt{add\_library}）和\texttt{target\_*}的组合。
+
+在XMake中，目标也有作用域的概念。不过写起来非常简单，例如\texttt{add\_includedirs("include", {public = true})}表示这个头文件目录是公共的，链接到这个目标的其他目标也可以使用这个头文件目录。
+
+\subsubsection{语法速查（和CMake对比）}
+
+\begin{table}
+\centering
+\begin{tabular}{l|l|l}
+\hline
+CMake & XMake & 说明 \\
+\hline
+\texttt{add\_executable} & \texttt{target("app")}, \texttt{set\_kind("binary")} & 声明一个可执行文件或库 \\
+\texttt{add\_library} & \texttt{target("lib")}, \texttt{set\_kind("static")} & 声明一个静态库或动态库（shared） \\
+\texttt{target\_sources} & \texttt{add\_files("src/\*.cpp")} & 添加源文件 \\
+\texttt{target\_include\_directories} & \texttt{add\_includedirs("include")} & 添加头文件目录 \\
+\texttt{target\_compile\_definitions} & \texttt{add\_defines("FOO")} & 添加编译选项 \\
+\texttt{target\_compile\_options} & \texttt{set\_cxflags("-Wall")} & 添加编译选项 \\
+\texttt{target\_link\_libraries} & \texttt{add\_links("bar")} & 添加链接库 \\
+\texttt{find\_package} & \texttt{add\_packages("fmt")} & 查找并添加包 \\
+\texttt{option()} & \texttt{option("BUILD\_TESTS", true)} & 设置配置选项 \\
+\texttt{install()} & \texttt{add\_installfiles("bin")} & 安装目标 \\
+\hline
+\end{tabular}
+\caption{CMake和XMake的常用命令对比}
+\end{table}
+
+\subsubsection{目标、规则}
+
+在XMake中，目标可以是以下种类当中的任意一种，我们可以使用\texttt{set\_kind()}来设置目标类型。关于目标和作用域的讨论，XMake和CMake如出一辙。
+\begin{itemize}
+    \item \texttt{binary}：可执行文件
+    \item \texttt{static}：静态库
+    \item \texttt{shared}：动态库
+    \item \texttt{phony}：伪目标（不生成文件，只执行命令）
+    \item \texttt{headeronly}：头文件库（只包含头文件，没有源文件）
+\end{itemize}
+
+XMake的规则（rules）是预定义的构建规则，可以通过\texttt{add\_rules()}来添加。我们可以理解为“编译的流水线”，例如：
+\begin{lstlisting}
+rule("embed")
+    set_extensions(".txt")
+    on_build_file(function(target, sourcefile)
+        -- 把文本编译成 .o 里的字符数组
+    end)
+\end{lstlisting}
+上述代码定义了一个名为\texttt{embed}的规则，作用是将文本文件编译成目标文件中的字符数组。XMake提供了许多内置规则，例如\texttt{mode.debug}、\texttt{mode.release}等，可以直接使用。一般情况下，多个target可以共用一个规则。
+
+\subsubsection{调包}
+
+XMake的包管理比CMake还要容易。我们可以非常简单地使用\texttt{add\_requires()}来添加依赖包，非常方便。
+
+XMake的官方仓库有着九百多个常用的库。第一次编译的时候，XMake会先查本地缓存有没有需要的包；如果没有，就自动下载预编译文件或者源码。然后，XMake会自动设置include路径等必要的内容。
+
+\begin{lstlisting}
+add_requires("fmt") -- 添加 fmt 依赖
+target("app")
+    set_kind("binary")
+    add_files("src/*.cpp")
+    add_packages("fmt") -- 链接 fmt 包
+\end{lstlisting}
+
+\subsubsection{跨平台、交叉编译、远程编译}
+
+XMake的跨平台做得很好，不需要手写toolchain文件等，只需要在命令行中指定平台和架构即可。例如：
+\begin{lstlisting}[language=bash]
+$ xmake f -p windows -a x64 -m release   # Windows 64-bit Release
+$ xmake f -p linux -a arm64 --sdk=/opt/rpi
+$ xmake
+\end{lstlisting}
+上述代码会在Windows上编译一个64位的Release版本，在Linux上编译一个ARM64的版本，并指定了Raspberry Pi的SDK路径。Raspberry Pi是一个流行的单板计算机（“树莓派”，常用于前端开发和嵌入式开发等轻量级场景）。
+
+另一方面，使用XMake运行远程编译功能也很容易：
+\begin{lstlisting}[language=bash]
+$ xmake service --start                  # 本机当编译服务器
+$ xmake f --remote_build=y
+$ xmake                                  # 自动分发
+\end{lstlisting}
+上述代码会启动一个编译服务器，然后在本地编译时自动分发到远程服务器上进行编译。XMake会自动处理远程编译的细节，用户只需要关注代码和配置即可。
+
+\subsection{打包发布}
+XMake的打包发布也和CMake大同小异：
+\begin{lstlisting}
+xmake package -f deb        # 生成 .deb
+xmake package -f nsis       # Windows 安装向导
+xmake package -f zip        # 绿色压缩包
+\end{lstlisting}
+
+\subsection{常见坑}
+XMake的常见坑和CMake类似：
+\begin{itemize}
+    \item 缓存出错：\texttt{xmake f -c}清理配置，比删build快。
+    \item 多个版本包冲突：使用\texttt{xmake require --info <package>}查看已经缓存的包版本，使用\texttt{xmake require --extra="\{debug=true\}" <package>}强制重装。
+    \item 调试脚本：使用\texttt{xmake -vD}输出详细日志。VS Code安装xmake插件也能打断点。
+    \item 懒惰（不想学lua）：绝大多数场景只使用6个API：target、set\_kind、add\_files、add\_includedirs、add\_links、add\_packages。其他的现查都来得及。
+\end{itemize}
+
+\subsection{从CMake迁移到XMake}
+如果你已经有了一个CMake项目，想要迁移到XMake。CMake项目的结构：
+\begin{lstlisting}
+project/
+- CMakeLists.txt
+- src/
+- tests/
+- thirdparty/fmt/
+\end{lstlisting}
+
+首先使用cmake2xmake工具粗略转换为XMake项目：
+\begin{lstlisting}[language=bash]
+    xmake create -P . -t cmake2xmake
+\end{lstlisting}
+然后手动调整生成的xmake.lua文件，主要是：
+\begin{itemize}
+    \item 把add\_subdirectory拆成多个target；
+    \item 把FetchContent转换为add\_requires；
+    \item 把CMAKE\_BUILD\_TYPE转换为set\_config("debug")或set\_config("release")；
+    \item 把gtest\_discover\_tests转换为add\_rules("test")等。
+\end{itemize}
+最后，保留旧的构建目录，并行验证新旧构建结果是否一致。
+
+如果使用了CI等工具，需要将CI脚本中的相关命令从CMake转换为XMake。
+
+\end{document}

@@ -134,7 +134,7 @@ constexpr double EPI = E * PI;
     \item \texttt{!}：逻辑非运算符。如果后面跟着的条件是真的，那么结果为假；反之为假。
 \end{itemize}
 
-
+在C++中，与或非运算符是有一定的运算顺序的。一般情况下，逻辑非运算符的优先级最高，其次是逻辑与运算符，最后是逻辑或运算符。不过笔者非常不建议同学们背诵这个顺序；实际在工程上不仅不建议大量嵌套使用这些运算符，而且遇事不决可以加括号——括号可比记运算顺序靠谱得多了！
 
 \subsubsection{条件语句}
 
@@ -918,6 +918,92 @@ auto str = "Hello, World!";  // 编译器推断str的类型为const char*
 以上代码中，编译器会根据初始值自动推断变量的类型。但是我们并不推荐在定义变量的时候使用类型推断，因为这会使得代码的可读性降低，尤其是当变量的类型不明显时。
 
 那么我为什么要讲这个？请看下一节，这一节将会是使得整个C++成功获得“没有人能够真正精通”称号的关键特性。
+
+\subsection{类型别名}
+
+类型别名是C就有的一个特性，但是C++11对它进行了扩展。类型别名允许我们为现有的类型创建一个新的名称，使得代码更易读。
+
+C++中可以使用\texttt{using}关键字来定义类型别名。
+\begin{lstlisting}
+using ll = long long;  // 定义一个长整型的别名
+using IntVector = std::vector<int>;  // 定义一个整型向量的别名
+IntVector v = {1, 2, 3};  // 使用别名创建一个整型向量
+\end{lstlisting}
+
+如果使用C风格的语法，则是：
+\begin{lstlisting}
+typedef long long ll;  // 定义一个长整型的别名
+typedef std::vector<int> IntVector;  // 定义一个整型向量的别名
+IntVector v = {1, 2, 3};  // 使用别名创建一个整型向量
+\end{lstlisting}
+
+using和typedef几乎没有什么区别，只不过using的语法更加符合直觉（用这个作为这个的别名），类似于声明变量；而typedef则更像是定义一个宏（虽然实际上不是），阅读方向是反直觉的。
+
+using的另一个独特之处是可以用于模板类型的别名：
+\begin{lstlisting}
+template <typename T>
+using Matrix = std::vector<std::vector<T>>;  // 定义一个二维向量的别名
+Matrix<int> m = {{1, 2}, {3, 4}};  // 使用别名创建一个二维向量
+Matrix<double> dm = {{1.1, 2.2}, {3.3, 4.4}};  // 使用别名创建一个二维向量
+\end{lstlisting}
+typedef就无法应用于模板类型别名。因此，在C++中，我们推荐使用using来定义类型别名。
+
+\subsection{类型强转}
+
+有时候，在编程中我们需要将一个类型转化成另一个类型，以满足特定的需求。
+
+C语言就有类型强转的功能：
+\begin{lstlisting}
+    float f = 3.14;
+    int i = (int)f;  // 将float类型强制转换为int
+    // 也可以写成 int i = int(f);
+
+    printf("i: %d\n", i);  // 输出结果，结果是3
+\end{lstlisting}
+在变量前面加上括号和目标类型，就可以将变量强制转换为目标类型。
+
+在C++中，类型强转被拆成了四个方式（四大金刚）：
+\begin{itemize}
+    \item \texttt{static\_cast}：\textbf{编译期安全的强转}，包括数值提升/截断，枚举/整型，指针向上转型、void*转型等。它是最常用的类型转换方式，适用于大多数情况。
+    \item \texttt{dynamic\_cast}：\textbf{运行时安全的强转}，用于类的向下转型（子类指针转父类指针）。它会在运行时检查类型安全，如果转换不安全，则返回nullptr。它只能用于有虚函数的类。同时，它是唯一一个在运行时检查强转安全性的转换方式。
+    \item \texttt{const\_cast}：\textbf{常变转换}，其他啥都不干。它是唯一一个能去const的转换方式。
+    \item \texttt{reinterpret\_cast}：\textbf{按位重解释}，用于int指针互转、void指针互转、无关类指针互转等。它是危险的转换方式，仅在编译期做极弱的检查。除非我们知道在干什么，否则不要使用它。
+\end{itemize}
+
+举例说明：
+\begin{lstlisting}
+#include <iostream>
+using namespace std;
+
+double d = 3.14;
+int a = static_cast<int>(d);  // 使用static_cast进行数值转换
+int a = (int)d;  // C风格的强转，也行
+
+const int c = 42;
+int* p = const_cast<int*>(&c);  // 使用const_cast去掉const属性
+*p = 100;  // 修改p指向的值，即使C是const的也能改
+
+class Base;
+class Derived : public Base;
+Base* b = new Derived();
+Derived* d = dynamic_cast<Derived*>(b);  // 使用dynamic_cast进行向下转型
+Derived* d = static_cast<Derived*>(b);  // 使用static_cast进行向下转型（不安全，但是能过编译）
+
+uintptr_t ptr = reinterpret_cast<uintptr_t>(b);  // 使用reinterpret_cast将指针转换为整数
+\end{lstlisting}
+
+那么有些同学可能会问：为什么C++要提供这么多种类型强转？难道C风格的强转不行吗？没错，两种代码实际上都可以用。不过，C风格的强转像个大锤，一口气把任何东西都能砸成目标东西，但是它可不带管安全性的；而C++强转四大金刚分别是四把精确的手术刀，功能单一、语义明确，编译器会帮助你把关，要是危险或者出错了，编译器给你兜底。这样就可以避免很多潜在的错误。
+
+C语言的强转实际上会先尝试常变转换，再尝试数值转换，要是不行就常变数值一起转，还不行就按位重解释。所以说这玩意实际上是四合一，不过也导致它隐形语义极为复杂、易于出错，出错了也不容易搜索定位。
+
+\begin{lstlisting}
+const volatile void* v = ...;
+int* bad = (int*)v;  // C风格的强转，实际上一口气把const和volatile都去掉了，顺便做了个按位重解释
+\end{lstlisting}
+
+所以说，我们非常建议优先使用C++四大金刚做显式强转。我们非常不建议在C++中使用旧式风格的强转，除非要做向下兼容等不这么做不行的事情。
+
+\emph{\texttt{volatile}是C/C++中的一个关键字，表示变量可能会被外部因素改变，因此编译器不会对它进行优化。它通常用于多线程编程或硬件寄存器的访问等。这个东西和移位运算符一样绝大多数人一辈子都不会用到。}
 
 \section{STL}
 
