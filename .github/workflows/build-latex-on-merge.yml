@@ -19,7 +19,7 @@ jobs:
         uses: xu-cheng/latex-action@v3
         with:
           root_file: main.tex          # 改成你的主文件
-          # 可按需添加其他参数
+          latexmk_use_xelatex: true  # 使用 xelatex 编译
 
       - name: Generate tag
         id: tag
