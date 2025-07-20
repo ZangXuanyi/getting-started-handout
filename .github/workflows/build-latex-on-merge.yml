@@ -25,7 +25,7 @@ jobs:
         id: tag
         run: |
           # 生成 yymmdd 格式的 tag，例如 250720
-          TAG=$(date -u +"%y%m%d")
+          TAG="$(date -u +'%y%m%d')-$(date -u +'%H%M')"
           echo "TAG=$TAG" >> $GITHUB_OUTPUT
 
       - name: Create Release
