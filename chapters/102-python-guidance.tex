@@ -6,7 +6,7 @@
 
 本章会快速带领大家过一遍Python的基本语法和常用特性。除了用作预习材料以外，还可以在期末考试复习的时候来快速回顾其基本语法与常用特性。
 
-在PKU，Python主要是文科生学习较多，因此我这一章的节奏会比C++的慢许多，也不会像C++一样涉及那么多的名词（内存空间、指针、引用等）。
+在PKU，Python主要是文科生学习较多，因此我这一章的节奏会比C++的慢许多，也不会像C++一样涉及那么多的名词（内存空间、指针、引用等）。当然，Python作为目前最流行的脚本语言，对于理科生而言也会是非常有用的，我将会单开一章介绍Python给理科生怎么玩。
 
 \section{Python的基本语法}
 
@@ -220,6 +220,13 @@ my_list.sort()  # 对列表进行排序
 print(my_list)  # 输出[1, 2, 3, 4]
 \end{lstlisting}
 
+可以利用加号\texttt{+}来连接两个列表，使用乘号\texttt{*}来重复列表。例如：
+\begin{lstlisting}[language=python]
+my_list1 = [1] * 1000 # 创建一个列表，这个列表包含1000个1
+my_list2 = [2, 3, 4]
+print([1]+my_list2)  # 输出[1, 2, 3, 4]
+\end{lstlisting}
+
 \subsection{元组（tuple）}
 元组和列表类似，但是它不可以被修改（不可变）。我们可以使用圆括号\texttt{()}来创建一个元组。元组的元素也可以通过索引访问。
 例如：
@@ -368,6 +375,12 @@ world!'''
 print(my_string)  # 输出'Hello,\nworld!'
 \end{lstlisting}
 
+对于字符串，我们可以使用加号\texttt{+}来连接两个字符串，使用乘号\texttt{*}来重复字符串。这个操作和列表是一样的。例如：
+\begin{lstlisting}[language=python]
+print("Hello, " + "world!")  # 输出'Hello, world!'
+print("Hello! " * 3)  # 输出'Hello! Hello! Hello! '
+\end{lstlisting}
+
 \texttt{\textbackslash n}指的是换行。
 
 \section{函数和模块}\label{sec:functions-and-modules}
@@ -466,6 +479,170 @@ with open("example.txt", "a") as file:
 \end{lstlisting}
 
 我们可以使用\texttt{with}语句来自动管理文件的打开和关闭，这样可以避免忘记关闭文件导致资源泄漏的问题。
+
+\section{Python的面向对象}
+
+Python虽然是一种脚本语言，更倾向于描述过程，但是它也支持面向对象编程（OOP）。
+
+面向对象编程可以理解为把现实世界中的事物抽象成对象，把有着相似属性和行为的事物归为一类，通过对象来组织代码。每个对象都有自己的属性（数据）和方法（行为），通过对象之间的交互来实现复杂的功能。举个例子，我们可以把“人”抽象成一个类（class），每个人都是这个类的一个实例（instance）。每个人都有自己的属性（如姓名、年龄等）和方法（如说话、走路等）；同时，不同的人之间也有自己的特性（如性别、职业等），这些特性可以通过继承、多态等方式来实现。
+
+\subsection{类和对象的基本定义}
+一个Python的常见类定义如下：
+\begin{lstlisting}[language=python]
+class Person:
+    def __init__(self, name, age):
+        self.name = name  # 属性：姓名
+        self.age = age    # 属性：年龄
+
+    def greet(self):
+        print(f"Hello, my name is {self.name} and I am {self.age} years old.")
+\end{lstlisting}
+在这个例子中，我们定义了一个名为\texttt{Person}的类，它有两个属性（\texttt{name}和\texttt{age}）和一个方法（\texttt{greet}）。\texttt{\_\_init\_\_()}方法是类的构造函数，用于初始化对象的属性。如果在类中希望使用自身的属性，我们需要使用\texttt{self}关键字来引用当前对象。这个\texttt{self}参数是必须的，它指向当前对象的实例。
+
+我们可以使用这个类来创建一个对象，并调用它的方法：
+\begin{lstlisting}[language=python]
+person = Person("Alice", 30)  # 创建一个Person对象
+person.greet()  # 调用greet方法，输出"Hello, my name is Alice and I am 30 years old."
+person2 = Person("Bob", 25)  # 创建另一个Person对象
+\end{lstlisting}
+
+在现代Python中，以上定义可以变得更简单：
+\begin{lstlisting}[language=python]
+from dataclasses import dataclass
+
+@dataclass # 使用数据类装饰器
+class Person:
+    name: str  # 属性：姓名
+    age: int   # 属性：年龄
+    def greet(self) -> None:
+        print(f"Hello, my name is {self.name} and I am {self.age} years old.")
+\end{lstlisting}
+上述例子又被称为“数据类”（dataclass），在Python 3.7中引入。使用数据类可以更方便地定义类，从而减少重复且意义有限的代码。“装饰器”是Python的一种语法糖，可以在函数或类定义前使用@符号来应用装饰器。数据类装饰器会自动为类生成一些常用方法，如\texttt{\_\_init\_\_()}、\texttt{\_\_repr\_\_()}等。
+
+\subsection{继承和多态}
+
+继承的意思是创建一个类（子类）来继承另一个类（父类）的属性和方法，子类可以扩展或修改父类的功能。举个例子：“动物”可以是一个类，而“猫”和“狗”都可以是“动物”的子类，它们继承了“动物”的属性和方法，但也有自己的特性。
+
+实际代码表现大概是这样的：
+\begin{lstlisting}[language=python]
+class Animal:
+    def __init__(self, name):
+        self.name = name
+
+    def eat(self):
+        print(f"{self.name} is eating.")
+
+    def speak(self):
+        print(f"{self.name} makes a sound.")
+
+class Dog(Animal):
+    def speak(self): # 重写父类方法
+        print(f"{self.name} barks.")
+
+class Cat(Animal):
+    def speak(self): # 重写父类方法
+        print(f"{self.name} meows.")
+
+mycat = Cat("Carol") # 创建一个Cat对象
+mycat.eat()  # 输出"Carol is eating."
+mycat.speak()  # 输出"Carol meows."
+mydog = Dog("Dave") # 创建一个Dog对象
+mydog.eat()  # 输出"Dave is eating."
+mydog.speak()  # 输出"Dave barks."
+\end{lstlisting}
+
+在这个例子中，\texttt{Dog}和\texttt{Cat}都是\texttt{Animal}的子类，它们继承了\texttt{Animal}的属性和方法，并重写了\texttt{speak()}方法。这样，我们可以通过多态来调用不同子类的同名方法，而不需要关心具体的实现细节。另一方面，子类也可以执行没有被重写的父类方法，例如上文中的\texttt{eat()}方法。
+
+在有些时候，我们希望一个子类在重写某方法的时候会先将父类的方法执行一遍，然后再执行自己的逻辑。这时，我们可以使用\texttt{super()}函数来调用父类的方法：
+\begin{lstlisting}[language=python]
+class Dog(Animal):
+    def speak(self):
+        super().speak()  # 调用父类的speak方法
+        print(f"{self.name} barks.")
+
+mydog = Dog("Eve")  # 创建一个Dog对象
+mydog.speak()  # 输出"Eve makes a sound."和"Eve barks."两行
+\end{lstlisting}
+
+有了OOP，我们就可以更简单地组织代码，便于维护和扩展。
+
+\section{出点小练}
+
+\subsection{练习1：冰雹猜想}
+
+角谷猜想是一个有趣的数学问题：从任意整数开始，如果他是奇数就乘以3加1，如果是偶数就除以2，如此反复循环，最终一定会得到1。目前还没有人证明这个猜想（但是它大概率是正确的）。
+
+我们可以用C++来验证一些具体值。要求输入一个整数，输出这个整数经过角谷猜想的处理后，最终得到1所需的每一步，例如输入6，输出6, 3, 10, 5, 16, 8, 4, 2, 1。
+
+\textbf{边写边说}
+
+我们读题，把人类语言逐句地改成Python语言。
+
+\texttt{从任意整数开始，如果他是奇数就乘以3加1，如果是偶数就除以2。}这句话提示我们要做一个条件判断：
+\begin{lstlisting}[language=python]
+if n % 2 == 0:  # 如果n是偶数
+    n = n // 2  # 除以2
+else:  # 如果n是奇数
+    n = n * 3 + 1  # 乘以3加1
+\end{lstlisting}
+\texttt{如此反复循环，最终一定会得到1。}这句话提示我们要使用循环来反复执行这个操作，直到n变成1为止。我们可以使用while循环来实现：
+\begin{lstlisting}[language=python]
+while n != 1:  # 当n不等于1时
+    # 循环体
+\end{lstlisting}
+
+\texttt{要求输入一个整数，输出这个整数经过角谷猜想的处理后，最终得到1所需的每一步。}这句话提示我们输入和输出的处理。
+
+接下来，我们把这些代码像乐高积木一样组合起来，就可以完成这个练习了：
+\begin{lstlisting}[language=python]
+n = int(input("请输入一个整数："))  # 输入一个整数
+n = print(n)  # 输出初始值
+while n != 1:  # 当n不等于1时
+    if n % 2 == 0:  # 如果n是偶数
+        n = n // 2  # 除以2
+    else:  # 如果n是奇数
+        n = n * 3 + 1  # 乘以3加1
+    print(n)  # 输出当前的n
+\end{lstlisting}
+
+是不是非常简单？
+
+\subsection{练习2：找素数}
+
+素数在数学中是一个非常重要的概念，它指的是只能被1和它本身整除的自然数。素数在密码学、数据加密等领域有着广泛的应用。一般我们可以使用筛法找到素数：在一系列整数中，先找到最小的素数（2），然后将它的倍数都去掉；然后再找到下一个最小的素数（3），再将它的倍数都去掉；如此反复，直到所有的数都被处理完。
+
+现在输出1到1000之间的所有素数\footnote{规定1不是素数，有兴趣的可以阅读这方面材料“为什么1既不是素数也不是合数”。}。
+
+\textbf{边写边说}
+
+题目说使用筛法找素数。那么，我们可以创建一个列表来存储1到1000之间的所有整数，然后使用一个循环来筛选出素数。如果不是素数，则删除之。那么可以这样：
+
+\begin{lstlisting}[language=python]
+# 创建一个列表来存储整数
+numbers = list(range(2, 1001))
+for i in range(2, 1001):
+    if i in numbers:  # 如果i还在列表中
+        for j in range(2, 1001 // i):  # 从2倍开始，删除i的所有倍数
+            if i * j in numbers:  # 确保i*j还在列表里
+                numbers.remove(j * i)  # 删除j * i
+print(numbers)  # 输出所有素数
+\end{lstlisting}
+
+以上算法是正确的，但是执行起来比较慢。这是因为对于2到1000之间的所有数，我们都需要确定它究竟是不是在列表之中，总共判断了近1000次。有没有什么更简单的办法呢？
+
+我们知道，数组的索引天生就是自然数。我们可以创建一个布尔数组来标记每个数是否是素数，初始时假设所有数都是素数。然后，我们从2开始，找到第一个素数，标记它的所有倍数为非素数。对于不是素数的数，我们可以跳过扫描。这样，代码就会快许多了。以下是一个实现：
+
+\begin{lstlisting}[language=python]
+numbers = [True] * 1001  # 创建一个布尔数组，初始时假设所有数都是素数
+numbers[0] = numbers[1] = False  # 0和1不是素数
+for i in range(2, 1001):  # 从2开始，遍历所有数
+    if not numbers[i]:  # 如果i不是素数
+        continue  # 跳过
+    else:
+        for j in range(2, 1001 // i):  # 从2开始，标记i的所有倍数为非素数
+            numbers[j * i] = False  # 标记为非素数
+print([i for i in range(1001) if numbers[i]])  # 输出所有素数
+\end{lstlisting}
 
 \section{文科生的Python}
 
