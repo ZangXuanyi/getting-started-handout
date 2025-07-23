@@ -160,6 +160,21 @@ conda有两个发行版，一个是Anaconda，另一个是Miniconda。Anaconda�
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 \end{lstlisting}
 
+\subsection{go环境搭建}
+
+请去\href{https://go.dev/doc/install}{官网下载页面}下载适用于你操作系统的安装包/压缩包。
+
+对于win和mac均是一键安装，对于linux请执行以下命令
+
+\begin{lstlisting}[language=bash]
+  sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.24.5.linux-amd64.tar.gz
+  # 此命令将会删除以前下载的go，并将你下载的压缩包解压并拷贝至/usr/local下（注意将其替换为压缩包的真实路径）
+  export PATH=$PATH:/usr/local/go/bin
+  # 这行命令建议手动加入~/.zshrc或~/.bashrc，以使环境变量在所有终端生效（说人话：让终端能找到你的go在哪）
+  go version
+  # 验证go的版本
+\end{lstlisting}
+
 \section{选择合适的IDE或者文本编辑器}
 
 IDE（集成开发环境）或者文本编辑器是编程的核心工具之一，用于编写代码、调试和测试等功能。选择合适的IDE或编辑器可以提高编程效率和代码质量。
@@ -303,6 +318,42 @@ VS Code是一个非常灵活的编辑器，可以通过安装插件来增强其�
 \textit{注意: 初始化后，文件夹下应有着\texttt{Cargo.toml}，否则便无法为其提供运行的功能，因为运行是依赖于\texttt{cargo}的。初学者往往会急于创建\texttt{main.rs}而没有用\texttt{cargo init}或\texttt{cargo new dir}来初始化文件夹，然后就会发现\texttt{rust-analyzer}报错\texttt{Failed to discover workspace. Consider adding the Cargo.toml of the workspace to the linkedProjects setting.}}
 
 为了便于调试，我们下载\texttt{codelldb}插件，之后按F5就可以开始调试了。
+
+\subsubsection{在VS Code中配置Go}
+
+安装\texttt{golang.go}插件。然后在终端执行如下命令。（如果你有着足够“好”的网络，那可以不用设置\texttt{GOPROXY}）
+
+\begin{lstlisting}[language=bash]
+  go env -w GO111MODULE=on # 启用 Go Modules 功能
+  go env -w GOPROXY=https://goproxy.cn,direct # 配置代理
+  # go env | grep GOPROXY # linux 确认配置
+  # go env |findstr "GOPROXY" # windows 确认配置
+\end{lstlisting}
+
+下载\textt{go tools}：\textt{Ctrl + Shift + P}打开命令面板输入\textt{Go: Install/Update Tools}，选择所有并确定，这将会下载\textt{go tools}。
+
+新建文件夹，用\textt{VS Code}打开此文件夹，新建\texttt{main.go}文件，\texttt{Ctrl + `} 打开终端，输入\textt{go mod init helloworld}，编辑\texttt{main.go}
+
+\begin{lstlisting}[language=go]
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	name := "Go Developers"
+	hello := "hello world"
+	fmt.Println("Azure for", name, hello)
+	hello_world()
+}
+\end{lstlisting}
+
+按F5即可调试。
+
+\textit{现在Go使用\texttt{go module} 管理依赖，也就是\texttt{go.mod}文件。现在推荐这么做，有些项目可能还在用\texttt{Go Path}来管理，同学遇到了此种项目可自行搜集资料（呜呜，因为我也不知道，等待大佬补充）}
+
+有同学可能发现了，调试的时候并没有输出可执行文件。输出可执行文件：\texttt{go build -o main.exe main.go}, \textt{-o}选项可以指定可执行文件的名字。如果是多文件编译呢？假设源代码均位于src目录下，\texttt{go build src/*.go}。同学们也可了解一下如何交叉编译。
 
 \subsubsection{在VS Code中配置Git}
 
