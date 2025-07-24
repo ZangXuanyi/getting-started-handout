@@ -46,7 +46,7 @@
 
 特别注意：\textbf{系统，尤其是Windows系统是一个很玄学的玩意}，有时候需要重启计算机（或者终端）才能使环境变量生效，有时候则不需要。
 
-\subsection{C系编译器及其环境配置}
+\subsection{C系编译器及其环境配置}\label{sec:c-install}
 
 对于C语言，有三个最常见的编译器：GCC、Clang和MSVC。它们各有特点，但都能满足大部分初学者的C语言开发的需求。这些编译器通常会与特定的C标准库实现（如GNU的libstdc++、LLVM的libc++或Microsoft的MSVC CRT）配合使用，不同的标准库之间存在细微差异。我们一般建议在Linux上使用GCC，而在Mac上推荐使用Clang。MSVC工具链在Windows上非常流行，但是不跨平台且为闭源软件，有部分程序员可能因此不愿意使用。
 
@@ -130,6 +130,50 @@ conda有两个发行版，一个是Anaconda，另一个是Miniconda。Anaconda�
     pip install -r requirements.txt
 \end{lstlisting}
 以上命令也常用于项目的依赖管理，可以方便地安装和更新项目所需的所有包；同时也可以通过修改\texttt{requirements.txt}文件来管理项目的依赖版本，适宜分发。
+
+\subsection{rust环境搭建}
+
+由于rust工具链依旧依赖着c的工具链所以在安装rust的工具链前，你应该先安装c的工具链，如MSVC、GCC、Clang等（在win上你应该安装MSVC环境,详情见\ref{sec:c-install}）。
+
+将会使用rustup来安装rust工具链。
+
+由于众所周知的原因，在安装前你应该换源，如中科大镜像站。在win上请搜索"环境变量",在"系统环境变量"处点击"新建"，将如下环境变量添加至系统环境变量中。
+
+\begin{lstlisting}
+  变量名             变量值
+  RUSTUP_DIST_SERVER https://mirrors.ustc.edu.cn/rust-static
+  RUSTUP_UPDATE_ROOT https://mirrors.ustc.edu.cn/rust-static/rustup
+\end{lstlisting}
+
+\href{https://rustup.rs/#}{rustup下载}后，就可以点击rustup-init.exe安装了。
+
+在linux上换源方式：将以下设置环境变量的命令放在\texttt{\textasciitilde/.zshrc}(如果你的终端是zsh)或\texttt{\textasciitilde/.bashrc}(如果你的终端是bash)里(这样会在所有终端中生效)
+
+\begin{lstlisting}[language=bash]
+  export RUSTUP_DIST_SERVER=https://mirrors.ustc.edu.cn/rust-static
+  export RUSTUP_UPDATE_ROOT=https://mirrors.ustc.edu.cn/rust-static/rustup
+\end{lstlisting}
+
+然后执行官方脚本来下载rust。
+
+\begin{lstlisting}[language=bash]
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+\end{lstlisting}
+
+\subsection{go环境搭建}
+
+请去\href{https://go.dev/doc/install}{官网下载页面}下载适用于你操作系统的安装包/压缩包。
+
+对于win和mac均是一键安装，对于linux请执行以下命令
+
+\begin{lstlisting}[language=bash]
+  sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.24.5.linux-amd64.tar.gz
+  # 此命令将会删除以前下载的go，并将你下载的压缩包解压并拷贝至/usr/local下（注意将其替换为压缩包的真实路径）
+  export PATH=$PATH:/usr/local/go/bin
+  # 这行命令建议手动加入~/.zshrc或~/.bashrc，以使环境变量在所有终端生效（说人话：让终端能找到你的go在哪）
+  go version
+  # 验证go的版本
+\end{lstlisting}
 
 \section{选择合适的IDE或者文本编辑器}
 
@@ -266,6 +310,50 @@ VS Code是一个非常灵活的编辑器，可以通过安装插件来增强其�
 你会在右下角看到一个黄色按钮“选择Python解释器”，点击它可以选择你想要使用的Python解释器。一般情况下，你可以选择“Python 3.x (conda)”或者“Python 3.x (venv)”等选项，这样VS Code就会自动识别你当前的虚拟环境。
 
 当然，我们非常建议同学们趁早熟悉纯命令行运行Python的方式，例如\texttt{python main.py}，这样可以更好地理解Python的运行机制，同时也更便于调试（？）。
+
+\subsubsection{在VS Code中配置Rust}
+
+在VS Code中配置Rust比较简单，只需要下载\texttt{rust-analyzer}插件即可。然后用VS Code打开一个空文件夹，打开VS Code的终端（快捷键：\texttt{Ctrl + `}）,\texttt{cargo init} 初始化当前的空文件夹。然后在\texttt{src/main.rs}里即可看到\texttt{main}函数的上方有着运行和调试的符号，点击即可运行或调试。
+
+\textit{注意: 初始化后，文件夹下应有着\texttt{Cargo.toml}，否则便无法为其提供运行的功能，因为运行是依赖于\texttt{cargo}的。初学者往往会急于创建\texttt{main.rs}而没有用\texttt{cargo init}或\texttt{cargo new dir}来初始化文件夹，然后就会发现\texttt{rust-analyzer}报错\texttt{Failed to discover workspace. Consider adding the Cargo.toml of the workspace to the linkedProjects setting.}}
+
+为了便于调试，我们下载\texttt{codelldb}插件，之后按F5就可以开始调试了。
+
+\subsubsection{在VS Code中配置Go}
+
+安装\texttt{golang.go}插件。然后在终端执行如下命令。（如果你有着足够“好”的网络，那可以不用设置\texttt{GOPROXY}）
+
+\begin{lstlisting}[language=bash]
+  go env -w GO111MODULE=on # 启用 Go Modules 功能
+  go env -w GOPROXY=https://goproxy.cn,direct # 配置代理
+  # go env | grep GOPROXY # linux 确认配置
+  # go env |findstr "GOPROXY" # windows 确认配置
+\end{lstlisting}
+
+下载\textt{go tools}：\textt{Ctrl + Shift + P}打开命令面板输入\textt{Go: Install/Update Tools}，选择所有并确定，这将会下载\textt{go tools}。
+
+新建文件夹，用\textt{VS Code}打开此文件夹，新建\texttt{main.go}文件，\texttt{Ctrl + `} 打开终端，输入\textt{go mod init helloworld}，编辑\texttt{main.go}
+
+\begin{lstlisting}[language=go]
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	name := "Go Developers"
+	hello := "hello world"
+	fmt.Println("Azure for", name, hello)
+	hello_world()
+}
+\end{lstlisting}
+
+按F5即可调试。
+
+\textit{现在Go使用\texttt{go module} 管理依赖，也就是\texttt{go.mod}文件。现在推荐这么做，有些项目可能还在用\texttt{Go Path}来管理，同学遇到了此种项目可自行搜集资料（呜呜，因为我也不知道，等待大佬补充）}
+
+有同学可能发现了，调试的时候并没有输出可执行文件。输出可执行文件：\texttt{go build -o main.exe main.go}, \textt{-o}选项可以指定可执行文件的名字。如果是多文件编译呢？假设源代码均位于src目录下，\texttt{go build src/*.go}。同学们也可了解一下如何交叉编译。
 
 \subsubsection{在VS Code中配置Git}
 
