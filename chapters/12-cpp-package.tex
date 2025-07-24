@@ -88,7 +88,7 @@ pacman -S mingw-w64-ucrt-x86_64-fmt
 \end{itemize}
 
 安装后，这些库通常会被放置在系统的标准路径下（如\texttt{/usr/include}和\texttt{/usr/lib}）。构建系统（如CMake等）通过\texttt{find\_package}命令可以轻松地找到它们，无需额外配置：
-\begin{lstlisting}[language=cmake]
+\begin{lstlisting}
 find_package(fmt REQUIRED)
 target_link_libraries(my_program PRIVATE fmt::fmt)
 \end{lstlisting}

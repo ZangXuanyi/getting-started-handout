@@ -330,9 +330,9 @@ VS Code是一个非常灵活的编辑器，可以通过安装插件来增强其�
   # go env |findstr "GOPROXY" # windows 确认配置
 \end{lstlisting}
 
-下载\textt{go tools}：\textt{Ctrl + Shift + P}打开命令面板输入\textt{Go: Install/Update Tools}，选择所有并确定，这将会下载\textt{go tools}。
+下载\texttt{go tools}：\texttt{Ctrl + Shift + P}打开命令面板输入\texttt{Go: Install/Update Tools}，选择所有并确定，这将会下载\texttt{go tools}。
 
-新建文件夹，用\textt{VS Code}打开此文件夹，新建\texttt{main.go}文件，\texttt{Ctrl + `} 打开终端，输入\textt{go mod init helloworld}，编辑\texttt{main.go}
+新建文件夹，用\texttt{VS Code}打开此文件夹，新建\texttt{main.go}文件，\texttt{Ctrl + `} 打开终端，输入\texttt{go mod init helloworld}，编辑\texttt{main.go}
 
 \begin{lstlisting}[language=go]
 package main
@@ -353,7 +353,7 @@ func main() {
 
 \textit{现在Go使用\texttt{go module} 管理依赖，也就是\texttt{go.mod}文件。现在推荐这么做，有些项目可能还在用\texttt{Go Path}来管理，同学遇到了此种项目可自行搜集资料（呜呜，因为我也不知道，等待大佬补充）}
 
-有同学可能发现了，调试的时候并没有输出可执行文件。输出可执行文件：\texttt{go build -o main.exe main.go}, \textt{-o}选项可以指定可执行文件的名字。如果是多文件编译呢？假设源代码均位于src目录下，\texttt{go build src/*.go}。同学们也可了解一下如何交叉编译。
+有同学可能发现了，调试的时候并没有输出可执行文件。输出可执行文件：\texttt{go build -o main.exe main.go}, \texttt{-o}选项可以指定可执行文件的名字。如果是多文件编译呢？假设源代码均位于src目录下，\texttt{go build src/*.go}。同学们也可了解一下如何交叉编译。
 
 \subsubsection{在VS Code中配置Git}
 
