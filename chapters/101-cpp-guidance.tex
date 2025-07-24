@@ -440,7 +440,9 @@ int arr[10];
 \end{lstlisting}
 以上的数组arr中的元素可以通过索引来访问，例如arr[0]表示第一个元素，arr[1]表示第二个元素，以此类推，一直到arr[9]表示第十个元素。没有arr[10]，访问这个会出错。我们不能像Python一样访问arr[-1]，因为C++不支持负索引。
 
-全局数组（C风格）的大小应当是常量，不能是变量；但是局部数组的大小可以是变量（需要较高C++版本）。
+在C和C++中，数组的大小应当是一个常量，或者说C风格的数组是\textbf{无法动态扩展的}。
+
+\emph{变长数组（VLA）是C99标准引入的特性，允许数组的大小在运行时确定，但它在C11中被移除。C++不支持任何VLA特性。容易引起误会的是，GCC 和 Clang++ 编译器提供了包含 VLA 的GNU 扩展语法，并且默认引入这些扩展，因此，VLA （例如\texttt{int n; int a[n];}）在这些编译器下可行。反之，如果关闭这些扩展（通过添加 -pedantic-errors 选项）或者非 GNU 兼容的编译器（如 MSVC），则 VLA 不可用。在实际操作中，我们不要去写VLA，它们可能会导致代码在不同编译器下的表现不一致。C中，我们需要使用数组但是长度不确定的时候，可以将数组开得大一些，例如题目有1000个元素，那么就开1000个元素或者稍多元素的数组；C++中，我们可以使用向量\texttt{std::vector}来代替数组，该类可以动态扩展。}
 
 \subsubsection{字符串}
 C++风格的字符串类型是\texttt{string}，它可以存储一串字符。字符串的基本格式如下：
@@ -1005,6 +1007,8 @@ int* bad = (int*)v;  // C风格的强转，实际上一口气把const和volatile
 
 \emph{\texttt{volatile}是C/C++中的一个关键字，表示变量可能会被外部因素改变，因此编译器不会对它进行优化。它通常用于多线程编程或硬件寄存器的访问等。这个东西和移位运算符一样绝大多数人一辈子都不会用到。}
 
+
+
 \section{STL}
 
 STL（Standard Template Library）是C++的最重要特性，它提供了一组通用的模板类和函数，可以帮助我们更高效地处理数据结构和算法。STL包含了许多常用的数据结构和算法，例如向量（vector）、链表（list）、集合（set）、映射（map）等。
@@ -1025,9 +1029,9 @@ std::unordered_map<std::string,int> m;  // 哈希表
 
 常见的容器有以下几种：（如果我没记错的话，C++正课会要求全部掌握这些容器，我只能说：祝你好运！）
 \begin{itemize}
-    \item \texttt{vector}：动态数组（向量），可以自动扩容，支持随机访问。
+    \item \texttt{vector}：动态数组（向量），可以自动扩容，支持随机访问。实际上是单一内存连续块。
     \item \texttt{list}：双向链表，支持高效的插入和删除操作，但不支持随机访问。
-    \item \texttt{deque}：双端队列，支持在两端高效地插入和删除操作。
+    \item \texttt{deque}：双端队列，支持在两端高效地插入和删除操作。实际上是分段连续的内存块。
     \item \texttt{set}：集合，存储唯一元素，并自动排序。
     \item \texttt{map}：映射，存储键值对，并根据键自动排序。
     \item \texttt{unordered\_set}：无序集合，存储唯一元素，不自动排序，查询效率高。
@@ -1045,13 +1049,18 @@ std::unordered_map<std::string,int> m;  // 哈希表
 其实遇事不决的情况下，我们可以按照需求选择容器：
 \begin{itemize}
     \item 速查：如果需要快速查找元素（建哈希表），使用\texttt{unordered\_set}或\texttt{unordered\_map}。
-    \item 排序：如果需要自动排序，\texttt{priority\_queue}是最好的选择，其次是\texttt{set}和\texttt{map}。
-    \item 频繁插入删除：如果需要频繁插入和删除元素，使用\texttt{list}。
-    \item 只关心两头：如果只关心两端的插入和删除，使用\texttt{deque}。如果能确定用的是栈或队列，使用\texttt{stack}或\texttt{queue}。
-    \item 遇事不决：如果不确定用什么容器，使用\texttt{vector}。
+    \item 排序：如果需要自动排序，\texttt{set}和\texttt{map}是最好的选择。
+    \item 只要最大最小：如果只关心最大值或最小值，使用\texttt{priority\_queue}。
+    \item 频繁在中间插入删除：如果需要频繁插入和删除元素，使用\texttt{list}。
+    \item 频繁需要两头插入删除：如果只关心两端（尤其是头部）的插入和删除，使用\texttt{deque}。如果能确定用的是栈或队列，使用\texttt{stack}或\texttt{queue}。
+    \item 遇事不决：如果不确定用什么容器，使用\texttt{vector}。如果只关心尾部的频繁增删，也可以不用\texttt{deque}，直接用\texttt{vector}。
 \end{itemize}
 
 \emph{特别说明：虽然我把stack和queue也当成容器、实际上在工程上也不怎么区分这东西，但是这里我有必要提及：这两个玩意实际上是容器适配器（container adapter），它们是基于其他容器实现的，提供了栈和队列的接口。一般情况下，默认参数是vector或者deque（因此不必指明），但是你也可以指定其他容器作为底层容器。}
+
+\emph{特别说明2：\texttt{std::vector<bool>}和\texttt{std::vector<T>}实现有区别。前者是一个极为特殊的实现，使用位压缩来存储布尔值，因此它不是一个真正的向量，而是一个位集合（bitset）。这使得\texttt{std::vector<bool>}在某些情况下效率更高，但也导致了一些不兼容的问题。例如，\texttt{v[i]}返回的是一个代理对象而不是一个引用；\texttt{auto x = v[i]}返回的是值拷贝而不是常规的数据类型。}
+
+\emph{我们使用者不关心\texttt{std::vector<bool>}的实现细节，只需要记住以下五件事就行了：不能使用\texttt{auto\& x = v[i]}来获取元素的引用，因为代理对象不能绑定到非常引用；不能使用\texttt{\&v[i]}，因为单个位没有地址；的迭代器不是常规迭代器的实现，不是指针；\texttt{std::vector<bool>}线程不安全；排序、查找等算法能用但是缓慢。}
 
 \subsection{迭代器}
 
@@ -1110,6 +1119,176 @@ std::reverse(v.begin(), v.end());        // 原地翻转
 \end{itemize}
 
 利用头文件\texttt{<algorithm>}可以使用这些算法。STL的算法通常是模板函数，可以处理任意类型的数据；配合迭代器，算法和容器原地解耦。
+
+\subsection{Lambda表达式}
+
+Lambda表达式是C++11引入的一个特性，它允许我们在代码中定义匿名函数。Lambda表达式可以捕获外部变量，并且可以作为参数传递给其他函数。它的基本语法如下：
+\begin{lstlisting}
+[捕获列表](参数列表) -> 返回类型 {
+    // 函数体
+}
+\end{lstlisting}
+捕获列表用于指定哪些外部变量可以在Lambda表达式中使用，参数列表和返回类型与普通函数类似。Lambda表达式可以直接在代码中定义，不需要单独声明。
+
+例如：
+\begin{lstlisting}
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    vector<int> nums = {1, 2, 3, 4, 5};
+    int sum = 0;
+    for_each(nums.begin(), nums.end(), [&sum](int n) { sum += n; });  // 使用Lambda表达式计算总和
+    cout << "Sum: " << sum << endl;  // 输出结果
+    return 0;
+}
+\end{lstlisting}
+以上代码中，我们定义了一个Lambda表达式，该表达式能够捕获外部变量\texttt{sum}，并对\texttt{nums}向量中的每个元素进行求和操作。Lambda表达式可以使代码更简洁。
+
+\subsection{小练}
+
+题目：假设现在有许多武士要决斗。每个武士都有一个名字和一个体力值，当两个武士相互角斗的时候，体力值较高的武士将会获胜，而体力值较低的武士会被淘汰。然而，角斗会消耗武士的体力值，因此每一次角斗后，胜者的体力值会减少等同于败者当前体力值的数值。如果有两个武士体力相等，则他们将会同归于尽。
+
+为了保证公平，武士们决定按照体力值从高到低的顺序进行角斗；如果有多个体力值最高的武士，那么他们会在这些武士中选择姓名字典序最靠前的两个武士进行角斗（例如有abc三个武士，则a的姓名字典序最靠前，b次之，c最靠后）。每次角斗后，胜者会继续参与角斗，直到只剩下一个武士或者没有武士剩下为止。
+
+请编写一个程序，模拟武士们的角斗过程，并输出角斗的结果。
+
+输入格式：共n+1行。你会接收到一个数字n，表示武士的数量。接下来n行，每行包含一个武士的名字和体力值（用空格分隔）。保证n不大于一百万，且保证没有两个武士的名字相同。
+
+输出格式：输出最后剩下的武士的名字和体力值。如果没有武士剩下，则输出“None Left”。
+
+\textbf{边写边说}
+
+上述题目看起来难度颇高。这也会是在类似于OJ上出现的常见题目类型之一：不会像前两个题目一样，给你明显的提示和思路（例如“使用筛法”），而是需要你自己思考解决问题的思路。对于这种题目，我们除了需要会语言以外，还要有一定的算法知识。好在这个题目比较简单，算法很直接，重点是怎么实现。
+
+我们看到，\texttt{武士们按照体力值从高到低的顺序角斗}，这说明我们非常需要一个数据结构来存储武士们的信息，并且能够不停地获取体力最高的武士（对于体力值次高的武士，我们取两次就行），这让我们想到STL的一个重要成员：优先队列。另一方面，我们发现n的数量级在一百万，这对算法的时间要求较高，而优先队列能够很好地满足这个要求。
+
+那么我们定义一下武士这个数据类型和优先队列：
+\begin{lstlisting}
+class Warrior {
+public:
+    string name;  // 武士的名字
+    int health;  // 武士的体力值
+    Warrior(string n, int h) : name(n), health(h) {}  // 构造函数
+    bool operator<(const Warrior& other) const {    // 按照体力值从高到低排序
+        if (health != other.health) {
+            return health < other.health;  // 体力值较低的武士排在后面
+        }
+        else {
+            return name > other.name;  // 体力值相同的武士按照名字字典序排序
+        }
+    }
+};
+
+priority_queue<Warrior> warriors;  // 定义一个优先队列，存储武士
+\end{lstlisting}
+
+接下来，处理读取逻辑：
+\begin{lstlisting}
+int n;
+cin >> n;  // 读取武士数量
+for (int i = 0; i < n; ++i) {
+    string name;
+    int health;
+    cin >> name >> health;  // 读取武士的名字和体力值
+    warriors.push(Warrior(name, health));  // 将武士加入优先队列
+}
+\end{lstlisting}
+
+再下一步就是处理角斗的逻辑了。由于优先队列会自动处理上述武士的排序问题，我们只需要不断地从优先队列中取出两个武士进行角斗即可：
+\begin{lstlisting}
+while(warriors.size() > 1) {  // 当优先队列中还有多个武士时
+    Warrior w1 = warriors.top();  // 取出体力值最高的武士
+    warriors.pop();  // 弹出这个武士
+    Warrior w2 = warriors.top();  // 取出体力值第二高的武士
+    warriors.pop();  // 弹出这个武士
+
+    if (w1 == w2) {
+        continue;  // 体力相等时，同归于尽，不用放回去了
+    } else {
+        w1.health -= w2.health;  // 体力不等时胜者体力值减少
+        warriors.push(w1);  // 将胜者重新加入优先队列
+    }
+}
+\end{lstlisting}
+
+最后，处理输出：
+\begin{lstlisting}
+if (warriors.empty()) {
+    cout << "None Left" << endl;  // 如果没有武士剩下，输出“None Left”
+} else {
+    Warrior last = warriors.top();  // 取出最后剩下的武士
+    cout << last.name << " " << last.health << endl;  // 输出武士的名字和体力值
+}
+return 0;  // 程序结束
+\end{lstlisting}
+
+当然，我们肯定不能把这些代码直接交上去，我们需要把它们拼接在一起，成为一个可以执行的程序：
+\begin{lstlisting}
+#include <iostream>
+#include <queue>
+#include <string>
+
+using namespace std;
+
+class Warrior {
+public:
+    string name;  // 武士的名字
+    int health;  // 武士的体力值
+    Warrior(string n, int h) : name(n), health(h) {}  // 构造函数
+    bool operator<(const Warrior& other) const {    // 按照体力值从高到低排序
+        if (health != other.health) {
+            return health < other.health;  // 体力值较低的武士排在后面
+        }
+        else {
+            return name > other.name;  // 体力值相同的武士按照名字字典序排序
+        }
+    }
+};
+
+int main() {
+    priority_queue<Warrior> warriors;  // 定义一个优先队列，存储武士
+    int n;
+    cin >> n;  // 读取武士数量
+    for (int i = 0; i < n; ++i) {
+        string name;
+        int health;
+        cin >> name >> health;  // 读取武士的名字和体力值
+        warriors.push(Warrior(name, health));  // 将武士加入优先队列
+    }
+
+    while(warriors.size() > 1) {  // 当优先队列中还有多个武士时
+        Warrior w1 = warriors.top();  // 取出体力值最高的武士
+        warriors.pop();  // 弹出这个武士
+        Warrior w2 = warriors.top();  // 取出体力值第二高的武士
+        warriors.pop();  // 弹出这个武士
+
+        if (w1.health == w2.health) {
+            continue;  // 体力相等时，同归于尽，不用放回去了
+        } else {
+            w1.health -= w2.health;  // 胜者体力值减少
+            warriors.push(w1);  // 将胜者重新加入优先队列
+        }
+    }
+
+    if (warriors.empty()) {
+        cout << "None Left" << endl;  // 如果没有武士剩下，输出“None Left”
+    } else {
+        Warrior last = warriors.top();  // 取出最后剩下的武士
+        cout << last.name << " " << last.health << endl;  // 输出武士的名字和体力值
+    }
+    return 0;  // 程序结束
+}
+\end{lstlisting}
+
+部分同学可能会思考：为什么我要用优先队列，而不是用set、map、vector等其他容器？这个问题问得很好。
+
+我们先来解释“优先队列为什么行”的问题。优先队列是一个特殊的容器，它使用二叉堆实现，速度很快，且我们仅考虑“每次只关心全局最大值”的问题。在上述题目中，我们实际上只将两件事反复循环：把人放进去，把最该打架的两个人拿出来，这两件事恰好符合优先队列的特性。优先队列插入弹出的时间复杂度是$O(\log n)$\footnote{对于不熟悉算法分析的同学们，以上表示可以通俗地理解为：问题规模是n与问题规模是1的时候相比，执行时间最坏情况下大概变为大O里面的函数倍。}，且获取最大值的时间复杂度是$O(1)$，因此上述问题使用优先队列的时间复杂度是$O(n \log n)$，空间复杂度是$O(n)$，非常高效。
+
+而对于set、map等容器，它们是用红黑树实现的，天然有序：简单地说，无论如何它们都会把所有元素排好（而优先队列并不会把所有元素排好，它只会把最大值放在最前面！）。上述问题中，每一次打架都会改变武士的体力值，这就意味着每次打架后都需要重新排序；为了保持有序，必须先删除、再插入，这个操作本身是两个$O(\log n)$的操作。而在更极端的情况下，加入胜者的体力值极低，它可能从队列首一直沉到队列尾，而set们仍然保留这个没什么竞争力的数据——这意味着后面每一次取“当前最大值”时，都会把这条记录再比较一遍，白白浪费 log n 的时间！上述问题中，我们知道n是百万级别的，这种反复比较的额外开销总归是需要让复杂度爆炸的，或者说$O(n^2 \log n)$的复杂度，慢了一百万倍。
+
+而对于vector而言，每次重新排序则更加直观：一次排序就得$O(n \log n)$，而每次打架后都需要重新排序，这就意味着每次打架后都需要$O(n \log n)$的时间复杂度。这样一来，整个问题的时间复杂度就变成了$O(n^2 \log n)$，显然超时。综上所述，\textbf{只有保留全局极值但是不必保留元素具体顺序}的数据结构才能较好地完成了这个问题，而优先队列正是这样一个数据结构\footnote{这个题其实有更快的手段，例如胜者树、败者树等，它们本质上是二叉堆的工业级优化，时间复杂度都是$O(n \log n)$，但是常数应该会更小。但是它们写起来非常困难，要考虑各种诸如淘汰等的边界情况，且需要相当的算法基础。胜者树/败者树在竞赛或工程里通常服务于多路归并这类需要“反复取最小/最大并立刻替换”的场景；而本题只需要“全局最大”，STL 的堆已经够用而且很简洁，杀鸡焉用牛刀。我们这里就不讲了。}。
 
 以上，就是C++的全部内容了（也不是全部内容，毕竟C++14、C++17等版本有越来越多的新特性，但是能掌握C++11的全部特性就已经不得了了）。C++的语法和特性非常丰富，学习曲线较陡，但一旦掌握，就可以编写高效、可维护的代码。
 
