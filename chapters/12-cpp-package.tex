@@ -26,14 +26,6 @@
 
 手动装是最原始的方式，要么从源代码编译，要么从二进制包安装。手动装的好处是可以完全控制安装的版本和配置，坏处是需要手动处理依赖关系和路径问题，并且容易出错。不过，其他的方式最终还是依赖于手动装的过程，只不过脏活累活有自动化工具帮你做了；另一方面，手动装包也是最通用的方式，在包管理器上没有找到包时，手动装包几乎是唯一的选择。
 
-\subsection{各种Linux发行版仓库}
-
-以fmt为例：
-\begin{lstlisting}
-sudo apt install libfmt-dev
-\end{lstlisting}
-一步完事，上述代码会自动安装fmt的头文件和库文件，并且将它们放在系统的标准路径下。这种安装方式的好处是非常简单，但是缺点也非常明显：版本旧，且不能多版本并存。对于一些比较新的包，可能需要手动编译安装。
-
 \subsection{手动编译}
 
 手动编译的过程通常是：先从官网下载源代码，然后编译：
@@ -65,6 +57,56 @@ sudo cmake --install build --prefix /opt/fmt
 \section{使用包管理器}
 
 包管理器实际上是一种自动化的手动装方式。它们通常会提供一个统一的命令行工具，来管理包的安装、卸载、更新等操作。许多包都可以使用这种方式安装，且包管理器通常会处理依赖关系和路径问题。
+
+\subsection{系统级包管理器}
+
+对于特定的操作系统或开发环境，使用其自带的包管理器是安装C++库最直接的方式。无论是Linux（如APT、DNF、Pacman）、macOS（如Homebrew），还是 Windows上的MSYS2环境都提供了强大的包管理工具。当你的开发环境和目标部署环境一致时，系统级包管理器通常是最佳选择。
+
+以安装\texttt{fmt}库为例，不同平台上的命令如下：
+
+\begin{itemize}
+    \item \textbf{Debian/Ubuntu (APT)}:
+    \begin{lstlisting}[language=bash]
+sudo apt install libfmt-dev
+    \end{lstlisting}
+    \item \textbf{Fedora (DNF/YUM)}:
+    \begin{lstlisting}[language=bash]
+sudo dnf install fmt-devel
+    \end{lstlisting}
+    \item \textbf{Arch Linux (Pacman)}:
+    \begin{lstlisting}[language=bash]
+sudo pacman -S fmt
+    \end{lstlisting}
+    \item \textbf{macOS (Homebrew)}:
+    \begin{lstlisting}[language=bash]
+brew install fmt
+    \end{lstlisting}
+    \item \textbf{Windows (MSYS2/MinGW)}: 在 MSYS2 环境下，同样可以使用 \texttt{pacman}。
+    \begin{lstlisting}[language=bash]
+pacman -S mingw-w64-ucrt-x86_64-fmt
+    \end{lstlisting}
+\end{itemize}
+
+安装后，这些库通常会被放置在系统的标准路径下（如\texttt{/usr/include}和\texttt{/usr/lib}）。构建系统（如CMake等）通过\texttt{find\_package}命令可以轻松地找到它们，无需额外配置：
+\begin{lstlisting}[language=cmake]
+find_package(fmt REQUIRED)
+target_link_libraries(my_program PRIVATE fmt::fmt)
+\end{lstlisting}
+
+\subsubsection{优势}
+\begin{itemize}
+    \item 一条命令即可完成安装，自动处理复杂的依赖关系。
+    \item 库文件和头文件被安装到标准位置，构建系统可以自动发现，无需手动配置路径。
+    \item 可以与其他系统软件一同通过包管理器进行更新和维护。
+    \item 发行版仓库中的库经过测试，通常与系统中的其他组件（如编译器）兼容性良好。
+\end{itemize}
+
+\subsubsection{劣势}
+\begin{itemize}
+    \item 仓库中的库版本未必能满足所有需求。如果你的项目需要某个库的最新特性，或者依赖于一个非常特定的旧版本，某些包管理器可能无法满足需求。
+    \item 不同平台、不同发行版的包管理器命令和包名各不相同，往往需要手动核验与对应。
+    \item 不是所有的 C++ 库都被收录到了官方仓库中，尤其是那些比较小众或新兴的库。
+\end{itemize}
 
 \subsection{vcpkg}
 
