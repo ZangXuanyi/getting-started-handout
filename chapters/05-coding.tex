@@ -56,6 +56,8 @@ Linux和Mac用户可以通过包管理器安装特定的编译器，在暑假课
 
 你需要在\href{https://www.msys2.org/}{MSYS2官网}下载最新的安装包，并按照官网的说明进行安装。安装完成后，你可以通过MSYS2的包管理器pacman来安装GCC。
 
+鉴于国内网络环境，我在这里贴出本人在北大网盘的MSYS2存档\footnote{如失效，务必联系管理员}：\href{https://disk.pku.edu.cn/link/AADF534C03FA714DC982607A17BEF8A178}{msys2-x86\_64-20250622.exe}，不能访问MSYS2官网或者下载缓慢的可以使用这个下载对应版本的MSYS2。另外，也可以使用其他手段（例如清华源等）来下载MSYS2的安装文件。
+
 你可以在MSYS2终端中运行以下命令来安装GCC和GDB（建议使用UCRT64终端，不建议使用逐渐失去支持的32位以及MINGW64环境，也不建议新手使用CLANG64环境，该环境完全使用Clang代替GCC）：
 
 \begin{lstlisting}[language=bash]
@@ -198,6 +200,8 @@ IDE（集成开发环境）或者文本编辑器是编程的核心工具之一�
 \subsection{安装VS Code}
 
 我们应该上官网下载安装包进行安装。我们需要安装的是System Installer版本，而不是User Installer版本。因为User Installer版本会将VS Code安装在用户目录下，而System Installer版本会将VS Code安装在系统目录下，这样可以方便地在所有用户之间共享VS Code，并且能够把它直接放在环境变量中。
+
+在安装之前，我们应当确定自己计算机的CPU架构是x86-64还是arm64。在Windows系统下，我们可以使用\texttt{systeminfo}指令来查看系统信息，或者右键点击“此电脑”选择“属性”来查看系统类型。在官网上下载的Code架构应当和操作系统的架构一致。
 
 安装完成后，我们需要设置环境变量，以便在命令行中直接使用code命令。不过如果你在安装时选择了“Add to PATH”选项，则不需要手动设置环境变量。
 

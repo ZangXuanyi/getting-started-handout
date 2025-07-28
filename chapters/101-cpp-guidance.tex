@@ -35,8 +35,8 @@ int main() {
     \item \texttt{using namespace std;}：使用标准命名空间，这样我们就可以直接使用\texttt{cout}而不需要加上\texttt{std::}前缀。
     \item \texttt{int main()}：程序的入口函数，告诉电脑程序从这里开始执行。\texttt{int}表示这个函数返回一个整数值。
     \item \texttt{int age = 18;}：跟电脑说，我要在内存找个地方放个整数，这个地方叫age，放个18进去。
-    \item \texttt{cout << "I am " << age; }：把东西一股脑送送到屏幕上。
-    \item \texttt{return 0;}：返回0，告诉操作系统：一切OK。
+    \item \texttt{cout << "I am " << age; }：把东西一股脑全送到屏幕上。
+    \item \texttt{return 0;}：返回0，告诉操作系统：一切OK。除非你知道你在做什么，否则这里不要改成其他数字。
 \end{itemize}
 
 以上就是骨架。接下来该往骨架里面填肉了：
@@ -966,8 +966,8 @@ C语言就有类型强转的功能：
 
 在C++中，类型强转被拆成了四个方式（四大金刚）：
 \begin{itemize}
-    \item \texttt{static\_cast}：\textbf{编译期安全的强转}，包括数值提升/截断，枚举/整型，指针向上转型、void*转型等。它是最常用的类型转换方式，适用于大多数情况。
-    \item \texttt{dynamic\_cast}：\textbf{运行时安全的强转}，用于类的向下转型（子类指针转父类指针）。它会在运行时检查类型安全，如果转换不安全，则返回nullptr。它只能用于有虚函数的类。同时，它是唯一一个在运行时检查强转安全性的转换方式。
+    \item \texttt{static\_cast}：\textbf{编译期安全的强转}，包括数值提升/截断，枚举/整型，子类指针转父类指针、void*转型等。它是最常用的类型转换方式，适用于大多数情况。
+    \item \texttt{dynamic\_cast}：\textbf{运行时安全的强转}，几乎仅用于父类指针转子类指针。它会在运行时检查类型安全，如果转换不安全，则返回nullptr。它只能用于有虚函数的类。同时，它是唯一一个在运行时检查强转安全性的转换方式。
     \item \texttt{const\_cast}：\textbf{常变转换}，其他啥都不干。它是唯一一个能去const的转换方式。
     \item \texttt{reinterpret\_cast}：\textbf{按位重解释}，用于int指针互转、void指针互转、无关类指针互转等。它是危险的转换方式，仅在编译期做极弱的检查。除非我们知道在干什么，否则不要使用它。
 \end{itemize}
@@ -988,8 +988,8 @@ int* p = const_cast<int*>(&c);  // 使用const_cast去掉const属性
 class Base;
 class Derived : public Base;
 Base* b = new Derived();
-Derived* d = dynamic_cast<Derived*>(b);  // 使用dynamic_cast进行向下转型
-Derived* d = static_cast<Derived*>(b);  // 使用static_cast进行向下转型（不安全，但是能过编译）
+Derived* d = dynamic_cast<Derived*>(b);  // 使用dynamic_cast将父类指针转为子类
+Derived* d = static_cast<Derived*>(b);  // 使用static_cast转型（不安全，但是能过编译）
 
 uintptr_t ptr = reinterpret_cast<uintptr_t>(b);  // 使用reinterpret_cast将指针转换为整数
 \end{lstlisting}
