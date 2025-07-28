@@ -87,14 +87,14 @@ Valgrind跑完以后别急着关，如果是开源项目或者协作项目，把
 
 有些时候，程序没有崩溃的风险，但它的执行不符合预期且占用了过多的资源。这时候，我们需要进行性能调优和资源使用分析。以下是一些常见的性能问题和资源使用问题，以及相应的分析工具。
 
-\subsection{CPU吃满但是程序显然不应该吃满CPU}
+\subsection{CPU占用过高}
 
 这种情况可以使用perf来分析问题，由Linux内核提供。只需要在运行程序时加上\texttt{perf}命令即可，例如：
 \begin{lstlisting}[language=bash]
     perf record -g ./your_program && perf report
 \end{lstlisting}
 
-\subsection{内存吃满但是程序显然不应该吃满内存}
+\subsection{内存占用过高}
 
 这种情况可以使用massif来分析问题，该工具由Valgrind提供。例如：
 \begin{lstlisting}[language=bash]
@@ -120,7 +120,7 @@ IO卡死通常是因为程序在等待某个IO操作完成，例如网络请求�
 
 经过以上的两步骤，我们总算是把程序的主要问题解决了个差不多。但是，为了保证程序的稳定性和可靠性，我们还需要进行一些额外的调养工作——测试。
 
-\subsection{测试第一步：隔离}
+\subsection{隔离}
 
 我们最好是找个地方把需要测试的代码隔离开来，放到一个单独的地方，防止其他代码或者文件影响测试结果；对于服务类型的项目，则更是如此。我们可以使用tmux、screen或者Docker来隔离测试环境。
 
