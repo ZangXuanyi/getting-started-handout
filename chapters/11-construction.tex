@@ -561,7 +561,7 @@ executable('app', 'main.cpp',
 Meson拥有一个名为Wrap的内置依赖包管理器，类似于CMake的\texttt{FetchContent}。当系统上没有安装某个依赖时，Meson可以通过Wrap系统从网上下载并构建它。
 
 要使用它，你需要在项目根目录下创建一个\texttt{subprojects}目录，并在其中放置一个\texttt{.wrap}文件。例如\texttt{subprojects/fmt.wrap}：
-\begin{lstlisting}[language=ini]
+\begin{lstlisting}
 [wrap-file]
 directory = fmt-10.2.1
 source_url = https://github.com/fmtlib/fmt/releases/download/10.2.1/fmt-10.2.1.zip
@@ -591,7 +591,7 @@ meson configure builddir -Duse_feature_x=true # 修改选项
 
 \subsection{交叉编译}
 交叉编译是Meson的一等公民。所有与交叉编译相关的设置都集中在一个单独的“交叉文件”（\texttt{cross file}）中。一个简单的交叉编译文件示例如下：
-\begin{lstlisting}[language=ini]
+\begin{lstlisting}
 [binaries]
 c = 'loongarch64-linux-gnu-gcc'
 cpp = 'loongarch64-linux-gnu-g++'
