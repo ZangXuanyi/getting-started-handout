@@ -470,4 +470,162 @@ project/
 
 如果使用了CI等工具，需要将CI脚本中的相关命令从CMake转换为XMake。
 
+\section{Meson}
+
+Meson是一个开源的构建系统，主要目标是尽可能地提高开发者的生产力。它力求快速、易用，并提供最现代化的软件构建工具。Meson的设计哲学是“不挡路”（Don't get in your way），致力于让构建过程尽可能简单、快速和可靠。
+
+与使用自定义脚本语言的CMake或使用Lua的XMake不同，Meson使用一种专门设计的、非图灵完备的领域特定语言（DSL）。这种设计的目的是为了确保构建定义的简洁性、可读性和可预测性，避免在构建脚本中出现过于复杂的逻辑。Meson的构建定义文件通常命名为\texttt{meson.build}。
+
+Meson本身并不直接编译代码，而是作为一个元构建系统生成另一套构建系统（Ninja或Visual Studio等）的项目文件，它的默认后端是Ninja。得益于其出色的设计和性能，Meson在开源社区获得了广泛的认可，许多大型项目，如GNOME（包括较底层的GLib、GTK以及各应用程序）、GStreamer、Systemd、Mesa等，都已采用Meson作为其官方构建系统。
+
+安装Meson非常简单，大多数系统的包管理器都提供了Meson：
+\begin{lstlisting}[language=bash]
+sudo apt install meson # Debian/Ubuntu
+sudo pacman -S meson   # Arch Linux
+pacman -S mingw-w64-ucrt-x86_64-meson # MSYS2 on Windows
+brew install meson     # macOS
+\end{lstlisting}
+
+Android的Termux等少数环境没有提供Meson，由于Meson是Python包，因此也可以方便地通过pip安装：
+\begin{lstlisting}[language=bash]
+pip install meson
+\end{lstlisting}
+
+\subsection{最小运行实例}
+Meson强制要求“外源构建”（out-of-source builds），即构建生成的文件必须位于一个与源码目录分开的独立目录中，保持源码树的整洁。
+
+假设我们有一个简单的\texttt{main.c}文件。在同级目录下，我们创建一个\texttt{meson.build}文件：
+\begin{lstlisting}
+# meson.build
+project('hello_meson', ['c'],
+  version : '0.1',
+  default_options : ['c_std=c11'])
+
+executable('hello', 'main.c')
+\end{lstlisting}
+
+然后，我们按以下步骤进行构建：
+\begin{lstlisting}[language=bash]
+# 配置项目，创建构建目录 builddir
+# 可以通过`--buildtype` 来设置构建类型
+meson setup builddir --buildtype=debugoptimized
+
+# 编译
+# -C 指定构建目录
+meson compile -C builddir
+
+# 运行
+./builddir/hello
+\end{lstlisting}
+
+整个过程清晰明了。\texttt{meson setup} 步骤只会执行一次（除非构建脚本或环境变化），后续的修改只需要运行\texttt{meson compile -C builddir}。其中，\texttt{--buildtype}选项可以指定构建类型，如\texttt{debug}为调试模式，\texttt{release}为发布模式，\texttt{debugoptimized}为调试优化模式，\texttt{plain}为纯粹的编译模式（使用环境变量中的构建参数），\texttt{minsize}为最小化大小优化模式，\texttt{custom}为自定义模式。对于调试模式，Meson会自动设置编译器相关选项，添加调试符号。
+
+\subsection{项目和目标}
+每个Meson项目的根目录都必须有一个\texttt{meson.build}文件，并且第一条命令必须是\texttt{project()}。
+\begin{lstlisting}
+project('my_project', ['c', 'cpp']) # 项目名，使用的语言
+\end{lstlisting}
+
+目标（Target）是你想要构建的东西，可以是可执行文件或库等。
+\begin{lstlisting}
+# 创建一个可执行文件
+exe = executable('my_app', 'main.c', 'utils.c')
+
+# 创建一个静态库
+lib = static_library('my_lib', 'lib.c', 'helper.c')
+
+# 创建一个共享库
+shared_lib = shared_library('my_shared_lib', 'shared.cpp')
+\end{lstlisting}
+
+Meson中的变量默认是不可变的，这有助于写出更可预测的构建脚本。上面代码中的\texttt{exe}和\texttt{lib}就是持有目标对象引用的变量。
+
+\subsection{依赖项处理}
+Meson的依赖项处理是其一大亮点。它提供了一个统一的\texttt{dependency()}函数来查找外部依赖。
+\begin{lstlisting}
+# 查找 fmt 库，如果找不到则构建失败
+fmt_dep = dependency('fmt', required: true)
+
+executable('app', 'main.cpp',
+  dependencies : [fmt_dep]) # 将依赖项传递给目标
+\end{lstlisting}
+
+\texttt{dependency()} 函数会按顺序尝试多种方法来寻找依赖，包括（但不限于）：
+\begin{itemize}
+    \item \textbf{pkg-config}：这是在Linux和类Unix系统上查找库的首选方式。
+    \item \textbf{CMake}：Meson可以调用\texttt{find\_package}来查找CMake包。
+    \item \textbf{内置查找器}：对于一些常用库（如Zlib、Threads），Meson有自己的查找逻辑。
+\end{itemize}
+
+\subsection{子项目与Wrap系统}
+Meson拥有一个名为Wrap的内置依赖包管理器，类似于CMake的\texttt{FetchContent}。当系统上没有安装某个依赖时，Meson可以通过Wrap系统从网上下载并构建它。
+
+要使用它，你需要在项目根目录下创建一个\texttt{subprojects}目录，并在其中放置一个\texttt{.wrap}文件。例如\texttt{subprojects/fmt.wrap}：
+\begin{lstlisting}
+[wrap-file]
+directory = fmt-10.2.1
+source_url = https://github.com/fmtlib/fmt/releases/download/10.2.1/fmt-10.2.1.zip
+source_hash = e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+\end{lstlisting}
+然后，在\texttt{meson.build}中，你可以像查找系统库一样查找它：
+\begin{lstlisting}
+# Meson会先尝试系统查找，失败后会自动在subprojects目录中寻找fmt
+# fallback的第二个参数是子项目中的依赖变量名
+fmt_dep = dependency('fmt', fallback: ['fmt', 'fmt_dep'])
+\end{lstlisting}
+
+\subsection{选项和配置}
+你可以使用\texttt{option()}函数为你的项目定义可配置的选项。
+\begin{lstlisting}
+option('use_feature_x', type : 'boolean', value : true, description : 'Enable feature X')
+\end{lstlisting}
+用户在配置时可以通过\texttt{-D}参数来修改这些选项的值：
+\begin{lstlisting}[language=bash]
+meson setup builddir -Duse_feature_x=false
+\end{lstlisting}
+要查看或修改一个已经配置好的构建目录的选项，可以使用\texttt{meson configure}：
+\begin{lstlisting}[language=bash]
+meson configure builddir                # 查看所有选项
+meson configure builddir -Duse_feature_x=true # 修改选项
+\end{lstlisting}
+
+\subsection{交叉编译}
+交叉编译是Meson的一等公民。所有与交叉编译相关的设置都集中在一个单独的“交叉文件”（\texttt{cross file}）中。一个简单的交叉编译文件示例如下：
+\begin{lstlisting}
+[binaries]
+c = 'loongarch64-linux-gnu-gcc'
+cpp = 'loongarch64-linux-gnu-g++'
+ar = 'loongarch64-linux-gnu-ar'
+strip = 'loongarch64-linux-gnu-strip'
+
+[host_machine]
+system = 'linux'
+cpu_family = 'loongarch64'
+cpu = 'loongarch64'
+endian = 'little'
+\end{lstlisting}
+
+在配置时使用\texttt{--cross-file}参数指定此文件：
+\begin{lstlisting}[language=bash]
+meson setup build_loongarch64 --cross-file loongarch64-linux-gnu.txt
+meson compile -C build_loongarch64
+\end{lstlisting}
+Meson会处理好所有细节，确保使用正确的编译器和库路径。
+
+\subsection{特点与比较}
+\begin{itemize}
+    \item \textbf{语法和设计哲学}：Meson的语法是声明式的、非图灵完备的DSL，虽然这造成了一些限制，但这也使得构建脚本非常简洁且易于分析。它强制实施了许多最佳实践（如外源构建）。
+    \item \textbf{性能}：Meson的配置阶段通常非常快。由于其默认后端是Ninja，编译速度也极具竞争力。
+    \item \textbf{易用性}：对于新项目或初学者来说，Meson和XMake的上手难度通常低于CMake。Meson的错误提示非常友好，文档也极为出色。
+\end{itemize}
+
+\subsection{技巧与提示}
+\begin{itemize}
+    \item \textbf{修改配置}：有时候因为Meson版本升级或者我们自己需要修改配置中的内容，需要重新配置项目构建目录。此时不必手动删除\texttt{builddir}目录来重新配置，使用\texttt{meson setup --reconfigure builddir}。
+    \item \textbf{调试}：Meson的输出信息非常清晰。如果遇到问题，仔细阅读它的错误提示与引导通常就能解决问题。
+    \item \textbf{官方文档}：Meson的\href{https://mesonbuild.com/}{官方文档}是学习和解决问题的极佳资源，内容详尽且组织良好。
+\end{itemize}
+
+Meson提供了一种不同的构建体验。如果你正在开始一个新的开源项目，Meson是一个非常值得考虑的优秀选择。
+
 \end{document}
