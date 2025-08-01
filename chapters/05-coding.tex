@@ -78,7 +78,7 @@ pacman -S mingw-w64-ucrt-x86_64-gdb
 
 \emph{特别注意：有的同学可能不是按照上述推荐的方式安装GCC的，而是通过其他方式（例如直接下载预编译版本）安装的GCC。如果是这种情况，务必记住GCC和非ASCII字符是死敌，因此请不要将GCC安装在包含非ASCII字符（如汉字、空格）的路径下！（最大的坑可能是你的用户名中包含非ASCII字符，例如汉字！）}
 
-\subsection{虚拟环境及其配置}\label{sec:virtualenv}
+\subsection{Python、虚拟环境及其配置}\label{sec:virtualenv}
 
 开发，尤其是生产类开发有一个重要的原则：不重复造轮子。以Python为例，作为一门流行的编程语言，它拥有丰富的第三方库和框架，可以帮助我们快速实现各种功能，并不需要从零开始开发。
 
@@ -135,11 +135,11 @@ conda有两个发行版，一个是Anaconda，另一个是Miniconda。Anaconda�
 
 \subsection{rust环境搭建}
 
-由于rust工具链依旧依赖着c的工具链所以在安装rust的工具链前，你应该先安装c的工具链，如MSVC、GCC、Clang等（在win上你应该安装MSVC环境,详情见\ref{sec:c-install}）。
+由于rust工具链依旧依赖着c的工具链，所以在安装rust的工具链前，你应该先安装c的工具链，如MSVC、GCC、Clang等（在win上你应该安装MSVC环境,详情见\ref{sec:c-install}）。
 
-将会使用rustup来安装rust工具链。
+我们将会使用rustup来安装rust工具链。
 
-由于众所周知的原因，在安装前你应该换源，如中科大镜像站。在win上请搜索"环境变量",在"系统环境变量"处点击"新建"，将如下环境变量添加至系统环境变量中。
+由于众所周知的原因，在安装前你应该换源，如中科大镜像站。在win上请搜索"环境变量"，在"系统环境变量"处点击"新建"，将如下环境变量添加至系统环境变量中。
 
 \begin{lstlisting}
   变量名             变量值
@@ -243,6 +243,7 @@ VS Code是一个非常灵活的编辑器，可以通过安装插件来增强其�
       "args": [
         "-g",
         "${file}",
+        "-O3",
         "-o",
         "${fileDirname}\\${fileBasenameNoExtension}.exe"
       ],
@@ -306,6 +307,15 @@ VS Code是一个非常灵活的编辑器，可以通过安装插件来增强其�
 
 调试配置没有UI配置选项，我们还得老老实实地手动编辑\texttt{launch.json}文件。当然默认调试已经够了，如果你不需要更复杂的调试功能，完全可以不修改。
 
+如果你确实做了这些事情，但是你的VS Code仍然无法编译和调试C/C++代码，那么你可能需要检查以下几点：
+\begin{itemize}
+  \item 使用\texttt{where g++}命令来确定你的编译器是不是在PATH环境变量中，另外你还需要确定上述识别出的编译器是不是你想用的那个。
+  \item 检查你的C++目录和编译器目录是否包含非ASCII字符（如汉字、空格等）。
+  \item 检查你是不是错误地使用了\texttt{gcc}来编译C++代码。C++代码需要使用\texttt{g++}来编译，而不是\texttt{gcc}。
+  \item 检查你的包含路径是否正确。VS Code会自动检测你的编译器和标准库，但如果你使用了自定义的路径或者安装了多个版本的编译器，可能需要手动配置包含路径。
+  \item 检查你改的几个配置文件是不是正确的配置文件。
+\end{itemize}
+一般情况下，修正的方法很简单：如果是环境变量、路径等问题，重新设置就可以；如果是配置文件问题，杀掉当前所有终端，删除\texttt{.vscode}文件夹，然后重新编译调试就可以了。
 
 \subsubsection{在VS Code中配置Python}
 
