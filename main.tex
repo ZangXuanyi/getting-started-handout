@@ -1,20 +1,47 @@
-\documentclass[lang=cn, color=blue, titlestyle=hang, scheme=chinese, 12pt, toc=twocol]{elegantbook}
+\documentclass[12pt]{ctexbook}
 
+\usepackage{geometry}
+\usepackage{amssymb}
+\usepackage{amsmath}
 \usepackage{subfiles}
+\usepackage{listings}
+\usepackage{graphicx}
 \usepackage{authblk}
 \usepackage{fontawesome5}
+\usepackage{draftwatermark}
+\usepackage{xcolor}
 \usepackage{hyperref}
-\usepackage{listings}
 
+\lstset{
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\color{blue},
+  commentstyle=\color{green!50!black},
+  stringstyle=\color{red},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  stepnumber=1,
+  numbersep=5pt,
+  backgroundcolor=\color{white},
+  showspaces=false,
+  showstringspaces=false,
+  breaklines=true,
+  frame=single
+}
+
+\geometry{a4paper, margin=1in}
 % \setcounter{tocdepth}{2}
+
+\SetWatermarkText{LCPU-2025}           % 设置水印内容
+\SetWatermarkLightness{0.97}             % 设置水印透明度 0-1
+\SetWatermarkScale{0.8}
 
 \title{北京大学计算机基础科学与开发手册}
 \author{臧炫懿}
-\institute{北京大学信息科学技术学院、北京大学学生Linux俱乐部}
-\extrainfo{“把初高中失去的计算机基础知识和大学失去的开发能力补回来”}
-\version{250801}
-\cover{cover.jpg}
-\logo{logo.png}
+% \institute{北京大学信息科学技术学院、北京大学学生Linux俱乐部}
+% \extrainfo{“把初高中失去的计算机基础知识和大学失去的开发能力补回来”}
+% \version{250801}
+% \cover{cover.jpg}
+% \logo{logo.png}
 
 \begin{document}
 

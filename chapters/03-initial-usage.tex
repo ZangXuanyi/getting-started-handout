@@ -44,20 +44,20 @@
 
 使用快捷键可以减少鼠标操作的频率。以下是来自Windows的常用快捷键：
 \begin{itemize}
-    \item Ctrl+C：复制
-    \item Ctrl+V：粘贴
-    \item Ctrl+Z：撤销
-    \item Ctrl+Y：重做
-    \item Ctrl+A：全选
-    \item Ctrl+Alt+Del：任务管理器
-    \item Alt+F4：关闭窗口
-    \item Win+R：打开运行窗口
-    \item Win+E：文件资源管理器\footnote{文件资源管理器是Windows系统中用于浏览和管理文件和文件夹的工具。}
-    \item Win+D：显示桌面
-    \item Win+L：锁定计算机
-    \item Ctrl+S：保存
-    \item Ctrl+P：打印
-    \item Ctrl+F：查找替换
+  \item Ctrl+C：复制
+  \item Ctrl+V：粘贴
+  \item Ctrl+Z：撤销
+  \item Ctrl+Y：重做
+  \item Ctrl+A：全选
+  \item Ctrl+Alt+Del：任务管理器
+  \item Alt+F4：关闭窗口
+  \item Win+R：打开运行窗口
+  \item Win+E：文件资源管理器\footnote{文件资源管理器是Windows系统中用于浏览和管理文件和文件夹的工具。}
+  \item Win+D：显示桌面
+  \item Win+L：锁定计算机
+  \item Ctrl+S：保存
+  \item Ctrl+P：打印
+  \item Ctrl+F：查找替换
 \end{itemize}
 
 \section{终端初步}\label{sec:terminal}
@@ -76,23 +76,23 @@
 对于Linux和macOS，我们建议使用Zsh或Fish等更加友好的shell，他们能够进行语法高亮、自动补全等操作。对于Windows，我们建议使用Windows PowerShell。PowerShell的命令统一采用的是动词-名词的格式，和Linux Shell的简单缩写形式有很大的不同。这是因为PowerShell的设计理念是模仿C\#的“对象”，而不是Linux Shell的文本流。不过也正因此，PowerShell本身就是一门完备的语言，功能非常强大，在处理复杂的任务上更为简单。表\ref{tab:terminal-commands}是一些常见的命令。
 
 \begin{table}[htbp]
-    \centering
-    \begin{tabular}{c|cc}
-        \hline
-        \textbf{操作} & \textbf{Bash} & \textbf{Pwsh} \\
-        \hline
-        创建文件 & touch & New-Item \\
-        列出文件 & ls & Get-ChildItem \\
-        复制文件 & cp & Copy-Item \\
-        移动文件 & mv & Move-Item \\
-        删除文件 & rm & Remove-Item \\
-        创建目录 & mkdir & New-Item -Type Directory \\
-        删除目录 & rmdir & Remove-Item -Recurse \\
-        查看帮助 & man & Get-Help \\
-        \hline
-    \end{tabular}
-    \caption{Bash和PowerShell的常用命令对比}
-    \label{tab:terminal-commands}
+  \centering
+  \begin{tabular}{c|cc}
+    \hline
+    \textbf{操作} & \textbf{Bash} & \textbf{Pwsh} \\
+    \hline
+    创建文件 & touch & New-Item \\
+    列出文件 & ls & Get-ChildItem \\
+    复制文件 & cp & Copy-Item \\
+    移动文件 & mv & Move-Item \\
+    删除文件 & rm & Remove-Item \\
+    创建目录 & mkdir & New-Item -Type Directory \\
+    删除目录 & rmdir & Remove-Item -Recurse \\
+    查看帮助 & man & Get-Help \\
+    \hline
+  \end{tabular}
+  \caption{Bash和PowerShell的常用命令对比}
+  \label{tab:terminal-commands}
 \end{table}
 
 这仅仅是最基本的命令使用方法，实际上终端的命令系统非常复杂，功能也非常强大。感兴趣的同学可以自行查找相关资料进一步学习。
@@ -116,10 +116,10 @@
 为了避免以上问题，我们引入了版本控制系统。目前最常用的版本控制系统是Git。
 
 \begin{figure}[htbp]
-\centering
-\includegraphics[width=0.8\textwidth]{images/git.png}
-\caption{一个典型的Git工作流程}
-\label{fig:git-workflow}
+  \centering
+  \includegraphics[width=0.8\textwidth]{images/git.png}
+  \caption{一个典型的Git工作流程}
+  \label{fig:git-workflow}
 \end{figure}
 
 \subsection{Git的工作原理}
@@ -129,10 +129,10 @@ Git有三个目录共同完成版本控制：工作区、暂存区、版本库�
 这样讲解很难以理解，我们不妨举例说明：现在，Git中有一个版本为X的节点，包括文件A和文件B两个文件。这些文件存储在版本库中。此时，工作区为空，暂存区为空，指针指向X。我现在希望对它们进行修改，这个修改遵循以下过程：
 
 \begin{enumerate}
-    \item 我拿出了这些文件，并且对文件A进行修改。此时，工作区有AB两个文件，但是暂存区依然是空的。我们的任何修改都不会被暂存区记录，Git也不会知道我对这些文件进行了修改。
-    \item 我觉得修改差不多了，现在把A放进暂存区。现在Git知道我对A进行了一些修改了。
-    \item 我又对B进行了类似的修改，此时B也进暂存区了。
-    \item 我觉得修改差不多了。我认为我应该永久保存目前的状态，于是就把暂存区提交到版本库。此时版本库多了一个Y节点，指针也指向Y节点，有修改过的AB两个文件。此时，暂存区又清空了，而工作区和版本库的Y版本一致。
+  \item 我拿出了这些文件，并且对文件A进行修改。此时，工作区有AB两个文件，但是暂存区依然是空的。我们的任何修改都不会被暂存区记录，Git也不会知道我对这些文件进行了修改。
+  \item 我觉得修改差不多了，现在把A放进暂存区。现在Git知道我对A进行了一些修改了。
+  \item 我又对B进行了类似的修改，此时B也进暂存区了。
+  \item 我觉得修改差不多了。我认为我应该永久保存目前的状态，于是就把暂存区提交到版本库。此时版本库多了一个Y节点，指针也指向Y节点，有修改过的AB两个文件。此时，暂存区又清空了，而工作区和版本库的Y版本一致。
 \end{enumerate}
 
 \subsection{下载Git}
@@ -159,7 +159,7 @@ Git有三个目录共同完成版本控制：工作区、暂存区、版本库�
 现代Git一般提倡使用main作为根分支的名称。而Git依然使用旧的master分支作为根分支，你可以使用以下命令修改为main：
 
 \begin{lstlisting}[language=bash]
-    git config --global init.defaultBranch main 
+    git config --global init.defaultBranch main
     # 这条命令会修改全局的默认分支名称
 \end{lstlisting}
 
@@ -205,23 +205,23 @@ Git有三个目录共同完成版本控制：工作区、暂存区、版本库�
 找到你希望回退到的版本的哈希值（前几位即可），然后使用以下命令来回退到该版本（这个命令会把指针回退到指定的版本，丢弃之后的所有内容，然后丢弃暂存区和工作区的所有东西）：
 
 \begin{lstlisting}[language=bash]
-    git reset --hard <commit_hash> 
+    git reset --hard <commit_hash>
     # 请谨慎使用这一命令！该命令不会保留当前的修改！
 \end{lstlisting}
 
 如果你希望回退到某个版本，但是不想丢失当前的修改，你可以使用以下命令来回退到该版本（这个命令会把版本库后面的东西全部丢弃，清空暂存区，但是保留当前工作区）：
 \begin{lstlisting}[language=bash]
-    git reset --mixed <commit_hash> 
+    git reset --mixed <commit_hash>
     # 我们更加推荐这个回退方式，--mixed可以省略，或者用--soft替代。
     用--soft替代时，不会清空暂存区。
 \end{lstlisting}
 
 使用图解来表示一下：
 \begin{figure}[htbp]
-\centering
-\includegraphics[width=0.8\textwidth]{images/git-reset.png}
-\caption{Git的回退操作}
-\label{fig:git-reset}
+  \centering
+  \includegraphics[width=0.8\textwidth]{images/git-reset.png}
+  \caption{Git的回退操作}
+  \label{fig:git-reset}
 \end{figure}
 可以看到，回退操作虽然会把指针回退到指定的版本并丢弃之后的版本，但是之后的版本提交依然存在于版本库中，只是被从树上摘下来了。这些提交被称为“孤立提交”。如果希望恢复或者删除这些孤立提交，可以执行以下命令：
 \begin{lstlisting}[language=bash]
@@ -232,7 +232,6 @@ Git有三个目录共同完成版本控制：工作区、暂存区、版本库�
     git gc --prune=now # 清理孤立提交
 \end{lstlisting}
 即使我们不使用\texttt{git gc}手动清理孤立提交，随着时间的推移（一般是90天提交记录过期），孤立提交也会被Git逐渐自动清理掉。
-
 
 \subsubsection{排除相关文件}
 

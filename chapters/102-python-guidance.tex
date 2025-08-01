@@ -59,9 +59,10 @@ a+b的意思就是“把a和b相加”，而a+=b的意思是“把b加到a上”
 
 Python支持许多常见的运算符：
 \begin{itemize}
-    \item 四则运算：加\texttt{+}、减\texttt{-}、乘\texttt{*}、除\texttt{/}（浮点除法）和取整除\texttt{//}（整数除法）。
-    \item 乘方：使用\texttt{**}表示乘方运算。
-    \item 取余数：使用\texttt{\%}表示取余数运算。
+  \item
+    四则运算：加\texttt{+}、减\texttt{-}、乘\texttt{*}、除\texttt{/}（浮点除法）和取整除\texttt{//}（整数除法）。
+  \item 乘方：使用\texttt{**}表示乘方运算。
+  \item 取余数：使用\texttt{\%}表示取余数运算。
 \end{itemize}
 
 对于字符串类型的变量，使用加法\texttt{+}可以连接两个字符串，例如：
@@ -97,9 +98,11 @@ print("Hello, 1", "Hello, 2", sep=", ") # 使用逗号分隔输出
 print("Hello, World!", file=open("output.txt", "w")) # 输出到文件
 \end{lstlisting}
 
-上述代码中的第二个print函数使用了\texttt{sep}参数来指定输出内容之间的分隔符，默认是空格。它的输出将会是：“Hello, 1, Hello, 2”。
+上述代码中的第二个print函数使用了\texttt{sep}参数来指定输出内容之间的分隔符，默认是空格。它的输出将会是：“Hello,
+1, Hello, 2”。
 
-上述输出到文件的例子会将“Hello, World!”写入同目录下的output.txt文件中，这个w的意思是“写入模式”，如果文件不存在则会创建，如果存在则会覆盖原有内容。如果改成\texttt{a}，则会以追加模式打开文件，即在文件末尾添加内容。
+上述输出到文件的例子会将“Hello,
+World!”写入同目录下的output.txt文件中，这个w的意思是“写入模式”，如果文件不存在则会创建，如果存在则会覆盖原有内容。如果改成\texttt{a}，则会以追加模式打开文件，即在文件末尾添加内容。
 
 \subsection{注释}
 
@@ -114,11 +117,13 @@ print("Hello, world!") # 这也是一个注释
 """
 \end{lstlisting}
 
-在阻止部分代码执行的时候，我们一般不习惯于直接删除这些代码，而是使用注释。这样做的好处是可以留痕，便于以后的恢复（解注释）；这就是程序员们常说的“注释掉”代码。在VS Code等编辑器中，常用的一键注释是\texttt{Ctrl + /}，它会自动将光标所在的一行或多行代码注释掉。
+在阻止部分代码执行的时候，我们一般不习惯于直接删除这些代码，而是使用注释。这样做的好处是可以留痕，便于以后的恢复（解注释）；这就是程序员们常说的“注释掉”代码。在VS
+Code等编辑器中，常用的一键注释是\texttt{Ctrl + /}，它会自动将光标所在的一行或多行代码注释掉。
 
 \subsection{类型强转}
 
-虽然Python是动态类型语言，同一个变量可以在不同的时间点上拥有不同的类型，但是在某一个确定的时刻，一个变量的类型是确定的。例如我们给a赋值\texttt{a = "12321"}，那么这个时候a的类型就是字符串。如果对该变量进行和数的加减操作，代码将会无法执行。
+虽然Python是动态类型语言，同一个变量可以在不同的时间点上拥有不同的类型，但是在某一个确定的时刻，一个变量的类型是确定的。例如我们给a赋值\texttt{a
+= "12321"}，那么这个时候a的类型就是字符串。如果对该变量进行和数的加减操作，代码将会无法执行。
 
 有些时候，我们希望把一些变量的类型转换为其他类型，例如把字符串“12321”转换为整数12321。我们可以使用一些函数来实现类型转换：
 
@@ -130,9 +135,6 @@ print("Hello, world!") # 这也是一个注释
 \end{lstlisting}
 
 我们可以使用\texttt{int()}函数将字符串转换为整数，使用\texttt{float()}函数将字符串转换为浮点数，使用\texttt{str()}函数将其他类型转换为字符串等。
-
-
-
 
 \section{控制程序的执行流程}
 
@@ -148,7 +150,8 @@ if age >= 18:
 else:
     print("你是未成年人。")
 \end{lstlisting}
-在这个例子中，\texttt{if}语句后面跟着一个条件表达式（\texttt{age >= 18}），如果条件为真，则执行冒号后面的代码块；否则，执行\texttt{else}后面的代码块。
+在这个例子中，\texttt{if}语句后面跟着一个条件表达式（\texttt{age >=
+18}），如果条件为真，则执行冒号后面的代码块；否则，执行\texttt{else}后面的代码块。
 
 Python使用\textbf{缩进}来表示代码块的层次结构，且对缩进要求极为严格。通常情况下，我们用一个制表符或者四个空格来表示一个缩进层级。要打出制表符，可以按下Tab键。
 
@@ -161,7 +164,8 @@ Python使用\textbf{缩进}来表示代码块的层次结构，且对缩进要�
 for i in range(1, 11):
     print(i)
 \end{lstlisting}
-在这个例子中，\texttt{range(1, 11)}生成了一个从1到10的整数序列，\texttt{for}循环会依次将每个数字赋值给变量\texttt{i}，并执行代码块中的操作。
+在这个例子中，\texttt{range(1,
+11)}生成了一个从1到10的整数序列，\texttt{for}循环会依次将每个数字赋值给变量\texttt{i}，并执行代码块中的操作。
 
 我们也可以使用\texttt{while}循环来实现类似的功能：
 \begin{lstlisting}[language=python]
@@ -215,7 +219,7 @@ print(my_list[5])  # 抛出IndexError异常
 \begin{lstlisting}[language=python]
 my_list = [1, 2, 3, "Hello"]
 my_list.append(4)  # 添加元素4
-my_list.remove("Hello")  # 删除元素"Hello" 
+my_list.remove("Hello")  # 删除元素"Hello"
 my_list.sort()  # 对列表进行排序
 print(my_list)  # 输出[1, 2, 3, 4]
 \end{lstlisting}
@@ -261,7 +265,8 @@ print(my_set)  # 输出{1, 2, 3, 4, True}
 \end{lstlisting}
 
 \subsection{字典（dict）}
-字典是一个无序的可变集合，存储键值对（key-value pairs）。我们可以使用花括号\texttt{{}}来创建一个字典，并使用键来访问值。字典的键必须是不可变类型（如字符串、整数等），而值可以是任意类型。
+字典是一个无序的可变集合，存储键值对（key-value
+pairs）。我们可以使用花括号\texttt{{}}来创建一个字典，并使用键来访问值。字典的键必须是不可变类型（如字符串、整数等），而值可以是任意类型。
 例如：
 \begin{lstlisting}[language=python]
 my_dict = {"name": "Alice", "age": 30, "is_student": False}
@@ -278,7 +283,7 @@ print(my_dict)  # 输出{"name": "Alice", "age": 31, "is_student": False}
 \begin{lstlisting}[language=python]
 print(my_dict.keys())  # 输出dict_keys(['name', 'age', 'is_student'])
 print(my_dict.values())  # 输出dict_values(['Alice', 31, False])
-print(my_dict.items())  
+print(my_dict.items())
 # 输出dict_items([('name', 'Alice'), ('age', 31), ('is_student', False)])
 \end{lstlisting}
 
@@ -310,13 +315,14 @@ print(my_list[::-1])  # 输出[10, 9, 8, 7, 6, 5, 4, 3, 2, 1]（反转列表）
 我们还可以使用列表推导式（list comprehension）来创建新的列表。列表推导式是一种简洁的语法，可以在一行代码中创建一个新的列表。
 例如：
 \begin{lstlisting}[language=python]
-squares = [x**2 for x in range(1, 11)] 
+squares = [x**2 for x in range(1, 11)]
 print(squares)  # 输出[1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
-evens = [x for x in range(1, 11) if x % 2 == 0]  
+evens = [x for x in range(1, 11) if x % 2 == 0]
 print(evens)  # 输出[2, 4, 6, 8, 10]
 \end{lstlisting}
 
-以上代码中，列表推导式的通用语法是\texttt{[thing for item in iterable if condition]}，其中\texttt{thing}是你要的东西，\texttt{iterable}是可迭代对象（如列表、元组等），\texttt{condition}是可选的条件。
+以上代码中，列表推导式的通用语法是\texttt{[thing for item in iterable if
+condition]}，其中\texttt{thing}是你要的东西，\texttt{iterable}是可迭代对象（如列表、元组等），\texttt{condition}是可选的条件。
 
 看起来真就像说话一样。
 
@@ -400,14 +406,13 @@ def add(a, b):
 在定义函数之后，我们可以在任意地方调用它，只需要提供函数希望的参数即可。例如：
 \begin{lstlisting}[language=python]
 result = add(3, 5)
-print(result)  # 输出8  
+print(result)  # 输出8
 \end{lstlisting}
 
 我们也可以在函数中使用默认参数，这样在调用函数时可以省略某些参数：
 \begin{lstlisting}[language=python]
 def greet(name="World"):
     print(f"Hello, {name}!")
-
 
 greet()  # 输出"Hello, World!"
 greet("Alice")  # 输出"Hello, Alice!"
@@ -420,7 +425,6 @@ def factorial(n):
         return 1
     else:
         return n * factorial(n - 1)
-
 
 print(factorial(5))  # 输出120
 \end{lstlisting}
@@ -517,7 +521,8 @@ class Person:
     def greet(self) -> None:
         print(f"Hello, my name is {self.name} and I am {self.age} years old.")
 \end{lstlisting}
-上述例子又被称为“数据类”（dataclass），在Python 3.7中引入。使用数据类可以更方便地定义类，从而减少重复且意义有限的代码。“装饰器”是Python的一种语法糖，可以在函数或类定义前使用@符号来应用装饰器。数据类装饰器会自动为类生成一些常用方法，如\texttt{\_\_init\_\_()}、\texttt{\_\_repr\_\_()}等。
+上述例子又被称为“数据类”（dataclass），在Python
+3.7中引入。使用数据类可以更方便地定义类，从而减少重复且意义有限的代码。“装饰器”是Python的一种语法糖，可以在函数或类定义前使用@符号来应用装饰器。数据类装饰器会自动为类生成一些常用方法，如\texttt{\_\_init\_\_()}、\texttt{\_\_repr\_\_()}等。
 
 \subsection{继承和多态}
 
@@ -568,11 +573,10 @@ mydog.speak()  # 输出"Eve makes a sound."和"Eve barks."两行
 
 \section{Python语法小练}
 
-\begin{problem}
-    角谷猜想是一个有趣的数学问题：从任意整数开始，如果他是奇数就乘以3加1，如果是偶数就除以2，如此反复循环，最终一定会得到1。目前还没有人证明这个猜想（但是它大概率是正确的），但是我们可以用C++来验证一些具体值。要求输入一个整数，输出这个整数经过角谷猜想的处理后，最终得到1所需的每一步，例如输入6，输出6, 3, 10, 5, 16, 8, 4, 2, 1。
-\end{problem}
+\subsection{角谷猜想}
+角谷猜想是一个有趣的数学问题：从任意整数开始，如果他是奇数就乘以3加1，如果是偶数就除以2，如此反复循环，最终一定会得到1。目前还没有人证明这个猜想（但是它大概率是正确的），但是我们可以用C++来验证一些具体值。要求输入一个整数，输出这个整数经过角谷猜想的处理后，最终得到1所需的每一步，例如输入6，输出6,
+3, 10, 5, 16, 8, 4, 2, 1。
 
-\begin{solution}
 我们读题，把人类语言逐句地改成Python语言。
 
 \texttt{从任意整数开始，如果他是奇数就乘以3加1，如果是偶数就除以2。}这句话提示我们要做一个条件判断：
@@ -601,14 +605,11 @@ while n != 1:  # 当n不等于1时
         n = n * 3 + 1  # 乘以3加1
     print(n)  # 输出当前的n
 \end{lstlisting}
-\end{solution}
 
-\begin{problem}
-    素数在数学中是一个非常重要的概念，它指的是只能被1和它本身整除的自然数。素数在密码学、数据加密等领域有着广泛的应用。一般我们可以使用筛法找到素数：在一系列整数中，先找到最小的素数（2），然后将它的倍数都去掉；然后再找到下一个最小的素数（3），再将它的倍数都去掉；如此反复，直到所有的数都被处理完。现在输出1到1000之间的所有素数\footnote{规定1不是素数，有兴趣的可以阅读这方面材料“为什么1既不是素数也不是合数”。}。
-\end{problem}
+\subsection{素数筛法}
+素数在数学中是一个非常重要的概念，它指的是只能被1和它本身整除的自然数。素数在密码学、数据加密等领域有着广泛的应用。一般我们可以使用筛法找到素数：在一系列整数中，先找到最小的素数（2），然后将它的倍数都去掉；然后再找到下一个最小的素数（3），再将它的倍数都去掉；如此反复，直到所有的数都被处理完。现在输出1到1000之间的所有素数\footnote{规定1不是素数，有兴趣的可以阅读这方面材料“为什么1既不是素数也不是合数”。}。
 
-\begin{solution}
-    题目说使用筛法找素数。那么，我们可以创建一个列表来存储1到1000之间的所有整数，然后使用一个循环来筛选出素数。如果不是素数，则删除之。那么可以这样：
+题目说使用筛法找素数。那么，我们可以创建一个列表来存储1到1000之间的所有整数，然后使用一个循环来筛选出素数。如果不是素数，则删除之。那么可以这样：
 
 \begin{lstlisting}[language=python]
 # 创建一个列表来存储整数
@@ -636,7 +637,6 @@ for i in range(2, 1001):  # 从2开始，遍历所有数
             numbers[j * i] = False  # 标记为非素数
 print([i for i in range(1001) if numbers[i]])  # 输出所有素数
 \end{lstlisting}
-\end{solution}
 
 \section{文科生的Python}
 
@@ -681,8 +681,8 @@ plt.show()
 
 当然，plt有两个常见的小坑：
 \begin{itemize}
-    \item 中文乱码？调包下面加一行\texttt{plt.rcParams['font.sans-serif'] = ['SimHei']}完事。
-    \item 颜色太理工？\texttt{plt.style.use('seaborn-v0\_8-pastel')}一键切换温柔色调。
+  \item 中文乱码？调包下面加一行\texttt{plt.rcParams['font.sans-serif'] = ['SimHei']}完事。
+  \item 颜色太理工？\texttt{plt.style.use('seaborn-v0\_8-pastel')}一键切换温柔色调。
 \end{itemize}
 
 \subsection{jieba}
@@ -697,7 +697,9 @@ words = jieba.cut("林黛玉葬花")  # 分词，精确模式
 jieba.add_word("林黛玉葬花")  # 添加新词，这个词会被识别为一个整体
 \end{lstlisting}
 
-当然，三件套最好一起用：Pandas读数据$\rightarrow$jieba分词$ \rightarrow $Pandas统计$ \rightarrow $Matplotlib可视化。这样可以轻松地完成论文中最让文科生们头痛的“数据分析”部分了！不过以上三件套的使用方法只是冰山一角，文科生们可以通过查阅相关文档和教程来深入学习。
+当然，三件套最好一起用：Pandas读数据$\rightarrow$jieba分词$ \rightarrow $Pandas统计$
+\rightarrow
+$Matplotlib可视化。这样可以轻松地完成论文中最让文科生们头痛的“数据分析”部分了！不过以上三件套的使用方法只是冰山一角，文科生们可以通过查阅相关文档和教程来深入学习。
 
 当然，Python也是一门语言，所有的语言都需要大量的练习和实践才能掌握；仅仅是看完这一章可能只需要一天，但是真正熟练应用语法可能需要一周的时间，熟练玩转文科生三板斧可能需要一个学期甚至还要多的时间。不过，不用担心：路在脚下，行则将至，只要你坚持下去，就一定能骄傲地说出：我是文科生，但我Python用得也很好。
 

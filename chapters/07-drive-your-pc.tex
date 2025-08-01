@@ -44,10 +44,10 @@ git checkout main
 这样会把上述feature上的三个提交从C变基到E，变成F'和G'。我们可以用图解来理解这个过程：
 
 \begin{figure}[htbp]
-\centering
-\includegraphics[width=\textwidth]{images/git-rebase.png}
-\caption{分支变基示意图}
-\label{fig:git-rebase}
+  \centering
+  \includegraphics[width=\textwidth]{images/git-rebase.png}
+  \caption{分支变基示意图}
+  \label{fig:git-rebase}
 \end{figure}
 
 特别注意：变基操作会改变提交的哈希值。
@@ -64,10 +64,10 @@ git merge feature
 这时候我们在main分支上，并试图将E和G合并在一起。这时，会自动创建一个特殊的提交Merge，它有两个父提交。之后的提交就会以Merge为父提交，而不是E或G中的任何一个。
 
 \begin{figure}[htbp]
-\centering
-\includegraphics[width=0.75\textwidth]{images/git-merge.png}
-\caption{分支合并示意图}
-\label{fig:git-merge}
+  \centering
+  \includegraphics[width=0.75\textwidth]{images/git-merge.png}
+  \caption{分支合并示意图}
+  \label{fig:git-merge}
 \end{figure}
 
 如果这两个提交没有冲突，那么合并会自动完成。但是如果有冲突（例如两个分支涉及到同一行的修改），Git 会提示我们解决冲突。此时，我们不得不手动解决冲突。我们会看到以下内容（或者其英文版本）：
@@ -160,10 +160,10 @@ Cherry-Pick（摘樱桃）操作（也叫挑拣）是指从一些提交中选择
 我们可以在GitHub上的仓库页面中找到这个 URL，如图所示。
 
 \begin{figure}[htbp]
-\centering
-\includegraphics[width=0.5\textwidth]{images/example.png}
-\caption{GitHub 上的仓库页面}
-\label{fig:github-repo}
+  \centering
+  \includegraphics[width=0.5\textwidth]{images/example.png}
+  \caption{GitHub 上的仓库页面}
+  \label{fig:github-repo}
 \end{figure}
 
 接下来，我们需要将本地仓库与远程仓库关联。可以使用以下命令：
@@ -460,9 +460,9 @@ Windows中有如下一些常用的文件夹：
 
 \begin{lstlisting}[language=python]
 import os
-for filename in os.listdir("."):  
-    if filename.endswith(".jpg"):  
-        os.rename(filename, "pic_" + filename)  
+for filename in os.listdir("."):
+    if filename.endswith(".jpg"):
+        os.rename(filename, "pic_" + filename)
 \end{lstlisting}
 
 使用以上脚本，我们可以将当前目录下所有的 .jpg 文件批量重命名为 pic\_ + 原文件名的形式。对以上代码进行相关修改，则可以进行其他的批量处理操作，例如移动文件、删除文件、批量添加前后缀、按照规则排序等。
@@ -473,12 +473,12 @@ for filename in os.listdir("."):
 
 我们可以使用Python 的\texttt{shutil}库来实现定时自动备份脚本。以下是一个简单的示例：
 \begin{lstlisting}[language=python]
-import shutil  
-import datetime  
+import shutil
+import datetime
 
-# 备份文件夹到指定位置  
-backup_dir = f"backup_{datetime.date.today()}"  
-shutil.copytree("我的文档", backup_dir)  
+# 备份文件夹到指定位置
+backup_dir = f"backup_{datetime.date.today()}"
+shutil.copytree("我的文档", backup_dir)
 \end{lstlisting}
 
 以上脚本会将“我的文档”文件夹备份到当前目录下，并以“backup\_YYYY-MM-DD”的格式命名备份文件夹。我们可以将该脚本设置为定时任务，定期自动执行备份操作。

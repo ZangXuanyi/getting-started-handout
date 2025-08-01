@@ -9,27 +9,27 @@
 目前最常用的排版工具或语言有 Microsoft Word、Markdown、LaTeX 和 Typst 等。每种工具都有其特点和适用场景：在日常生活中，Microsoft Word因其简单易用、所见即所得的特点而广受欢迎；Markdown因为其轻量级和易于学习的特点而在技术文档和博客中广泛使用；在科研写作中，又属 LaTeX 最为常用，因为它提供了强大的排版功能，尤其是在处理复杂的数学公式和图表时；而 Typst 则是近年来新兴的排版工具，旨在提供一种更直观、更易于使用的排版方式，正在年轻一代技术人中逐渐流行开来。
 
 \begin{table}[htbp]
-\centering
-\begin{tabular}{c|cccc}
-\hline
-\textbf{特性} & \textbf{MS Word} & \textbf{Markdown} & \textbf{LaTeX} & \textbf{Typst} \\
-\hline
-安装 & 简单 & 简单 & 难 & 简单 \\
+  \centering
+  \begin{tabular}{c|cccc}
+    \hline
+    \textbf{特性} & \textbf{MS Word} & \textbf{Markdown} & \textbf{LaTeX} & \textbf{Typst} \\
+    \hline
+    安装 & 简单 & 简单 & 难 & 简单 \\
 
-语法复杂度 & 非常简单 & 简单 & 高 & 中 \\
+    语法复杂度 & 非常简单 & 简单 & 高 & 中 \\
 
-编译速度 & 较快 & 快 & 慢 & 快 \\
+    编译速度 & 较快 & 快 & 慢 & 快 \\
 
-排版能力 & 较强 & 一般 & 极强 & 较强 \\
+    排版能力 & 较强 & 一般 & 极强 & 较强 \\
 
-模板能力 & 几乎没有 & 中等 & 强 & 强 \\
+    模板能力 & 几乎没有 & 中等 & 强 & 强 \\
 
-编程能力 & 无 & 无 & 强，风格古老 & 强，风格现代 \\
+    编程能力 & 无 & 无 & 强，风格古老 & 强，风格现代 \\
 
-方言 & 无 & 极多 & 有 & 较少 \\
-\hline
-\end{tabular}
-\caption{不同排版工具的对比}
+    方言 & 无 & 极多 & 有 & 较少 \\
+    \hline
+  \end{tabular}
+  \caption{不同排版工具的对比}
 \end{table}
 
 \section{Markdown}
@@ -197,9 +197,9 @@ LaTeX的安装冗长且复杂，通常需要安装一个完整的 TeX 发行版�
 然后，下载光盘镜像，并进行装载。
 
 \begin{lstlisting}[language=bash]
-  sudo apt install fontconfig gedit 
-  sudo mkdir /mnt/texlive 
-  sudo mount ./texlive2025.iso /mnt/texlive 
+  sudo apt install fontconfig gedit
+  sudo mkdir /mnt/texlive
+  sudo mount ./texlive2025.iso /mnt/texlive
   sudo /mnt/texlive/install-tl
 \end{lstlisting}
 
@@ -363,7 +363,7 @@ LaTeX其实还有“注释”部分，这些部分仅在tex源码中存在，但
 LaTeX 对数学公式的支持非常强大。可以使用美元符号 (\$) 来包裹行内公式，或者使用两个美元符号 (\$\$) 来包裹块级公式。例如：
 \begin{lstlisting}
   这是一个行内公式 $E=mc^2$ 的示例。
-  
+
   这是一个块级公式的示例：
   $$ E=mc^2 $$
 \end{lstlisting}
@@ -519,14 +519,14 @@ LaTeX的字体分三种：常规字体、无衬线字体和等宽字体。常规
 
 \begin{lstlisting}
   \documentclass{article}
-  \usepackage[UTF8, heading=true]{ctex} 
+  \usepackage[UTF8, heading=true]{ctex}
   % 这里的heading=true的意思是“采用中式标题”，没有的话会报错
 
   \title{\zihao{0} 标题} % 这里的意思是用小初号标题
 
   \ctexset{
       section = {
-          format += \zihao{4}\kaishu\raggedright, 
+          format += \zihao{4}\kaishu\raggedright,
           % 这里的+=指的是在原有格式上增加以下内容，
           % \kaishu在XeCJK中指的就是\zhkai.
           name = {第,节},
@@ -535,7 +535,7 @@ LaTeX的字体分三种：常规字体、无衬线字体和等宽字体。常规
           beforeskip = 1.5ex plus .2ex minus .2ex,
           afterskip = 1.5ex plus .2ex minus .2ex
       }
-  } 
+  }
   % 这段代码的意思是把section的默认写法从一个数字变成：“第X节”，
   % 并设置前后垂直间距等。
 \end{lstlisting}
@@ -692,7 +692,7 @@ This is *emphasized* text. // 红色加粗
 
 // 多式综合
 #let base-style = set text(font: "Helvetica", size: 12pt)
-#let title-style = base-style.with(size: 16pt, weight: "bold") 
+#let title-style = base-style.with(size: 16pt, weight: "bold")
 // 这里的*.with()可以扩展或者覆盖原有的样式
 
 #title-style
