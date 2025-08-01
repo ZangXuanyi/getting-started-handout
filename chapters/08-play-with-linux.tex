@@ -10,9 +10,9 @@
 因此，学习 Linux，我们需要掌握：
 
 \begin{enumerate}
-    \item 对这一套思想有充分理解、能顺利玩一些玩具
-    \item 使用现有的工具操作命令行、把他人准备好的软件运行起来
-    \item 创造新的工具
+  \item 对这一套思想有充分理解、能顺利玩一些玩具
+  \item 使用现有的工具操作命令行、把他人准备好的软件运行起来
+  \item 创造新的工具
 \end{enumerate}
 
 让我们开始吧！
@@ -36,11 +36,11 @@
 对于Linux新手，我们建议安装Ubuntu系统，因为它有着和Windows类似的图形化界面，且有着丰富的社区支持和文档。以下是一个简要步骤：
 
 \begin{enumerate}
-    \item 获取Linux发行版的ISO镜像文件。可以从（\href{https://ubuntu.com/download}{Ubuntu官网}）下载最新版本的Ubuntu ISO镜像。
-    \item 准备一个U盘，至少8GB容量。将这个镜像文件写入U盘。可以使用工具如Ultra ISO、Rufus（Windows）或Etcher（跨平台）来完成这个操作。
-    \item 将U盘插入目标机器，重启电脑并进入BIOS设置，将U盘设置为首选启动设备。
-    \item 保存设置并重启，系统将从U盘启动，进入Ubuntu安装界面，并按照提示进行安装。我们建议选择“安装Ubuntu”选项，并在安装过程中选择“擦除磁盘并安装Ubuntu”选项（注意，这将删除磁盘上的所有数据，请确保备份重要数据）。
-    \item 安装完成后，重启电脑，拔出U盘，系统将进入Ubuntu桌面环境。
+  \item 获取Linux发行版的ISO镜像文件。可以从（\href{https://ubuntu.com/download}{Ubuntu官网}）下载最新版本的Ubuntu ISO镜像。
+  \item 准备一个U盘，至少8GB容量。将这个镜像文件写入U盘。可以使用工具如Ultra ISO、Rufus（Windows）或Etcher（跨平台）来完成这个操作。
+  \item 将U盘插入目标机器，重启电脑并进入BIOS设置，将U盘设置为首选启动设备。
+  \item 保存设置并重启，系统将从U盘启动，进入Ubuntu安装界面，并按照提示进行安装。我们建议选择“安装Ubuntu”选项，并在安装过程中选择“擦除磁盘并安装Ubuntu”选项（注意，这将删除磁盘上的所有数据，请确保备份重要数据）。
+  \item 安装完成后，重启电脑，拔出U盘，系统将进入Ubuntu桌面环境。
 \end{enumerate}
 
 对于硬盘容量较大且熟悉分区的同学，可以使用磁盘分区工具自己划出一个分区，并将Ubuntu安装在这个分区上。这样可以保留原有的操作系统，并在需要时切换到Ubuntu。在这种情况下我们一般使用grub引导程序来管理多系统启动。
@@ -100,9 +100,9 @@ sl
 那么，我们怎么知道有什么程序，我们又怎么使用它们呢？对于第一个问题，我们可以通过搜索来解决；对于第二个问题，我们可以通过手册来解决。
 
 \begin{itemize}
-    \item \texttt{<program> -h}：这是最简单的方式，直接查看程序的帮助信息。通常会列出所有可用的子命令和选项。
-    \item \texttt{man <program>}：这是查看程序手册的方式。手册通常会提供更详细的信息，包括子命令的用法、选项的含义等。但是这个手册可能会比较长，需要耐心阅读。
-    \item \texttt{tldr <program>}：这个命令会给出一些常用的命令示例和简要说明。当然，\texttt{tldr}需要自己安装，当然，安装方法和\texttt{sl}类似。
+  \item \texttt{<program> -h}：这是最简单的方式，直接查看程序的帮助信息。通常会列出所有可用的子命令和选项。
+  \item \texttt{man <program>}：这是查看程序手册的方式。手册通常会提供更详细的信息，包括子命令的用法、选项的含义等。但是这个手册可能会比较长，需要耐心阅读。
+  \item \texttt{tldr <program>}：这个命令会给出一些常用的命令示例和简要说明。当然，\texttt{tldr}需要自己安装，当然，安装方法和\texttt{sl}类似。
 \end{itemize}
 
 \section{Linux的文件系统}
@@ -116,9 +116,9 @@ sl
 Unix和Linux认为，所有的东西都是\textbf{文件}。文件系统就是用来管理这些文件的。这时候，我们就可以使用同样的方式来对所有的东西进行操作了。但是我们又出现了其他问题：
 
 \begin{enumerate}
-    \item 文件怎么组织？
-    \item 文件是谁的？怎么反映不同类型的特性？
-    \item 文件怎么相互联系？
+  \item 文件怎么组织？
+  \item 文件是谁的？怎么反映不同类型的特性？
+  \item 文件怎么相互联系？
 \end{enumerate}
 
 接下来我们将会逐个回答以上问题。
@@ -219,11 +219,11 @@ sudo apt-get install -f # 修复依赖问题
 \texttt{ls}命令用于列出目录中的文件和子目录。我们可以使用一些选项来改变输出的格式：
 
 \begin{itemize}
-    \item \texttt{-l}：以长格式列出文件和目录的详细信息，包括权限、所有者、大小和修改时间等。
-    \item \texttt{-a}：列出所有文件和目录，包括以点号开头的隐藏文件。
-    \item \texttt{-h}：以人类可读的格式显示文件大小，例如将字节转换为KB、MB等。
-    \item \texttt{-R}：递归地列出子目录中的文件和目录。
-    \item \texttt{-t}：按修改时间排序，最新的文件排在最前面。
+  \item \texttt{-l}：以长格式列出文件和目录的详细信息，包括权限、所有者、大小和修改时间等。
+  \item \texttt{-a}：列出所有文件和目录，包括以点号开头的隐藏文件。
+  \item \texttt{-h}：以人类可读的格式显示文件大小，例如将字节转换为KB、MB等。
+  \item \texttt{-R}：递归地列出子目录中的文件和目录。
+  \item \texttt{-t}：按修改时间排序，最新的文件排在最前面。
 \end{itemize}
 
 \subsubsection{文件系统操作类}
@@ -232,110 +232,108 @@ sudo apt-get install -f # 修复依赖问题
 
 \texttt{mkdir}命令用于创建新目录。我们可以使用一些选项来改变创建目录的方式：
 \begin{itemize}
-    \item \texttt{-p}：递归地创建多级目录，如果上级目录不存在则一并创建。
-    \item \texttt{-v}：显示创建目录的详细信息。
-    \item \texttt{-m}：设置新目录的权限。
-    \item \texttt{-Z}：设置 SELinux 上下文。
+  \item \texttt{-p}：递归地创建多级目录，如果上级目录不存在则一并创建。
+  \item \texttt{-v}：显示创建目录的详细信息。
+  \item \texttt{-m}：设置新目录的权限。
+  \item \texttt{-Z}：设置 SELinux 上下文。
 \end{itemize}
 
 \texttt{touch}命令用于创建新文件或更新现有文件的修改时间。我们可以使用一些选项来改变创建文件的方式：
 \begin{itemize}
-    \item \texttt{-a}：只更新访问时间。
-    \item \texttt{-m}：只更新修改时间。
-    \item \texttt{-c}：如果文件不存在则不创建。
-    \item \texttt{-t}：设置文件的时间戳。
-    \item \texttt{-r}：使用指定文件的时间戳。
+  \item \texttt{-a}：只更新访问时间。
+  \item \texttt{-m}：只更新修改时间。
+  \item \texttt{-c}：如果文件不存在则不创建。
+  \item \texttt{-t}：设置文件的时间戳。
+  \item \texttt{-r}：使用指定文件的时间戳。
 \end{itemize}
 
 \texttt{rm}命令用于删除文件或目录。我们可以使用一些选项来改变删除的方式：
 \begin{itemize}
-    \item \texttt{-r}：递归地删除目录及其内容。
-    \item \texttt{-f}：强制删除文件或目录，不提示确认。
-    \item \texttt{-i}：在删除前提示确认。
-    \item \texttt{-v}：显示删除的详细信息。
+  \item \texttt{-r}：递归地删除目录及其内容。
+  \item \texttt{-f}：强制删除文件或目录，不提示确认。
+  \item \texttt{-i}：在删除前提示确认。
+  \item \texttt{-v}：显示删除的详细信息。
 \end{itemize}
 
 \texttt{rmdir}命令用于删除空目录。
 
 \texttt{cp}命令用于复制文件或目录。我们可以使用一些选项来改变复制的方式：
 \begin{itemize}
-    \item \texttt{-r}：递归地复制目录及其内容。
-    \item \texttt{-f}：强制覆盖目标文件。
-    \item \texttt{-i}：在覆盖前提示确认。
-    \item \texttt{-v}：显示复制的详细信息。
-    \item \texttt{-u}：只在源文件比目标文件新时才进行复制。
+  \item \texttt{-r}：递归地复制目录及其内容。
+  \item \texttt{-f}：强制覆盖目标文件。
+  \item \texttt{-i}：在覆盖前提示确认。
+  \item \texttt{-v}：显示复制的详细信息。
+  \item \texttt{-u}：只在源文件比目标文件新时才进行复制。
 \end{itemize}
 
 \texttt{mv}命令用于移动或重命名文件或目录。我们可以使用一些选项来改变移动的方式：
 \begin{itemize}
-    \item \texttt{-f}：强制覆盖目标文件。
-    \item \texttt{-i}：在覆盖前提示确认。
-    \item \texttt{-v}：显示移动的详细信息。
-    \item \texttt{-u}：只在源文件比目标文件新时才进行移动。
+  \item \texttt{-f}：强制覆盖目标文件。
+  \item \texttt{-i}：在覆盖前提示确认。
+  \item \texttt{-v}：显示移动的详细信息。
+  \item \texttt{-u}：只在源文件比目标文件新时才进行移动。
 \end{itemize}
 
 \texttt{ln}命令用于创建链接。我们可以使用一些选项来改变链接的方式：
 \begin{itemize}
-    \item \texttt{-s}：创建软链接（符号链接）。
-    \item \texttt{-f}：强制覆盖目标链接。
-    \item \texttt{-i}：在覆盖前提示确认。
-    \item \texttt{-v}：显示链接的详细信息。
-    \item \texttt{-T}：将目标视为一个普通文件，而不是目录。
+  \item \texttt{-s}：创建软链接（符号链接）。
+  \item \texttt{-f}：强制覆盖目标链接。
+  \item \texttt{-i}：在覆盖前提示确认。
+  \item \texttt{-v}：显示链接的详细信息。
+  \item \texttt{-T}：将目标视为一个普通文件，而不是目录。
 \end{itemize}
 
 \texttt{tar}命令用于打包和解包文件。我们可以使用一些选项来改变打包和解包的方式：
 \begin{itemize}
-    \item \texttt{-c}：创建一个新的归档文件。
-    \item \texttt{-x}：从归档文件中提取文件。
-    \item \texttt{-f}：指定归档文件的名称。
-    \item \texttt{-v}：显示详细的操作信息。
-    \item \texttt{-z}：使用 gzip 压缩或解压缩归档文件。
-    \item \texttt{-j}：使用 bzip2 压缩或解压缩归档文件。
-    \item \texttt{-J}：使用 xz 压缩或解压缩归档文件。
-    \item \texttt{-p}：保留文件的权限和时间戳。
-    \item \texttt{-C}：切换到指定目录后再进行打包或解包。
+  \item \texttt{-c}：创建一个新的归档文件。
+  \item \texttt{-x}：从归档文件中提取文件。
+  \item \texttt{-f}：指定归档文件的名称。
+  \item \texttt{-v}：显示详细的操作信息。
+  \item \texttt{-z}：使用 gzip 压缩或解压缩归档文件。
+  \item \texttt{-j}：使用 bzip2 压缩或解压缩归档文件。
+  \item \texttt{-J}：使用 xz 压缩或解压缩归档文件。
+  \item \texttt{-p}：保留文件的权限和时间戳。
+  \item \texttt{-C}：切换到指定目录后再进行打包或解包。
 \end{itemize}
 
 \subsubsection{其他命令}
 
 \texttt{cat}命令用于连接文件并打印到标准输出。我们可以使用一些选项来改变输出的方式：
 \begin{itemize}
-    \item \texttt{-n}：为每一行添加行号。
-    \item \texttt{-b}：为非空行添加行号。
-    \item \texttt{-s}：压缩连续的空行。
-    \item \texttt{-E}：在每行末尾显示\texttt{\$}符号。
-    \item \texttt{-T}：将制表符显示为\texttt{\^I}。
-    \item \texttt{-v}：显示不可见字符。
-    \item \texttt{-A}：显示所有不可见字符，包括空格和制表符。
-    \item \texttt{-e}：等同于\texttt{-vE}，显示不可见字符并在行末添加\texttt{\$}符号。
+  \item \texttt{-n}：为每一行添加行号。
+  \item \texttt{-b}：为非空行添加行号。
+  \item \texttt{-s}：压缩连续的空行。
+  \item \texttt{-E}：在每行末尾显示\texttt{\$}符号。
+  \item \texttt{-T}：将制表符显示为\texttt{\^I}。
+  \item \texttt{-v}：显示不可见字符。
+  \item \texttt{-A}：显示所有不可见字符，包括空格和制表符。
+  \item \texttt{-e}：等同于\texttt{-vE}，显示不可见字符并在行末添加\texttt{\$}符号。
 \end{itemize}
 
 \texttt{echo}命令用于在终端输出文本。我们可以使用一些选项来改变输出的方式：
 \begin{itemize}
-    \item \texttt{-n}：不在输出末尾添加换行符。
-    \item \texttt{-e}：启用转义字符的解释，例如\texttt{\textbackslash n}表示换行，\texttt{\t}表示制表符。
-    \item \texttt{-E}：禁用转义字符的解释。
-    \item \texttt{-c}：不输出任何内容。
-    \item \texttt{-C}：将输出内容转换为大写字母。
-    \item \texttt{-l}：将输出内容转换为小写字母。
-    \item \texttt{-a}：将输出内容转换为首字母大写字母。
-    \item \texttt{-s}：将输出内容转换为首字母小写字母。
-    \item \texttt{-p}：将输出内容转换为首字母大写字母，并将其他字母转换为小写字母。
+  \item \texttt{-n}：不在输出末尾添加换行符。
+  \item \texttt{-e}：启用转义字符的解释，例如\texttt{\textbackslash n}表示换行，\texttt{\t}表示制表符。
+  \item \texttt{-E}：禁用转义字符的解释。
+  \item \texttt{-c}：不输出任何内容。
+  \item \texttt{-C}：将输出内容转换为大写字母。
+  \item \texttt{-l}：将输出内容转换为小写字母。
+  \item \texttt{-a}：将输出内容转换为首字母大写字母。
+  \item \texttt{-s}：将输出内容转换为首字母小写字母。
+  \item \texttt{-p}：将输出内容转换为首字母大写字母，并将其他字母转换为小写字母。
 \end{itemize}
 
 \texttt{ps}命令用于显示当前运行的进程。我们可以使用一些选项来改变输出的方式：
 \begin{itemize}
-    \item \texttt{-e}：显示所有进程。
-    \item \texttt{-f}：以全格式显示进程信息，包括父进程ID、用户等。
-    \item \texttt{-l}：以长格式显示进程信息。
-    \item \texttt{-u}：显示指定用户的进程。
-    \item \texttt{-p}：显示指定进程ID的进程。
-    \item \texttt{-o}：自定义输出格式。
-    \item \texttt{-H}：以树形结构显示进程之间的关系。
-    \item \texttt{-j}：以作业控制格式显示进程信息。
-    \item \texttt{-x}：显示所有进程，包括没有控制终端的进程。
+  \item \texttt{-e}：显示所有进程。
+  \item \texttt{-f}：以全格式显示进程信息，包括父进程ID、用户等。
+  \item \texttt{-l}：以长格式显示进程信息。
+  \item \texttt{-u}：显示指定用户的进程。
+  \item \texttt{-p}：显示指定进程ID的进程。
+  \item \texttt{-o}：自定义输出格式。
+  \item \texttt{-H}：以树形结构显示进程之间的关系。
+  \item \texttt{-j}：以作业控制格式显示进程信息。
+  \item \texttt{-x}：显示所有进程，包括没有控制终端的进程。
 \end{itemize}
-
-
 
 \end{document}

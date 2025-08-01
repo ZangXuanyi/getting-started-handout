@@ -31,19 +31,19 @@
 
 在GDB中，我们可以使用以下命令来设置断点、运行程序、查看变量等：
 \begin{itemize}
-    \item \texttt{break}：设置断点，可以简写为\texttt{b}，例如\texttt{break main}在\texttt{main}函数处设置断点。也可以在特定的某一行设置断点，例如\texttt{break 42}在第42行设置断点；也可以利用偏移量来设置断点，例如\texttt{break +10}在当前行的往前数10行设置断点。
-    \item \texttt{run}：运行程序。可以简写为\texttt{r}。
-    \item \texttt{next}：执行下一行代码，可以简写为\texttt{n}。如果当前行是函数调用，则不会进入函数内部，而是把这个函数视为一个整体往下执行一行。该命令有一个变体\texttt{ni}，它是汇编级别的断点定位，也就是执行下一条汇编指令。
-    \item \texttt{step}：也是执行下一行代码，可以简写为\texttt{s}。如果当前行是函数调用，则会进入函数内部，逐行执行函数内部的代码。\texttt{si}是它的变体，表示汇编级别的单步执行。
-    \item \texttt{continue}：继续运行直到下一个断点，可以简写为\texttt{c}。
-    \item \texttt{print}：打印变量的值，例如\texttt{print variable}，可以简写为\texttt{p variable}。如果变量是一个结构体或类的实例，可以使用\texttt{print variable.field}来打印某个字段的值。
-    \item \texttt{backtrace}：查看函数调用栈，可以简写为\texttt{bt}。这对于定位程序崩溃时的调用路径非常有用。
-    \item \texttt{layout}：切换到图形界面模式，可以使用\texttt{layout src}来显示源代码，使用\texttt{layout asm}来显示汇编代码。
-    \item \texttt{info}：查看程序的状态，例如\texttt{info breakpoints}查看断点信息，\texttt{info registers}查看寄存器状态，\texttt{info locals}查看局部变量等。
-    \item \texttt{watch}：设置观察点，当某个变量的值发生变化时暂停执行，例如\texttt{watch variable}。这对于调试复杂的逻辑错误非常有用。
-    \item \texttt{set}：强制设置变量的值，例如\texttt{set variable = value}。这对于调试时修改变量的值非常有用。
-    \item \texttt{list}：查看源代码（带行号），可以简写为\texttt{l}。
-    \item \texttt{quit}：退出GDB。
+  \item \texttt{break}：设置断点，可以简写为\texttt{b}，例如\texttt{break main}在\texttt{main}函数处设置断点。也可以在特定的某一行设置断点，例如\texttt{break 42}在第42行设置断点；也可以利用偏移量来设置断点，例如\texttt{break +10}在当前行的往前数10行设置断点。
+  \item \texttt{run}：运行程序。可以简写为\texttt{r}。
+  \item \texttt{next}：执行下一行代码，可以简写为\texttt{n}。如果当前行是函数调用，则不会进入函数内部，而是把这个函数视为一个整体往下执行一行。该命令有一个变体\texttt{ni}，它是汇编级别的断点定位，也就是执行下一条汇编指令。
+  \item \texttt{step}：也是执行下一行代码，可以简写为\texttt{s}。如果当前行是函数调用，则会进入函数内部，逐行执行函数内部的代码。\texttt{si}是它的变体，表示汇编级别的单步执行。
+  \item \texttt{continue}：继续运行直到下一个断点，可以简写为\texttt{c}。
+  \item \texttt{print}：打印变量的值，例如\texttt{print variable}，可以简写为\texttt{p variable}。如果变量是一个结构体或类的实例，可以使用\texttt{print variable.field}来打印某个字段的值。
+  \item \texttt{backtrace}：查看函数调用栈，可以简写为\texttt{bt}。这对于定位程序崩溃时的调用路径非常有用。
+  \item \texttt{layout}：切换到图形界面模式，可以使用\texttt{layout src}来显示源代码，使用\texttt{layout asm}来显示汇编代码。
+  \item \texttt{info}：查看程序的状态，例如\texttt{info breakpoints}查看断点信息，\texttt{info registers}查看寄存器状态，\texttt{info locals}查看局部变量等。
+  \item \texttt{watch}：设置观察点，当某个变量的值发生变化时暂停执行，例如\texttt{watch variable}。这对于调试复杂的逻辑错误非常有用。
+  \item \texttt{set}：强制设置变量的值，例如\texttt{set variable = value}。这对于调试时修改变量的值非常有用。
+  \item \texttt{list}：查看源代码（带行号），可以简写为\texttt{l}。
+  \item \texttt{quit}：退出GDB。
 \end{itemize}
 
 当然，如果想要显示行号的话，我们编译代码的时候需要加上\texttt{-g}选项，例如：

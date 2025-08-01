@@ -18,8 +18,8 @@
 
 简单说来，C++装库主要任务有三项：找到头文件、找到库文件、让构建系统知道它们在哪。头文件指的是C++的头文件（.h、.hpp等），库文件指的是编译好的二进制文件（.so、.dll、.a等）。由于二十多年来没有一个官方组织来统一C++的包管理、大家习惯自己编译，因此逐渐形成了两种互相不重叠的技术路线：
 \begin{itemize}
-    \item 手动装
-    \item 使用包管理器
+  \item 手动装
+  \item 使用包管理器
 \end{itemize}
 
 \section{手动装}
@@ -65,23 +65,23 @@ sudo cmake --install build --prefix /opt/fmt
 以安装\texttt{fmt}库为例，不同平台上的命令如下：
 
 \begin{itemize}
-    \item \textbf{Debian/Ubuntu (APT)}:
+  \item \textbf{Debian/Ubuntu (APT)}:
     \begin{lstlisting}[language=bash]
 sudo apt install libfmt-dev
     \end{lstlisting}
-    \item \textbf{Fedora (DNF/YUM)}:
+  \item \textbf{Fedora (DNF/YUM)}:
     \begin{lstlisting}[language=bash]
 sudo dnf install fmt-devel
     \end{lstlisting}
-    \item \textbf{Arch Linux (Pacman)}:
+  \item \textbf{Arch Linux (Pacman)}:
     \begin{lstlisting}[language=bash]
 sudo pacman -S fmt
     \end{lstlisting}
-    \item \textbf{macOS (Homebrew)}:
+  \item \textbf{macOS (Homebrew)}:
     \begin{lstlisting}[language=bash]
 brew install fmt
     \end{lstlisting}
-    \item \textbf{Windows (MSYS2/MinGW)}: 在 MSYS2 环境下，同样可以使用 \texttt{pacman}。
+  \item \textbf{Windows (MSYS2/MinGW)}: 在 MSYS2 环境下，同样可以使用 \texttt{pacman}。
     \begin{lstlisting}[language=bash]
 pacman -S mingw-w64-ucrt-x86_64-fmt
     \end{lstlisting}
@@ -95,17 +95,17 @@ target_link_libraries(my_program PRIVATE fmt::fmt)
 
 \subsubsection{优势}
 \begin{itemize}
-    \item 一条命令即可完成安装，自动处理复杂的依赖关系。
-    \item 库文件和头文件被安装到标准位置，构建系统可以自动发现，无需手动配置路径。
-    \item 可以与其他系统软件一同通过包管理器进行更新和维护。
-    \item 发行版仓库中的库经过测试，通常与系统中的其他组件（如编译器）兼容性良好。
+  \item 一条命令即可完成安装，自动处理复杂的依赖关系。
+  \item 库文件和头文件被安装到标准位置，构建系统可以自动发现，无需手动配置路径。
+  \item 可以与其他系统软件一同通过包管理器进行更新和维护。
+  \item 发行版仓库中的库经过测试，通常与系统中的其他组件（如编译器）兼容性良好。
 \end{itemize}
 
 \subsubsection{劣势}
 \begin{itemize}
-    \item 仓库中的库版本未必能满足所有需求。如果你的项目需要某个库的最新特性，或者依赖于一个非常特定的旧版本，某些包管理器可能无法满足需求。
-    \item 不同平台、不同发行版的包管理器命令和包名各不相同，往往需要手动核验与对应。
-    \item 不是所有的 C++ 库都被收录到了官方仓库中，尤其是那些比较小众或新兴的库。
+  \item 仓库中的库版本未必能满足所有需求。如果你的项目需要某个库的最新特性，或者依赖于一个非常特定的旧版本，某些包管理器可能无法满足需求。
+  \item 不同平台、不同发行版的包管理器命令和包名各不相同，往往需要手动核验与对应。
+  \item 不是所有的 C++ 库都被收录到了官方仓库中，尤其是那些比较小众或新兴的库。
 \end{itemize}
 
 \subsection{vcpkg}

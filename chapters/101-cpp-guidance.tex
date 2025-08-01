@@ -25,18 +25,18 @@ using namespace std;
 
 int main() {
     int age = 18;
-    cout << "I am " << age; 
+    cout << "I am " << age;
     return 0;
 }
 \end{lstlisting}
 逐行拆解之：
 \begin{itemize}
-    \item \texttt{\#include <iostream>}：告诉编译器，我要用输入输出工具。
-    \item \texttt{using namespace std;}：使用标准命名空间，这样我们就可以直接使用\texttt{cout}而不需要加上\texttt{std::}前缀。
-    \item \texttt{int main()}：程序的入口函数，告诉电脑程序从这里开始执行。\texttt{int}表示这个函数返回一个整数值。
-    \item \texttt{int age = 18;}：跟电脑说，我要在内存找个地方放个整数，这个地方叫age，放个18进去。
-    \item \texttt{cout << "I am " << age; }：把东西一股脑全送到屏幕上。
-    \item \texttt{return 0;}：返回0，告诉操作系统：一切OK。除非你知道你在做什么，否则这里不要改成其他数字。
+  \item \texttt{\#include <iostream>}：告诉编译器，我要用输入输出工具。
+  \item \texttt{using namespace std;}：使用标准命名空间，这样我们就可以直接使用\texttt{cout}而不需要加上\texttt{std::}前缀。
+  \item \texttt{int main()}：程序的入口函数，告诉电脑程序从这里开始执行。\texttt{int}表示这个函数返回一个整数值。
+  \item \texttt{int age = 18;}：跟电脑说，我要在内存找个地方放个整数，这个地方叫age，放个18进去。
+  \item \texttt{cout << "I am " << age; }：把东西一股脑全送到屏幕上。
+  \item \texttt{return 0;}：返回0，告诉操作系统：一切OK。除非你知道你在做什么，否则这里不要改成其他数字。
 \end{itemize}
 
 以上就是骨架。接下来该往骨架里面填肉了：
@@ -47,18 +47,18 @@ int main() {
 
 常见的变量类型有：
 \begin{itemize}
-    \item \texttt{int}：整数类型，通常是32位（二进制位数）。
-    \item \texttt{double}：双精度浮点数，通常是64位。
-    \item \texttt{char}：字符类型，通常是8位整数，表示一个字符。也可以用于表示整数。
-    \item \texttt{bool}：布尔类型，表示真或假。
-    \item \texttt{string}：字符串类型，表示一串字符。
+  \item \texttt{int}：整数类型，通常是32位（二进制位数）。
+  \item \texttt{double}：双精度浮点数，通常是64位。
+  \item \texttt{char}：字符类型，通常是8位整数，表示一个字符。也可以用于表示整数。
+  \item \texttt{bool}：布尔类型，表示真或假。
+  \item \texttt{string}：字符串类型，表示一串字符。
 \end{itemize}
 
 对于变量的运算就跟数学差不多，比方说
 \begin{lstlisting}[language=C++]
     int a = 10;
     int b = 20;
-    int c = a + b; 
+    int c = a + b;
     c = a * 2;
     c += 5;
 \end{lstlisting}
@@ -70,9 +70,9 @@ int main() {
 
 让我们看看常见的运算符：
 \begin{itemize}
-    \item 四则运算：\texttt{+}（加）、\texttt{-}（减）、\texttt{*}（乘）、\texttt{/}（除）。注意，除法运算中，如果两个整数相除，结果仍然是整数，余数会被舍弃。
-    \item 取模：\texttt{\%}，表示取余数。例如\texttt{5 \% 2}的结果是1，因为5除以2的余数是1。
-    \item 自增和自减：\texttt{++}（自增）和\texttt{--}（自减）。例如，\texttt{a++}表示将a的值加1，\texttt{b--}表示将b的值减1。
+  \item 四则运算：\texttt{+}（加）、\texttt{-}（减）、\texttt{*}（乘）、\texttt{/}（除）。注意，除法运算中，如果两个整数相除，结果仍然是整数，余数会被舍弃。
+  \item 取模：\texttt{\%}，表示取余数。例如\texttt{5 \% 2}的结果是1，因为5除以2的余数是1。
+  \item 自增和自减：\texttt{++}（自增）和\texttt{--}（自减）。例如，\texttt{a++}表示将a的值加1，\texttt{b--}表示将b的值减1。
 \end{itemize}
 不要纠结i++和++i的区别，初学者完全可以认为这两个和\texttt{i += 1}没有区别。一个饱受诟病的题目“i = 3, i++ + i++ = ?”答：这个题目是错误的，至少是不良定义的。不同的编译器对上述代码的处理方式不同。
 
@@ -88,8 +88,8 @@ int main() {
 
 在C++中，注释有两种方法来写：
 \begin{itemize}
-    \item 单行注释：使用\texttt{//}，例如\texttt{// 这是一个单行注释}。注释符号后面的内容会被编译器忽略，直到行尾为止。
-    \item 多行注释：使用\texttt{/* ... */}，例如\texttt{/* 这是一个多行注释 */}。两个注释符号之间的内容会被编译器忽略，可以跨越多行。
+  \item 单行注释：使用\texttt{//}，例如\texttt{// 这是一个单行注释}。注释符号后面的内容会被编译器忽略，直到行尾为止。
+  \item 多行注释：使用\texttt{/* ... */}，例如\texttt{/* 这是一个多行注释 */}。两个注释符号之间的内容会被编译器忽略，可以跨越多行。
 \end{itemize}
 
 在阻止部分代码执行的时候，我们一般不习惯于直接删除这些代码，而是使用注释。这样做的好处是可以留痕，便于以后的恢复（解注释）；这就是程序员们常说的“注释掉”代码。在VS Code等编辑器中，常用的一键注释是\texttt{Ctrl + /}，它会自动将光标所在的一行或多行代码注释掉。
@@ -112,7 +112,7 @@ const int P = a + b; // 这里的a和b可以是变量
 \begin{lstlisting}
 constexpr double E = 2.71828;
 constexpr double PI = 3.14159;
-constexpr double EPI = E * PI; 
+constexpr double EPI = E * PI;
 \end{lstlisting}
 
 \subsection{判断和循环}
@@ -123,15 +123,15 @@ constexpr double EPI = E * PI;
 
 常见的一些条件表达式包括：
 \begin{itemize}
-    \item \texttt{==}：等于运算符。
-    \item \texttt{!=}：不等于运算符。
-    \item \texttt{<}：小于运算符。
-    \item \texttt{>}：大于运算符。
-    \item \texttt{<=}：小于等于运算符。
-    \item \texttt{>=}：大于等于运算符。
-    \item \texttt{\&\&}：逻辑与运算符。如果前后两个条件都为真，则结果为真；有一个是假的话，结果为假。
-    \item \texttt{||}：逻辑或运算符。如果前后两个条件至少有一个为真，则结果为真；如果两个都为假，结果为假。
-    \item \texttt{!}：逻辑非运算符。如果后面跟着的条件是真的，那么结果为假；反之为假。
+  \item \texttt{==}：等于运算符。
+  \item \texttt{!=}：不等于运算符。
+  \item \texttt{<}：小于运算符。
+  \item \texttt{>}：大于运算符。
+  \item \texttt{<=}：小于等于运算符。
+  \item \texttt{>=}：大于等于运算符。
+  \item \texttt{\&\&}：逻辑与运算符。如果前后两个条件都为真，则结果为真；有一个是假的话，结果为假。
+  \item \texttt{||}：逻辑或运算符。如果前后两个条件至少有一个为真，则结果为真；如果两个都为假，结果为假。
+  \item \texttt{!}：逻辑非运算符。如果后面跟着的条件是真的，那么结果为假；反之为假。
 \end{itemize}
 
 在C++中，与或非运算符是有一定的运算顺序的。一般情况下，逻辑非运算符的优先级最高，其次是逻辑与运算符，最后是逻辑或运算符。不过笔者非常不建议同学们背诵这个顺序；实际在工程上不仅不建议大量嵌套使用这些运算符，而且遇事不决可以加括号——括号可比记运算顺序靠谱得多了！
@@ -344,16 +344,13 @@ int main() {
 
 \emph{头文件\texttt{<stdio.h>}是C的头文件，而\texttt{<cstdio>}是这个头文件在C++中的移植版本。两者内容完全一致，只不过\texttt{<cstdio>}使用了C++的命名空间（\texttt{std}）；但是由于C++是C的超集，因此大多数实现也允许不套命名空间直接用\texttt{printf}等。在现代风格的C++编程中，我们通常使用\texttt{<iostream>}或\texttt{<cstdio>}来进行输入输出操作，而不是使用\texttt{<stdio.h>}。}
 
-
 这些看起来都非常简单。而以上内容就是C++的全部基本语法了：是的，你已经学完了！
 
 \subsection{小练}
 
-\begin{problem}
 角谷猜想是一个有趣的数学问题：从任意整数开始，如果他是奇数就乘以3加1，如果是偶数就除以2，如此反复循环，最终一定会得到1。目前还没有人证明这个猜想，但我们可以用C++来验证一些具体值。请编写一个C++程序，输入一个整数n，然后输出这个整数经过角谷猜想的处理后，最终得到1的过程。要求输出每一步的结果。例如，输入n=6时，输出应该是：6, 3, 10, 5, 16, 8, 4, 2, 1。
-\end{problem}
 
-\begin{solution}
+\subsubsection{解答}
 一句一句地看：任意整数，奇数乘以3加1，偶数除以2。这一段代码写起来很方便。我们知道，整数的奇偶性可以通过取模来判断：如果n\%2==0，那么n是偶数；否则n是奇数。
 
 因此仅仅这句话，从人的自然语言到代码语言的转换就非常简单了。
@@ -363,7 +360,7 @@ if(n % 2 == 0) {
     n /= 2; // 偶数除以2
 } else {
     n = n * 3 + 1; // 奇数乘以3加1
-} 
+}
 \end{lstlisting}
 
 或者使用三元表达式：
@@ -417,11 +414,8 @@ int main() {
 }
 \end{lstlisting}
 这段代码就是一个完整的C++程序了。同学们可以在自己的电脑上编译运行，看看效果！
-\end{solution}
 
-\begin{exercise}
-下面用三元表达式来改写这个程序。
-\end{exercise}
+练习：下面用三元表达式来改写这个程序。
 
 \section{C++的进阶使用}
 
@@ -441,10 +435,9 @@ int arr[10];
 
 在C和C++中，数组的大小应当是一个常量，或者说C风格的数组是\textbf{无法动态扩展的}。
 
-\begin{note}
-变长数组（VLA）是C99标准引入的特性，允许数组的大小在运行时确定，但它在C11中被变为可选特性。C++不支持任何VLA特性。容易引起误会的是，GCC 和 Clang++ 编译器提供了包含 VLA 的GNU 扩展语法，并且默认引入这些扩展，因此，VLA （例如\texttt{int n; int a[n];}）在这些编译器下可行。反之，如果关闭这些扩展（通过添加 -pedantic-errors 选项）或者非 GNU 兼容的编译器（如 MSVC），则 VLA 不可用。在实际操作中，我们不要去写VLA，它们可能会导致代码在不同编译器下的表现不一致。C中，我们需要使用数组但是长度不确定的时候，可以将数组开得大一些，例如题目有1000个元素，那么就开1000个元素或者稍多元素的数组；C++中，我们可以使用向量\texttt{std::vector}来代替数组，该类可以动态扩展。
-\end{note}
-
+\emph{
+  变长数组（VLA）是C99标准引入的特性，允许数组的大小在运行时确定，但它在C11中被变为可选特性。C++不支持任何VLA特性。容易引起误会的是，GCC 和 Clang++ 编译器提供了包含 VLA 的GNU 扩展语法，并且默认引入这些扩展，因此，VLA （例如\texttt{int n; int a[n];}）在这些编译器下可行。反之，如果关闭这些扩展（通过添加 -pedantic-errors 选项）或者非 GNU 兼容的编译器（如 MSVC），则 VLA 不可用。在实际操作中，我们不要去写VLA，它们可能会导致代码在不同编译器下的表现不一致。C中，我们需要使用数组但是长度不确定的时候，可以将数组开得大一些，例如题目有1000个元素，那么就开1000个元素或者稍多元素的数组；C++中，我们可以使用向量\texttt{std::vector}来代替数组，该类可以动态扩展。
+}
 \subsubsection{字符串}
 C++风格的字符串类型是\texttt{std::string}，它可以存储一串字符。字符串的基本格式如下：
 \begin{lstlisting}[language=C++]
@@ -508,8 +501,8 @@ union Data {
     float floatValue; // 双精度浮点数值
 };
 Data data;  // 声明一个数据变量
-data.intValue = 42;  // 设置整数值  
-cout << "Int Value: " << data.intValue << endl;  
+data.intValue = 42;  // 设置整数值
+cout << "Int Value: " << data.intValue << endl;
 \end{lstlisting}
 以上代码的意思是：声明一个名为Data的联合体，它可以存储整数值、双精度浮点数值和字符值。我们可以通过访问联合体的成员来获取数据。
 
@@ -535,9 +528,9 @@ for (int i = 0; i < 5; i++) {
 
 指针是一种非常强大的工具，但也需要小心使用。错误地使用指针可能会导致程序崩溃或内存泄漏，有时候也有可能会导致悬空指针的问题。悬空指针是指指向已经释放的内存空间的指针，这种指针无法访问有效的数据，可能会导致程序崩溃或产生不可预知的后果。除此之外，滥用指针还可能导致指向错误的、未初始化的地址等，这些被称为“野指针”。
 
-\begin{note}
-悬空指针不是空指针！空指针是指向空地址的指针，是安全的；悬空指针是指向已经释放的内存空间（现在可能已经装进去一些其他数据）的指针，是不安全的。
-\end{note}
+\emph{
+  悬空指针不是空指针！空指针是指向空地址的指针，是安全的；悬空指针是指向已经释放的内存空间（现在可能已经装进去一些其他数据）的指针，是不安全的。
+}
 
 在C++中，有一些比较高级的指针特性，例如智能指针（smart pointer）。它可以自动管理内存，避免内存泄漏和野指针等问题。常见的智能指针有\texttt{std::unique\_ptr}、\texttt{std::shared\_ptr}和\texttt{std::weak\_ptr}。
 
@@ -551,9 +544,9 @@ for (int i = 0; i < 5; i++) {
 \begin{lstlisting}[language=C++]
 int a = 10;  // 声明一个整数变量
 int& ref = a;  // 声明一个整数的引用
-cout << "a: " << a << ", ref: " << ref << endl;  // 输出a和ref的值
+cout << "a: " << a << ", ref: " << ref << endl;
 ref = 20;  // 修改引用的值
-cout << "a: " << a << ", ref: " << ref << endl;  // 输出修改后的a和ref的值
+cout << "a: " << a << ", ref: " << ref << endl;
 \end{lstlisting}
 
 以上代码的意思是：声明一个名为ref的引用，它是变量a的别名。我们可以通过ref来访问a。当我们修改ref的值时，实际上也修改了a的值。
@@ -625,9 +618,9 @@ int factorial(int n) {
 
 刚刚说到，函数可以接受一些参数。一般情况下，有三个传参方式：值传递、引用传递和指针传递。
 \begin{itemize}
-    \item 值传递：函数接收参数的副本，修改参数不会影响原变量。基本类型（如int、double等）默认使用值传递。
-    \item 引用传递：函数接收参数的引用，修改参数会影响原变量。可以通过在参数类型前加\texttt{\&}来实现。
-    \item 指针传递：函数接收参数的指针，修改参数会影响原变量。可以通过在参数类型前加\texttt{*}来实现。
+  \item 值传递：函数接收参数的副本，修改参数不会影响原变量。基本类型（如int、double等）默认使用值传递。
+  \item 引用传递：函数接收参数的引用，修改参数会影响原变量。可以通过在参数类型前加\texttt{\&}来实现。
+  \item 指针传递：函数接收参数的指针，修改参数会影响原变量。可以通过在参数类型前加\texttt{*}来实现。
 \end{itemize}
 例如，我们可以使用引用传递来交换两个整数的值：
 \begin{lstlisting}[language=C++]
@@ -641,23 +634,24 @@ void swap(int& a, int& b) {
 
 \subsection{小练}
 
-\begin{problem}
 素数在数学中是一个非常重要的概念，它指的是只能被1和它本身整除的自然数。素数在密码学、数据加密等领域有着广泛的应用。一般我们可以使用筛法找到素数：在一系列整数中，先找到最小的素数（2），然后将它的倍数都去掉；然后再找到下一个最小的素数（3），再将它的倍数都去掉；如此反复，直到所有的数都被处理完。请编写一个C++程序，输入一些整数n1，n2，...，然后输出这些整数是不是素数。n的数值在0到1000之间。
-\end{problem}
 
-\begin{solution}
+\subsubsection{解答}
+
 我们阅读题目：在一系列整数中，这个“一系列”整数提示我们可以使用数组来存储这些整数；先找到最小的素数，然后将它的倍数都去掉；然后再找到下一个最小的素数（3），再将它的倍数都去掉；如此反复，直到所有的数都被处理完，这句话提示我们需要使用循环来处理这些整数。
 
 数组的索引天然是自然数集合，因此我们可以使用索引表示整数。我们可以声明一个比较大的数组，来存储从1到n的整数。假设n不超过1000，我们可以声明一个大小为1000的数组来存储这些整数，并将它们全部初始化为0（表示未处理）。对于数组中的每一个元素，我们都可以将他的索引作为整数的值，而元素的值为0说明是素数，1说明不是素数。
 
 然后我们可以使用一个循环来遍历这个数组，找到素数。写成代码就是：
 \begin{lstlisting}[language=C++]
-bool arr[1000] = {};  // 声明一个数组来存储0和1，并将全部数值初始化为0
+bool arr[1000] = {};
+// 声明一个数组来存储0和1，并将全部数值初始化为0
 arr[0] = 1;  // 0不是素数
 arr[1] = 1;  // 1不是素数
 for (int i = 2; i < 1000; i++){
     if (arr[i] == 0) {  // 如果这个数是素数
-        for (int j = 2; j < 1000; j++) {  // 将它的倍数都标记为1
+        for (int j = 2; j < 1000; j++) {
+            // 将它的倍数都标记为1
             arr[j * i] = 1;
         }
     }
@@ -678,14 +672,16 @@ else {
 #include <iostream>
 using namespace std;
 
-bool arr[1000] = {};  // 声明一个数组来存储0和1，并将全部数值初始化为0
+bool arr[1000] = {};
+// 声明一个数组来存储0和1，并将全部数值初始化为0
 
 int findPrimes() {
     arr[0] = 1;  // 0不是素数
     arr[1] = 1;  // 1不是素数
     for (int i = 2; i < 1000; i++) {
         if (arr[i] == 0) {  // 如果这个数是素数
-            for (int j = 2; j * i < n; j++) {  // 将它的倍数都标记为1
+            for (int j = 2; j * i < n; j++) {
+                // 将它的倍数都标记为1
                 arr[j * i] = 1;
             }
         }
@@ -709,12 +705,8 @@ int main() {
 }
 \end{lstlisting}
 上述代码中的\texttt{while(cin >> i)}可以在无法确定输入的数量的情况下，帮我们自动处理输入。
-\end{solution}
 
-\begin{exercise}
-    不使用筛法的情况下，还有没有其他的算法？
-\end{exercise}
-
+思考：不使用筛法的情况下，还有没有其他的算法？
 
 \section{C++的高级特性}
 C++提供了许多高级特性，可以帮助我们更好地组织代码和数据。
@@ -763,7 +755,10 @@ public:
         x += dx;
         y += dy;
     }
-    Point2D(int x = 0, int y = 0) : x(x), y(y) { count++; }  // 构造函数
+    Point2D(int x = 0, int y = 0) : x(x), y(y)
+    {
+        count++;
+    }  // 构造函数
     ~Point2D() { count--; }  // 析构函数
 }
 \end{lstlisting}
@@ -787,8 +782,8 @@ class Node {
 public:
     int data;  // 节点数据
     Node* next;  // 指向下一个节点的指针
-    Node(int value) : data(value), next(nullptr) {}  // 构造函数
-    Node& GetThis() const {  
+    Node(int value) : data(value), next(nullptr) {}
+    Node& GetThis() const {
         return *this;  // 返回当前对象的引用
     }
 };
@@ -804,9 +799,9 @@ public:
 
 如果我们写了自己的构造和析构函数，那么默认的就会被覆盖掉。比方说，上文\texttt{Point2D}类中，我们定义了一个带参数的构造函数和一个析构函数。这样，当我们创建一个\texttt{Point2D}对象时，就会调用这个构造函数来初始化对象的属性（将全局点数量增加1）；当对象被销毁时，就会调用析构函数来干点别的（将全局点数量减1），然后清理资源。上述Point2D类的构造函数和析构函数都做了一些额外的操作：增加和减少全局点数量，因此Point2D是一个复杂类。
 
-\begin{note}
-    需要注意的一点是：在C++中对象的资源管理由构造函数和析构函数自动完成，因此我们不要在构造函数中malloc，也不要在析构函数中free或者delete this。前者有可能导致内存泄漏，后者可能会导致双重释放，这是非常危险的。
-\end{note}
+\emph{
+  需要注意的一点是：在C++中对象的资源管理由构造函数和析构函数自动完成，因此我们不要在构造函数中malloc，也不要在析构函数中free或者delete this。前者有可能导致内存泄漏，后者可能会导致双重释放，这是非常危险的。
+}
 
 拷贝函数是一个特殊的构造函数，它用来复制对象。一般情况下，C++会自动生成一个拷贝构造函数，它会逐个复制对象的属性。但是，如果类中有指针或动态分配的资源，我们需要自定义拷贝构造函数来正确地复制对象。拷贝构造函数的参数是类本身的常量引用，而对方法本身没有什么要求。
 
@@ -833,7 +828,7 @@ class BankAccount {
 private:
     int balance;  // 私有属性，外部无法直接访问
 public:
-    BankAccount(int initialBalance) : balance(initialBalance) {}  // 构造函数
+    BankAccount(int initialBalance) : balance(initialBalance) {}
     void deposit(int amount) {  // 公共方法，允许外部调用
         if (amount > 0) {
             balance += amount;  // 增加余额
@@ -851,9 +846,9 @@ public:
 \end{lstlisting}
 这样可以阻止外部直接修改余额，只能通过存款和取款方法来操作余额。问我为什么余额用int而不是double或者float的，建议重读Mini ICS。
 
-\begin{note}
-    在C\#中，对于封装有一个非常优雅的名词：Getter和Setter。Getter是获取属性值的方法，Setter是设置属性值的方法，同样是上述的代码我们在C\#中可以写成\texttt{public int Balance \{ get; private set; \}}，意思是只有类内可以设置这个属性的值，而类内外可以获取这个属性的值。这样就实现了封装，同时又不失优雅。C++中没有这个优雅的语法，因此我们只能像上述代码中手动定义getter。
-\end{note}
+\emph{
+  在C\#中，对于封装有一个非常优雅的名词：Getter和Setter。Getter是获取属性值的方法，Setter是设置属性值的方法，同样是上述的代码我们在C\#中可以写成\texttt{public int Balance \{ get; private set; \}}，意思是只有类内可以设置这个属性的值，而类内外可以获取这个属性的值。这样就实现了封装，同时又不失优雅。C++中没有这个优雅的语法，因此我们只能像上述代码中手动定义getter。
+}
 
 \subsubsection{继承}
 
@@ -892,7 +887,7 @@ public:
 };
 void revealSecret(const MyClass& obj) {
     cout << "The secret is: " << obj.secret << endl;  // 访问私有属性
-}   
+}
 \end{lstlisting}
 
 一般情况下我们很少用到友元函数，因为它破坏了类的封装性。然而，在某些情况下，友元函数可以提供更高效的访问方式，尤其是在需要频繁访问类的私有属性时。
@@ -1009,10 +1004,10 @@ C语言就有类型强转的功能：
 
 在C++中，类型强转被拆成了四个方式（四大金刚）：
 \begin{itemize}
-    \item \texttt{static\_cast}：\textbf{编译期安全的强转}，包括数值提升/截断，枚举/整型，子类指针转父类指针、void*转型等。它是最常用的类型转换方式，适用于大多数情况。
-    \item \texttt{dynamic\_cast}：\textbf{运行时安全的强转}，几乎仅用于父类指针转子类指针。它会在运行时检查类型安全，如果转换不安全，则返回nullptr。它只能用于有虚函数的类。同时，它是唯一一个在运行时检查强转安全性的转换方式。
-    \item \texttt{const\_cast}：\textbf{常变转换}，其他啥都不干。它是唯一一个能去const的转换方式。
-    \item \texttt{reinterpret\_cast}：\textbf{按位重解释}，用于int指针互转、void指针互转、无关类指针互转等。它是危险的转换方式，仅在编译期做极弱的检查。除非我们知道在干什么，否则不要使用它。
+  \item \texttt{static\_cast}：\textbf{编译期安全的强转}，包括数值提升/截断，枚举/整型，子类指针转父类指针、void*转型等。它是最常用的类型转换方式，适用于大多数情况。
+  \item \texttt{dynamic\_cast}：\textbf{运行时安全的强转}，几乎仅用于父类指针转子类指针。它会在运行时检查类型安全，如果转换不安全，则返回nullptr。它只能用于有虚函数的类。同时，它是唯一一个在运行时检查强转安全性的转换方式。
+  \item \texttt{const\_cast}：\textbf{常变转换}，其他啥都不干。它是唯一一个能去const的转换方式。
+  \item \texttt{reinterpret\_cast}：\textbf{按位重解释}，用于int指针互转、void指针互转、无关类指针互转等。它是危险的转换方式，仅在编译期做极弱的检查。除非我们知道在干什么，否则不要使用它。
 \end{itemize}
 
 举例说明：
@@ -1048,9 +1043,9 @@ int* bad = (int*)v;  // C风格的强转，实际上一口气把const和volatile
 
 所以说，我们非常建议优先使用C++四大强转做显式强转。我们非常不建议在C++中使用旧式风格的强转，除非要做向下兼容等不这么做不行的事情。
 
-\begin{note}
-    \texttt{volatile}是C/C++中的一个关键字，表示变量可能会被外部因素改变，因此编译器不会对它进行优化。它通常用于多线程编程或硬件寄存器的访问等。这个东西和移位运算符一样，绝大多数人一辈子都不会用到。
-\end{note}
+\emph{
+  \texttt{volatile}是C/C++中的一个关键字，表示变量可能会被外部因素改变，因此编译器不会对它进行优化。它通常用于多线程编程或硬件寄存器的访问等。这个东西和移位运算符一样，绝大多数人一辈子都不会用到。
+}
 
 \section{STL}
 
@@ -1072,42 +1067,43 @@ std::unordered_map<std::string,int> m;  // 哈希表
 
 常见的容器有以下几种：（如果我没记错的话，C++正课会要求全部掌握这些容器，我只能说：祝你好运！）
 \begin{itemize}
-    \item \texttt{vector}：动态数组（向量），可以自动扩容，支持随机访问。实际上是单一内存连续块。
-    \item \texttt{list}：双向链表，支持高效的插入和删除操作，但不支持随机访问。
-    \item \texttt{deque}：双端队列，支持在两端高效地插入和删除操作。实际上是分段连续的内存块。
-    \item \texttt{set}：集合，存储唯一元素，并自动排序。
-    \item \texttt{map}：映射，存储键值对，并根据键自动排序。
-    \item \texttt{unordered\_set}：无序集合，存储唯一元素，不自动排序，查询效率高。
-    \item \texttt{unordered\_map}：无序映射，存储键值对，不自动排序，查询效率高。
-    \item \texttt{stack}：栈，后进先出（LIFO）。
-    \item \texttt{queue}：队列，先进先出（FIFO）。
-    \item \texttt{priority\_queue}：优先队列，支持按优先级访问元素。
-    \item \texttt{array}：固定大小的数组，类似于C风格的数组，但提供了更多的功能。
-    \item \texttt{bitset}：位集合，支持高效的位操作。
-    \item \texttt{tuple}：元组，可以存储不同类型的多个值。
-    \item \texttt{forward\_list}：单向链表，类似于list，但只支持单向遍历。
-    \item \texttt{unordered\_multiset}：无序多重集合，存储可以重复的元素，不自动排序。
-    \item \texttt{unordered\_multimap}：无序多重映射，存储可以重复的键值对，不自动排序。
+  \item \texttt{vector}：动态数组（向量），可以自动扩容，支持随机访问。实际上是单一内存连续块。
+  \item \texttt{list}：双向链表，支持高效的插入和删除操作，但不支持随机访问。
+  \item \texttt{deque}：双端队列，支持在两端高效地插入和删除操作。实际上是分段连续的内存块。
+  \item \texttt{set}：集合，存储唯一元素，并自动排序。
+  \item \texttt{map}：映射，存储键值对，并根据键自动排序。
+  \item \texttt{unordered\_set}：无序集合，存储唯一元素，不自动排序，查询效率高。
+  \item \texttt{unordered\_map}：无序映射，存储键值对，不自动排序，查询效率高。
+  \item \texttt{stack}：栈，后进先出（LIFO）。
+  \item \texttt{queue}：队列，先进先出（FIFO）。
+  \item \texttt{priority\_queue}：优先队列，支持按优先级访问元素。
+  \item \texttt{array}：固定大小的数组，类似于C风格的数组，但提供了更多的功能。
+  \item \texttt{bitset}：位集合，支持高效的位操作。
+  \item \texttt{tuple}：元组，可以存储不同类型的多个值。
+  \item \texttt{forward\_list}：单向链表，类似于list，但只支持单向遍历。
+  \item \texttt{unordered\_multiset}：无序多重集合，存储可以重复的元素，不自动排序。
+  \item \texttt{unordered\_multimap}：无序多重映射，存储可以重复的键值对，不自动排序。
 \end{itemize}
 其实遇事不决的情况下，我们可以按照需求选择容器：
 \begin{itemize}
-    \item 速查：如果需要快速查找元素（建哈希表），使用\texttt{unordered\_set}或\texttt{unordered\_map}。
-    \item 排序：如果需要自动排序，\texttt{set}和\texttt{map}是最好的选择。
-    \item 只要最大最小：如果只关心最大值或最小值，使用\texttt{priority\_queue}。
-    \item 频繁在中间插入删除：如果需要频繁插入和删除元素，使用\texttt{list}。
-    \item 频繁需要两头插入删除：如果只关心两端（尤其是头部）的插入和删除，使用\texttt{deque}。如果能确定用的是栈或队列，使用\texttt{stack}或\texttt{queue}。
-    \item 遇事不决：如果不确定用什么容器，使用\texttt{vector}。如果只关心尾部的频繁增删，也可以不用\texttt{deque}，直接用\texttt{vector}。
+  \item 速查：如果需要快速查找元素（建哈希表），使用\texttt{unordered\_set}或\texttt{unordered\_map}。
+  \item 排序：如果需要自动排序，\texttt{set}和\texttt{map}是最好的选择。
+  \item 只要最大最小：如果只关心最大值或最小值，使用\texttt{priority\_queue}。
+  \item 频繁在中间插入删除：如果需要频繁插入和删除元素，使用\texttt{list}。
+  \item 频繁需要两头插入删除：如果只关心两端（尤其是头部）的插入和删除，使用\texttt{deque}。如果能确定用的是栈或队列，使用\texttt{stack}或\texttt{queue}。
+  \item 遇事不决：如果不确定用什么容器，使用\texttt{vector}。如果只关心尾部的频繁增删，也可以不用\texttt{deque}，直接用\texttt{vector}。
 \end{itemize}
 
-\begin{note}
-    虽然我把stack和queue也当成容器、实际上在工程上也不怎么区分这东西，但是这里我有必要提及：这两个玩意实际上是容器适配器（container adapter），它们是基于其他容器实现的，提供了栈和队列的接口。一般情况下，默认参数是vector或者deque（因此不必指明），但是你也可以指定其他容器作为底层容器。
-\end{note}
+\emph{
+  虽然我把stack和queue也当成容器、实际上在工程上也不怎么区分这东西，但是这里我有必要提及：这两个玩意实际上是容器适配器（container adapter），它们是基于其他容器实现的，提供了栈和队列的接口。一般情况下，默认参数是vector或者deque（因此不必指明），但是你也可以指定其他容器作为底层容器。
+}
 
-\begin{note}
-    \texttt{std::vector<bool>}和\texttt{std::vector<T>}实现有区别。前者是一个极为特殊的实现，使用位压缩来存储布尔值，因此它不是一个真正的向量，而是一个位集合（bitset）。这使得\texttt{std::vector<bool>}在某些情况下效率更高，但也导致了一些不兼容的问题。例如，\texttt{v[i]}返回的是一个代理对象而不是一个引用；\texttt{auto x = v[i]}返回的是值拷贝而不是常规的数据类型。
-
-    我们使用者不关心\texttt{std::vector<bool>}的实现细节，只需要记住以下五件事就行了：不能使用\texttt{auto\& x = v[i]}来获取元素的引用，因为代理对象不能绑定到非常引用；不能使用\texttt{\&v[i]}，因为单个位没有地址；的迭代器不是常规迭代器的实现，不是指针；\texttt{std::vector<bool>}线程不安全；排序、查找等算法能用但是缓慢。
-\end{note}
+\emph{
+  \texttt{std::vector<bool>}和\texttt{std::vector<T>}实现有区别。前者是一个极为特殊的实现，使用位压缩来存储布尔值，因此它不是一个真正的向量，而是一个位集合（bitset）。这使得\texttt{std::vector<bool>}在某些情况下效率更高，但也导致了一些不兼容的问题。例如，\texttt{v[i]}返回的是一个代理对象而不是一个引用；\texttt{auto x = v[i]}返回的是值拷贝而不是常规的数据类型。
+}
+\emph{
+  我们使用者不关心\texttt{std::vector<bool>}的实现细节，只需要记住以下五件事就行了：不能使用\texttt{auto\& x = v[i]}来获取元素的引用，因为代理对象不能绑定到非常引用；不能使用\texttt{\&v[i]}，因为单个位没有地址；的迭代器不是常规迭代器的实现，不是指针；\texttt{std::vector<bool>}线程不安全；排序、查找等算法能用但是缓慢。
+}
 
 \subsection{迭代器}
 
@@ -1120,15 +1116,15 @@ for(auto x : v) cout<<x<<' '; // auto最应该这么用！
 
 所有容器风格完全一致，完全不必关心装的是什么玩意。一些常见的迭代器和方法：
 \begin{itemize}
-    \item \texttt{begin()}：返回容器的起始迭代器。
-    \item \texttt{end()}：返回容器的结束迭代器。
-    \item \texttt{rbegin()}：返回容器的反向起始迭代器。
-    \item \texttt{rend()}：返回容器的反向结束迭代器。
-    \item \texttt{cbegin()}：返回容器的常量起始迭代器。
-    \item \texttt{cend()}：返回容器的常量结束迭代器。
-    \item \texttt{next(it)}：返回迭代器it的下一个位置。
-    \item \texttt{prev(it)}：返回迭代器it的上一个位置。
-    \item \texttt{distance(it1, it2)}：返回迭代器it1和it2之间的距离。
+  \item \texttt{begin()}：返回容器的起始迭代器。
+  \item \texttt{end()}：返回容器的结束迭代器。
+  \item \texttt{rbegin()}：返回容器的反向起始迭代器。
+  \item \texttt{rend()}：返回容器的反向结束迭代器。
+  \item \texttt{cbegin()}：返回容器的常量起始迭代器。
+  \item \texttt{cend()}：返回容器的常量结束迭代器。
+  \item \texttt{next(it)}：返回迭代器it的下一个位置。
+  \item \texttt{prev(it)}：返回迭代器it的上一个位置。
+  \item \texttt{distance(it1, it2)}：返回迭代器it1和it2之间的距离。
 \end{itemize}
 
 迭代器也可以加减，例如\texttt{it+1}表示下一个元素，\texttt{it-1}表示上一个元素。
@@ -1136,7 +1132,7 @@ for(auto x : v) cout<<x<<' '; // auto最应该这么用！
 \subsection{算法}
 STL提供了许多常用的算法，可以帮助我们更高效地处理数据，直接拿出来用就行：
 \begin{lstlisting}
-std::sort(v.begin(), v.end());           // 混合高速排序，结合快排、堆排等算法
+std::sort(v.begin(), v.end()); // 混合高速排序，结合快排、堆排等算法
 std::binary_search(v.begin(), v.end(), 4);  // 二分
 std::reverse(v.begin(), v.end());        // 原地翻转
 \end{lstlisting}
@@ -1145,24 +1141,24 @@ std::reverse(v.begin(), v.end());        // 原地翻转
 
 除此之外，还有一些常用的算法：
 \begin{itemize}
-    \item \texttt{std::find}：查找元素。
-    \item \texttt{std::count}：统计元素出现的次数。
-    \item \texttt{std::accumulate}：计算元素的累加和。
-    \item \texttt{std::max\_element}：找到最大元素。
-    \item \texttt{std::min\_element}：找到最小元素。
-    \item \texttt{std::shuffle}：随机打乱元素顺序。
-    \item \texttt{std::unique}：去除重复元素。
-    \item \texttt{std::merge}：合并两个已排序的范围。
-    \item \texttt{std::partition}：对元素进行分区。
-    \item \texttt{std::transform}：对元素进行转换。
-    \item \texttt{std::for\_each}：对每个元素执行操作。
-    \item \texttt{std::set\_union}：计算两个集合的
-    \item \texttt{std::set\_intersection}：计算两个集合的交集。
-    \item \texttt{std::set\_difference}：计算两个集合的差集。
-    \item \texttt{std::set\_symmetric\_difference}：计算两个集合的对称差集。
-    \item \texttt{std::nth\_element}：找到第n小的元素。
-    \item \texttt{std::lower\_bound}：找到第一个不小于给定值的元素。
-    \item \texttt{std::upper\_bound}：找到第一个大于给定值的元素。
+  \item \texttt{std::find}：查找元素。
+  \item \texttt{std::count}：统计元素出现的次数。
+  \item \texttt{std::accumulate}：计算元素的累加和。
+  \item \texttt{std::max\_element}：找到最大元素。
+  \item \texttt{std::min\_element}：找到最小元素。
+  \item \texttt{std::shuffle}：随机打乱元素顺序。
+  \item \texttt{std::unique}：去除重复元素。
+  \item \texttt{std::merge}：合并两个已排序的范围。
+  \item \texttt{std::partition}：对元素进行分区。
+  \item \texttt{std::transform}：对元素进行转换。
+  \item \texttt{std::for\_each}：对每个元素执行操作。
+  \item \texttt{std::set\_union}：计算两个集合的
+  \item \texttt{std::set\_intersection}：计算两个集合的交集。
+  \item \texttt{std::set\_difference}：计算两个集合的差集。
+  \item \texttt{std::set\_symmetric\_difference}：计算两个集合的对称差集。
+  \item \texttt{std::nth\_element}：找到第n小的元素。
+  \item \texttt{std::lower\_bound}：找到第一个不小于给定值的元素。
+  \item \texttt{std::upper\_bound}：找到第一个大于给定值的元素。
 \end{itemize}
 
 利用头文件\texttt{<algorithm>}可以使用这些算法。STL的算法通常是模板函数，可以处理任意类型的数据；配合迭代器，算法和容器原地解耦。
@@ -1195,20 +1191,18 @@ int main() {
 
 \subsection{小练}
 
-\begin{problem}
-    假设现在有许多武士要决斗。每个武士都有一个名字和一个体力值，当两个武士相互角斗的时候，体力值较高的武士将会获胜，而体力值较低的武士会被淘汰。然而，角斗会消耗武士的体力值，因此每一次角斗后，胜者的体力值会减少等同于败者当前体力值的数值。如果有两个武士体力相等，则他们将会同归于尽。为了保证公平，武士们决定按照体力值从高到低的顺序进行角斗；如果有多个体力值最高的武士，那么他们会在这些武士中选择姓名字典序最靠前的两个武士进行角斗（例如有abc三个武士，则a的姓名字典序最靠前，b次之，c最靠后）。每次角斗后，胜者会继续参与角斗，直到只剩下一个武士或者没有武士剩下为止。
+假设现在有许多武士要决斗。每个武士都有一个名字和一个体力值，当两个武士相互角斗的时候，体力值较高的武士将会获胜，而体力值较低的武士会被淘汰。然而，角斗会消耗武士的体力值，因此每一次角斗后，胜者的体力值会减少等同于败者当前体力值的数值。如果有两个武士体力相等，则他们将会同归于尽。为了保证公平，武士们决定按照体力值从高到低的顺序进行角斗；如果有多个体力值最高的武士，那么他们会在这些武士中选择姓名字典序最靠前的两个武士进行角斗（例如有abc三个武士，则a的姓名字典序最靠前，b次之，c最靠后）。每次角斗后，胜者会继续参与角斗，直到只剩下一个武士或者没有武士剩下为止。
 
-    请编写一个程序，模拟武士们的角斗过程，并输出角斗的结果。
+请编写一个程序，模拟武士们的角斗过程，并输出角斗的结果。
 
-    输入格式：共n+1行。你会接收到一个数字n，表示武士的数量。接下来n行，每行包含一个武士的名字和体力值（用空格分隔）。保证n不大于一百万，且保证没有两个武士的名字相同。
+输入格式：共n+1行。你会接收到一个数字n，表示武士的数量。接下来n行，每行包含一个武士的名字和体力值（用空格分隔）。保证n不大于一百万，且保证没有两个武士的名字相同。
 
-    输出格式：输出最后剩下的武士的名字和体力值。如果没有武士剩下，则输出“None Left”。
-\end{problem}
+输出格式：输出最后剩下的武士的名字和体力值。如果没有武士剩下，则输出“None Left”。
 
 上述题目看起来难度颇高。这也会是在类似于OJ上出现的常见题目类型之一：不会像前两个题目一样，给你明显的提示和思路（例如“使用筛法”），而是需要你自己思考解决问题的思路。对于这种题目，我们除了需要会语言以外，还要有一定的算法知识。好在这个题目比较简单，算法很直接，重点是怎么实现。
 
-\begin{solution}
-    我们看到，\texttt{武士们按照体力值从高到低的顺序角斗}，这说明我们非常需要一个数据结构来存储武士们的信息，并且能够不停地获取体力最高的武士（对于体力值次高的武士，我们取两次就行），这让我们想到STL的一个重要成员：优先队列。另一方面，我们发现n的数量级在一百万，这对算法的时间要求较高，而优先队列能够很好地满足这个要求。
+\subsubsection{思路}
+我们看到，\texttt{武士们按照体力值从高到低的顺序角斗}，这说明我们非常需要一个数据结构来存储武士们的信息，并且能够不停地获取体力最高的武士（对于体力值次高的武士，我们取两次就行），这让我们想到STL的一个重要成员：优先队列。另一方面，我们发现n的数量级在一百万，这对算法的时间要求较高，而优先队列能够很好地满足这个要求。
 
 那么我们定义一下武士这个数据类型和优先队列：
 \begin{lstlisting}
@@ -1271,17 +1265,11 @@ return 0;  // 程序结束
 \end{lstlisting}
 
 当然，我们肯定不能把这些代码直接交上去，我们需要把它们拼接在一起，成为一个可以执行的程序。
-\end{solution}
 
-\begin{exercise}
-    请将上述代码拼接在一起，完成一个完整的C++程序，并在本地编译运行。
-\end{exercise}
+练习：请将上述代码拼接在一起，完成一个完整的C++程序，并在本地编译运行。
 
-\begin{exercise}
-    请试着使用set、map、vector等其他容器来重新实现上述题目，比较数据量较大时的性能差异。
-\end{exercise}
+思考：请试着使用set、map、vector等其他容器来重新实现上述题目，比较数据量较大时的性能差异。
 
-\begin{note}
 部分同学可能会思考：为什么我要用优先队列，而不是用set、map、vector等其他容器？这个问题问得很好。
 
 我们先来解释“优先队列为什么行”的问题。优先队列是一个特殊的容器，它使用二叉堆实现，速度很快，且我们仅考虑“每次只关心全局最大值”的问题。在上述题目中，我们实际上只将两件事反复循环：把人放进去，把最该打架的两个人拿出来，这两件事恰好符合优先队列的特性。优先队列插入弹出的时间复杂度是$O(\log n)$\footnote{对于不熟悉算法分析的同学们，以上表示可以通俗地理解为：问题规模是n与问题规模是1的时候相比，执行时间最坏情况下大概变为大O里面的函数倍。}，且获取最大值的时间复杂度是$O(1)$，因此上述问题使用优先队列的时间复杂度是$O(n \log n)$，空间复杂度是$O(n)$，非常高效。
@@ -1289,14 +1277,7 @@ return 0;  // 程序结束
 而对于set、map等容器，它们是用红黑树实现的，天然有序：简单地说，无论如何它们都会把所有元素排好（而优先队列并不会把所有元素排好，它只会把最大值放在最前面！）。上述问题中，每一次打架都会改变武士的体力值，这就意味着每次打架后都需要重新排序；为了保持有序，必须先删除、再插入，这个操作本身是两个$O(\log n)$的操作。而在更极端的情况下，加入胜者的体力值极低，它可能从队列首一直沉到队列尾，而set们仍然保留这个没什么竞争力的数据——这意味着后面每一次取“当前最大值”时，都会把这条记录再比较一遍，白白浪费$n log n $的时间！上述问题中，我们知道n是百万级别的，这种反复比较的额外开销总归是需要让复杂度爆炸的，或者说$O(n^2 \log n)$的复杂度，慢了一百万倍。
 
 而对于vector而言，每次重新排序则更加直观：一次排序就得$O(n \log n)$，而每次打架后都需要重新排序，这就意味着每次打架后都需要$O(n \log n)$的时间复杂度。这样一来，整个问题的时间复杂度就变成了$O(n^2 \log n)$，显然超时。综上所述，只有保留全局极值但是不必保留元素具体顺序的数据结构才能较好地完成了这个问题，而优先队列正是这样一个数据结构\footnote{这个题其实有更快的手段，例如胜者树、败者树等，它们本质上是二叉堆的工业级优化，时间复杂度都是$O(n \log n)$，但是常数应该会更小。但是它们写起来非常困难，要考虑各种诸如淘汰等的边界情况，且需要相当的算法基础。胜者树/败者树在竞赛或工程里通常服务于多路归并这类需要“反复取最小/最大并立刻替换”的场景；而本题只需要“全局最大”，STL 的堆已经够用而且很简洁，杀鸡焉用牛刀。我们这里就不讲了。}。
-\end{note}
 
 以上，就是C++的全部内容了（也不是全部内容，毕竟C++14、C++17等版本有越来越多的新特性，但是能掌握C++11的全部特性就已经不得了了）。C++的语法和特性非常丰富，学习曲线较陡，但一旦掌握，就可以编写高效、可维护的代码。
-
-\begin{problemset}
-    \item 编写一个程序，将摄氏度和华氏度互转。摄氏度C和华氏度F的转换公式为：$F = C \times \frac{9}{5} + 32$，$C = (F - 32) \times \frac{5}{9}$。输入格式为：一个字符F或者C，表示输入是华氏度还是摄氏度；接下来一行是一个整数，表示温度的数值。输出格式为：一个字符F或者C，表示输出是华氏度还是摄氏度；接下来一行是转换后温度的数值，保留两位小数。提示：使用cout处理小数点后两位，可以包含头文件\texttt{<iomanip>}使用\texttt{std::fixed}和\texttt{std::setprecision(2)}，将这两个东西直接插在cout后面就行了。（难度：简单）
-    \item 编写一个程序，计算一个班级期末成绩的平均分。期末成绩由平时成绩和考试成绩共同决定，其中前者占30\%，后者占70\%。输入格式为：第一行是学生人数n，接下来n行，每行输入两个整数，分别表示平时成绩和考试成绩。输出格式：一行，输出学生的平均分，保留两位小数。（难度：中等）
-    \item 有一批药剂需要浓缩。每瓶药剂都有自己的浓度，每一次浓缩需要将两瓶药剂放在一起，成本为药剂浓度之和。为了保证成本最小，我们使用贪心算法，也就是每次取出浓度最低的两瓶药剂进行浓缩\footnote{这个算法的正确性可以利用排序不等式证明，这里我就不证明了}。输入格式为：第一行是药剂的数量n，接下来n行，每行一个整数，表示药剂的浓度。输出格式：一行，输出最小的总成本。（难度：困难）
-\end{problemset}
 
 \end{document}
