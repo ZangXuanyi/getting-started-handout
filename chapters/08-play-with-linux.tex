@@ -336,4 +336,357 @@ sudo apt-get install -f # 修复依赖问题
   \item \texttt{-x}：显示所有进程，包括没有控制终端的进程。
 \end{itemize}
 
+\section{安装 Arch Linux}
+
+熟练掌握上述许多操作方式以后，我们可以自己开一个虚拟机或者实体机器等，逐步地安装Arch Linux，进一步练习Linux的使用，并深化理解Linux系统的相关知识。
+
+\subsection{前置操作}
+
+在安装archlinux之前，我们首先要做一些前置的工作。我们需要一个U盘和一个archlinux的iso映像，并使用Rufus等工具将iso映像烧录到U盘中；另一方面，我们在安装整个系统的时候需要保证机器一直联网。
+
+之后，在关机状态下，插上U盘，进入你计算机的BIOS环境，并选择你的启动方式为“从U盘启动”、关闭安全启动、调整启动模式为 UEFI。此三者缺一不可。另外，请确保你的计算机一直有网络连接；如果使用无线网络，务必保证你的无线网络名称和密码均不含特殊字符（如汉字）。
+
+\emph{有少数奇葩的主板里面，安全启动\footnote{安全启动指的是主板在这种情况下只信任微软签名的bootloader。Arch自带的bootloader没有微软签名，因此会被拒绝执行。}被设置为开启，却不存在关闭它的选项，但系统主板内置有 Windows 系统的公钥证书签名，使其只能加载 Windows，其它系统（包括 archlinux）一律不予加载。用户不能关闭它，还没法换系统，实在让人无语。如果你正好是这样的电脑，不妨在虚拟机里尝试下 archlinux 吧！}
+
+\subsection{开始安装}
+
+\subsubsection{进入安装环境}
+
+在跳出的选项框中，选择第一项，进入安装环境。之后，该安装环境就会自动给你加载一些内容。不需要管这些内容具体是什么，一路确认到命令行界面，此时你的用户是\texttt{root\@ archiso}，终端是zsh。从这一步开始，到安装完成为止，你的这个U盘就一定要一直插在电脑上。
+
+\subsubsection{禁用reflector服务}
+
+这个服务主要是用于自行更新mirrorlist的。mirrorlist是软件包管理器 pacman 的软件下载渠道；也许它是一个很好的工具，但是在国内的特殊网络环境下，这个东西反而成了累赘，不妨禁用之。因此，这个东西一定要在联网之前搞。
+
+\begin{lstlisting}[language=bash]
+  systemctl stop reflector.service # 禁用reflector服务
+\end{lstlisting}
+
+\subsubsection{联网}
+
+我们使用\texttt{iwctl}来联网：
+
+\begin{lstlisting}[language=bash]
+iwctl # 进入交互式命令行
+device list # 列出无线网卡设备名，比如无线网卡看到叫 wlan0
+station wlan0 scan # 扫描网络
+station wlan0 get-networks # 列出所有 wifi 网络
+station wlan0 connect wifi-name # 进行连接，注意这里无法输入中文。回车后输入密码即可
+exit # 连接成功后退出
+\end{lstlisting}
+
+可以使用\texttt{ping}等工具来检查是否联网了。在Linux下ping必须按下\texttt{Ctrl+C}终止输出。
+
+\subsubsection{同步时间}
+
+我们使用\texttt{timedatectl}来同步系统的时间。这一步是必要的，这是因为 Linux 很多加密校验（HTTPS、GPG）依赖正确时间。如果时间差太多，证书会被判定过期。
+
+\begin{lstlisting}
+  timedatectl set-ntp true
+\end{lstlisting}
+
+\subsubsection{检查是不是国内源}
+
+\begin{lstlisting}
+  vim /etc/pacman.d/mirrorlist
+\end{lstlisting}
+
+检查有没有熟悉的pku.edu.cn和隔壁镜像。如果没有，说明你的reflector服务禁用晚了，不过并非不能解决，只需要在开头加上相关镜像就行了。不要在这一步添加社区源（例如archlinuxcn）。
+
+\subsubsection{分区与格式化}
+
+这两个操作对数据很危险！不要把含有重要数据的盘当作目标盘。
+
+\texttt{lsblk}命令可以帮助我们确定我们要把archlinux安装在哪里。一般有两种硬盘编号，要么是走SATA协议的sdx，其中x是字母；要么是走NVME协议的nvmexn1，其中x是数字。我们可以通过观察磁盘的大小、已存在的分区情况等判断。下文统一使用sda作为磁盘编号，请根据你自己的实际情况更改磁盘编号。
+
+\begin{lstlisting}[language=bash]
+  cfdisk /dev/sda
+\end{lstlisting}
+
+我们要分出三个区：EFI用来启动（如果做双系统时已有一个EFI分区，则无需）；Swap用于临时存储（至少给到你物理内存的60\%以上）、不活跃页交换和休眠；文件分区（使用Btrfs文件系统，不需要多个文件分区了）。
+
+先创建Swap分区：选中FreeSpace，再选中操作New，再按回车，这样就能创建一个新的分区了。在按下回车后会提示输入分区大小，我们正常输入就可以了；单位可以自行输入。之后在新创建的分区上选中操作Type并按下回车，选择Linux Swap项目，按下回车以修改分区为swap格式。
+
+再创建一个分区，操作类似之前的，只不过这次需要的分区格式是Linux File System。
+
+最后，应用分区表的修改。选中操作Write，并回车，输入yes,再回车，确认分区操作。
+
+分区完成后，可以再使用\texttt{lsblk}命令复查分区情况。
+
+现在，我们需要格式化各种分区。我们假设EFI分区是sda1，Swap分区是sda2，Btrfs分区是sda3。
+
+\begin{lstlisting}[language=bash]
+  mkfs.fat -F32 /dev/sda1
+  mkswap /dev/sda2
+  mkfs.btrfs -L myArch /dev/sda3 # -L操作是指定盘符用的
+  mount -t btrfs -o compress=zstd /dev/sda3 /mnt # 挂载分区
+  btrfs subvolume create /mnt/@ # 创建 / 目录子卷
+  btrfs subvolume create /mnt/@home # 创建 /home 目录子卷
+  umount /mnt # 卸载分区以便于之后的挂载操作
+\end{lstlisting}
+
+\subsubsection{挂载分区}
+
+挂载分区有顺序性，需要从根目录开始挂载：
+
+\begin{lstlisting}[language=bash]
+mount -t btrfs -o subvol=/@,compress=zstd /dev/sda3 /mnt # 挂载 / 目录
+mkdir /mnt/home # 创建 /home 目录
+mount -t btrfs -o subvol=/@home,compress=zstd /dev/sda3 /mnt/home # 挂载 /home 目录
+mkdir -p /mnt/boot # 创建 /boot 目录
+mount /dev/sda1 /mnt/boot # 挂载 /boot 目录
+swapon /dev/sda2 # 挂载交换分区
+\end{lstlisting}
+
+用\texttt{df -h}命令和\texttt{free -h}来复查挂载情况。
+
+\subsubsection{安装系统}
+
+现在终于到了最重要的一步：安装系统了。我们使用\texttt{pacstrap}来安装最基础的包和功能性软件。
+
+\begin{lstlisting}
+  pacstrap /mnt base base-devel linux linux-firmware btrfs-progs
+  pacstrap /mnt networkmanager vim sudo zsh zsh-completions # zsh也可以换成bash，但是不建议新手换这个。
+\end{lstlisting}
+
+倘若提示GPG证书错误，用以下命令更新一下密钥环：
+
+\begin{lstlisting}
+  pacman -S archlinux-keyring
+\end{lstlisting}
+
+然后经过一系列安装时信息的刷屏，就安装好了。之后，我们利用\texttt{genfstab}命令来根据当前挂载情况生成并写入fstab文件\footnote{该文件用来定义磁盘分区。它是 Linux 系统中重要的文件之一。}即可。
+
+\begin{lstlisting}
+  genfstab
+\end{lstlisting}
+
+\subsubsection{换根，以及一些基础设置}
+
+接下来，我们需要从安装介质中切出，进入新系统的目录下。
+
+\begin{lstlisting}
+  arch-chroot /mnt
+\end{lstlisting}
+
+现在可以发现命令行的提示符颜色和样式发生了改变。我们现在可以设置主机名和时区了：
+\begin{lstlisting}
+  vim /etc/hostname
+\end{lstlisting}
+输入你喜欢的主机名称，当然这里也不要包含特殊字符以及空格。
+
+下一步，设置\texttt{/etc/hosts}：
+\begin{lstlisting}
+  vim /etc/hosts
+\end{lstlisting}
+保证里面有以下内容：
+\begin{lstlisting}
+127.0.0.1   localhost
+::1         localhost
+127.0.1.1   myarch.localdomain myarch
+\end{lstlisting}
+
+再下一步，设置时区和硬件时间：
+\begin{lstlisting}
+  ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+  hwclock --systohc
+\end{lstlisting}
+这里没有北京，只有上海，所以不要傻傻的找北京了！
+
+使用vim或者nano编辑/etc/locale.gen，去掉 en\_US.UTF-8 UTF-8 以及 zh\_CN.UTF-8 UTF-8 行前的注释符号，并保存。之后用\texttt{locale-gen}命令来生成locale\footnote{这个文件决定了软件使用的语言、书写习惯、字符集等}。
+
+\begin{lstlisting}
+  locale-gen
+\end{lstlisting}
+
+下一步运行以下命令来设置默认locale：
+\begin{lstlisting}
+  echo 'LANG=en_US.UTF-8'  > /etc/locale.conf
+\end{lstlisting}
+我们不建议在这一步设置任何中文的locale，会导致tty乱码。
+
+现在为root用户设置密码：
+\begin{lstlisting}
+  passwd root
+\end{lstlisting}
+根据提示操作即可。注意输入密码时不会显示，不要以为键盘坏了。
+
+最后，安装CPU微码：
+\begin{lstlisting}
+pacman -S intel-ucode # Intel
+pacman -S amd-ucode # AMD
+\end{lstlisting}
+CPU微码是厂商发布的CPU补丁，它们在启动早期加载，使用软件来修复硬件缺陷。
+
+\subsubsection{作引导}
+
+引导是让主板和系统内核沟通的桥梁，系统的启动依赖于引导。
+
+第一步，装包：
+\begin{lstlisting}
+  pacman -S grub efibootmgr os-prober
+\end{lstlisting}
+os-prober是为了能够引导Windows系列系统而不得不装的一个东西。如果不需要Windows系统，完全可以不安装之。但是，前两个还是要装的。
+
+下一步，把grub安装到EFI分区：
+\begin{lstlisting}
+  grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=ARCH
+\end{lstlisting}
+
+然后，对开机指令进行一些微调，以加快速度：
+\begin{lstlisting}
+  vim /etc/default/grub
+\end{lstlisting}
+主要是对GRUB\_CMDLINE\_LINUX\_DEFAULT进行修改：去掉最后的 quiet 参数（这样可以在启动的时候就把内核日志打出来，便于排错）；把 loglevel 的数值从 3 改成 5，方便排错；加入 nowatchdog 参数，这可以显著提高开关机速度。
+
+如果需要引导Windows系列系统，则不得不添加新的一行：
+\begin{lstlisting}
+  GRUB_DISABLE_OS_PROBER=false
+\end{lstlisting}
+
+最后，生成配置文件：
+\begin{lstlisting}
+  grub-mkconfig -o /boot/grub/grub.cfg
+\end{lstlisting}
+
+\subsubsection{完成基础安装}
+
+输入以下命令以完成安装：
+\begin{lstlisting}
+exit # 退回安装环境
+umount -R /mnt # 卸载新分区
+reboot # 重启
+\end{lstlisting}
+计算机关闭后，立刻拔掉U盘，进入引导界面，然后选择archlinux。
+
+登录系统需要输入用户名和密码。在这时，我们还没有创建任何账户，因此只有一个root。输入用户名root，以及你的密码，即可进入系统。
+
+为了保证这玩意能够自动联网，可以使用
+\begin{lstlisting}
+systemctl enable --now NetworkManager # 设置开机自启并立即启动 NetworkManager 服务
+nmcli dev wifi list # 显示附近的 Wi-Fi 网络
+nmcli dev wifi connect "<Your_Wifi>" password "<your_password>" # 连接指定的无线网络
+ping 8.8.8.8 # 测试网络连接
+\end{lstlisting}
+
+最后，安装并运行fastfetch：
+\begin{lstlisting}
+  pacman -S fastfetch
+  fastfetch
+\end{lstlisting}
+看着显示出的Arch徽标，我们终于可以长舒一口气：安装Arch Linux的过程终于结束了。当然，这个系统肯定很难日常使用，还需要一些后续配置，例如安装视窗等。之后的各种配置实际上都是在已经有的内容上继续开枝散叶，和现代Windows有显著的不同：现代Windows的视窗实际上已经紧紧地和系统内核绑定在一起了，而Linux的视窗只是个软件罢了！
+
+\subsubsection{创建非根用户}
+
+根用户的权限太高了，甚至高于系统本身。这导致其自由度太高、安全度太低，几乎毫无容错。因此，有必要创建一个非根用户。
+
+先做一点准备工作：使用vim或者nano编辑一下\texttt{~/.bash\_profile}文件：
+\begin{lstlisting}
+  vim ~/.bash_profile
+\end{lstlisting}
+向其中加入以下内容：
+\begin{lstlisting}
+  export EDITOR='vim'
+\end{lstlisting}
+这样就会显式地制定编辑器为vim，保证部分情况下不会出错。
+
+然后就可以添加用户了：
+\begin{lstlisting}
+  useradd -m -G wheel -s /bin/bash myusername
+\end{lstlisting}
+你可以把myusername改为你喜欢的名字，但是同样不能包含空格和特殊字符。这个wheel是一个特殊的用户组，可以使用sudo提权。你可以使用以下命令设置新用户的密码：
+\begin{lstlisting}
+  passwd myusername
+\end{lstlisting}
+再下一步，编辑sudoers文件：
+\begin{lstlisting}
+  EDITOR=vim visudo # 这里需要显式的指定编辑器，因为上面的环境变量还未生效
+\end{lstlisting}
+找到这一行，把前面的注释符号\#去掉：
+\begin{lstlisting}
+  #%wheel ALL=(ALL:ALL) ALL
+\end{lstlisting}
+保存并退出就可以了。现在你就有了一个非根用户。
+
+\subsubsection{开启多个库的支持}
+
+编辑这个文件：
+\begin{lstlisting}
+  vim /etc/pacman.conf
+\end{lstlisting}
+然后去掉\texttt{[multilib]}一节中所有内容的注释即可。这样可以开启32位库的支持。
+
+然后在文档结尾处加入下面的文字来添加中国社区源：
+\begin{lstlisting}
+[archlinuxcn]
+Server = https://mirrors.ustc.edu.cn/archlinuxcn/$arch # 中国科学技术大学开源镜像站
+Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch # 清华大学开源软件镜像站
+Server = https://mirrors.hit.edu.cn/archlinuxcn/$arch # 哈尔滨工业大学开源镜像站
+Server = https://repo.huaweicloud.com/archlinuxcn/$arch # 华为开源镜像站
+\end{lstlisting}
+
+保存并退出上述文件，然后使用以下命令刷新数据库并更新系统：
+\begin{lstlisting}
+  pacman -Syyu
+\end{lstlisting}
+
+\subsection{配置视窗，以及后续内容}
+
+通过以下的命令安装视窗相关的软件包：
+\begin{lstlisting}
+  pacman -S plasma-meta konsole dolphin
+\end{lstlisting}
+安装完成之后，运行以下命令：
+\begin{lstlisting}
+  systemctl enable sddm
+\end{lstlisting}
+之后重启电脑就行。输入你新创建的非根用户的密码，然后回车，就可以登录桌面了。
+
+值得注意的是，这时尚未安装任何显卡驱动。如果你在进入桌面环境时遭遇闪退、花屏等异常情况，建议尝试安装相应的显卡驱动。这里我就不提了，感兴趣的同学可以自行查找相关资料进行了解。
+
+之后，可以做一些很好的操作，例如使用\texttt{Ctrl+Alt+T}打开Konsole（不是Console，这个是一个终端模拟器）。连接一下网络，然后安装一些基础功能包：
+\begin{lstlisting}
+sudo pacman -S sof-firmware alsa-firmware alsa-ucm-conf # 声音固件
+sudo pacman -S ntfs-3g # 使系统可以识别 NTFS 格式的硬盘
+sudo pacman -S adobe-source-han-serif-cn-fonts wqy-zenhei # 安装几个开源中文字体。一般装上文泉驿就能解决大多 wine 应用中文方块的问题
+sudo pacman -S noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra # 安装谷歌开源字体及表情
+sudo pacman -S firefox chromium # 安装常用的火狐、chromium 浏览器
+sudo pacman -S ark # 压缩软件。在 dolphin 中可用右键解压压缩包
+sudo pacman -S packagekit-qt6 packagekit appstream-qt appstream # 确保 Discover（软件中心）可用，需重启
+sudo pacman -S gwenview # 图片查看器
+sudo pacman -S archlinuxcn-keyring # cn 源中的签名（archlinuxcn-keyring 在 archlinuxcn）
+sudo pacman -S yay # yay 命令可以让用户安装 AUR 中的软件（yay 在 archlinuxcn）
+\end{lstlisting}
+
+之后，如同root账户一样，配置其默认编辑器即可。
+
+\subsubsection{配置中文环境}
+
+首先应当配置系统为中文。这很简单，打开\texttt{System Settings > Language and Regional Settings > Language > Add languages}，找到并加入简体中文，然后拖拽到最上面一位，保存并退出设置。重启电脑就可以生效了。
+
+现在该配置汉语输入法了：
+\begin{lstlisting}
+sudo pacman -S fcitx5-im # 输入法基础包组
+sudo pacman -S fcitx5-chinese-addons # 官方中文输入引擎
+sudo pacman -S fcitx5-anthy # 日文输入引擎
+sudo pacman -S fcitx5-pinyin-moegirl # 萌娘百科词库。二刺猿必备（archlinuxcn）
+sudo pacman -S fcitx5-material-color # 输入法主题
+\end{lstlisting}
+下一步，创建以下文件，然后编辑这个文件：
+\begin{lstlisting}
+  vim ~/.config/environment.d/im.conf
+\end{lstlisting}
+向文件中加入这些内容并保存退出，以修正输入法的一些错误：
+\begin{lstlisting}
+# fix fcitx problem
+GTK_IM_MODULE=fcitx
+QT_IM_MODULE=fcitx
+XMODIFIERS=@im=fcitx
+SDL_IM_MODULE=fcitx
+GLFW_IM_MODULE=ibus
+\end{lstlisting}
+之后，打开系统设置-区域和语言，找到输入法一项，运行fcitx。之后，点击添加输入法，找到拼音输入（或者你喜欢的输入），将其添加为拼音输入法。
+
+现在重启电脑就可以输入中文了。
+
 \end{document}

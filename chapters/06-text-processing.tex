@@ -272,23 +272,23 @@ LaTeX的安装冗长且复杂，通常需要安装一个完整的 TeX 发行版�
 \end{itemize}
 
 一个简单的 LaTeX 文档示例如下：
-\begin{lstlisting}
-  \documentclass{article}
-  \usepackage{amsmath}
+\begin{lstlisting}[language={[LaTeX]TeX}]
+\documentclass{article}
+\usepackage{amsmath}
 
-  \begin{document}
-  \title{我的第一篇 LaTeX 文档}
-  \author{张三}
-  \date{\today}
-  \maketitle
-  \section{引言}
-  这是一篇 LaTeX 文档。我们可以在这里写一些数学公式：
-  \begin{equation}
-  E=mc^2
-  \end{equation}
-  \section{结论}
-  LaTeX 是一种强大的排版工具，适用于学术论文和书籍等文档的排版。
-  \end{document}
+\begin{document}
+\title{我的第一篇 LaTeX 文档}
+\author{张三}
+\date{\today}
+\maketitle
+\section{引言}
+这是一篇 LaTeX 文档。我们可以在这里写一些数学公式：
+\begin{equation}
+E=mc^2
+\end{equation}
+\section{结论}
+LaTeX 是一种强大的排版工具，适用于学术论文和书籍等文档的排版。
+\end{document}
 \end{lstlisting}
 
 \subsubsection{文档类声明}
@@ -303,14 +303,14 @@ LaTeX的安装冗长且复杂，通常需要安装一个完整的 TeX 发行版�
 \end{itemize}
 
 要声明一个文档类，只需在文档的第一行使用 \texttt{\textbackslash documentclass} 命令。例如，要声明一个文章类型的文档，可以使用以下命令：
-\begin{lstlisting}
+\begin{lstlisting}[language={[LaTeX]TeX}]
   \documentclass{article}
 \end{lstlisting}
 
 \subsubsection{导言区}
 导言区是 LaTeX 文档的第二部分，用于加载宏包和设置文档的全局参数。宏包是 LaTeX 的扩展功能，可以提供额外的排版功能和样式。
 在导言区，可以使用 \texttt{\textbackslash usepackage} 命令来加载宏包。例如，要加载 amsmath 宏包以支持数学公式，可以使用以下命令：
-\begin{lstlisting}
+\begin{lstlisting}[language={[LaTeX]TeX}]
   \usepackage{amsmath}
 \end{lstlisting}
 
@@ -321,7 +321,7 @@ LaTeX的安装冗长且复杂，通常需要安装一个完整的 TeX 发行版�
 
 LaTeX其实还有“注释”部分，这些部分仅在tex源码中存在，但是不会出现在最终的pdf文档中。注释部分以百分号（\%）开头，本行后面的内容会被 LaTeX 忽略。例如：
 
-\begin{lstlisting}
+\begin{lstlisting}[language={[LaTeX]TeX}]
   \begin{document}
     ...正文...
     % 这是一个注释
@@ -348,7 +348,7 @@ LaTeX其实还有“注释”部分，这些部分仅在tex源码中存在，但
 \subsubsection{强制空格}
 
 对于纯英语的文本，LaTeX 会自动处理空格。但有时在英汉混写或纯汉语的文档中，代码中的空格不会编译，此时我们需要在文本中插入一个强制空格。可以使用 \texttt{\textbackslash } 命令来实现，这个反斜杠前后都应该加上空格。例如：
-\begin{lstlisting}
+\begin{lstlisting}[language={[LaTeX]TeX}]
   这是一个强制 \ 空格的例子。
 \end{lstlisting}
 
@@ -361,7 +361,7 @@ LaTeX其实还有“注释”部分，这些部分仅在tex源码中存在，但
 \subsubsection{数学公式}
 
 LaTeX 对数学公式的支持非常强大。可以使用美元符号 (\$) 来包裹行内公式，或者使用两个美元符号 (\$\$) 来包裹块级公式。例如：
-\begin{lstlisting}
+\begin{lstlisting}[language={[LaTeX]TeX}]
   这是一个行内公式 $E=mc^2$ 的示例。
 
   这是一个块级公式的示例：
@@ -369,14 +369,14 @@ LaTeX 对数学公式的支持非常强大。可以使用美元符号 (\$) 来�
 \end{lstlisting}
 
 除此之外，也可以使用 \texttt{\textbackslash begin\{equation\}} 和 \texttt{\textbackslash end\{equation\}} 来包裹数学公式，这样可以自动编号公式。例如：
-\begin{lstlisting}
+\begin{lstlisting}[language={[LaTeX]TeX}]
   \begin{equation}
   E=mc^2
   \end{equation}
 \end{lstlisting}
 
 对于多行公式\footnote{需要宏包\texttt{amsmath}}，可以使用 \texttt{\textbackslash begin\{align\}} 和 \texttt{\textbackslash end\{align\}} 来包裹公式，并使用 \texttt{\&} 符号来对齐公式。例如：
-\begin{lstlisting}
+\begin{lstlisting}[language={[LaTeX]TeX}]
   \begin{align}
   E &= mc^2 \\
   F &= ma
@@ -400,7 +400,7 @@ LaTeX 还支持各种数学符号和运算符，例如乘号 (\texttt{\textbacks
 \subsubsection{列表}
 
 使用 \texttt{itemize} 环境来创建无序列表，使用 \texttt{enumerate} 环境来创建有序列表。这个列表也是可以嵌套的，例如：
-\begin{lstlisting}
+\begin{lstlisting}[language={[LaTeX]TeX}]
   \begin{itemize}
   \item 列表项 1
   \item 列表项 2
@@ -416,7 +416,7 @@ LaTeX 还支持各种数学符号和运算符，例如乘号 (\texttt{\textbacks
 
 使用 \texttt{table} 环境来创建表格。以下是一个示例：
 
-\begin{lstlisting}
+\begin{lstlisting}[language={[LaTeX]TeX}]
   \begin{table}
     \centering
     \begin{tabular}{lr}
@@ -440,7 +440,7 @@ caption 命令用于添加表格的标题，label 命令用于给表格添加标
 \subsubsection{图片}
 
 使用 \texttt{graphicx} 宏包来插入图片。首先，在导言区加载这个宏包，然后使用 \texttt{figure} 环境来插入图片。例如：
-\begin{lstlisting}
+\begin{lstlisting}[language={[LaTeX]TeX}]
   \usepackage{graphicx}
 
   \begin{figure}
@@ -456,12 +456,12 @@ caption 命令用于添加表格的标题，label 命令用于给表格添加标
 \subsubsection{超链接与标签引用}
 
 可以使用 \texttt{hyperref} 宏包来创建超链接。首先，在导言区加载这个宏包，然后使用 \texttt{\textbackslash href\{链接地址\}\{链接文本\}} 命令来创建超链接。例如：
-\begin{lstlisting}
+\begin{lstlisting}[language={[LaTeX]TeX}]
   这是一个超链接：\href{https://www.example.com}{超链接文本}
 \end{lstlisting}
 
 标签引用则与超链接类似，可以使用 \texttt{\textbackslash label\{标签名\}} 命令来创建标签，然后使用 \texttt{\textbackslash ref\{标签名\}} 命令来引用标签。例如：
-\begin{lstlisting}
+\begin{lstlisting}[language={[LaTeX]TeX}]
   \section{引言}
   \label{sec:introduction}
 
@@ -517,7 +517,7 @@ LaTeX的字体分三种：常规字体、无衬线字体和等宽字体。常规
 
 我们可以使用 \texttt{ctex} 宏包来设置中文文档的格式和字体。以下是一个简单的示例：
 
-\begin{lstlisting}
+\begin{lstlisting}[language={[LaTeX]TeX}]
   \documentclass{article}
   \usepackage[UTF8, heading=true]{ctex}
   % 这里的heading=true的意思是“采用中式标题”，没有的话会报错
@@ -549,7 +549,7 @@ LaTeX的字体分三种：常规字体、无衬线字体和等宽字体。常规
 现代的LaTeX，我们建议使用 \texttt{\textbackslash subfile\{文件名\}} 命令来引入其他 LaTeX 文件，这个命令是由 \texttt{subfiles} 宏包提供的。这样能够较好地保证文件的独立性，不仅可以在主文件中编译，也可以在子文件中独立编译，使得调试更加方便。
 
 举例说明：我们可以写一个主要文件 main.tex，内容如下：
-\begin{lstlisting}
+\begin{lstlisting}[language={[LaTeX]TeX}]
   \documentclass{article}
   \usepackage{subfiles}
 
@@ -569,7 +569,7 @@ LaTeX的字体分三种：常规字体、无衬线字体和等宽字体。常规
 \end{lstlisting}
 
 然后，我们可以创建两个子文件 section1.tex 和 section2.tex，内容如下：
-\begin{lstlisting}
+\begin{lstlisting}[language={[LaTeX]TeX}]
   \documentclass[main.tex]{subfiles} % 指定主文件是main.tex
 
   \section{第一节}
