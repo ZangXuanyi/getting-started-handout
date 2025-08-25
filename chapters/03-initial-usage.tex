@@ -43,22 +43,46 @@
 \section{善用快捷键}
 
 使用快捷键可以减少鼠标操作的频率。以下是来自Windows的常用快捷键：
-\begin{itemize}
-  \item Ctrl+C：复制
-  \item Ctrl+V：粘贴
-  \item Ctrl+Z：撤销
-  \item Ctrl+Y：重做
-  \item Ctrl+A：全选
-  \item Ctrl+Alt+Del：任务管理器
-  \item Alt+F4：关闭窗口
-  \item Win+R：打开运行窗口
-  \item Win+E：文件资源管理器\footnote{文件资源管理器是Windows系统中用于浏览和管理文件和文件夹的工具。}
-  \item Win+D：显示桌面
-  \item Win+L：锁定计算机
-  \item Ctrl+S：保存
-  \item Ctrl+P：打印
-  \item Ctrl+F：查找替换
-\end{itemize}
+
+\begin{table}[htbp]
+  \centering
+  \caption{Windows常用快捷键}
+  \label{tab:windows-shortcuts}
+  \begin{tabular}[t]{c|c}
+    \hline
+    \textbf{快捷键} & \textbf{功能} \\
+    \hline
+    \texttt{Ctrl+C} & 复制 \\
+    \texttt{Ctrl+V} & 粘贴 \\
+    \texttt{Ctrl+Z} & 撤销 \\
+    \texttt{Ctrl+Y} & 重做 \\
+    \texttt{Ctrl+A} & 全选 \\
+    \texttt{Ctrl+Alt+Del} & 打开任务管理器 \\
+    \texttt{Ctrl+S} & 保存当前文档或文件 \\
+    \texttt{Ctrl+P} & 打印当前文档或文件 \\
+    \texttt{Ctrl+F} & 查找文本或内容 \\
+    \hline
+  \end{tabular}
+  \qquad
+  \begin{tabular}[t]{c|c}
+
+    \hline
+    \textbf{快捷键} & \textbf{功能} \\
+    \hline
+    \texttt{Alt+F4} & 关闭当前窗口 \\
+    \texttt{Alt+Tab} & 迅速切换窗口 \\
+    \texttt{Win+R} & 打开运行窗口 \\
+    \texttt{Win+E} & 打开文件资源管理器 \\
+    \texttt{Win+D} & 显示桌面 \\
+    \texttt{Win+L} & 锁定计算机 \\
+    \texttt{PrtScn} & 截图（全屏） \\
+    \texttt{Alt+PrtScn} & 截图（当前窗口） \\
+    \texttt{Win+Shift+S} & 截图（自定义区域） \\
+    \hline
+  \end{tabular}
+\end{table}
+
+除了上述快捷键以外，在其他的软件中也有着自己特定的快捷键。例如在浏览器中，Ctrl+T可以打开一个新的标签页，Ctrl+W可以关闭当前标签页，Ctrl+Shift+T可以重新打开上一个关闭的标签页等。这些快捷键可以帮助我们更高效地使用计算机。
 
 \section{终端初步}\label{sec:terminal}
 
@@ -103,7 +127,7 @@
 
 在Linux和macOS中，包管理器是非常常用的工具。它可以帮助用户快速安装和管理软件包，避免手动下载和安装软件包的麻烦。比如我希望在Arch Linux下安装GCC，只需要执行以下命令即可：
 
-\begin{lstlisting}
+\begin{lstlisting}[language=bash]
     sudo pacman -S gcc
 \end{lstlisting}
 
@@ -113,7 +137,11 @@
 
 试想以下环境：我们正在写一项作业，开发工作已经基本完成，试运行也能够得到90分。此时我们希望进一步精进代码，使得分数达到95分以上；但是经过一通修改以后，发现程序再也运行不起来了。这时候距离ddl只有1小时，我们决定摆烂，提交能够得到90分的代码。然后我们根据记忆改回原来的代码的时候，发现我们再也想不起来旧代码是怎么写的了！这无疑是令人极为懊恼的。
 
-为了避免以上问题，我们引入了版本控制系统。目前最常用的版本控制系统是Git。
+再试想另一个环境：假设我们正在开发一个大型项目，项目中有很多人参与开发。如果使用传统的方式来分发代码，那么每个人都要手动下载代码，修改代码，然后再上传代码。这时候就会出现很多问题，例如代码冲突、版本不一致等。那这就需要专门的一个人或者几个人来管理代码的版本和分发，但是这样就会显著增加工作量和复杂度。
+
+为了避免以上问题，我们引入了版本控制（VCS）系统。一般来说，VCS系统可以分为两类：集中式版本控制系统（CVCS，也叫中心化的）和分布式版本控制系统（DVCS，也叫去中心化的）。集中式版本控制系统的特点是所有的代码都存储在一个中心服务器上，所有的开发者都需要从中心服务器上下载代码，然后再上传代码；而分布式版本控制系统的特点是每个开发者都有一份完整的代码库，所有的操作都是在本地进行的，然后再将修改推送到中心服务器上。这样就可以避免代码冲突、版本不一致等问题。
+
+2002 年以前，Linux 内核开发完全依赖于 Linus 一个人手工检查并合并全世界发来的补丁，这样工作量非常大。于是，Linus 的一个朋友介绍了 BitMover 公司开发的商业 VCS 软件 BitKeeper 免费授权给 Linux 开发团队使用。此举招致了 FSF 的 RMS 等人的批评，认为在自由软件开发中使用非自由软件是“道德上有污点”的行为。但是作为实用主义者的 Linus 并不在意这些事情，BitKeeper 作为去中心化的 VCS，满足了 Linus 的需求。然而好景不长，有 Linux 内核开发者逆向了 BitKeeper 的协议，致使 BitMover 公司在 2005 年决定收回其授权。Git 就是在这种条件下诞生的，据说第一版 Git 是 Linus 利用 1 周休假时间完成的。随着Linux的广泛应用，Git也逐渐成为了最流行的去中心化版本控制系统，也是目前最流行的版本控制系统。
 
 \begin{figure}[htbp]
   \centering
@@ -124,15 +152,40 @@
 
 \subsection{Git的工作原理}
 
-Git有三个目录共同完成版本控制：工作区、暂存区、版本库。工作区是项目目录，暂存区是一个隐藏的文件夹.git，版本库是一个隐藏的文件夹.git/objects。工作区是我们平时使用的目录，暂存区是Git用来存储修改的地方，版本库是Git用来存储所有版本信息的地方。版本库有一个指针，指向当前版本的某一节点（一般指向最新的节点）。每个节点都有一个唯一的哈希值，用来标识该节点。每个节点包含了该版本的所有文件和目录的信息，以及指向上一个版本的指针。Git使用哈希值来标识每个版本，这样可以保证每个版本都是唯一的。
+Git有三个目录共同完成版本控制：工作区、暂存区、版本库。工作区是项目目录，暂存区是一个隐藏的文件夹.git，版本库是一个隐藏的文件夹.git/objects。工作区是我们平时使用的目录，暂存区是Git用来存储修改的地方，版本库是Git用来存储所有版本信息的地方。版本库有一个指针，指向当前版本的某一节点（一般指向最新的节点）。每个节点都有一个唯一的哈希值\footnote{哈希（Hash，也叫散列）指的是固定长度、像指纹一样的唯一小串字符，可用于快速校验、查找或加密等功能。}，用来标识该节点。每个节点包含了该版本的所有文件和目录的信息，以及指向上一个版本的指针。Git使用哈希值来标识每个版本，这样可以保证每个版本都是唯一的。
 
 这样讲解很难以理解，我们不妨举例说明：现在，Git中有一个版本为X的节点，包括文件A和文件B两个文件。这些文件存储在版本库中。此时，工作区为空，暂存区为空，指针指向X。我现在希望对它们进行修改，这个修改遵循以下过程：
 
 \begin{enumerate}
   \item 我拿出了这些文件，并且对文件A进行修改。此时，工作区有AB两个文件，但是暂存区依然是空的。我们的任何修改都不会被暂存区记录，Git也不会知道我对这些文件进行了修改。
+
   \item 我觉得修改差不多了，现在把A放进暂存区。现在Git知道我对A进行了一些修改了。
+    \begin{figure}[!ht]
+      \begin{subfigure}[t]{0.45\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{images/git-graph-no-modified.png}
+      \end{subfigure}
+      \hfill               % 把左右撑开
+      %----- 右图 -----
+      \begin{subfigure}[t]{0.45\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{images/git-a-changed.png}
+      \end{subfigure}
+    \end{figure}
   \item 我又对B进行了类似的修改，此时B也进暂存区了。
   \item 我觉得修改差不多了。我认为我应该永久保存目前的状态，于是就把暂存区提交到版本库。此时版本库多了一个Y节点，指针也指向Y节点，有修改过的AB两个文件。此时，暂存区又清空了，而工作区和版本库的Y版本一致。
+    \begin{figure}[!ht]
+      \begin{subfigure}[t]{0.45\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{images/git-b-changed.png}
+      \end{subfigure}
+      \hfill               % 把左右撑开
+      %----- 右图 -----
+      \begin{subfigure}[t]{0.45\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{images/git-commited.png}
+      \end{subfigure}
+    \end{figure}
 \end{enumerate}
 
 \subsection{下载Git}
@@ -213,7 +266,7 @@ Git有三个目录共同完成版本控制：工作区、暂存区、版本库�
 \begin{lstlisting}[language=bash]
     git reset --mixed <commit_hash>
     # 我们更加推荐这个回退方式，--mixed可以省略，或者用--soft替代。
-    用--soft替代时，不会清空暂存区。
+    # 用--soft替代时，不会清空暂存区。
 \end{lstlisting}
 
 使用图解来表示一下：
