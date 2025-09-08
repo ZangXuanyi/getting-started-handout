@@ -65,7 +65,6 @@
   \end{tabular}
   \qquad
   \begin{tabular}[t]{c|c}
-
     \hline
     \textbf{快捷键} & \textbf{功能} \\
     \hline
@@ -95,15 +94,41 @@
     <命令> [<选项>] [<参数>]
 \end{lstlisting}
 
-其中，命令是要执行的操作，选项是对命令的修改（例如 -h 表示帮助信息），参数是命令的输入（例如文件名）。选项和参数往往都是可选的。
+其中，命令是要执行的操作，选项是对命令的补充说明（例如 -h 往往表示帮助信息），参数是命令的输入（例如文件名）。选项和参数往往都是可选的。
 
-对于Linux和macOS，我们建议使用Zsh或Fish等更加友好的shell，他们能够进行语法高亮、自动补全等操作。对于Windows，我们建议使用Windows PowerShell。PowerShell的命令统一采用的是动词-名词的格式，和Linux Shell的简单缩写形式有很大的不同。这是因为PowerShell的设计理念是模仿C\#的“对象”，而不是Linux Shell的文本流。不过也正因此，PowerShell本身就是一门完备的语言，功能非常强大，在处理复杂的任务上更为简单。表\ref{tab:terminal-commands}是一些常见的命令。
+对于Linux和macOS，常见的shell有以下几种：
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{c|ccc}
+    \hline
+    & \textbf{bash} & \textbf{zsh} & \textbf{fish} \\
+    \hline
+    定位 & 通用，默认 & 高度定制 & 易用、美观、现代化 \\
+    兼容性 & POSIX标准兼容 & 大多数兼容bash & 不兼容bash，自成一套 \\
+    上手难度 & 中等 & 中等偏高 & 非常简单 \\
+    自动补全 & 仅有基础功能 & 需配合插件 & 开箱即用 \\
+    语法高亮 & 没有 & 有插件 & 默认有 \\
+    可定制性 & 较低 & 非常高 & 较高 \\
+    脚本通用性 & 几乎全通用 & 高 & 低 \\
+    资源占用 & 非常低 & 取决于插件 & 较低 \\
+    \hline 
+  \end{tabular}
+  \caption{常见的Linux/macOS Shell对比}
+\end{table}
+我们推荐使用zsh或者fish。关于zsh怎么安装插件的问题，可以参考网上的各种教程，例如Oh My Zsh等。
+
+对于Windows，默认的终端是CMD，其风格太老了，基本与现代开发脱节，不建议使用。我们建议使用Windows PowerShell。PowerShell的命令统一采用的是动词-名词的格式，和Linux Shell的简单缩写形式有很大的不同。这是因为PowerShell的设计理念是模仿C\#的“对象”，而不是Linux Shell的文本流。不过也正因此，PowerShell本身就是一门完备的语言，功能非常强大，在处理复杂的任务上更为简单。
+
+除了这些以外，如果不希望使用Windows的原生终端，也可以使用诸如Cygwin、MSYS2等类Unix环境，来获得类似Linux的终端体验。有些教程会让你使用git bash，这东西是一个精简版MSYS2，主要用于Git操作，功能非常有限，不建议长期使用。
+
+下表\ref{tab:terminal-commands}是一些常见的命令。
 
 \begin{table}[htbp]
   \centering
   \begin{tabular}{c|cc}
     \hline
-    \textbf{操作} & \textbf{Bash} & \textbf{Pwsh} \\
+    \textbf{操作} & \textbf{\*sh类系统} & \textbf{Pwsh} \\
     \hline
     创建文件 & touch & New-Item \\
     列出文件 & ls & Get-ChildItem \\
