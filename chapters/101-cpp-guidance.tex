@@ -791,30 +791,54 @@ public:
 
 \subsubsection{构造、析构、拷贝和赋值}
 
-类的构造函数和析构函数是特殊的方法，用于对象的初始化和清理。构造函数在创建对象（也叫实例化）时自动调用，而析构函数在对象销毁时自动调用。构造函数的名称与类名相同，并且没有返回值；析构函数的名称是类名加上波浪号（\textasciitilde），也没有返回值。
+类的构造函数和析构函数是特殊的方法，用于对象的初始化和清理。构造函数在创建对象（也叫实例化）时自动调用，而析构函数在对象销毁时自动调用。构造函数的名称与类名相同，并且既没有返回值也没有返回类型；析构函数的名称是波浪号（\textasciitilde）加上类名，同样既没有返回值也没有返回类型。
 
-构造函数可以有参数，用于初始化对象的属性；析构函数通常用于释放对象占用的资源。\textbf{这是C++的一个重要特性：RAII（Resource Acquisition Is Initialization），资源获取在初始化中获取、在析构中释放。}我们在C++中不需要（也尽可能不要）像C一样手动malloc和free内存，而是通过构造函数和析构函数来自动管理资源，代码更简洁也更安全。
+构造函数用于初始化对象的属性，析构函数通常用于释放对象占用的资源。\textbf{这是C++的一个重要特性RAII（Resource Acquisition Is Initialization）：资源获取在初始化中获取、在析构中释放。}我们在C++中不需要（也尽可能不要）像C一样手动malloc和free内存，而是通过构造函数和析构函数来自动管理资源，代码更简洁也更安全。
 
-一般情况下，类有着默认的构造和析构函数，它们不含有任何参数，且不执行任何操作。默认的构造函数只会自动获取资源并将所有属性初始化为默认值（例如整数为0，布尔值为false等），析构函数也不会做除了释放资源外的任何事情。满足这种条件的类也叫做\textbf{POD类型，Plain Old Data}：没有自定义构造函数、析构函数和拷贝构造函数，它们的行为类似于C语言中的结构体。相应的，在构造函数、析构函数中执行一些其他操作的类则叫做\textbf{非POD类型}，也往往叫做\textbf{复杂类}。
+一般情况下，类有着默认的构造和析构函数，它们不含有任何参数，且不执行任何操作。默认的构造函数只会将所有属性初始化为默认值（例如整数为0，布尔值为false等），默认析构函数则按成员逆序调用成员的析构函数。满足这种条件的类也叫做\textbf{平凡且标准布局类}，在旧的实现中也叫POD类型：这种类型没有自定义构造函数、析构函数和拷贝构造函数，它们的行为类似于C语言中的结构体。相应的，在构造函数、析构函数中执行一些其他操作的类则叫做\textbf{非POD类型}，也往往叫做\textbf{复杂类}。一个类可以有多个构造函数（本质上是函数重载），但是只能有一个析构函数。
 
-如果我们写了自己的构造和析构函数，那么默认的就会被覆盖掉。比方说，上文\texttt{Point2D}类中，我们定义了一个带参数的构造函数和一个析构函数。这样，当我们创建一个\texttt{Point2D}对象时，就会调用这个构造函数来初始化对象的属性（将全局点数量增加1）；当对象被销毁时，就会调用析构函数来干点别的（将全局点数量减1），然后清理资源。上述Point2D类的构造函数和析构函数都做了一些额外的操作：增加和减少全局点数量，因此Point2D是一个复杂类。
+比如说：
+\begin{lstlisting}[language=C++]
+class Point2D{
+    public:
+        int x, y;
+        Point2D() {} // 默认构造函数，防止覆盖
+        Point2D(int _x, int _y){ // 自己写的构造函数
+            x = _x;
+            y = _y;
+        }
+        ~Point2D() {} // 自己写的析构函数
+};
+\end{lstlisting}
+
+如果我们写了自己的构造和析构函数，那么编译器就不会再隐式地生成任何默认构造函数和析构函数。比方说，上文\texttt{Point2D}类中，我们定义了一个带参数的构造函数和一个析构函数。这样，当我们创建一个\texttt{Point2D}对象时，就会调用这个构造函数来初始化对象的属性（将全局点数量增加1）；当对象被销毁时，就会调用析构函数来干点别的（将全局点数量减1），然后清理资源。
+
+在较新版本的C++标准中，构造函数的属性初始化部分可以使用初始化列表来简单地编写。例如：
+\begin{lstlisting}[language=C++]
+Point2D(int _x, int _y) : x(_x), y(_y) { ... }
+\end{lstlisting}
 
 \emph{
-  需要注意的一点是：在C++中对象的资源管理由构造函数和析构函数自动完成，因此我们不要在构造函数中malloc，也不要在析构函数中free或者delete this。前者有可能导致内存泄漏，后者可能会导致双重释放，这是非常危险的。
+  需要注意的一点是：在C++中对象的资源管理由构造函数和析构函数自动完成，因此我们不要在构造函数中malloc，也不要在析构函数中free或者delete this。当malloc/free未配对时几乎必然导致内存出毛病，而随便delete this导致的双重释放也是非常危险的。如果一定要用构造函数和析构函数管理资源，应使用 RAII 资源句柄（如 std::unique\_ptr）而非裸指针。
 }
 
-拷贝函数是一个特殊的构造函数，它用来复制对象。一般情况下，C++会自动生成一个拷贝构造函数，它会逐个复制对象的属性。但是，如果类中有指针或动态分配的资源，我们需要自定义拷贝构造函数来正确地复制对象。拷贝构造函数的参数是类本身的常量引用，而对方法本身没有什么要求。
+拷贝构造函数\footnote{没有“拷贝函数”这种东西。}是一个特殊的构造函数，它用来复制对象。一般情况下，C++会自动生成一个拷贝构造函数，它会逐个复制对象的属性。但是，如果类中有指针或动态分配的资源，我们需要自定义拷贝构造函数来正确地复制对象。拷贝构造函数的参数是类本身的常量引用，而对方法本身没有什么要求。
 
-一般拷贝分为浅拷贝和深拷贝。浅拷贝只是复制指针的值，而深拷贝则会复制指针指向的内容。对于包含指针的类，我们通常需要实现深拷贝，以避免多个对象的指针指向同一块内存空间，导致资源管理混乱。默认情况下，C++的拷贝形式是浅拷贝。
+一般拷贝分为浅拷贝和深拷贝。浅拷贝只是复制指针的值，而深拷贝则会复制指针指向的内容。对于包含指针的类，我们通常需要实现深拷贝，以避免多个对象的指针指向同一块内存空间，导致资源管理混乱。默认拷贝操作对数据成员逐个复制；如果成员是指针，则仅复制指针值（即所谓“浅拷贝”）。当类拥有动态资源时，通常需要自定义深拷贝逻辑。
 
-拷贝赋值运算符是一个特殊的运算符，用于将一个对象的值赋给另一个对象。它的基本格式如下：
+拷贝赋值运算符是一个特殊的运算符，用于将一个对象的值赋给另一个对象。它的基本格式如下，而下面这一段代码也展示了深拷贝操作中常见的“先复制、后交换”写法：
 \begin{lstlisting}[language=C++]
-类名& operator=(const 类名& other) {
-    if (this != &other) {  // 防止自赋值
-        // 复制属性
+class Foo {
+    int* data;
+public:
+    Foo(const Foo& rhs) : data(new int[*rhs.data]) {} // 构造函数，深拷贝
+    Foo& operator=(Foo rhs) {      // 按值接收，已拷贝/移动
+        swap(*this, rhs);          // 交换资源
+        return *this;
     }
-    return *this;  // 返回当前对象的引用
-}
+    friend void swap(Foo& a, Foo& b) noexcept { std::swap(a.data, b.data); }
+    // noexcept表示这个函数不会抛出异常
+};
 \end{lstlisting}
 由此，我们看到了我们对\texttt{=}进行了重载。这实际上是定义了一个赋值函数，因此也被叫做类的赋值。
 
@@ -847,12 +871,12 @@ public:
 这样可以阻止外部直接修改余额，只能通过存款和取款方法来操作余额。问我为什么余额用int而不是double或者float的，建议重读Mini ICS。
 
 \emph{
-  在C\#中，对于封装有一个非常优雅的名词：Getter和Setter。Getter是获取属性值的方法，Setter是设置属性值的方法，同样是上述的代码我们在C\#中可以写成\texttt{public int Balance \{ get; private set; \}}，意思是只有类内可以设置这个属性的值，而类内外可以获取这个属性的值。这样就实现了封装，同时又不失优雅。C++中没有这个优雅的语法，因此我们只能像上述代码中手动定义getter。
+  在C\#中，对于封装有一个非常优雅的名词：Getter和Setter。Getter是获取属性值的方法，Setter是设置属性值的方法，同样是上述的代码我们在C\#中可以写成\texttt{public int Balance \{ get; private set; \}}，意思是只有类内可以设置这个属性的值，而类内外可以获取这个属性的值。这样就实现了封装，同时又不失优雅。C++中没有这个优雅的语法，因此我们只能像上述代码中手动实现getter。
 }
 
 \subsubsection{继承}
 
-继承是面向对象编程的一个重要特性，它允许我们创建一个新的类（子类），它继承了另一个类（父类）的属性和方法。子类可以添加自己的属性和方法，也可以重写父类的方法。被重写的方法必须是\textbf{虚方法}，也就是在父类中声明为\texttt{virtual}的方法。
+继承是面向对象编程的一个重要特性，它允许我们创建一个新的类（子类），它继承了另一个类（父类）的属性和方法。子类可以添加自己的属性和方法，也可以重写父类的方法。基类中被重写的方法应被声明为 virtual，也就是\textbf{虚函数}。重写方法时建议加 override 关键字。
 
 继承的基本格式如下：
 \begin{lstlisting}[language=C++]
@@ -861,14 +885,77 @@ class Circle : public Shape { ... };
 \end{lstlisting}
 以上代码的意思是：声明一个名为Shape的类，它有一个纯虚函数area()，表示这个类是一个抽象类。然后声明一个名为Circle的类，它继承了Shape类，并实现了area()方法。
 
-在实际操作中，子类一般属于父类的一个特例，或者说\textbf{子类真包含于父类}。例如，我们要创建一个“大舅”类和一个“二舅”类，一个非常差的设计是让“二舅”继承自“大舅”，因为二舅并不是大舅的一个特例（或者说二舅不是大舅），反过来也一样。一个好的设计是让这两个类都继承自一个“舅舅”类（他大舅他二舅都是他舅），这样就可以避免这种问题。
+除了重写父类已有的方法，我们也可以在子类中新增一些父类没有的属性和方法。例如：
+\begin{lstlisting}[language=C++]
+class Circle : public Shape {
+private:
+    double radius;  // 圆的半径
+public:
+    Circle(double r) : radius(r) {}  // 构造函数
+    double area() override {  // 重写父类的area()方法
+        return M_PI * radius * radius;  // 计算圆的面积
+    }
+    double circumference() {  // 新增方法，计算圆的周长
+        return 2 * M_PI * radius;  // 计算圆的周长
+    }
+};
+\end{lstlisting}
+
+现在只剩下“子类的构造函数怎么写”这个问题了。在C++的继承中，子类的构造函数需要调用父类的构造函数来初始化父类的属性。当\textbf{父类有公共的默认构造函数（无参）}，且\textbf{子类没有需要手动初始化的属性}时，子类的构造函数可以不写，编译器会自动生成一个公共且无参的默认构造函数，并调用父类的默认构造函数来初始化父类的属性。只要不满足以上情况，就必须要显式的提供子类的至少一个构造函数。
+\begin{lstlisting}[language=C++]
+class Base {
+public:
+    Base(int value) {
+        cout << "Base constructor with value: " << value << endl; 
+    }  // 带参数的构造函数
+    Base(int v1, int v2) { 
+        cout << "Base constructor with values: " << v1 << ", " << v2 << endl; 
+    }  // 另一个带参数的构造函数
+    Base() { 
+        cout << "Base default constructor" << endl; 
+    }  // 默认构造函数
+};
+class Derived : public Base {
+public:
+    Derived(int value) : Base(value) {
+        cout << "Derived constructor with data: " << value << endl;
+    }  // 子类的构造函数，调用父类的带参数构造函数
+    Derived(int v1, int v2) : Base(v1, v2) {
+        cout << "Derived constructor with data: " << value << endl;
+    }  // 另一个子类的构造函数，调用父类的另一个带参数构造函数
+    Derived() : Base() {
+        cout << "Derived default constructor" << endl;
+    }  // 子类的默认构造函数，调用父类的默认构造函数
+};
+\end{lstlisting}
+
+C++11以上的标准中，如果子类只是想照抄父类的所有构造函数而不需要写自己的，可以使用\texttt{using}关键字来简化代码：
+\begin{lstlisting}[language=C++]
+class Derived : public Base {
+public:
+    using Base::Base;  // 直接继承父类的所有构造函数
+};
+\end{lstlisting}
+
+需要注意的是，以下两种代码是不过编译的：
+\begin{lstlisting}[language=C++]
+    class Base;
+    class Derived : public Base { ... };  // 错误，Base类未定义
+\end{lstlisting}
+\begin{lstlisting}[language=C++]
+    class Base { ... };
+    class Derived : public Base; // 错误，子类的定义必须紧跟类体
+\end{lstlisting}
+在上述代码中，一开始我们声明出了一个类\texttt{Base}，但是并未定义它。这样的类是“不完整的”，C++规定不能继承一个不完整的类。另一方面，即使预先定义了基类，但是在继承的时候没有跟出定义也是不允许的。
+
+在实际操作中，子类一般属于父类的一个特例，或者更简单地说\textbf{子类是父类}。例如，我们要创建一个“大舅”类和一个“二舅”类，一个非常差的设计是让“二舅”继承自“大舅”，因为二舅并不是大舅的一个特例（或者说二舅不是大舅），反过来也一样。一个好的设计是让这两个类都继承自一个“舅舅”类（他大舅他二舅都是他舅），这样就可以避免这种问题。
 
 \subsubsection{多态}
 
 多态指的是同一个方法在不同的对象上有不同的表现。多态是通过继承和虚函数实现的。当我们调用一个虚函数时，实际调用的是子类中重写的方法，而不是父类中的方法。这种特性使得我们可以使用父类指针或引用来调用子类的方法。
 
 以继承中涉及到的Shape和Circle类为例：
-\begin{lstlisting}
+\begin{lstlisting}[language=C++]
 Shape* shape = new Circle();  // 创建一个Circle对象，并将其赋值给Shape指针
 shape->area();  // 调用Circle类的area()方法
 \end{lstlisting}
@@ -896,7 +983,7 @@ void revealSecret(const MyClass& obj) {
 
 重载是C++中的一个重要特性，它允许我们定义多个同名的函数或运算符，但它们的参数列表或返回类型不同。写一个例子就好了：
 
-\begin{lstlisting}
+\begin{lstlisting}[language=C++]
 class Tensor{
     int x, y;
 public:
@@ -919,7 +1006,7 @@ cout << t3.x << ", " << t3.y << endl;  // 输出结果
 模板也是一个很重要的特性，它允许我们编写通用的代码，可以处理不同类型的数据。模板可以分为函数模板和类模板。
 
 比方说我们想写一个加法：
-\begin{lstlisting}
+\begin{lstlisting}[language=C++]
 template <typename T>
 T add(T a, T b) {
     return a + b;  // 返回a和b的和
@@ -935,7 +1022,7 @@ int main() {
 这个函数就可以对任何类型的数据进行加法操作，只要这个类型支持加法运算符。对于不支持加法运算符的类型，编译器会报错（但是我们可以为这些类型重载加法运算符）。
 
 类模板的语法类似，只不过是定义一个类而不是一个函数：
-\begin{lstlisting}
+\begin{lstlisting}[language=C++]
 template <typename T>
 class Box {
 public:
@@ -952,7 +1039,7 @@ Box<double> doubleBox(3.14);  // 创建一个存储双精度浮点数的Box对�
 
 类型推断是C++11引入的一个特性，它允许编译器根据变量的初始值自动推断变量的类型。使用类型推断可以使代码更简洁、更易读。
 类型推断的基本语法是使用\texttt{auto}关键字：
-\begin{lstlisting}
+\begin{lstlisting}[language=C++]
 auto x = 5;  // 编译器推断x的类型为int
 auto y = 3.14;  // 编译器推断y的类型为double
 auto str = "Hello, World!";  // 编译器推断str的类型为const char*
@@ -964,14 +1051,14 @@ auto str = "Hello, World!";  // 编译器推断str的类型为const char*
 类型别名是C就有的一个特性，但是C++11对它进行了扩展。类型别名允许我们为现有的类型创建一个新的名称，使得代码更易读。
 
 C++中可以使用\texttt{using}关键字来定义类型别名。
-\begin{lstlisting}
+\begin{lstlisting}[language=C++]
 using ll = long long;  // 定义一个长整型的别名
 using IntVector = std::vector<int>;  // 定义一个整型向量的别名
 IntVector v = {1, 2, 3};  // 使用别名创建一个整型向量
 \end{lstlisting}
 
 如果使用C风格的语法，则是：
-\begin{lstlisting}
+\begin{lstlisting}[language=C++]
 typedef long long ll;  // 定义一个长整型的别名
 typedef std::vector<int> IntVector;  // 定义一个整型向量的别名
 IntVector v = {1, 2, 3};  // 使用别名创建一个整型向量
@@ -980,7 +1067,7 @@ IntVector v = {1, 2, 3};  // 使用别名创建一个整型向量
 using和typedef几乎没有什么区别，只不过using的语法更加符合直觉（用这个作为这个的别名），类似于声明变量；而typedef则更像是定义一个宏（虽然实际上不是），阅读方向是反直觉的。
 
 using的另一个独特之处是可以用于模板类型的别名：
-\begin{lstlisting}
+\begin{lstlisting}[language=C++]
 template <typename T>
 using Matrix = std::vector<std::vector<T>>;  // 定义一个二维向量的别名
 Matrix<int> m = {{1, 2}, {3, 4}};  // 使用别名创建一个二维向量
@@ -993,7 +1080,7 @@ typedef就无法应用于模板类型别名。因此，在C++中，我们推荐�
 有时候，在编程中我们需要将一个类型转化成另一个类型，以满足特定的需求。
 
 C语言就有类型强转的功能：
-\begin{lstlisting}
+\begin{lstlisting}[language=C++]
     float f = 3.14;
     int i = (int)f;  // 将float类型强制转换为int
     // 也可以写成 int i = int(f);
@@ -1011,7 +1098,7 @@ C语言就有类型强转的功能：
 \end{itemize}
 
 举例说明：
-\begin{lstlisting}
+\begin{lstlisting}[language=C++]
 #include <iostream>
 using namespace std;
 
@@ -1024,7 +1111,8 @@ int* p = const_cast<int*>(&c);  // 使用const_cast去掉const属性
 *p = 100;  // 修改p指向的值，即使C是const的也能改
 
 class Base;
-class Derived : public Base;
+class Derived : public Base; 
+// 注意：以上两行代码仅用于说明继承关系，实际过不了编译
 Base* b = new Derived();
 Derived* d = dynamic_cast<Derived*>(b);  // 使用dynamic_cast将父类指针转为子类
 Derived* d = static_cast<Derived*>(b);  // 使用static_cast转型（不安全，但是能过编译）
@@ -1036,7 +1124,7 @@ uintptr_t ptr = reinterpret_cast<uintptr_t>(b);  // 使用reinterpret_cast将指
 
 C语言的强转实际上会先尝试常变转换，再尝试数值转换，要是不行就常变数值一起转，还不行就按位重解释。所以说这玩意实际上是四合一，不过也导致它隐形语义极为复杂、易于出错，出错了也不容易搜索定位。
 
-\begin{lstlisting}
+\begin{lstlisting}[language=C++]
 const volatile void* v = ...;
 int* bad = (int*)v;  // C风格的强转，实际上一口气把const和volatile都去掉了，顺便做了个按位重解释
 \end{lstlisting}
@@ -1058,7 +1146,7 @@ STL（Standard Template Library）是C++的最重要特性，它提供了一组�
 \subsection{容器}
 
 举个最常见的例子：
-\begin{lstlisting}
+\begin{lstlisting}[language=C++]
 std::vector<int> v = {3,1,4};   // 自动扩容的数组
 std::set<int> s = {3,1,4};      // 自动排序的红黑树
 std::unordered_map<std::string,int> m;  // 哈希表
@@ -1108,7 +1196,7 @@ std::unordered_map<std::string,int> m;  // 哈希表
 \subsection{迭代器}
 
 迭代器可以认为是指针的语法糖。一个示例：
-\begin{lstlisting}
+\begin{lstlisting}[language=C++]
 for(auto it=v.begin(); it!=v.end(); ++it) cout<<*it<<' ';
 // 或者直接：
 for(auto x : v) cout<<x<<' '; // auto最应该这么用！
@@ -1166,7 +1254,7 @@ std::reverse(v.begin(), v.end());        // 原地翻转
 \subsection{Lambda表达式}
 
 Lambda表达式是C++11引入的一个特性，它允许我们在代码中定义匿名函数。Lambda表达式可以捕获外部变量，并且可以作为参数传递给其他函数。它的基本语法如下：
-\begin{lstlisting}
+\begin{lstlisting}[language=C++]
 [捕获列表](参数列表) -> 返回类型 {
     // 函数体
 }
@@ -1174,7 +1262,7 @@ Lambda表达式是C++11引入的一个特性，它允许我们在代码中定义
 捕获列表用于指定哪些外部变量可以在Lambda表达式中使用，参数列表和返回类型与普通函数类似。Lambda表达式可以直接在代码中定义，不需要单独声明。
 
 例如：
-\begin{lstlisting}
+\begin{lstlisting}[language=C++]
 #include <iostream>
 #include <vector>
 using namespace std;
@@ -1205,7 +1293,7 @@ int main() {
 我们看到，\texttt{武士们按照体力值从高到低的顺序角斗}，这说明我们非常需要一个数据结构来存储武士们的信息，并且能够不停地获取体力最高的武士（对于体力值次高的武士，我们取两次就行），这让我们想到STL的一个重要成员：优先队列。另一方面，我们发现n的数量级在一百万，这对算法的时间要求较高，而优先队列能够很好地满足这个要求。
 
 那么我们定义一下武士这个数据类型和优先队列：
-\begin{lstlisting}
+\begin{lstlisting}[language=C++]
 class Warrior {
 public:
     string name;  // 武士的名字
@@ -1225,7 +1313,7 @@ priority_queue<Warrior> warriors;  // 定义一个优先队列，存储武士
 \end{lstlisting}
 
 接下来，处理读取逻辑：
-\begin{lstlisting}
+\begin{lstlisting}[language=C++]
 int n;
 cin >> n;  // 读取武士数量
 for (int i = 0; i < n; ++i) {
@@ -1237,7 +1325,7 @@ for (int i = 0; i < n; ++i) {
 \end{lstlisting}
 
 再下一步就是处理角斗的逻辑了。由于优先队列会自动处理上述武士的排序问题，我们只需要不断地从优先队列中取出两个武士进行角斗即可：
-\begin{lstlisting}
+\begin{lstlisting}[language=C++]
 while(warriors.size() > 1) {  // 当优先队列中还有多个武士时
     Warrior w1 = warriors.top();  // 取出体力值最高的武士
     warriors.pop();  // 弹出这个武士
@@ -1254,14 +1342,14 @@ while(warriors.size() > 1) {  // 当优先队列中还有多个武士时
 \end{lstlisting}
 
 最后，处理输出：
-\begin{lstlisting}
+\begin{lstlisting}[language=C++]
 if (warriors.empty()) {
     cout << "None Left" << endl;  // 如果没有武士剩下，输出“None Left”
 } else {
     Warrior last = warriors.top();  // 取出最后剩下的武士
     cout << last.name << " " << last.health << endl;  // 输出武士的名字和体力值
 }
-return 0;  // 程序结束
+return 0;
 \end{lstlisting}
 
 当然，我们肯定不能把这些代码直接交上去，我们需要把它们拼接在一起，成为一个可以执行的程序。
