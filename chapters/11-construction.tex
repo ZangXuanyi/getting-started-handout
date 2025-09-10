@@ -350,11 +350,11 @@ target("app")                             -- 一个目标
 \end{lstlisting}
 我们发现，对比CMake，XMake的语法更加简洁，没有复杂的概念；无需手写类似于\texttt{if (WIN32)}这样的系统条件判断，XMake会自动根据宿主处理；虽然也有目标的概念（\texttt{target}块），但是这一个块就相当于CMake的\texttt{add\_executable}（或者\texttt{add\_library}）和\texttt{target\_*}的组合。
 
-在XMake中，目标也有作用域的概念。不过写起来非常简单，例如\texttt{add\_includedirs("include", {public = true})}表示这个头文件目录是公共的，链接到这个目标的其他目标也可以使用这个头文件目录。
+在XMake中，目标也有作用域的概念。例如\texttt{add\_includedirs("include", {public = true})}表示这个头文件目录是公共的，链接到这个目标的其他目标也可以使用这个头文件目录。
 
 \subsubsection{语法速查（和CMake对比）}
 
-\begin{table}
+\begin{table}[ht]\small
   \centering
   \begin{tabular}{l|l|l}
     \hline
@@ -426,7 +426,7 @@ $ xmake service --start                  # 本机当编译服务器
 $ xmake f --remote_build=y
 $ xmake                                  # 自动分发
 \end{lstlisting}
-上述代码会启动一个编译服务器，然后在本地编译时自动分发到远程服务器上进行编译。XMake会自动处理远程编译的细节，用户只需要关注代码和配置即可。
+上述代码会启动一个编译服务器，然后在本地编译时自动分发到服务器上进行编译。XMake会自动处理远程编译的细节，用户只需要关注代码和配置即可。
 
 \subsection{打包发布}
 XMake的打包发布也和CMake大同小异：
