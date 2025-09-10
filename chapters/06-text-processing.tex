@@ -113,6 +113,7 @@ Markdown 使用井号（\#）来表示标题。井号的数量表示标题的层
 有序列表则使用数字加点的方式表示，例如：
 
 \begin{lstlisting}
+1. 列表项 1
 2. 列表项 2
 3. 列表项 3
 \end{lstlisting}
@@ -188,7 +189,7 @@ LaTeX的安装冗长且复杂，通常需要安装一个完整的 TeX 发行版�
 
 将下载下来的虚拟光驱镜像装载到虚拟光驱中，然后执行其中的批处理文件进行安装。安装过程中，建议选择“安装所有包”以防出现各种未知的错误。之后，在弹出的窗口中选择清华源（校外）或者北大源（校内，速度更快）并进行下载安装。安装过程可能需要较长时间，请耐心等待。
 
-如果你不希望安装在默认的 C:\textbackslash texlive 目录下，可以在安装过程中选择自定义安装路径。但是，该目录不应包含任何非 ASCII 字符，或者说不应包含空格或其他非英文特殊字符。安装完成后，建议将 TeX Live 的 bin 目录添加到系统的环境变量中，以便在命令行中直接使用 LaTeX 命令。我们不建议安装TexLive 的 GUI 前端，因为它不易于使用。
+如果你不希望安装在默认的 \texttt{C:\textbackslash texlive} 目录下，可以在安装过程中选择自定义安装路径。但是，该目录不应包含任何非 ASCII 字符，或者说不应包含空格或其他非英文特殊字符。安装完成后，建议将 TeX Live 的 bin 目录添加到系统的环境变量中，以便在命令行中直接使用 LaTeX 命令。我们不建议安装TexLive 的 GUI 前端，因为它不易于使用。
 
 \subsubsection{Linux: 以Ubuntu为例}
 
@@ -260,7 +261,7 @@ LaTeX的安装冗长且复杂，通常需要安装一个完整的 TeX 发行版�
 \begin{lstlisting}
     "latex-workshop.latex.autoBuild.run": "onSave",
 \end{lstlisting}
-这样每次保存文档时，VS Code 都会自动编译 LaTeX 文档。将 "onSave" 改为 "never" 则可以关闭自动编译功能。
+这样每次保存文档时，VS Code 都会自动编译 LaTeX 文档。将 \texttt{"onSave"} 改为 \texttt{"never"} 则可以关闭自动编译功能。
 
 \subsection{LaTeX 的语法}
 
@@ -542,7 +543,7 @@ LaTeX的字体分三种：常规字体、无衬线字体和等宽字体。常规
 
 \subsection{LaTeX 与多文件}
 
-我们在\ref{sec:code-style}中提到过，对于非常长的代码文件，建议将其拆分成多个文件进行管理。LaTeX 也不例外，虽然tex文件是以文本内容为主的，但是对于动辄几十页上万行的文档，拆分成多个文件也是必要的，LaTeX也支持这种做法。
+对于非常长的代码文件，建议将其拆分成多个文件进行管理。LaTeX 也不例外，虽然tex文件是以文本内容为主的，但是对于动辄几十页上万行的文档，拆分成多个文件也是必要的，LaTeX也支持这种做法。
 
 一些比较经典的手段是使用 \texttt{\textbackslash input\{文件名\}} 或 \texttt{\textbackslash include\{文件名\}} 命令来引入其他 LaTeX 文件。但是这两个命令风格比较老，不建议使用。
 
@@ -581,7 +582,107 @@ LaTeX的字体分三种：常规字体、无衬线字体和等宽字体。常规
 
 需要注意的是，采用多文件来管理文档的时候，我们在应对多文件引用时，需要多次编译才能得到正确的引用和目录，一般来说是三次。（而单文件文档只需要两次编译即可。）
 
-\section{Typst*}
+\subsection{使用Beamer类制作幻灯片}
+
+LaTeX除了可以用来排版文章、书籍等文档外，还可以制作幻灯片。Beamer就是用于制作幻灯片的一个文档类。以下会简单介绍如何使用Beamer类制作幻灯片。
+
+\subsubsection{Beamer文档的基本结构}
+
+Beamer类文档的基本结构和普通的LaTeX文档类似。然而，在正文部分，其内容并不是简单的段落，而是由多个幻灯片（frame）组成的。每个frame对应PowerPoint中的一页内容。
+
+一个简单的Beamer文档示例如下：
+\begin{lstlisting}[language={[LaTeX]TeX}]
+  \documentclass{beamer}
+  \usepackage{amsmath}
+  \title{我的第一篇 Beamer 幻灯片}
+  \author{张三}
+  \date{\today}
+  \begin{document}
+  \frame{\titlepage} % 生成标题页
+  \begin{frame}
+    \frametitle{引言} % 设置帧标题
+    这是我的第一篇 Beamer 幻灯片。
+    我们可以在这里写一些数学公式：
+    \begin{equation}
+      E=mc^2
+    \end{equation}
+  \end{frame}
+  \end{document}
+\end{lstlisting}
+
+如上述代码所示，创建帧有两种方式：一种是使用 \texttt{\textbackslash frame\{\}} 命令，另一种是使用 \texttt{frame} 环境。前者适合内容较少的帧，后者适合内容较多的帧。在帧中添加标题可以使用 \texttt{\textbackslash frametitle\{标题\}} 命令，如希望添加简单文字、图片、公式等内容，可以直接在帧中编写，方法和普通的 LaTeX 文档几乎完全相同。
+
+\subsubsection{Beamer的常用强调}
+
+经常做幻灯片的同学们都知道，在幻灯片中希望强调某些内容的时候，最好不要仅使用字体的简单变化，而是结合显隐、颜色等手段来突出重点。对于部分颜色的文字，可以使用 \texttt{\textbackslash textcolor\{颜色名\}\{文本\}} 命令来实现。例如：
+\begin{lstlisting}[language={[LaTeX]TeX}]
+  \textcolor{red}{这是红色的文本}
+  \textcolor{blue}{这是蓝色的文本}
+\end{lstlisting}
+
+另外，它也提供了一些“块”命令来强调内容，例如 \texttt{block}、\texttt{alertblock} 和 \texttt{exampleblock} 等环境。例如：
+\begin{lstlisting}[language={[LaTeX]TeX}]
+  \begin{block}{普通块}
+    这是一个普通块。
+  \end{block}
+  \begin{alertblock}{警告块}
+    这是一个警告块。
+  \end{alertblock}
+  \begin{exampleblock}{示例块}
+    这是一个示例块。
+  \end{exampleblock}
+\end{lstlisting}
+
+最后，Beamer还支持显隐效果，这种显隐效果在列表的逐步显示中非常有用。一个最简单的逐步显示的例子如下：
+\begin{lstlisting}[language={[LaTeX]TeX}]
+  \begin{itemize}
+    \item<1-> 第一项
+    \item<2-> 第二项
+    \item<3-> 第三项
+  \end{itemize}
+\end{lstlisting}
+上述代码中，\texttt{<1->} 表示从这页的第一帧开始显示这一项，以此类推。如果只想在某一帧显示某一项，可以使用 \texttt{<n>} 的形式，例如 \texttt{<2>} 表示只在第二帧显示这一项。上述代码也可以用在其他环境中，例如段落、公式等。Beamer 还支持更复杂的显隐效果，感兴趣的同学可以查阅 Beamer 的文档。
+
+\subsubsection{Beamer的主题}
+
+结构主题决定了幻灯片的整体风格。Beamer 提供了多种内置主题，用户可以根据需要选择合适的主题。可以使用 \texttt{\textbackslash usetheme\{主题名\}} 命令来设置主题。内置的主题有许多，我们可以通过查阅 Beamer 的文档来了解这些主题的具体名称和效果。我个人比较喜欢使用\texttt{Berlin}主题，该主题简洁大方，适合大多数场合。
+
+除了结构主题外，还有配色主题，它决定了幻灯片的配色方案。可以使用 \texttt{\textbackslash usecolortheme\{配色主题名\}} 命令来设置配色主题。内置的配色主题也有许多，例如 \texttt{dolphin}、\texttt{seahorse}、\texttt{beetle} 等。
+
+另外，Beamer 允许用户创建自己的主题，或者使用第三方提供的主题包。创建自定义主题需要一定的 LaTeX 和 Beamer 知识，建议有一定经验的用户尝试。
+
+\subsection{使用ModernCV类制作简历}
+
+ModernCV 是一个用于制作简历的 LaTeX 文档类。它提供了多种简洁、美观的简历模板，用户可以根据需要选择合适的模板来制作自己的简历。当然，这类简历极为简洁，然而对于技术类岗位也已经绰绰有余；如希望更花哨、更复杂的简历，这个则略显平淡，可以去淘宝花几块钱买个模板（或者转行当UI设计师）。
+
+以下是一个使用 ModernCV 类制作简历的简单示例：
+\begin{lstlisting}[language={[LaTeX]TeX}]
+\documentclass{moderncv}
+\usepackage[UTF8]{ctex}
+
+\moderncvtheme[blue]{casual}        % 主题选casual，颜色选忧郁蓝
+\name{王小明}{摸鱼学硕士}             % 名字和头衔分开写，防止过于嚣张
+\email{run@fast.com}                % 建议别用“ilovexxx@qq.com”
+\social[github]{github.com/xxx}     
+\social[linkedin]{xxx}              % 假装有国际化人脉
+\quote{Stay hungry，stay foolish}   % 乔布斯名言，HR已免疫
+
+\begin{document}
+\maketitle  % 生成个人信息区块
+
+\section{教育背景}
+\cventry{2021--2025}{专业：理论与实操}{某大学}{寄点3.0/4.0}{}{核心课程：《咖啡因代谢学》《早八生存指南》}
+
+\section{实习经历}
+\cventry{2023.06--2023.09}{首席工位守护者}{某厂}{}{}{主要成就：带薪拉屎时长部门TOP1}
+\end{document}
+\end{lstlisting}
+
+如你所见，ModernCV 的使用非常简单。我们只需在导言区加载 \texttt{moderncv} 宏包，并设置主题和颜色，然后使用 \texttt{\textbackslash name}、\texttt{\textbackslash email} 和 \texttt{\textbackslash social} 等命令来添加个人信息。正文部分则使用 \texttt{\textbackslash section} 和 \texttt{\textbackslash cventry} 等命令来添加简历内容。这样就可以快速地生成一份简洁、美观的简历，免除了使用Word等工具排版的烦恼。
+
+该包的另一个极为良好的特性是可以自动压缩空白区域，可以有效地避免“半页纸尴尬”。但是与其这样，感觉确实不如多整点活填满这页纸（大嘘）。所以欢迎来LCPU玩混项目（不是）。
+
+\section{Typst}
 
 Typst 是一种新兴的排版语言，由著名的语言神Rust编写，旨在提供一种更直观、更易于使用的排版方式。它的完备性与 LaTeX 类似，但语法更简洁，易于上手，和MarkDown类似。Typst 的设计理念是让用户能够专注于内容，而不是被复杂的语法和命令所困扰。
 
@@ -589,7 +690,9 @@ Typst 是一种新兴的排版语言，由著名的语言神Rust编写，旨在�
 
 官方提供了Typst的WebAPP，我们可以直接使用之，但是其中文字体和版本控制都不优秀。如果希望在本地使用，则可以在VS Code中安装插件 Tinymist Typst。安装完成后，用户可以在 VS Code 中创建 .typ 文件，并使用 Typst 语法进行排版。
 
-\textit{官方提供了typst的命令行程序，可以使用Rust工具链安装或其他包管理安装。使用\texttt{typst watch main.typ}，之后就可以随意编辑main.typ，在pdf预览器如SumatraPDF和okular中预览pdf了(要能支持动态加载哦)。这种预览方式相比于tinymist预览内存占用小，平时推荐使用tinymist插件预览，除非长文本内存占用极大}
+\begin{tcolorbox}
+  官方提供了typst的命令行程序，可以使用Rust工具链安装或其他包管理安装。使用\texttt{typst watch main.typ}，之后就可以随意编辑main.typ，在能支持动态加载的pdf预览器如SumatraPDF和okular中预览pdf了。这种预览方式相比于tinymist预览内存占用小，平时推荐使用tinymist插件预览，除非长文本内存占用极大。
+\end{tcolorbox}
 
 \subsection{Typst 的语法}
 

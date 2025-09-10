@@ -46,7 +46,7 @@ sudo cmake --install build --prefix /opt/fmt
 
 \subsection{头文件库}
 
-这种安装方式适宜用于一些小型的、单文件的库。只需要将头文件放在项目目录（\texttt{third\_party/}）下，然后在CMake中添加头文件搜索路径即可：
+这种安装方式适宜用于一些小型的库。只需要将头文件放在项目目录（\texttt{third\_party/}）下，然后在CMake中添加头文件搜索路径即可：
 \begin{lstlisting}
     add_subdirectory(third_party/nlohmann_json)
     target_include_directories(my_program PRIVATE third_party/nlohmann_json)

@@ -147,7 +147,9 @@ Linux还有一个重要的目录：用户的家目录。每个用户都有一个
 
 我们可以使用\texttt{chmod}命令来修改文件的权限。例如，\texttt{chmod 777 file.txt}将会把\texttt{file.txt}的权限设置为777。
 
-\emph{注意：修改文件权限需要有相应的权限，否则会报错。同时，不要执行这类抽象的命令：\texttt{chmod 777 /}，这会导致系统无法正常工作。}
+\begin{tcolorbox}[title=注意]
+  修改文件权限需要有相应的权限，否则会报错。同时，不要执行这类抽象的命令：\texttt{chmod 777 /}，这会导致系统无法正常工作。
+\end{tcolorbox}
 
 所以可执行文件并不是因为这个文件本身有什么特别，而是这个文件被你赋予了可执行的性质。一个简单的文本文件也可以被加上可执行的权限，也可以发挥操作其他文件的作用。
 
@@ -254,6 +256,18 @@ sudo apt-get install -f # 修复依赖问题
   \item \texttt{-i}：在删除前提示确认。
   \item \texttt{-v}：显示删除的详细信息。
 \end{itemize}
+
+\begin{tcolorbox}[title=笑话]
+
+\emph{导啊咱们生产环境为啥执行 \texttt{dpkg} 会说 \texttt{command not found} 呀？}
+
+\emph{我之前干了啥？清了一下工作路径垃圾，好像是 \texttt{sudo rm -rf /}}
+
+\emph{什么叫相对路径要加个点？}
+
+{\color{red}\textbf{警告：任何情况下均不得执行上述命令！}}该命令会删除整个根目录下的所有文件，不仅导致系统无法正常工作，还会导致数据丢失。
+
+\end{tcolorbox}
 
 \texttt{rmdir}命令用于删除空目录。
 
