@@ -610,7 +610,10 @@ Beamer类文档的基本结构和普通的LaTeX文档类似。然而，在正文
   \end{document}
 \end{lstlisting}
 
-如上述代码所示，创建帧有两种方式：一种是使用 \texttt{\textbackslash frame\{\}} 命令，另一种是使用 \texttt{frame} 环境。前者适合内容较少的帧，后者适合内容较多的帧。在帧中添加标题可以使用 \texttt{\textbackslash frametitle\{标题\}} 命令，如希望添加简单文字、图片、公式等内容，可以直接在帧中编写，方法和普通的 LaTeX 文档几乎完全相同。
+如上述代码所示，创建帧有两种方式：一种是使用 \texttt{\textbackslash frame\{\}} 命令，另一种是使用 \texttt{frame} 环境。前者适合内容较少的帧，后者适合内容较多的帧。在帧中添加标题可以使用 \texttt{\textbackslash frametitle\{标题\}} 命令，如希望添加简单文字、图片、公式等内容，可以直接在帧中编写，方法和普通的 LaTeX 文档几乎完全相同。然而，如果希望添加表格、代码等浮动内容，则需要在该帧加上 \texttt{[fragile]} 选项，也就是：
+\begin{lstlisting}[language={[LaTeX]TeX}]
+  \begin{frame}[fragile]
+\end{lstlisting}
 
 \subsubsection{Beamer的常用强调}
 
@@ -641,13 +644,24 @@ Beamer类文档的基本结构和普通的LaTeX文档类似。然而，在正文
     \item<3-> 第三项
   \end{itemize}
 \end{lstlisting}
-上述代码中，\texttt{<1->} 表示从这页的第一帧开始显示这一项，以此类推。如果只想在某一帧显示某一项，可以使用 \texttt{<n>} 的形式，例如 \texttt{<2>} 表示只在第二帧显示这一项。上述代码也可以用在其他环境中，例如段落、公式等。Beamer 还支持更复杂的显隐效果，感兴趣的同学可以查阅 Beamer 的文档。
+上述代码中，\texttt{<1->} 表示从这页的第一帧开始显示这一项，以此类推。如果只想在某一帧显示某一项，可以使用 \texttt{<n>} 的形式，例如 \texttt{<2>} 表示只在第二帧显示这一项。上述代码也可以用在其他环境中，例如段落、公式等。
+
+除了这种简单的显隐效果外，还可以使用 \texttt{\textbackslash pause} 命令来实现逐步显示的效果。例如：
+\begin{lstlisting}[language={[LaTeX]TeX}]
+  这是第一部分内容。
+  \pause
+  这是第二部分内容。
+\end{lstlisting}
+
+Beamer 还支持更复杂的显隐效果，感兴趣的同学可以查阅 Beamer 的文档。
 
 \subsubsection{Beamer的主题}
 
 结构主题决定了幻灯片的整体风格。Beamer 提供了多种内置主题，用户可以根据需要选择合适的主题。可以使用 \texttt{\textbackslash usetheme\{主题名\}} 命令来设置主题。内置的主题有许多，我们可以通过查阅 Beamer 的文档来了解这些主题的具体名称和效果。我个人比较喜欢使用\texttt{Berlin}主题，该主题简洁大方，适合大多数场合。
 
-除了结构主题外，还有配色主题，它决定了幻灯片的配色方案。可以使用 \texttt{\textbackslash usecolortheme\{配色主题名\}} 命令来设置配色主题。内置的配色主题也有许多，例如 \texttt{dolphin}、\texttt{seahorse}、\texttt{beetle} 等。
+配色主题决定了幻灯片的配色方案。可以使用 \texttt{\textbackslash usecolortheme\{配色主题名\}} 命令来设置配色主题。内置的配色主题也有许多，例如 \texttt{dolphin}、\texttt{seahorse}、\texttt{beetle} 等。
+
+除了上述主题，还有“字体主题”，决定了幻灯片中使用的字体样式。可以使用 \texttt{\textbackslash usefonttheme\{字体主题名\}} 命令来设置字体主题。一般情况下，Beamer使用的字体系列和常规文档（serif）不同，我们可以使用\texttt{\textbackslash usefonttheme\{serif\}}来强制使用衬线字体。如果仅希望更改公式部分的字体，可以使用\texttt{\textbackslash usefonttheme[onlymath]\{serif\}}。
 
 另外，Beamer 允许用户创建自己的主题，或者使用第三方提供的主题包。创建自定义主题需要一定的 LaTeX 和 Beamer 知识，建议有一定经验的用户尝试。
 
