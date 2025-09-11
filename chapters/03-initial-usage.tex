@@ -120,7 +120,7 @@
 
 对于Windows，默认的终端是CMD，其风格太老了，基本与现代开发脱节，不建议使用。我们建议使用Windows PowerShell。PowerShell的命令统一采用的是动词-名词的格式，和Linux Shell的简单缩写形式有很大的不同。这是因为PowerShell的设计理念是模仿C\#的“对象”，而不是Linux Shell的文本流。不过也正因此，PowerShell本身就是一门完备的语言，功能非常强大，在处理复杂的任务上更为简单。
 
-除了这些以外，如果不希望使用Windows的原生终端，也可以使用诸如Cygwin、MSYS2等类Unix环境，来获得类似Linux的终端体验。有些教程会让你使用git bash，这东西是一个精简版MSYS2，主要用于Git操作，功能非常有限，不建议长期使用。
+除了这些以外，如果不希望使用Windows的原生终端，也可以使用诸如Cygwin、MSYS2等类UNIX环境，来获得类似Linux的终端体验。有些教程会让你使用git bash，这东西是一个精简版MSYS2，主要用于Git操作，功能非常有限，不建议长期使用。
 
 下表\ref{tab:terminal-commands}是一些常见的命令。
 
@@ -156,7 +156,7 @@
     sudo pacman -S gcc
 \end{lstlisting}
 
-在Windows中，包管理器的使用不普遍。虽然有一个官方的包管理器winget，但是支持的软件包较少，且无法自动管理依赖（但也基本够用）；还有一些例如Chocolatey、Scoop等第三方包管理器。除此以外，使用MSYS2、Cygwin等类Unix环境也可以从某种程度上当成包管理器使用。例如后文讲的安装GCC的过程，我们就是使用MSYS2来安装的，比下载预编译版本简单许多。
+在Windows中，包管理器的使用不普遍。虽然有一个官方的包管理器winget，但是支持的软件包较少，且无法自动管理依赖（但也基本够用）；还有一些例如Chocolatey、Scoop等第三方包管理器。除此以外，使用MSYS2、Cygwin等类UNIX环境也可以从某种程度上当成包管理器使用。例如后文讲的安装GCC的过程，我们就是使用MSYS2来安装的，比下载预编译版本简单许多。
 
 \section{Git初步}\label{sec:git}
 
