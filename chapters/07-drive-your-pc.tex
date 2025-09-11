@@ -320,9 +320,9 @@ RSA密钥对是最常用的密钥对之一，不过因为 RSA 密钥对的安全
 ssh-keygen -t ed25519 -C "<你的邮箱地址>"
 \end{lstlisting}
 
-生成密钥对后，我们需要将公钥（\texttt{id\_rsa.pub} 或 \texttt{id\_ed25519.pub}）添加到远程服务器或服务（例如 GitHub、GitLab 等）的 SSH 密钥列表中。\textbf{注意：私钥（\texttt{id\_rsa} 或 \texttt{id\_ed25519}）必须保密，绝对不能泄露给任何人！}
+生成密钥对后，我们需要将公钥（\texttt{id\_rsa.pub} 或 \texttt{id\_ed25519.pub}）添加到远程服务器或服务（例如 GitHub、GitLab、CLab 等）的 SSH 密钥列表中。我们可以使用任何喜欢的编辑器打开上述公钥文件，复制其中的内容，并将其粘贴到指定的位置。\textbf{\color{red}同时，私钥（\texttt{id\_rsa} 或 \texttt{id\_ed25519}）必须保密，绝对不能泄露给任何人！}
 
-如果我们能够直接访问远程服务器，可以使用以下命令将公钥复制到远程服务器上：
+如果我们本地是Linux或者Mac且能够直接访问远程服务器，可以使用以下命令将公钥复制到远程服务器上：
 \begin{lstlisting}[language=bash]
 ssh-copy-id user@remote-server
 \end{lstlisting}

@@ -15,7 +15,13 @@
 \usepackage{subcaption}
 \usepackage{enumitem}
 \usepackage{booktabs}
+\usepackage{xurl}              % 比 url 更 aggressive，允许在任意字符断行
+\def\UrlBreaks{\do. \do@ \do\ \do/ \do! \do_ \do| \do; \do: \do?} % 再补一刀
+\usepackage[english]{babel}   % 或者 ngerman / french / ...
+\babelprovide{import,main}    % 中文用 xeCJK 或 luaotfload 自带断字
+\hyphenpenalty=1000           % 默认 50，值越大越不愿意断字
 \usepackage{hyperref}
+
 
 \lstset{
   basicstyle=\ttfamily\footnotesize,
