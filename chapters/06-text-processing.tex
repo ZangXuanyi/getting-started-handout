@@ -661,7 +661,7 @@ Beamer 还支持更复杂的显隐效果，感兴趣的同学可以查阅 Beamer
 
 配色主题决定了幻灯片的配色方案。可以使用 \texttt{\textbackslash usecolortheme\{配色主题名\}} 命令来设置配色主题。内置的配色主题也有许多，例如 \texttt{dolphin}、\texttt{seahorse}、\texttt{beetle} 等。
 
-除了上述主题，还有“字体主题”，决定了幻灯片中使用的字体样式。可以使用 \texttt{\textbackslash usefonttheme\{字体主题名\}} 命令来设置字体主题。一般情况下，Beamer使用的字体系列和常规文档（serif）不同，我们可以使用\texttt{\textbackslash usefonttheme\{serif\}}来强制使用衬线字体。如果仅希望更改公式部分的字体，可以使用\texttt{\textbackslash usefonttheme[onlymath]\{serif\}}。
+字体主题决定了幻灯片中使用的字体样式。可以使用 \texttt{\textbackslash usefonttheme\{字体主题名\}} 命令来设置字体主题。一般情况下，Beamer使用的字体系列和常规文档（serif）不同，我们可以使用\texttt{\textbackslash usefonttheme\{serif\}}来强制使用衬线字体。如果仅希望更改公式部分的字体，可以使用\texttt{\textbackslash usefonttheme[onlymath]\{serif\}}。
 
 另外，Beamer 允许用户创建自己的主题，或者使用第三方提供的主题包。创建自定义主题需要一定的 LaTeX 和 Beamer 知识，建议有一定经验的用户尝试。
 
@@ -712,7 +712,7 @@ Typst 是一种新兴的排版语言，由著名的语言神Rust编写，旨在�
 
 Typst 有两类语言模式：标记模式和脚本模式，而本质上都可以归结为脚本模式。
 
-在默认情况下，Typst 使用标记模式进行排版，使用类似于MarkDown的简单语法来编写文档。如果希望进入脚本模式，可以使用井号\# 来切换到脚本模式，例如\texttt{\#heading(strong([加粗]))}是一个合法的语法。大段的脚本代码则可以使用花括号，例如\texttt{\#\{1+1\}}。
+在默认情况下，Typst 使用标记模式进行排版，使用类似于MarkDown的简单语法来编写文档。如果希望进入脚本模式，可以使用井号\texttt{\#} 来切换到脚本模式，例如\texttt{\#heading(strong([加粗]))}是一个合法的语法。大段的脚本代码则可以使用花括号，例如\texttt{\#\{1+1\}}。
 
 在脚本模式中，也可以使用方括号来进入标记模式，这将成为脚本模式的“内容块”或者标记元素。
 

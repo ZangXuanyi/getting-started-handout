@@ -323,6 +323,8 @@ VS Code是一个非常灵活的编辑器，可以通过安装插件来增强其�
 \end{itemize}
 一般情况下，修正的方法很简单：如果是环境变量、路径等问题，重新设置就可以；如果是配置文件问题，杀掉当前所有终端，删除\texttt{.vscode}文件夹，然后重新编译调试就可以了。
 
+另外，如果希望使用Code的插件来帮助你编译并运行C/C++代码，则需要打开一个工作文件夹。否则，插件无法为你提供编译和运行的功能。当然，\lstinline[language=bash]|g++ main.cpp -o main.exe && ./main.exe|也并非不可。
+
 \subsubsection{在VS Code中配置Python}
 
 在VS Code中配置Python非常简单。只需要安装微软提供的三个Python插件，然后在VS Code中打开一个Python文件。
@@ -389,6 +391,14 @@ func main() {
 
 \subsection{安装Oh My Posh}
 
+\begin{tcolorbox}[title=注意]
+在配置Oh My Posh的时候，很多的命令涉及到执行脚本。默认情况下，Windows PowerShell会阻止执行脚本以保护系统安全。因此，你需要先修改执行策略来允许执行脚本。在PowerShell中运行以下命令：
+\begin{lstlisting}[language=bash]
+  Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+\end{lstlisting}
+就可以允许当前用户执行远程签名的脚本。
+\end{tcolorbox}
+
 我们建议使用winget来安装Oh My Posh。你可以在PowerShell中运行以下命令来安装：
 
 \begin{lstlisting}[language=bash]
@@ -400,13 +410,7 @@ func main() {
   oh-my-posh init pwsh
 \end{lstlisting}
 
-在配置Oh My Posh的时候，很多的命令涉及到执行脚本。默认情况下，Windows PowerShell会阻止执行脚本以保护系统安全。因此，你需要先修改执行策略来允许执行脚本。在PowerShell中运行以下命令：
-\begin{lstlisting}[language=bash]
-  Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-\end{lstlisting}
-就可以允许当前用户执行远程签名的脚本。
-
-如果你使用的是其他终端，例如cmd或者Git Bash，你可以在Oh My Posh的\href{https://ohmyposh.dev/docs/installation}{安装文档}中找到相应的安装方法。
+如果你使用的是其他终端，例如cmd，你可以在Oh My Posh的\href{https://ohmyposh.dev/docs/installation}{安装文档}中找到相应的安装方法。
 
 \subsection{配置Oh My Posh}
 
@@ -419,7 +423,17 @@ func main() {
 
 安装完成后，你需要在终端中设置字体为Nerd Font。以PowerShell为例，你可以右键点击窗口标题栏，选择“属性”，然后在“字体”选项卡中选择Nerd Font即可。
 
-接下来，你可以在PowerShell中运行命令来设置Oh My Posh的主题了。主题可以在Oh My Posh的\href{https://ohmyposh.dev/docs/themes}{主题文档}中找到。
+为了保证Oh My Posh在每次启动PowerShell时都能自动加载，你需要将初始化命令添加到PowerShell的配置文件中。你可以在PowerShell中运行以下命令来打开配置文件：
+\begin{lstlisting}[language=bash]
+  notepad $PROFILE
+\end{lstlisting}
+
+然后在文件的末尾添加以下内容，并重新启动终端：
+\begin{lstlisting}[language=bash]
+  oh-my-posh init pwsh | Invoke-Expression
+\end{lstlisting}
+
+接下来，你可以在PowerShell中运行命令来设置Oh My Posh的主题了。主题及其安装方法可以在Oh My Posh的\href{https://ohmyposh.dev/docs/themes}{主题文档}中找到。
 
 \subsection{在VS Code中配置终端}
 

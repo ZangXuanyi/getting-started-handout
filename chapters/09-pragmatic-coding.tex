@@ -40,7 +40,7 @@ Python社区广泛遵循\href{https://www.python.org/dev/peps/pep-0008/}{PEP 8}�
 \subsubsection{C: K\&R, GNU, and Linux Kernel Style}
 作为一门历史悠久的系统编程语言，C语言形成了多种常见的代码风格。
 \begin{itemize}
-  \item \textbf{K\&R风格}：源自C语言的作者Brian Kernighan和Dennis Ritchie的著作\href{https://en.wikipedia.org/wiki/The_C_Programming_Language}{《The C Programming Language》}。它的特点是括号风格紧凑，左大括号跟在函数名或控制语句的同一行。这是许多后续风格的基础。
+  \item \textbf{K\&R风格}：源自C语言的作者Brian Kernighan和Dennis Ritchie的\href{https://en.wikipedia.org/wiki/The_C_Programming_Language}{著作}\textsc{The C Programming Language}。它的特点是括号风格紧凑，左大括号跟在函数名或控制语句的同一行。这是许多后续风格的基础。
   \item \textbf{GNU风格}：由\href{https://www.gnu.org/prep/standards/standards.html}{GNU项目}推广。它对代码的布局和注释有非常详细的规定。其括号风格很独特，大括号需要单独成行并缩进。
   \item \textbf{Linux内核风格}：由Linus Torvalds主导，用于\href{https://www.kernel.org/doc/html/latest/process/coding-style.html}{Linux内核的开发}。它基于K\&R风格，但有自己独特的规则，例如使用制表符（tab）进行缩进（且一个tab等于8个空格），并严格限制行长为80个字符。
 \end{itemize}
@@ -91,7 +91,9 @@ C++ 社区存在多种代码风格。其中，\href{https://google.github.io/sty
 
 当然，我们作为汉语使用者不喜欢注释非常正常，因为谁都不喜欢来回切输入法，我也不喜欢大量的写注释。但是对于一些复杂的逻辑，虽然无法要求自己每一行都写注释，但是至少要在关键的地方写注释，例如某个非常复杂的算法，至少也要按照步骤写注释（这一部分是做什么，那一部分是做什么）。
 
-\emph{部分公司做自建库的时候，会强制要求代码中注释达到一定的比例。这本意是好的，但是如果注释的质量不高，反而会导致代码难以阅读。部分人甚至导入数万字的网文来应付了事，这是非常不推荐的。}
+\begin{tcolorbox}[title=说明]
+部分公司做自建库的时候，会强制要求代码中注释达到一定的比例。这本意是好的，但是如果注释的质量不高，反而会导致代码难以阅读。部分人甚至导入数万字的网文来应付了事，这是非常不推荐的。
+\end{tcolorbox}
 
 \section{防御式编程}
 
@@ -129,7 +131,11 @@ except UserNotFoundError:
 
 这种代码在查询的时候非常常见，能够有效地防止查到空对象并尽早暴露问题，同时还能防止程序崩溃，防止笨蛋甲方在酒吧点炒饭的时候不停地输入不存在的用户ID导致程序崩溃。
 
-\emph{不要\texttt{except Exception as e: pass}，除非你这个大笨蛋想被运维半夜叫醒。}
+\begin{tcolorbox}[title=警告]
+    
+不要\texttt{except Exception as e: pass}，除非你这个大笨蛋想被运维半夜叫醒。
+
+\end{tcolorbox}
 
 \subsection{断言}
 
@@ -160,7 +166,7 @@ def divide(a, b):
         raise ValueError("除数不能为零！")
     return a / b
 \end{lstlisting}
-raise是Python中手动抛出异常的语句，和C\#的throw很像。上述代码和使用断言的区别有两点：一个是代码量变大了（多了一行，不够优雅），另一个是这个异常抛出的是“值错误”而不是“断言错误”。不过在实际操作中，这两个区别不大，且在查询等需要更多信息的场景中，使用raise会更好一些（生产环境中往往禁用断言，优雅不能当饭吃）。
+\texttt{raise}是Python中手动抛出异常的语句，和C\#的\texttt{throw}很像。上述代码和使用断言的区别有两点：一个是代码量变大了（多了一行，不够优雅），另一个是这个异常抛出的是“值错误”而不是“断言错误”。不过在实际操作中，这两个区别不大，且在查询等需要更多信息的场景中，使用\texttt{raise}会更好一些（生产环境中往往禁用断言，优雅不能当饭吃）。
 
 在C系中，也有这样的断言，包括运行时断言和编译时断言。运行时断言指的是在运行时会检查某些条件是否成立，对编译进程没有影响；编译时断言则是在编译阶段就检查某些条件是否成立，如果不成立直接掐断编译。
 

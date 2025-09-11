@@ -88,7 +88,7 @@ for x, y in train_dl:        # x.shape == [256, 1, 28, 28]
 
 \subsection{\texttt{nn.Module}搭积木式写网络}
 
-PyTorch的\texttt{nn.Module}是一个非常强大的模块化网络构建工具。我们可以通过继承\texttt{nn.Module}来定义自己的网络结构。例如：
+PyTorch的\texttt{nn.Module}是一个非常强大的模块化网络构建工具。我们可以通过继承该类来定义自己的网络结构。例如：
 
 \begin{lstlisting}
     import torch.nn as nn
@@ -304,7 +304,7 @@ print(result.x, result.nit)   # [1. 1.] 24
 
 \subsubsection{稀疏矩阵}
 
-稀疏矩阵指的是大多数元素是0的矩阵，在科学计算中非常常见。Scipy提供了\texttt{scipy.sparse}模块来处理稀疏矩阵。
+稀疏矩阵在科学计算中非常常见。Scipy提供了\texttt{scipy.sparse}模块来处理稀疏矩阵。
 
 \begin{lstlisting}[language=python]
 from scipy.sparse import diags
@@ -517,7 +517,10 @@ plt.rcParams['axes.unicode_minus'] = False  # 解决负号显示为方块的问�
 
 SymPy是一个用于符号计算的Python库。符号计算是指对数学表达式进行符号操作，而不是数值计算；或者说，\textbf{求解析解而不是数值解}。SymPy可以用于求解方程、积分、微分、矩阵运算等多种数学操作。它的语法类似于Mathematica和Maple，但使用Python语言编写，因此更易于学习和使用。
 
-在使用该库之前，我们尽量在文件的靠前位置写下这一行：\texttt{init\_printing(use\_unicode=True)}，这样可以让SymPy的输出更加美观。
+在使用该库之前，我们尽量在文件的靠前位置添加下面这一行，这样可以让SymPy的输出更加美观。
+\begin{lstlisting}[language=python]
+  init\_printing(use\_unicode=True)
+\end{lstlisting}
 
 \subsection{基本数据类型}
 SymPy的基本数据类型有三个：符号、表达式、等号。符号是SymPy的核心数据类型，用于表示数学符号，如变量、常数等。表达式是由符号和运算符组成的数学表达式，可以进行各种数学操作。等号用于表示等式关系。
