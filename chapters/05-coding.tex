@@ -44,9 +44,13 @@
 
 在搭建编程环境之前，我们应当先认识“环境变量”，它是操作系统中存储的变量，用于配置程序运行环境。环境变量可以影响程序的行为，例如指定编译器的路径、设置库文件的搜索路径等。
 
-\begin{tcolorbox}[title=注意]
+\begin{tip}
   \textbf{系统，尤其是Windows系统是一个很玄学的玩意}，有时候需要重启计算机（或者终端）才能使环境变量生效，有时候则不需要。
-\end{tcolorbox}
+\end{tip}
+
+\begin{note}
+  下文经常提到的一个东西“环境变量”是操作系统的重要变量\texttt{PATH}。该变量存储了一系列路径，当用户在命令行中输入一个命令时，操作系统会在这些路径中查找对应的可执行文件。如果找到了，就会运行该文件，否则会提示“命令未找到”之类的错误。因此，在安装编译器、解释器等工具时，通常需要将它们的安装路径添加到\texttt{PATH}变量中，以便在任何位置都能使用这些工具。否则，每次输入命令时都要指定完整路径，极其不便。
+\end{note}
 
 \subsection{C系编译器及其环境配置}\label{sec:c-install}
 
@@ -78,9 +82,9 @@ pacman -S mingw-w64-ucrt-x86_64-gdb
   \item 需要在Windows的PowerShell或者CMD中运行POSIX风格工具时，也可以将下列路径也添加到用户的PATH环境变量中：\texttt{C:\textbackslash msys64\textbackslash usr\textbackslash bin}。但这样具有环境冲突风险，需要注意保证该变量的查找顺序在比ucrt64的bin目录更靠后，以避免冲突。
 \end{itemize}
 
-\begin{tcolorbox}[title=注意]
+\begin{caution}
   有的同学可能不是按照上述推荐的方式安装GCC的，而是通过其他方式（例如直接下载预编译版本）安装的GCC。如果是这种情况，务必记住GCC和非ASCII字符是死敌，因此请不要将GCC安装在包含非ASCII字符（如汉字、空格）的路径下！（最大的坑可能是你的用户名中包含非ASCII字符，例如汉字！）
-\end{tcolorbox}
+\end{caution}
 
 \subsection{Python、虚拟环境及其配置}\label{sec:virtualenv}
 
@@ -88,7 +92,7 @@ pacman -S mingw-w64-ucrt-x86_64-gdb
 
 Python作为一门流行的编程语言，拥有丰富的第三方库和框架，可以帮助我们快速实现各种功能，并不需要从零开始开发，第三方库的安装和管理是必然是开发中非常重要的一部分。而不同的开发往往需要不同的包，或者同一个包的不同版本。这些包有可能会产生冲突，如果用全局环境则会导致依赖混乱。这时，我们引入了虚拟环境，它是解决包冲突的有效手段。
 
-虚拟环境可以理解为一个单独的盒子，包含了特定版本的编译器、解释器和所有依赖的包。用户可以在虚拟环境中自由安装和管理包，而不会影响全局的Python环境。一般有以下几种方法创建虚拟环境：
+虚拟环境可以理解为一个单独的沙盒，包含了特定版本的编译器、解释器和所有依赖的包。用户可以在虚拟环境中自由安装和管理包，而不会影响全局的Python环境，更不会影响其他沙盒。一般有以下几种方法创建虚拟环境：
 \begin{itemize}
   \item \textbf{venv}：Python内置的虚拟环境模块，适用于大多数场景。
   \item \textbf{virtualenv}：一个第三方库，提供了更多的功能和灵活性。
@@ -191,13 +195,21 @@ IDE（集成开发环境）或者文本编辑器是编程的核心工具之一�
 
 最Geek的一批程序员最喜欢使用命令行编辑器，例如VIM、Emacs、NeoVim等。这些编辑器通常具有强大的功能和高度的可定制性，适合喜欢命令行操作和自定义配置的用户。但是这些编辑器的使用难度极高，学习曲线陡峭，对于初学者来说极不友好。技术人中有一个非常著名的笑话：“怎么生成一段随机的字符串？答：只需要让不会用VIM的人试着退出VIM就可以了！”
 
-\begin{tcolorbox}[title=提示]
+\begin{tip}
   退出VIM的命令是\texttt{:q}，如果你在编辑器中输入了内容并且想要保存，可以使用\texttt{:wq}命令；如果你不想保存，可以使用\texttt{:q!}命令强制退出。纵然如此，我个人还是建议同学们学着使用一下vim这个经典TUI编辑器，这是因为在将来的开发中，我们或多或少都会面对一些情况：不得不从远端登录某机器，且这个机器甚至还不能安装一些诸如nano的更现代的编辑器！
-\end{tcolorbox}
+\end{tip}
 
 正课一般推荐以下的几个IDE：C++ IDE是Visual Studio和DevC++，Python IDE是PyCharm。它们各有各的优势，并且有一个最大的共同点：开箱即用，用户并不需要复杂的配置来进行编程。
 
 但是它们的缺点非常明显：Visual Studio（一般简称VS）和PyCharm都非常臃肿，尤其是前者如果安装全家桶需要大量的磁盘空间和内存资源。同时，它们更注重于超大型项目的开发，这一“超大”往往动辄涉及数十万甚至上百万行代码，我们日常学习使用的代码量远远达不到这个级别，只能说是“杀鸡焉用牛刀”。VS的另一个缺点是它实际上专精于Windows平台和微软的.NET生态系统，虽然它也支持C++和Python等语言，但很笨重。至于DevC++，它的功能少得可怜且只支持C/C++。虽然比较适合初学者，但扩展性极差，完全无法满足更复杂的开发需求。
+
+\begin{note}
+  Visual Studio 把一个工作目录视为一个“项目”，当用户使用编译功能时会把整个项目编译一遍。而在同一个项目中，不能同时存在多个同名的变量和函数，因此即使我们在VS中新建了不同的C++文件且他们在逻辑上并无任何关联，但是VS依然会把它们视为同一个项目的一部分，从而导致命名冲突的问题。对于初学者来说，这无疑是一个巨大的坑，往往表现为“我这个\texttt{main}函数怎么出现了重定义的错误？”。
+
+  另外，VS出于安全性考量，禁用了C系的一部分函数，例如\texttt{printf}。当我们试图对这些函数进行调用时，VS会报错并提示我们使用更安全的版本，例如\texttt{printf\_s}。这无疑给初学者带来了不必要的困扰。当然这个困扰并非不能解决，只需要在文件开头定义宏\texttt{\#define \_CRT\_SECURE\_NO\_WARNINGS}即可，但这无疑增加了学习的难度。另外，\texttt{printf\_s}等并不是标准函数，这会导致代码的可移植性变差。
+
+  综上所述，我非常建议新手远离VS，即使是简陋的DevC++也比VS强。每一年都会有大量的同学因为使用VS而陷入困境，浪费了大量的时间和精力。
+\end{note}
 
 因此，我并不推荐初学阶段就使用这些IDE。从长远来看，使用更加通用的编辑器会更有利于你在编程世界中游刃有余。我们强烈推荐同学们使用Visual Studio Code（VS Code，或者直接说Code）完成大多数的任务。它是一款轻量级的编辑器，具有良好的扩展性和社区支持，可以满足不同用户的需求。VS Code支持多种编程语言，并且有丰富的插件生态系统，可以根据需要安装各种插件来增强功能。它同时也为调试和版本控制功能添加了GUI，非常适合初学者和中小型项目开发者使用。
 
@@ -337,9 +349,9 @@ VS Code是一个非常灵活的编辑器，可以通过安装插件来增强其�
 
 在VS Code中配置Rust比较简单，只需要下载\texttt{rust-analyzer}插件即可。然后用VS Code打开一个空文件夹，打开VS Code的终端（快捷键：\texttt{Ctrl + `}）,\texttt{cargo init} 初始化当前的空文件夹。然后在\texttt{src/main.rs}里即可看到\texttt{main}函数的上方有着运行和调试的符号，点击即可运行或调试。
 
-\begin{tcolorbox}[title=注意]
+\begin{caution}
   初始化后，文件夹下应有着\texttt{Cargo.toml}，否则便无法为其提供运行的功能，因为运行是依赖于\texttt{cargo}的。初学者往往会急于创建\texttt{main.rs}而没有用\texttt{cargo init}或\texttt{cargo new dir}来初始化文件夹，然后就会发现\texttt{rust-analyzer}报错\texttt{Failed to discover workspace. Consider adding the Cargo.toml of the workspace to the linkedProjects setting.}
-\end{tcolorbox}
+\end{caution}
 
 为了便于调试，我们下载\texttt{codelldb}插件，之后按F5就可以开始调试了。
 
@@ -375,9 +387,9 @@ func main() {
 
 按F5即可调试。
 
-\begin{tcolorbox}
+\begin{note}
   现在Go使用\texttt{go module} 管理依赖，也就是\texttt{go.mod}文件。现在推荐这么做，有些项目可能还在用\texttt{Go Path}来管理，同学遇到了此种项目可自行搜集资料。
-\end{tcolorbox}
+\end{note}
 
 有同学可能发现了，调试的时候并没有输出可执行文件。输出可执行文件：\texttt{go build -o main.exe main.go}, \texttt{-o}选项可以指定可执行文件的名字。如果是多文件编译呢？假设源代码均位于src目录下，\texttt{go build src/*.go}。同学们也可了解一下如何交叉编译。
 
@@ -391,13 +403,13 @@ func main() {
 
 \subsection{安装Oh My Posh}
 
-\begin{tcolorbox}[title=注意]
-在配置Oh My Posh的时候，很多的命令涉及到执行脚本。默认情况下，Windows PowerShell会阻止执行脚本以保护系统安全。因此，你需要先修改执行策略来允许执行脚本。在PowerShell中运行以下命令：
+\begin{tip}
+  在配置Oh My Posh的时候，很多的命令涉及到执行脚本。默认情况下，Windows PowerShell会阻止执行脚本以保护系统安全。因此，你需要先修改执行策略来允许执行脚本。在PowerShell中运行以下命令：
 \begin{lstlisting}[language=bash]
   Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 \end{lstlisting}
-就可以允许当前用户执行远程签名的脚本。
-\end{tcolorbox}
+  就可以允许当前用户执行远程签名的脚本。
+\end{tip}
 
 我们建议使用winget来安装Oh My Posh。你可以在PowerShell中运行以下命令来安装：
 
@@ -517,9 +529,9 @@ print("Their sum is:", a + b)
 
 而这也导致了一个问题：编译器可以识别全部的语法错误和部分的语义错误，因此一份能够编译通过的C++代码，通常代码本身是正确的，但是算法可能因为极端数据出现错误，例如除零等；而Python则无法检查语法错误和语义错误，解释器只会在按顺序运行代码，直到在出现问题的的地方停止。Python 自身的动态类型系统与缺少编译器带来的静态查错系统，使得实际写出来的 Python 代码中经常包含大量的错误。
 
-\begin{tcolorbox}[title=说明]
+\begin{note}
   在Python的较新版本中引入了“类型注释”，例如\texttt{func(para: int) -> int}。VS Code的Pylance插件能够识别类型注释，并在编辑器中提供有限的类型检查。一些新生代程序员在编写程序时，会使用类型注释来帮助自己检查代码的正确性，防止出现错误。在C++的较新版本中，也引入了“类型推断”，我们可以把部分变量声明为\texttt{auto}类型，例如\texttt{for(auto item : items)}，其中\texttt{items}是一个列表。编译器能够自动推断变量的类型，从而减少了代码的冗余。由此可见，编程语言的发展是不断演进的，程序员们不断引入新的特性和语法，以提高代码的可读性和可维护性；同时，我们还可以看到，强类型语言和动态类型语言之间的界限正在逐渐模糊。
-\end{tcolorbox}
+\end{note}
 
 \subsection{学会阅读错误信息}
 

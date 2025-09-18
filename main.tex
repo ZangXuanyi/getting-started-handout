@@ -9,19 +9,18 @@
 \usepackage{authblk}
 \usepackage{fontawesome5}
 \usepackage{draftwatermark}
-\usepackage{xcolor}
+\usepackage[table]{xcolor}
+\usepackage{longtable}
+\usepackage{array}
 \usepackage{multicol}
-\usepackage{tcolorbox}
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{skins,xparse}
 \usepackage{subcaption}
 \usepackage{enumitem}
 \usepackage{booktabs}
 \usepackage{xurl}              % 比 url 更 aggressive，允许在任意字符断行
 \def\UrlBreaks{\do. \do@ \do\ \do/ \do! \do_ \do| \do; \do: \do?} % 再补一刀
-\usepackage[english]{babel}   % 或者 ngerman / french / ...
-\babelprovide{import,main}    % 中文用 xeCJK 或 luaotfload 自带断字
-\hyphenpenalty=1000           % 默认 50，值越大越不愿意断字
 \usepackage{hyperref}
-
 
 \lstset{
   basicstyle=\ttfamily\footnotesize,
@@ -56,6 +55,121 @@
 \SetWatermarkText{LCPU-2025}           % 设置水印内容
 \SetWatermarkLightness{0.97}             % 设置水印透明度 0-1
 \SetWatermarkScale{0.8}
+
+\definecolor{expbg}{RGB}{255,245,240}   % 例题背景
+\definecolor{expfr}{RGB}{255,94,77}    % 例题边框/标题
+
+\definecolor{solnfr}{RGB}{46,204,113}  % 解答边框/标题
+\definecolor{solnbg}{RGB}{240,255,240} % 解答背景
+
+\definecolor{probfr}{RGB}{0,123,255}   % 习题边框/标题
+\definecolor{probbg}{RGB}{240,247,255} % 习题背景
+
+%------- 三种环境 -------
+%--------------------------------------------------
+% 1. 警告：高饱和橙红
+\newtcolorbox{warning}{
+  enhanced,
+  colback = red!4!white,
+  colframe = red!75!black,
+  coltitle = white,
+  fonttitle = \bfseries,
+  title = 警告,
+  top = 2mm, bottom = 2mm, left = 2.5mm, right = 2.5mm,
+  boxrule = 0.6pt,
+  breakable,
+  % sharp corners,
+}
+
+%--------------------------------------------------
+% 2. 注意：稳重暗黄
+\newtcolorbox{caution}{
+  enhanced,
+  colback = orange!5!white,
+  colframe = orange!60!black,
+  coltitle = white,
+  fonttitle = \bfseries,
+  title = 注意,
+  top = 2mm, bottom = 2mm, left = 2.5mm, right = 2.5mm,
+  boxrule = 0.6pt,
+  breakable,
+  % sharp corners,
+}
+
+%--------------------------------------------------
+% 3. 提示：柔和蓝绿
+\newtcolorbox{tip}{
+  enhanced,
+  colback = cyan!3!white,
+  colframe = cyan!65!black,
+  coltitle = white,
+  fonttitle = \bfseries,
+  title = 提示,
+  top = 2mm, bottom = 2mm, left = 2.5mm, right = 2.5mm,
+  boxrule = 0.6pt,
+  breakable,
+  % sharp corners,
+}
+
+%--------------------------------------------------
+% 4. 说明：中性天青
+\newtcolorbox{note}{
+  enhanced,
+  colback = teal!3!white,
+  colframe = teal!60!black,
+  coltitle = white,
+  fonttitle = \bfseries,
+  title = 说明,
+  top = 2mm, bottom = 2mm, left = 2.5mm, right = 2.5mm,
+  boxrule = 0.6pt,
+  breakable,
+  % sharp corners,
+}
+
+%--------------------------------------------------
+% 5. 例题：理性深空蓝
+\newtcolorbox{example}[1][]{%
+  enhanced,
+  colback = blue!3!white,
+  colframe = blue!70!black,
+  coltitle = white,
+  fonttitle = \bfseries,
+  title = {\IfBlankTF{#1}{例题}{例题 (#1)}},  % 可选子标题
+  top = 2mm, bottom = 2mm, left = 2.5mm, right = 2.5mm,
+  boxrule = 0.6pt,
+  % sharp corners,
+  breakable,
+}
+
+%--------------------------------------------------
+% 6. 答案：温和草绿
+\newtcolorbox{answer}{
+  enhanced,
+  colback = green!4!white,
+  colframe = green!65!black,
+  coltitle = white,
+  fonttitle = \bfseries,
+  title = 答案,
+  top = 2mm, bottom = 2mm, left = 2.5mm, right = 2.5mm,
+  boxrule = 0.6pt,
+  % sharp corners,
+  breakable,
+}
+
+%--------------------------------------------------
+% 7. 练习：活力紫
+\newtcolorbox{exercise}{
+  enhanced,
+  colback = violet!4!white,
+  colframe = violet!70!black,
+  coltitle = white,
+  fonttitle = \bfseries,
+  title = 练习,
+  top = 2mm, bottom = 2mm, left = 2.5mm, right = 2.5mm,
+  boxrule = 0.6pt,
+  % sharp corners,
+  breakable,
+}
 
 \title{\Huge\textbf{北京大学计算机基础能力手册}}
 

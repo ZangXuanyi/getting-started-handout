@@ -147,9 +147,13 @@ Linux还有一个重要的目录：用户的家目录，通常位于\texttt{/hom
 
 我们可以使用\texttt{chmod}命令来修改文件的权限。例如，\texttt{chmod 777 file.txt}将会把指定文件的权限设置为777。
 
-\begin{tcolorbox}[title=注意]
-  修改文件权限需要有相应的权限，否则会报错。同时，不要执行这类抽象的命令：\texttt{chmod 777 /}，这会导致系统无法正常工作。
-\end{tcolorbox}
+\begin{tip}
+  修改文件权限需要有相应的权限，否则会报错。
+\end{tip}
+
+\begin{warning}
+  不要执行这类抽象的命令：\texttt{chmod 777 /}，这会导致系统无法正常工作。
+\end{warning}
 
 所以可执行文件并不是因为这个文件本身有什么特别，而是这个文件被你赋予了可执行的性质。一个简单的文本文件也可以被加上可执行的权限，也可以发挥操作其他文件的作用。
 
@@ -252,16 +256,16 @@ VIM有两种状态：命令状态和编辑状态。默认情况下，VIM处于�
 Nano是一个简单易用的文本编辑器，它有着直观的界面和快捷键，可以快速上手。其使用也比VIM简单得多，因为它没有两种状态的区别，直接打开文件后就可以编辑文本了，而且所有命令快捷键全都在界面下方列出了，直接照着按就行了！
 
 \begin{multicols}{2}
-\begin{itemize}
-  \item \texttt{Ctrl+O}：保存文件。
-  \item \texttt{Ctrl+X}：退出Nano。
-  \item \texttt{Ctrl+K}：剪切当前行。
-  \item \texttt{Ctrl+U}：粘贴。
-  \item \texttt{Ctrl+W}：查找文本。
-  \item \texttt{Ctrl+\textbackslash}：替换文本。
-  \item \texttt{Ctrl+C}：显示光标位置。
-  \item \texttt{Ctrl+G}：显示帮助信息。
-\end{itemize}
+  \begin{itemize}
+    \item \texttt{Ctrl+O}：保存文件。
+    \item \texttt{Ctrl+X}：退出Nano。
+    \item \texttt{Ctrl+K}：剪切当前行。
+    \item \texttt{Ctrl+U}：粘贴。
+    \item \texttt{Ctrl+W}：查找文本。
+    \item \texttt{Ctrl+\textbackslash}：替换文本。
+    \item \texttt{Ctrl+C}：显示光标位置。
+    \item \texttt{Ctrl+G}：显示帮助信息。
+  \end{itemize}
 \end{multicols}
 
 \subsection{再临终端命令行}
@@ -270,139 +274,139 @@ Nano是一个简单易用的文本编辑器，它有着直观的界面和快捷�
 
 \begin{itemize}
   \item \textbf{系统命令}
-  \begin{itemize}
-    \item \texttt{sudo}命令用于提权。
-    \item \texttt{poweroff}和\texttt{shutdown}两个命令用于关机。
-    \item \texttt{reboot}命令用于重启电脑。
-    \item \texttt{whoami}命令用于查看自己是哪个用户。
-    \item \texttt{which}命令用于查找可执行文件的路径。
-    \item \texttt{ps}命令用于显示当前运行的进程。
     \begin{itemize}
-      \item \texttt{-e}：显示所有进程。
-      \item \texttt{-f}：以全格式显示进程信息，包括父进程ID、用户等。
-      \item \texttt{-l}：以长格式显示进程信息。
-      \item \texttt{-u}：显示指定用户的进程。
-      \item \texttt{-p}：显示指定进程ID的进程。
-      \item \texttt{-o}：自定义输出格式。
-      \item \texttt{-H}：以树形结构显示进程之间的关系。
-      \item \texttt{-j}：以作业控制格式显示进程信息。
-      \item \texttt{-x}：显示所有进程，包括没有控制终端的进程。
+      \item \texttt{sudo}命令用于提权。
+      \item \texttt{poweroff}和\texttt{shutdown}两个命令用于关机。
+      \item \texttt{reboot}命令用于重启电脑。
+      \item \texttt{whoami}命令用于查看自己是哪个用户。
+      \item \texttt{which}命令用于查找可执行文件的路径。
+      \item \texttt{ps}命令用于显示当前运行的进程。
+        \begin{itemize}
+          \item \texttt{-e}：显示所有进程。
+          \item \texttt{-f}：以全格式显示进程信息，包括父进程ID、用户等。
+          \item \texttt{-l}：以长格式显示进程信息。
+          \item \texttt{-u}：显示指定用户的进程。
+          \item \texttt{-p}：显示指定进程ID的进程。
+          \item \texttt{-o}：自定义输出格式。
+          \item \texttt{-H}：以树形结构显示进程之间的关系。
+          \item \texttt{-j}：以作业控制格式显示进程信息。
+          \item \texttt{-x}：显示所有进程，包括没有控制终端的进程。
+        \end{itemize}
+      \item \texttt{kill}命令用于终止进程。
+      \item \texttt{fg}命令可以将后台运行的任务调回前台，这个命令可以恢复被\texttt{Ctrl+Z}挂起的任务。
+      \item \texttt{bg}命令可以将任务放到后台运行。
     \end{itemize}
-    \item \texttt{kill}命令用于终止进程。
-    \item \texttt{fg}命令可以将后台运行的任务调回前台，这个命令可以恢复被\texttt{Ctrl+Z}挂起的任务。
-    \item \texttt{bg}命令可以将任务放到后台运行。
-  \end{itemize}
   \item \textbf{列出和查找类}
-  \begin{itemize}
-    \item \texttt{pwd}命令用于显示当前工作目录的绝对路径。
-    \item \texttt{ls}命令用于列出目录中的文件和子目录。
     \begin{itemize}
-      \item \texttt{-l}：以长格式列出文件和目录的详细信息。
-      \item \texttt{-a}：列出所有文件和目录，包括隐藏文件。
-      \item \texttt{-h}：以人类可读的格式显示文件大小。
-      \item \texttt{-R}：递归地列出子目录中的文件和目录。
-      \item \texttt{-t}：按修改时间排序。
+      \item \texttt{pwd}命令用于显示当前工作目录的绝对路径。
+      \item \texttt{ls}命令用于列出目录中的文件和子目录。
+        \begin{itemize}
+          \item \texttt{-l}：以长格式列出文件和目录的详细信息。
+          \item \texttt{-a}：列出所有文件和目录，包括隐藏文件。
+          \item \texttt{-h}：以人类可读的格式显示文件大小。
+          \item \texttt{-R}：递归地列出子目录中的文件和目录。
+          \item \texttt{-t}：按修改时间排序。
+        \end{itemize}
+      \item \texttt{tree}命令用于以树形结构显示目录中的文件和子目录。
+      \item \texttt{find}命令用于在目录中查找文件和目录。
     \end{itemize}
-    \item \texttt{tree}命令用于以树形结构显示目录中的文件和子目录。
-    \item \texttt{find}命令用于在目录中查找文件和目录。
-  \end{itemize}
   \item \textbf{文件系统操作类}
-  \begin{itemize}
-    \item \texttt{cd}命令用于切换当前工作目录。
-    \item \texttt{mkdir}命令用于创建新目录。
     \begin{itemize}
-      \item \texttt{-p}：递归地创建多级目录，如果上级目录不存在则一并创建。
-      \item \texttt{-v}：显示创建目录的详细信息。
-      \item \texttt{-m}：设置新目录的权限。
+      \item \texttt{cd}命令用于切换当前工作目录。
+      \item \texttt{mkdir}命令用于创建新目录。
+        \begin{itemize}
+          \item \texttt{-p}：递归地创建多级目录，如果上级目录不存在则一并创建。
+          \item \texttt{-v}：显示创建目录的详细信息。
+          \item \texttt{-m}：设置新目录的权限。
+        \end{itemize}
+      \item \texttt{touch}命令用于创建新文件或更新现有文件的修改时间。
+        \begin{itemize}
+          \item \texttt{-a}：只更新访问时间。
+          \item \texttt{-m}：只更新修改时间。
+          \item \texttt{-c}：如果文件不存在则不创建。
+          \item \texttt{-t}：设置文件的时间戳。
+          \item \texttt{-r}：使用指定文件的时间戳。
+        \end{itemize}
+      \item \texttt{rm}命令用于删除文件或目录。
+        \begin{itemize}
+          \item \texttt{-r}：递归地删除目录及其内容。
+          \item \texttt{-f}：强制删除文件或目录，不提示确认。
+          \item \texttt{-i}：在删除前提示确认。
+          \item \texttt{-v}：显示删除的详细信息。
+        \end{itemize}
+      \item \texttt{rmdir}命令用于删除空目录。
+      \item \texttt{cp}命令用于复制文件或目录。
+        \begin{itemize}
+          \item \texttt{-r}：递归地复制目录及其内容。
+          \item \texttt{-f}：强制覆盖目标文件。
+          \item \texttt{-i}：在覆盖前提示确认。
+          \item \texttt{-v}：显示复制的详细信息。
+          \item \texttt{-u}：只在源文件比目标文件新时才进行复制。
+        \end{itemize}
+      \item \texttt{mv}命令用于移动或重命名文件或目录。
+        \begin{itemize}
+          \item \texttt{-f}：强制覆盖目标文件。
+          \item \texttt{-i}：在覆盖前提示确认。
+          \item \texttt{-v}：显示移动的详细信息。
+          \item \texttt{-u}：只在源文件比目标文件新时才进行移动。
+        \end{itemize}
+      \item \texttt{ln}命令用于创建链接。
+        \begin{itemize}
+          \item \texttt{-s}：创建软链接（符号链接）。
+          \item \texttt{-f}：强制覆盖目标链接。
+          \item \texttt{-i}：在覆盖前提示确认。
+          \item \texttt{-v}：显示链接的详细信息。
+          \item \texttt{-T}：将目标视为一个普通文件，而不是目录。
+        \end{itemize}
+      \item \texttt{tar}命令用于打包和解包文件。
+        \begin{itemize}
+          \item \texttt{-c}：创建一个新的归档文件。
+          \item \texttt{-x}：从归档文件中提取文件。
+          \item \texttt{-f}：指定归档文件的名称。
+          \item \texttt{-v}：显示详细的操作信息。
+          \item \texttt{-z}：使用 gzip 压缩或解压缩归档文件。
+          \item \texttt{-j}：使用 bzip2 压缩或解压缩归档文件。
+          \item \texttt{-J}：使用 xz 压缩或解压缩归档文件。
+          \item \texttt{-p}：保留文件的权限和时间戳。
+          \item \texttt{-C}：切换到指定目录后再进行打包或解包。
+        \end{itemize}
     \end{itemize}
-    \item \texttt{touch}命令用于创建新文件或更新现有文件的修改时间。
-    \begin{itemize}
-      \item \texttt{-a}：只更新访问时间。
-      \item \texttt{-m}：只更新修改时间。
-      \item \texttt{-c}：如果文件不存在则不创建。
-      \item \texttt{-t}：设置文件的时间戳。
-      \item \texttt{-r}：使用指定文件的时间戳。
-    \end{itemize}
-    \item \texttt{rm}命令用于删除文件或目录。
-    \begin{itemize}
-      \item \texttt{-r}：递归地删除目录及其内容。
-      \item \texttt{-f}：强制删除文件或目录，不提示确认。
-      \item \texttt{-i}：在删除前提示确认。
-      \item \texttt{-v}：显示删除的详细信息。
-    \end{itemize}
-    \item \texttt{rmdir}命令用于删除空目录。
-    \item \texttt{cp}命令用于复制文件或目录。
-    \begin{itemize}
-      \item \texttt{-r}：递归地复制目录及其内容。
-      \item \texttt{-f}：强制覆盖目标文件。
-      \item \texttt{-i}：在覆盖前提示确认。
-      \item \texttt{-v}：显示复制的详细信息。
-      \item \texttt{-u}：只在源文件比目标文件新时才进行复制。
-    \end{itemize}
-    \item \texttt{mv}命令用于移动或重命名文件或目录。
-    \begin{itemize}
-      \item \texttt{-f}：强制覆盖目标文件。
-      \item \texttt{-i}：在覆盖前提示确认。
-      \item \texttt{-v}：显示移动的详细信息。
-      \item \texttt{-u}：只在源文件比目标文件新时才进行移动。
-    \end{itemize}
-    \item \texttt{ln}命令用于创建链接。
-    \begin{itemize}
-      \item \texttt{-s}：创建软链接（符号链接）。
-      \item \texttt{-f}：强制覆盖目标链接。
-      \item \texttt{-i}：在覆盖前提示确认。
-      \item \texttt{-v}：显示链接的详细信息。
-      \item \texttt{-T}：将目标视为一个普通文件，而不是目录。
-    \end{itemize}
-    \item \texttt{tar}命令用于打包和解包文件。
-    \begin{itemize}
-      \item \texttt{-c}：创建一个新的归档文件。
-      \item \texttt{-x}：从归档文件中提取文件。
-      \item \texttt{-f}：指定归档文件的名称。
-      \item \texttt{-v}：显示详细的操作信息。
-      \item \texttt{-z}：使用 gzip 压缩或解压缩归档文件。
-      \item \texttt{-j}：使用 bzip2 压缩或解压缩归档文件。
-      \item \texttt{-J}：使用 xz 压缩或解压缩归档文件。
-      \item \texttt{-p}：保留文件的权限和时间戳。
-      \item \texttt{-C}：切换到指定目录后再进行打包或解包。
-    \end{itemize}
-  \end{itemize}
   \item \textbf{文本处理类}
-  \begin{itemize}
-    \item \texttt{head}命令用于显示文件的前几行。
-    \item \texttt{tail}命令用于显示文件的后几行。
-    \item \texttt{cat}命令用于连接文件并打印到标准输出。
     \begin{itemize}
-      \item \texttt{-n}：为每一行添加行号。
-      \item \texttt{-b}：为非空行添加行号。
-      \item \texttt{-s}：压缩连续的空行。
-      \item \texttt{-E}：在每行末尾显示\texttt{\$}符号。
-      \item \texttt{-T}：将制表符显示为\texttt{\^I}。
-      \item \texttt{-v}：显示不可见字符。
-      \item \texttt{-A}：显示所有不可见字符，包括空格和制表符。
-      \item \texttt{-e}：等同于\texttt{-vE}，显示不可见字符并在行末添加\texttt{\$}符号。
+      \item \texttt{head}命令用于显示文件的前几行。
+      \item \texttt{tail}命令用于显示文件的后几行。
+      \item \texttt{cat}命令用于连接文件并打印到标准输出。
+        \begin{itemize}
+          \item \texttt{-n}：为每一行添加行号。
+          \item \texttt{-b}：为非空行添加行号。
+          \item \texttt{-s}：压缩连续的空行。
+          \item \texttt{-E}：在每行末尾显示\texttt{\$}符号。
+          \item \texttt{-T}：将制表符显示为\texttt{\^I}。
+          \item \texttt{-v}：显示不可见字符。
+          \item \texttt{-A}：显示所有不可见字符，包括空格和制表符。
+          \item \texttt{-e}：等同于\texttt{-vE}，显示不可见字符并在行末添加\texttt{\$}符号。
+        \end{itemize}
+      \item \texttt{echo}命令用于在终端输出文本。
+        \begin{itemize}
+          \item \texttt{-n}：不在输出末尾添加换行符。
+          \item \texttt{-e}：启用转义字符的解释，例如\texttt{\textbackslash n}表示换行，\texttt{\t}表示制表符。
+          \item \texttt{-E}：禁用转义字符的解释。
+          \item \texttt{-c}：不输出任何内容。
+          \item \texttt{-C}：将输出内容转换为大写字母。
+          \item \texttt{-l}：将输出内容转换为小写字母。
+          \item \texttt{-a}：将输出内容转换为首字母大写字母。
+          \item \texttt{-s}：将输出内容转换为首字母小写字母。
+          \item \texttt{-p}：将输出内容转换为首字母大写字母，并将其他字母转换为小写字母。
+        \end{itemize}
     \end{itemize}
-    \item \texttt{echo}命令用于在终端输出文本。
-    \begin{itemize}
-      \item \texttt{-n}：不在输出末尾添加换行符。
-      \item \texttt{-e}：启用转义字符的解释，例如\texttt{\textbackslash n}表示换行，\texttt{\t}表示制表符。
-      \item \texttt{-E}：禁用转义字符的解释。
-      \item \texttt{-c}：不输出任何内容。
-      \item \texttt{-C}：将输出内容转换为大写字母。
-      \item \texttt{-l}：将输出内容转换为小写字母。
-      \item \texttt{-a}：将输出内容转换为首字母大写字母。
-      \item \texttt{-s}：将输出内容转换为首字母小写字母。
-      \item \texttt{-p}：将输出内容转换为首字母大写字母，并将其他字母转换为小写字母。
-    \end{itemize}
-  \end{itemize}
 \end{itemize}
 
-\begin{tcolorbox}[title=笑话]
+\begin{warning}
   导啊，咱们生产环境为啥执行 \texttt{dpkg} 会说 \texttt{command not found} 呀？\\
   我之前干了啥？清了一下工作路径垃圾，好像是 \texttt{sudo rm -rf /}\\
   什么叫相对路径要加个点？\\
   {\color{red}\textbf{警告：除非你知道你在输入什么，否则任何情况下均不要带上\texttt{sudo}执行删除命令！}}
-\end{tcolorbox}
+\end{warning}
 
 \subsection{重定向和管道}
 
@@ -435,9 +439,9 @@ Nano是一个简单易用的文本编辑器，它有着直观的界面和快捷�
 
 之后，在关机状态下，插上U盘，进入你计算机的BIOS环境，并选择你的启动方式为“从U盘启动”、关闭安全启动、调整启动模式为 UEFI。此三者缺一不可。另外，请确保你的计算机一直有网络连接；如果使用无线网络，务必保证你的无线网络名称和密码均不含特殊字符（如汉字）。
 
-\begin{tcolorbox}[title=说明]
+\begin{note}
   有少数奇葩的主板里面，安全启动\footnote{安全启动指的是主板在这种情况下只信任微软签名的bootloader。Arch自带的bootloader没有微软签名，因此会被拒绝执行。}被设置为开启，却不存在关闭它的选项，但系统主板内置有 Windows 系统的公钥证书签名，使其只能加载 Windows，其它系统（包括 archlinux）一律不予加载。用户不能关闭它，还没法换系统，实在让人无语。如果你正好是这样的电脑，不妨在虚拟机里尝试下 archlinux 吧！
-\end{tcolorbox}
+\end{note}
 
 \subsection{开始安装}
 
