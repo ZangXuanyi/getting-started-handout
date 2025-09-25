@@ -120,7 +120,7 @@ cmake -B build -DBUILD_TESTS=OFF -DCMAKE_BUILD_TYPE=Debug # 修改缓存变量�
 
 \begin{itemize}
   \item \texttt{Ninja}：一个快速的构建系统，CMake默认生成的构建系统。跨平台最快。
-  \item \texttt{Unix Makefiles}：传统的Makefile生成器，Linux服务器默认。
+  \item \texttt{UNIX Makefiles}：传统的Makefile生成器，Linux服务器默认。
   \item \texttt{Visual Studio}：Windows下的Visual Studio生成器。
   \item \texttt{Xcode}：macOS下的Xcode生成器。
 \end{itemize}
@@ -552,7 +552,7 @@ executable('app', 'main.cpp',
 
 \texttt{dependency()} 函数会按顺序尝试多种方法来寻找依赖，包括（但不限于）：
 \begin{itemize}
-  \item \textbf{pkg-config}：这是在Linux和类Unix系统上查找库的首选方式。
+  \item \textbf{pkg-config}：这是在Linux和类UNIX系统上查找库的首选方式。
   \item \textbf{CMake}：Meson可以调用\texttt{find\_package}来查找CMake包。
   \item \textbf{内置查找器}：对于一些常用库（如Zlib、Threads），Meson有自己的查找逻辑。
 \end{itemize}

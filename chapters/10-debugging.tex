@@ -147,8 +147,7 @@ docker和上述两个东西不太一样。上述两个东西只能做到“守�
 \begin{lstlisting}[language=bash]
     docker run -it --rm -v $(pwd):/app -w /app python:3.9 bash
 \end{lstlisting}
-
-以上代码的含义是创建一个Python 3.9的Docker容器，并将当前目录挂载到容器的/app目录下，然后进入容器的bash终端。这样，我们就可以在隔离的环境中进行测试了。
+以上代码的含义是创建一个Python 3.9的Docker容器，并将当前目录挂载到容器的/app目录下，然后进入容器的bash终端。这样，我们就可以在隔离的环境中进行测试了。上述命令中，\texttt{-it}表示交互式终端，\texttt{--rm}表示容器退出后自动删除，\texttt{-v}表示挂载目录，\texttt{-w}表示设置工作目录。如果我们不希望容器退出后自动删除，可以去掉\texttt{--rm}选项。当然，上述命令还是太长了，我们往往写成一个脚本来执行，或者利用\texttt{alias}命令等来充分简化命令。
 
 我们也可以让测试代码在docker容器里面跑起来以后，再退出来，使用其他代码（例如测试代码）来访问这个容器。此时我们需要再docker容器中预留端口，也就是：
 \begin{lstlisting}[language=bash]
@@ -156,9 +155,29 @@ docker和上述两个东西不太一样。上述两个东西只能做到“守�
 \end{lstlisting}
 上述命令是做了一个端口映射，我们可以在本地的8000端口访问容器中的8000端口。
 
-默认情况下，离开容器不会关闭容器，除非服务挂了。这时候我们可以使用\texttt{docker exec}命令来进入容器，例如：
+希望从容器中离开，可以使用\texttt{Ctrl + P + Q}组合键，这样可以让容器继续在后台运行。如果直接使用\texttt{exit}命令或者\texttt{Ctrl + D}组合键退出容器，则会停止容器的运行。
+
+默认情况下，离开容器不会关闭容器，除非服务挂了。可以利用\texttt{docker ps}命令来查看所有容器。
+\begin{lstlisting}
+    docker ps -a // 查看所有容器，包括未运行的
+    docker ps // 只查看正在运行的
+\end{lstlisting}
+
+这时候我们可以使用\texttt{docker exec}或者\texttt{docker attach}命令来进入正在运行的容器，例如：
 \begin{lstlisting}[language=bash]
-    docker exec -it container_name bash
+    docker exec -it container_name bash // 启动一个新的bash终端
+    docker attach container_name // 连接到容器的主终端，不会启动新的终端
+\end{lstlisting}
+
+当然，也可以在容器外使用\texttt{docker exec}命令来在容器内执行一些命令，例如：
+\begin{lstlisting}[language=bash]
+    docker exec -it container_name python your_script.py
+\end{lstlisting}
+这样会在容器内执行\texttt{your\_script.py}脚本。当然也可以执行诸如\texttt{ls}、\texttt{top}等命令来查看容器内的文件和进程，这样命令的输出会在容器外显示。
+
+如果服务确实挂了，我们可以使用\texttt{docker start}命令来重新启动容器，例如：
+\begin{lstlisting}[language=bash]
+    docker start container_name
 \end{lstlisting}
 
 如果我们不想要这个容器了，可以使用\texttt{docker rm}命令来删除它，例如：
