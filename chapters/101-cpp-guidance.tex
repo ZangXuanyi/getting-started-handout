@@ -2,9 +2,9 @@
 
 \begin{document}
 
-\chapter{C/C++高速入门}
+\chapter{C++高速入门}
 
-本章会快速带领大家过一遍C系的基本语法和常用特性，除了用作预习材料以外，还可以在期末考试复习的时候来快速回顾其基本语法与常用的高级特性。
+本章会快速带领大家过一遍C++的基本语法和常用特性，除了用作预习材料以外，还可以在期末考试复习的时候来快速回顾其基本语法与常用的高级特性。
 
 这里直接从C++开始讲起，因为C++是C的超集，C的语法在C++中完全可以使用。
 
@@ -178,7 +178,7 @@ constexpr double EPI = E * PI;
 有时候，代码需要根据不同的条件或不同的输入来执行不同的操作；有时候，一段代码需要执行很多次，但是并不知道具体要执行多少次。C++提供了条件语句和循环语句来实现这些功能。
 
 \subsubsection{条件表达式}
-条件表达式是一个布尔表达式，它的值要么是true（真），要么是false（假）。在C++中，条件表达式通常用于控制程序的执行流程。一般情况下，认为false等价于0，true等价于1。
+条件表达式是一个布尔表达式，它的值要么是true（真），要么是false（假）。在C++中，条件表达式通常用于控制程序的执行流程。一般情况下，认为false等价于0，true等价于1；而且在需要布尔值的地方，非零值会被视为true，零值会被视为false。
 
 常见的一些条件表达式包括：
 \begin{itemize}
@@ -192,6 +192,10 @@ constexpr double EPI = E * PI;
   \item \texttt{||}：逻辑或运算符。如果前后两个条件至少有一个为真，则结果为真；如果两个都为假，结果为假。
   \item \texttt{!}：逻辑非运算符。如果后面跟着的条件是真的，那么结果为假；反之为假。
 \end{itemize}
+
+\begin{tip}
+    在C++中，不能使用类似\texttt{1 <= x <= 2}这样的连续记号来表示区间。正确的写法是\texttt{(1 <= x) \&\& (x <= 2)}，即把每个比较都单独写出来，然后用逻辑与运算符连接起来。
+\end{tip}
 
 在C++中，与或非运算符是有一定的运算顺序的。一般情况下，逻辑非运算符的优先级最高，其次是逻辑与运算符，最后是逻辑或运算符。不过笔者非常不建议同学们背诵这个顺序；实际在工程上不仅不建议大量嵌套使用这些运算符，而且遇事不决可以加括号——括号可比记运算顺序靠谱得多了！
 
@@ -516,7 +520,7 @@ int arr[10];
 在C和C++中，数组的大小应当是一个常量，或者说C风格的数组是\textbf{无法动态扩展的}。
 
 \begin{caution}
-  变长数组（VLA）是C99标准引入的特性，允许数组的大小在运行时确定，但它在C11中被变为可选特性。C++不支持任何VLA特性。容易引起误会的是，GCC 和 Clang++ 编译器提供了包含 VLA 的GNU 扩展语法，并且默认引入这些扩展，因此，VLA （例如\texttt{int n; int a[n];}）在这些编译器下可行。反之，如果关闭这些扩展（通过添加 \texttt{-pedantic-errors} 选项）或者非 GNU 兼容的编译器（如 MSVC），则 VLA 不可用。在实际操作中，我们不要去写VLA，它们可能会导致代码在不同编译器下的表现不一致。C中，我们需要使用数组但是长度不确定的时候，可以将数组开得大一些，例如题目有1000个元素，那么就开1000个元素或者稍多元素的数组；C++中，我们可以使用向量\texttt{std::vector}来代替数组，该类可以动态扩展。
+  变长数组（VLA）是C99标准引入的特性，允许数组的大小在运行时确定，但它在C11中被变为可选特性。C++不支持任何VLA特性。容易引起误会的是，GCC 和 Clang++ 编译器提供了包含 VLA 的GNU 扩展语法，并且默认引入这些扩展，因此，VLA （例如\texttt{int n; int a[n];}）在这些编译器下可行。反之，如果关闭这些扩展（通过添加 \texttt{--pedantic-errors} 选项）或者非 GNU 兼容的编译器（如 MSVC），则 VLA 不可用。在实际操作中，我们不要去写VLA，它们可能会导致代码在不同编译器下的表现不一致。C中，我们需要使用数组但是长度不确定的时候，可以将数组开得大一些，例如题目有1000个元素，那么就开1000个元素或者稍多元素的数组；C++中，我们可以使用向量\texttt{std::vector}来代替数组，该类可以动态扩展。
 \end{caution}
 
 \subsubsection{字符串}
@@ -762,6 +766,69 @@ void swap(int& a, int& b) {
 \end{lstlisting}
 使用传指针其实也可以实现同样的功能。但是，传值不能实现同样的功能：传值的本质是复制参数的值到函数内部，因此在函数内部修改参数不会影响原变量。至于引用和指针，则对应的可以理解为剪切，因此能够直接修改原变量的值。
 
+
+\subsection{头文件及其编写，与多文件编程}
+
+头文件是一些预先写好的代码的集合，通常包含函数、类、变量等的声明和定义。通过包含头文件，我们可以使用这些预先写好的代码，而不需要重新编写它们，其扩展名通常是\texttt{.h}或\texttt{.hpp}。对应的，我们将自己编写的代码放在源文件中，扩展名通常是\texttt{.cpp}。
+
+引入头文件只需要在文件的开头使用\texttt{\#include}指令即可。头文件有两种类型：标准库头文件和自定义头文件。标准库头文件是C++标准库提供的头文件，通常使用尖括号括起来，例如\texttt{<iostream>}、\texttt{<vector>}等，这样会先在系统路径中查找，再去当前路径中查找；自定义头文件是用户自己编写的头文件，通常使用双引号括起来，例如\texttt{"myheader.h"}，这样会先在当前路径中查找，再去系统路径中查找。
+
+\begin{lstlisting}[language=C++]
+#include <iostream>  // 引入标准库头文件
+#include "myheader.h"  // 引入自定义头文件
+using namespace std;
+int main() {
+    // 使用头文件中的代码
+    return 0;
+}
+\end{lstlisting}
+
+\begin{caution}
+    虽然我们在一些地方可以见到诸如\texttt{\# include <bits/stdc++.h>}这样的头文件，被称为“万能头文件”，但是该头文件并不是C++标准库的一部分，而是GCC编译器提供的一个非标准头文件，包含了几乎所有的标准库头文件。使用该头文件可能会导致代码在不同编译器下无法编译通过，因此不推荐使用；另一方面，该头文件会显著增加编译时间。
+
+    在做题中，我们实际上仅考虑代码在GCC编译器下的表现，代码生命周期短（即用即丢）也完全不需要考虑维护问题，因此使用这个头文件一般不会出现问题。但是，在工程开发中，为了遵循模块化、可维护性、可移植性原则与方便静态分析等，因此非常不推荐使用这个“万能头”，而是在用到标准库时仅引入所需的头文件。
+
+    笔者个人推荐同学们彻底抛弃“万能头”，养成良好的编程习惯，而不是当“接头霸王”。
+\end{caution}
+
+自己写头文件时，通常包括以下内容：
+\begin{itemize}
+  \item 声明函数、类、变量等的接口。
+  \item 使用预处理指令防止重复包含。
+\end{itemize}
+例如，我们可以编写一个简单的头文件\texttt{myheader.h}，包含一个函数的声明和定义：
+\begin{lstlisting}[language=C++]
+#ifndef MYHEADER_H  // 编译守卫，防止重复包含
+#define MYHEADER_H
+int add(int, int);  // 函数声明
+#endif
+\end{lstlisting}
+然后在源文件\texttt{myheader.cpp}中实现这个函数：
+\begin{lstlisting}[language=C++]
+#include "myheader.h"  // 引入头文件
+int add(int a, int b) {  // 函数定义
+    return a + b;
+}
+\end{lstlisting}
+然后在主程序中使用这个函数：
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include "myheader.h"  // 引入头文件
+using namespace std;
+int main() {
+    int x = 5;
+    int y = 10;
+    int sum = add(x, y);  // 调用add函数
+    cout << "Sum: " << sum << endl;  // 输出结果
+    return 0;
+}
+\end{lstlisting}
+最终对其进行编译：
+\begin{lstlisting}[language=bash]
+g++ main.cpp myheader.cpp -o myprogram
+\end{lstlisting}
+这样，我们就完成了一个简单的多文件编程。在上述编译命令中，两个源文件的顺序无关紧要。
+
 \subsection{输入输出的规范化}
 
 在C++中，我们使用\texttt{cin}和\texttt{cout}来进行输入输出操作。
@@ -820,7 +887,7 @@ int main() {
 }
 \end{lstlisting}
 
-对于输入方面，则复杂得多。{\color{red}\textbf{在输入较为复杂的情况下（例如逗号分隔而不是空格分隔的输入等），对于不会\texttt{getline}等现代输入方式和不会用流的同学，我们非常建议使用C风格的输入输出函数。}}
+对于输入方面，则复杂得多。{\color{red}\textbf{在输入较为复杂的情况下（例如逗号分隔而不是空格分隔的输入等），对于不会\texttt{getline}等现代输入方式和不会用流的同学，我们建议使用C风格的输入输出函数以省事。}}
 
 可以使用循环来处理不确定数量的输入：
 \begin{lstlisting}[language=C++]
@@ -830,7 +897,7 @@ while (cin >> n) {
 }
 \end{lstlisting}
 
-另外，对于逗号分割（而不是空格分割）的输入，现代C++的方式是使用getline读一行，然后使用字符串流（\texttt{stringstream}）来处理字符串。下文演示了这种方式，并将逗号分割的整数字符串转换为整数数组：
+另外，对于逗号分割（而不是空格分割）的输入，现代C++的方式是使用\texttt{getline}读一行，然后使用字符串流（\texttt{stringstream}）来处理字符串。下文演示了这种方式，并将逗号分割的整数字符串转换为整数数组：
 \begin{lstlisting}[language=C++]
 #include <iostream>
 #include <sstream>
@@ -856,28 +923,9 @@ int main(){
     // 如果转换为double，可以使用stod
 }
 \end{lstlisting}
-而且，C++20引入了\texttt{std::views::split}，可以直接对字符串进行分割，代码更简洁：
-\begin{lstlisting}[language=C++]
-#include <iostream>
-#include <string>
-#include <vector>
-#include <ranges>  // 引入范围库
-using namespace std;
+这种数据在工程上比较常见，因此掌握这种输入方式是非常有必要的。同时，\texttt{getline}和\texttt{stringstream}的配合也能帮助我们轻松地过滤脏数据，例如多余的空格等。
 
-int main() {
-    string line;
-    vector<int> results;
-
-    // 1. 读一整行
-    getline(cin, line);
-
-    // 2. 使用 views::split 按逗号分割并处理
-    for (const auto& part : line | views::split(',')) {
-        results.push_back(stoi(string(part))); // 转换为整数并存储
-    }
-}
-\end{lstlisting}
-除此之外，使用C风格的输入输出函数（\texttt{scanf}）也可以处理逗号分割的输入：
+除此之外，使用C风格的输入输出函数（\texttt{scanf}）也可以处理逗号分割的输入。
 \begin{lstlisting}[language=C++]
 #include <cstdio>  // 引入C风格输入输出库
 using namespace std;
@@ -1313,7 +1361,13 @@ auto x = 5;  // 编译器推断x的类型为int
 auto y = 3.14;  // 编译器推断y的类型为double
 auto str = "Hello, World!";  // 编译器推断str的类型为const char*
 \end{lstlisting}
-以上代码中，编译器会根据初始值自动推断变量的类型。但是我们并不推荐在定义简单类型变量（如\texttt{int}）的时候使用类型推断，因为这会使得代码的可读性降低，尤其是当变量的类型不明显时。我们只推荐在\textbf{变量的类型非常确定}且\textbf{类型的名称非常冗长}的情况下使用类型推断，例如在循环中使用迭代器时。关于迭代器，请参考后面的章节。
+以上代码中，编译器会根据初始值自动推断变量的类型。
+
+\begin{caution}
+    不要滥用\texttt{auto}，因为这会使得代码的可读性降低，尤其是当变量的类型不明显时。我们只推荐在\textbf{变量的类型是确定的}、\textbf{类型的名称非常冗长}、\textbf{你知道这个变量的类型是什么或者大概是什么}的情况下使用类型推断，例如\lstinline[language=C++]|auto it = std::max_element(v.begin(), v.end());|中，\texttt{it}的类型是\texttt{std::vector<int>::iterator}是确定的，这个类型名称很长，你也知道它是个迭代器类型，这时候使用\texttt{auto}是非常合适的。但是如果你真写了\lstinline[language=C++]|auto x = 5;|这种代码，那就属于滥用了，是不提倡的。
+
+    如果变量的类型确实不确定（例如变量类型会随着初始化方式的不同而改变），这时候可以使用模板函数或模板类，而不是使用\texttt{auto}。如果你知道变量的类型是一个确定的类型，但是你不知道具体是什么类型，建议你先搞清楚这个变量的类型再写代码，否则几乎必然会出错。
+\end{caution}
 
 \subsection{类型别名}
 
@@ -1354,7 +1408,7 @@ typedef就无法应用于模板类型别名。因此，在C++中，我们推荐�
   \item \textbf{整形等级转换}：提升之后，如果类型仍不匹配，编译器会尝试将较小的整型转换为较大的整型（如\texttt{int}转为\texttt{long}）。
   \item \textbf{浮点等级转换}：如果涉及浮点数，编译器会尝试将较小的浮点类型转换为较大的浮点类型（如\texttt{float}转为\texttt{double}）。
   \item \textbf{混合类别转换}：如果操作数类型不同，编译器会尝试将整型转换为浮点型，以避免精度丢失。转换后的类型为与浮点数的类型相同的浮点类型。
-  \item \textbf{其他转换}：包括数组到指针、函数到指针、空指针常量、枚举到整型\footnote{\texttt{C++11}起，强枚举不能继续隐式转换了}、类类型的转换\footnote{指的是诸如代码： \lstinline[language=c++]|struct A{ A(int);}; void foo(A); foo(42);| 中，\texttt{foo(42)}把整数隐式转换为类}等。
+  \item \textbf{其他转换}：包括数组到指针、函数到指针、空指针常量、枚举到整型\footnote{\texttt{C++11}起的强枚举不能隐式转换}、类类型的转换\footnote{指的是诸如代码： \lstinline[language=c++]|struct A{ A(int);}; void foo(A); foo(42);| 中，\texttt{foo(42)}把整数隐式转换为类}等。
 \end{enumerate}
 
 C语言就有类型强转的功能：
@@ -1438,6 +1492,44 @@ int main() {
 }
 \end{lstlisting}
 以上代码中，我们定义了一个Lambda表达式，该表达式能够捕获外部变量\texttt{sum}，并对\texttt{nums}向量中的每个元素进行求和操作。Lambda表达式可以使代码更简洁。
+
+Lambda表达式的类型是特殊的。它是一个\textbf{独一无二}的、\textbf{不可命名}的、\textbf{由编译器生成}的\textbf{闭包类型}。该类是匿名的，每一个Lambda表达式都会生成一个独一无二的类。这个类会重载\texttt{operator()}，使得Lambda表达式可以像函数一样被调用。其类型是一个确定的类型，但是该类型既不能命名也不能写出。Lambda表达式也不是一个函数指针，但是可以隐式转换为函数指针（前提是没有捕获任何外部变量）。
+
+例如下列代码：
+\begin{lstlisting}[language=C++]
+auto lambda = [](int x) { return x * x; };  
+\end{lstlisting}
+其类型实际上类似于：
+\begin{lstlisting}[language=C++]
+class __lambda_unique_name {
+public:
+    int operator()(int x) const { return x * x; }
+};
+\end{lstlisting}
+但是你永远不能直接写出这个类名，它是不可以访问的。
+
+有些时候，我们需要对其进行存储或传递，此时需要声明其类型。此时，\texttt{auto}是好的实践之一。但是如果要传递给函数怎么办呢？为了这个目的，C++11引入了\texttt{std::function}模板类，它可以存储任何可调用对象，包括Lambda表达式、函数指针、函数对象等。使用\texttt{std::function}可以方便地传递和存储Lambda表达式。
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <functional>  // 包含std::function的头文件
+using namespace std;
+
+void applyFunction(const function<int(int)>& func, int value) {
+    cout << "Result: " << func(value) << endl;  // 调用传入的函数并输出结果
+}
+
+int main() {
+    auto lambda = [](int x) { return x * x; };  // 定义一个Lambda表达式
+    applyFunction(lambda, 5);  // 将Lambda表达式传递给函数
+    return 0;
+}
+\end{lstlisting}
+然而值得注意的是，即使是用\texttt{std::function}，它也仅仅是一个传递Lambda表达式的手段，而不是Lambda表达式本身的类型。且该类的性能开销比较大，有类型擦除的开销，可能会通过内联或堆分配来优化，因此在性能敏感的场景下应谨慎使用该类。实际上如果Lambda表达式不捕获任何外部变量，我们完全可以直接转成函数指针传递。
+\begin{lstlisting}[language=C++]
+    using FuncPtr = int(*)(int);  // 定义一个函数指针类型
+    FuncPtr func = [](int x) { return x * x; };  // 将Lambda表达式转换为函数指针
+    cout << "Result: " << func(5) << endl;  // 调用函数指针并输出结果
+\end{lstlisting}
 
 \section{STL}
 
@@ -1663,6 +1755,75 @@ int main() {
 
 至于定长的浮点数，C++标准库并没有直接提供这样的类型。
 
+\subsection{位运算}
+
+位运算是对整数的二进制位进行操作的运算。常见的位运算符有以下几种：
+\begin{itemize}
+    \item 按位与（AND）：\texttt{\&}，对两个整数的每一位进行与运算，只有两个位都为1时结果才为1，否则为0。
+    \item 按位或（OR）：\texttt{|}，对两个整数的每一位进行或运算，只要有一个位为1时结果就为1，否则为0。
+    \item 按位异或（XOR）：\texttt{\^}，对两个整数的每一位进行异或运算，当两个位不同时结果为1，否则为0。
+    \item 按位取反（NOT）：\texttt{\~}，对一个整数的每一位进行取反运算，0变为1，1变为0。
+    \item 左移（Left Shift）：\texttt{<<}，将一个整数的二进制表示整体向左移动指定的位数，右边补0。
+    \item 右移（Right Shift）：\texttt{>>}，将一个整数的二进制表示整体向右移动指定的位数，左边补0（对于无符号整数）或补符号位（对于有符号整数）。
+\end{itemize}
+位运算通常用于相当底层的编程，例如操作硬件寄存器、加密算法、图像处理、乘除法加速等，其效率非常高。有时候，在不太底层的地方，位运算往往也有奇效。
+\begin{example}
+    有一串整数，其中只有一个数出现了奇数次，其他数都出现了偶数次。请编写一个C++程序，找出这个出现奇数次的数。要求时间复杂度为O(n)，空间复杂度为O(1)。
+
+    \textbf{输入}：一串整数，整数之间用空格隔开，输入以-1结束。保证\texttt{int}能够存储所有整数。
+    \textbf{输出}：出现奇数次的整数。
+\end{example}
+
+\begin{answer}
+    这道题可以使用按位异或运算来解决。我们知道，按位异或运算有以下性质：
+    \begin{itemize}
+        \item $a \oplus a = 0$，即一个数和自己异或结果为0。
+        \item $a \oplus 0 = a$，即一个数和0异或结果为自己。
+        \item 异或运算满足交换律和结合律。
+    \end{itemize}
+    因此，如果我们将所有整数进行异或运算，那么出现偶数次的数会被抵消掉，最终只剩下出现奇数次的数。
+
+    我们可以用一个变量\texttt{result}来存储异或的结果，初始值为0。然后，我们不断读取输入的整数，并将其与\texttt{result}进行异或运算，直到遇到-1为止。最后，\texttt{result}中存储的就是出现奇数次的数。
+
+    下面是关键处的代码实现：
+\begin{lstlisting}[language=C++]
+while (cin >> num && num != -1)
+    result ^= num;  // 使用按位异或运算
+\end{lstlisting}
+    结合输入输出，我们可以写出完整的程序。该程序留作练习。
+\end{answer}
+
+\begin{exercise}
+    \begin{enumerate}
+        \item 请完成上述程序。
+        \item 与、或、非有没有类似的性质？请写下来。
+    \end{enumerate}
+\end{exercise}
+
+在STL中，有一个专门处理位集合的容器：\texttt{std::bitset}。它可以看作是一个定长的位数组，支持高效的位操作。我们可以使用它来存储和操作大量的布尔值，例如：
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <bitset> // 包含bitset的头文件
+using namespace std;
+int main() {
+    bitset<8> b;  // 创建一个8位的位集合，初始值为00000000
+    b.set(3);    // 将第3位（从0开始计数）设置为1，变为00001000
+    b.flip(1);   // 将第1位取反，变为00001010
+    b.reset(3);  // 将第3位重置为0，变为00000010
+    cout << b << endl;  // 输出位集合的值
+    cout << "Number of set bits: " << b.count() << endl;  // 计算并输出1的个数
+    return 0;
+}
+\end{lstlisting}
+以上代码中，我们创建了一个8位的位集合，并对其进行了设置、取反和重置操作。最后，我们输出了位集合的值和其中1的个数。位集合还提供了其他常用的方法，例如：
+\begin{itemize}
+  \item \texttt{all()}：检查所有位是否都为1。
+  \item \texttt{any()}：检查是否有任意一位为1。
+  \item \texttt{none()}：检查是否所有位都为0。
+  \item \texttt{size()}：获取位集合的大小。
+  \item \texttt{to\_string()}：将位集合转换为字符串。
+\end{itemize}
+
 \subsection{小练}
 
 \begin{example}
@@ -1761,7 +1922,7 @@ return 0;
   而对于vector而言，每次重新排序则更加直观：一次排序就得$O(n \log n)$，而每次打架后都需要重新排序，这就意味着每次打架后都需要$O(n \log n)$的时间复杂度。这样一来，整个问题的时间复杂度就变成了$O(n^2 \log n)$，显然超时。综上所述，只有保留全局极值但是不必保留元素具体顺序的数据结构才能较好地完成了这个问题，而优先队列正是这样一个数据结构\footnote{这个题其实有更快的手段，例如胜者树、败者树等，它们本质上是二叉堆的工业级优化，时间复杂度都是$O(n \log n)$，但是常数应该会更小。但是它们写起来非常困难，要考虑各种诸如淘汰等的边界情况，且需要相当的算法基础。胜者树/败者树在竞赛或工程里通常服务于多路归并这类需要“反复取最小/最大并立刻替换”的场景；而本题只需要“全局最大”，STL 的堆已经够用而且很简洁，杀鸡焉用牛刀。我们这里就不讲了。}。
 \end{note}
 
-以上，就是C++的全部内容了（也不是全部内容，毕竟C++14、C++17等版本有越来越多的新特性，但是能掌握C++11的全部特性就已经不得了了）。C++的语法和特性非常丰富，学习曲线较陡，但一旦掌握，就可以编写高效、可维护的代码。
+以上，就是C++的全部内容了（也不是全部内容，毕竟C++20、C++23等版本有越来越多的新特性，但是能掌握C++17的全部特性就已经不得了了）。C++的语法和特性非常丰富，学习曲线较陡，但一旦掌握，就可以编写高效、可维护的代码。
 
 \section{附录：OpenJudge判题结果含义速查}
 

@@ -408,26 +408,75 @@ Nano是一个简单易用的文本编辑器，它有着直观的界面和快捷�
   {\color{red}\textbf{警告：除非你知道你在输入什么，否则任何情况下均不要带上\texttt{sudo}执行删除命令！}}
 \end{warning}
 
-\subsection{重定向和管道}
+\subsection{命令联动}
 
-在Linux中，重定向和管道是两个非常重要的概念，它们可以帮助我们更好地处理命令的输入和输出。
+在 Linux 中，重定向、管道、变量和进程替换是四种把“数据”从一条命令挪到另一条命令（或文件）的核心手段。它们常被混用，但机理各不相同。
 
-重定向是指将命令的输入或输出重定向到文件或其他命令中。我们可以使用\texttt{>}符号将命令的输出重定向到文件中，使用\texttt{<}符号将文件的内容作为命令的输入。例如：
+\subsubsection{重定向}
+
+重定向只认识真正的文件（或文件描述符），有两种：\texttt{>} 把标准输出定向到文件（写）；\texttt{<}把文件内容定向到标准输入（读）。  
 \begin{lstlisting}[language=bash]
-  echo "Hello, World!" > hello.txt # 将输出重定向到hello.txt文件中
-  ls > file.txt # 将ls命令的输出重定向到file.txt文件中
-  cat < file.txt # 将file.txt文件的内容作为cat命令的输入
-  diff <(cmd1) <(cmd2) # 比较cmd1和cmd2的输出
-\end{lstlisting}
-实际上最常见的输出重定向就是echo命令了，与其说是重定向，不如直接说是向文件里输入内容。
-
-而管道则是指将一个命令的输出作为另一个命令的输入。我们可以使用\texttt{|}符号将两个命令连接起来。例如：
-\begin{lstlisting}[language=bash]
-  ls | grep "file" # 将ls命令的输出作为grep命令的输入，查找包含"file"的文件
-  cat file.txt | sort # 将file.txt文件的内容作为cat命令的输入，并将输出排序
+echo "Hello, World!" > hello.txt   # 新建或覆盖文件
+cat < hello.txt                    # 把文件当输入
 \end{lstlisting}
 
-通过管道和重定向，我们可以更方便地使命令之间相互联动，从而实现更复杂的操作。
+\subsubsection{管道}
+
+管道 \texttt{|} 在内核里创建一条匿名管道，让左边进程的标准输出直接成为右边进程的标准输入，两边同时运行。
+
+\begin{lstlisting}[language=bash]
+ls | grep "file"          # 边 ls 边 grep，流式处理
+\end{lstlisting}
+
+\subsubsection{\texttt{Here-String}}
+
+\texttt{<<< word}是 Bash 的 here-string 语法，shell 会先把 \texttt{word} 的扩展结果写进一个临时文件（或匿名管道），再把该临时对象作为标准输入递给命令。因此它正好弥补了重定向只能读文件的不足。
+
+\begin{lstlisting}[language=bash]
+grep "file" <<< "$(ls)"   # 等价于 ls | grep "file"，但没用管道
+\end{lstlisting}
+
+\texttt{Here-String}和管道有一定的区别。管道是流式的，边产生边消费；\texttt{Here-String}必须等整个字符串生成完才能开始消费。
+
+\subsubsection{进程替换}
+
+进程替换是一种“把命令输出/输入伪装成文件名”的 Bash 特性。\texttt{<(cmd)} 把命令的标准输出绑定到一个命名管道（或 \texttt{/dev/fd/N}），返回一个可读文件名；\texttt{>(cmd)} 则把命令的标准输入绑定到一个命名管道，返回一个可写文件名。对任何“只能读文件”的工具（`diff`、`cat`、`sort`…）来说，这就像凭空多了两个临时文件。
+
+\begin{lstlisting}[language=bash]
+diff <(cmd1) <(cmd2)      # 比较两条命令的输出，而无需临时落盘
+sort >(uniq > result.txt) # 把排序结果直接丢给 uniq
+\end{lstlisting}
+
+\subsubsection*{变量与命令替换}
+
+\texttt{\$(cmd)} 是“命令替换”，shell 会等待该命令执行结束，把它的全部标准输出当成一段文本收回来，可以赋给变量，也可以直接嵌入命令行。
+
+\begin{lstlisting}[language=bash]
+out=$(ls)                 # 把 ls 的输出存进变量
+grep "file" <<< "$out"    # 这里用 here-string 消费变量
+diff <(echo "$out") <(ls) # 用进程替换再比一次
+\end{lstlisting}
+
+\texttt{\$(cmd)} 本身不是管道，也不是重定向。它只是“把命令输出变成字符串”的一种手段。
+
+\begin{table}[ht]\small
+  \centering
+  \begin{tabular}{llll}
+\toprule
+机制 & 数据形态 & 左侧何时开始 & 右侧何时开始 \\
+\midrule
+\texttt{cmd1 | cmd2} & 管道字节流 & 立即 & 立即 \\
+\texttt{cmd < file} & 已有文件 & 立即 & - \\
+\texttt{cmd <<< "\$str"} & 临时文件 & 字符串生成完后 & 字符串生成完后 \\
+\texttt{cmd <(cmd1)} & 命名管道/FD & 立即 & 立即 \\
+\texttt{str=\$(cmd1); cmd2 <<< "\$str"} & 变量$\rightarrow$临时文件 & cmd1 结束后 & cmd1 结束后 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+
+掌握这四种手法后，你就可以根据各种实际条件，灵活选择最简洁、最高效的写法。
 
 \section{安装 Arch Linux}
 
