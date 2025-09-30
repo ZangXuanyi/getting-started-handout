@@ -3,12 +3,13 @@
 \usepackage{geometry}
 \usepackage{amssymb}
 \usepackage{amsmath}
+\usepackage{fontspec}
 \usepackage{subfiles}
 \usepackage{listings}
 \usepackage{graphicx}
 \usepackage{authblk}
 \usepackage{fontawesome5}
-\usepackage{draftwatermark}
+% \usepackage{draftwatermark}
 \usepackage[table]{xcolor}
 \usepackage{longtable}
 \usepackage{array}
@@ -17,6 +18,8 @@
 \tcbuselibrary{skins,xparse}
 \usepackage{subcaption}
 \usepackage{enumitem}
+\usepackage{xeCJK}
+\newCJKfontfamily{\rare}{Source Han Serif CN}
 \usepackage{booktabs}
 \usepackage{xurl}              % 比 url 更 aggressive，允许在任意字符断行
 \def\UrlBreaks{\do. \do@ \do\ \do/ \do! \do_ \do| \do; \do: \do?} % 再补一刀
@@ -50,24 +53,7 @@
 }
 
 \geometry{b5paper, margin=0.5in}
-% \setcounter{tocdepth}{2}
 
-\SetWatermarkText{LCPU-2025}           % 设置水印内容
-\SetWatermarkLightness{0.97}             % 设置水印透明度 0-1
-\SetWatermarkScale{0.8}
-
-\definecolor{expbg}{RGB}{255,245,240}   % 例题背景
-\definecolor{expfr}{RGB}{255,94,77}    % 例题边框/标题
-
-\definecolor{solnfr}{RGB}{46,204,113}  % 解答边框/标题
-\definecolor{solnbg}{RGB}{240,255,240} % 解答背景
-
-\definecolor{probfr}{RGB}{0,123,255}   % 习题边框/标题
-\definecolor{probbg}{RGB}{240,247,255} % 习题背景
-
-%------- 三种环境 -------
-%--------------------------------------------------
-% 1. 警告：高饱和橙红
 \newtcolorbox{warning}{
   enhanced,
   colback = red!4!white,
@@ -81,8 +67,6 @@
   % sharp corners,
 }
 
-%--------------------------------------------------
-% 2. 注意：稳重暗黄
 \newtcolorbox{caution}{
   enhanced,
   colback = orange!5!white,
@@ -96,8 +80,6 @@
   % sharp corners,
 }
 
-%--------------------------------------------------
-% 3. 提示：柔和蓝绿
 \newtcolorbox{tip}{
   enhanced,
   colback = cyan!3!white,
@@ -111,8 +93,6 @@
   % sharp corners,
 }
 
-%--------------------------------------------------
-% 4. 说明：中性天青
 \newtcolorbox{note}{
   enhanced,
   colback = teal!3!white,
@@ -126,8 +106,6 @@
   % sharp corners,
 }
 
-%--------------------------------------------------
-% 5. 例题：理性深空蓝
 \newtcolorbox{example}[1][]{%
   enhanced,
   colback = blue!3!white,
@@ -141,8 +119,6 @@
   breakable,
 }
 
-%--------------------------------------------------
-% 6. 答案：温和草绿
 \newtcolorbox{answer}{
   enhanced,
   colback = green!4!white,
@@ -156,8 +132,6 @@
   breakable,
 }
 
-%--------------------------------------------------
-% 7. 练习：活力紫
 \newtcolorbox{exercise}{
   enhanced,
   colback = violet!4!white,
@@ -173,7 +147,19 @@
 
 \title{\Huge\textbf{北京大学计算机基础能力手册}}
 
-\author{臧炫懿}
+\author[1]{臧炫懿}
+% \author[1]{周乾康}
+
+\affil[1]{北京大学学生Linux俱乐部}
+
+\affil[ ]{\faGithub\ \texttt{ZangXuanyi/getting-started-handout}}
+\affil[ ]{\faEnvelope\ \texttt{zangxuanyi@stu.pku.edu.cn}}
+
+\renewcommand*{\Authsep}{, }
+\renewcommand*{\Authand}{, }
+\renewcommand*{\Authands}{, }
+
+\date{}
 
 \begin{document}
 
@@ -185,7 +171,9 @@
 
 \mainmatter
 
-\tableofcontents
+% \begin{multicols}{2}
+  \tableofcontents
+% \end{multicols}
 
 \part{零基础起步}
 
@@ -193,17 +181,17 @@
 
 \subfile{chapters/02-knowledge-acquirement.tex}
 
-\subfile{chapters/03-initial-usage.tex}
+% \subfile{chapters/03-initial-usage.tex}
 
 \subfile{chapters/04-buy.tex}
 
-\part{大学计算机前置}
-
 \subfile{chapters/05-coding.tex}
+
+% \part{大学计算机前置}
 
 \subfile{chapters/06-text-processing.tex}
 
-\subfile{chapters/07-drive-your-pc.tex}
+% \subfile{chapters/07-drive-your-pc.tex}
 
 \subfile{chapters/08-play-with-linux.tex}
 
@@ -215,7 +203,7 @@
 
 \subfile{chapters/11-construction.tex}
 
-\subfile{chapters/12-cpp-package.tex}
+% \subfile{chapters/12-cpp-package.tex}
 
 \part{附录}
 

@@ -19,7 +19,58 @@
 
 \section{获取Linux}
 
-不管怎么说，Linux最终还是一个操作系统。我们最终还是先要获取一个基于Linux的系统当玩具：不摸一摸，知道用起来舒不舒服，又了解它干啥呢？
+在20世纪80年代，主要的几个计算机系统有UNIX、DOS和Mac OS。当时，UNIX系统昂贵且无法用于个人计算机，DOS太简陋了且闭源，Mac OS则只用于苹果电脑，计算机科学教育严重受限。为了解决这个问题，Andrew S. Tanenbaum教授设计了MINIX系统，并将其用于教学。然而该系统功能有限且不实用。
+
+当时在芬兰赫尔辛基大学读大二的Linus Torvald在用过MINIX之后，受到了启发。在1991年，他利用UNIX的核心，吸收了MINIX的精华，剔除了不必要的部分，编写了一个新的操作系统内核，并将其命名为Linux 0.01，该内核能够运行在x86架构的个人计算机上。这就是后来各种Linux的雏形。1994年，Linux 1.0版本发布，标志着Linux的正式诞生。
+
+Linux内核采用了GPL协议，这使得任何人都可以自由地使用、修改和分发它。这种开放的理念吸引了大量的开发者和用户，形成了一个庞大的社区。如今，Linux已经与Windows、macOS成三足鼎立之势，成为全球最流行的操作系统之一，更成为了开源技术的象征。
+
+然而，不管怎么讲故事，Linux最终还是一个操作系统，我们还是先要获取一个基于Linux的系统当玩具：不摸一摸，知道用起来舒不舒服，又了解它干啥呢？
+
+\subsection{Linux发行版}
+
+虽然我们经常说“Linux系统”，但是实际上Linux并不是一个操作系统，它仅仅是一个内核（Kernel）。一个完整的操作系统还需要很多其他的组件，例如文件系统、图形界面、应用程序等。为了方便用户使用，很多组织和公司将Linux内核和其他组件打包在一起，形成了一个完整的操作系统，这就是我们常说的Linux发行版（Distribution）。Linux发行版种类繁多，每个发行版都有其独特的特点和适用场景。常见的Linux发行版有：
+\begin{small}
+  \begin{longtable}[c]{l|lll}
+    \caption{常见Linux发行版}\label{tab:linux-distros}\\
+    \toprule
+    发行版 & 特点 & 更新频率 & 适用情况 \\
+    \midrule
+    \endfirsthead          % 首页表头
+
+    \multicolumn{4}{c}{\footnotesize\itshape 续表~\ref{tab:linux-distros}}\\[.5ex]
+    \toprule
+    发行版 & 特点 & 更新频率 & 适用情况 \\
+    \midrule
+    \endhead               % 后续页表头
+
+    \midrule
+    \multicolumn{3}{r}{\footnotesize\itshape 接下页}
+    \endfoot               % 每页底部（除末页）
+
+    \bottomrule
+    \endlastfoot
+
+    Ubuntu（2004） & 用户友好，社区活跃 & 两年 & Linux新手，桌面用户 \\
+    Debian（1993） & 稳定，软件包丰富 & 两年 & 服务器等生产环境 \\
+    Fedora（2003） & 最新技术，社区驱动 & 半年 & 开发者，技术爱好者 \\
+    RHEL & 商业支持，稳定 & 三年 & 企业用户，服务器 \\
+    CentOS（2004） & RHEL的免费版本 & 死了 & 企业用户，服务器 \\
+    Arch（2002）& 滚动更新，极简 & 以天计 & 高级用户，DIY爱好者 \\
+    NixOS（2003） & 声明式配置，原子升级 & 以天计 & 高级用户，系统管理员 \\
+    Rocky（2021） & Cent的复活版本 & 三年 & 企业用户，服务器 \\
+    Alma（2021） & Cent的复活版本 & 三年 & 企业用户，服务器 \\
+    Mint（2006） & 基于Ubuntu，用户友好 & 两年 & Linux新手，桌面用户 \\
+    Manjaro（2011） & 基于Arch，用户友好 & 以月计 & Linux新手，桌面用户 \\
+    openSUSE（2005） & 稳定，企业支持 & 八个月 & 企业用户，服务器 \\
+    Gentoo（2002） & 源码编译，极致定制 & 以月计 & 高级用户，DIY爱好者 \\
+    Kali（2013） & 安全测试，渗透测试 & 半年 & 网络安全专业人员 \\
+    Alpine（2005） & 轻量级，安全 & 以月计 & 容器，嵌入式系统 \\
+    统信UOS（2018） & 中国本土，兼容Windows & 两年 & 政府，企业用户 \\
+  \end{longtable}
+\end{small}
+
+对于什么都不会的小白而言，我们推荐使用Ubuntu、Mint、Manjaro等用户友好的发行版。
 
 \subsection{CLab}
 
@@ -33,7 +84,7 @@
 
 \subsubsection{Ubuntu}
 
-对于Linux新手，我们建议安装Ubuntu系统，因为它有着和Windows类似的图形化界面，且有着丰富的社区支持和文档。以下是一个简要步骤：
+Ubuntu安装过程非常简单，其自动化程度非常高。以下是一个简要步骤：
 
 \begin{enumerate}
   \item 获取Linux发行版的ISO镜像文件。可以从（\href{https://ubuntu.com/download}{Ubuntu官网}）下载最新版本的Ubuntu ISO镜像。
@@ -414,7 +465,7 @@ Nano是一个简单易用的文本编辑器，它有着直观的界面和快捷�
 
 \subsubsection{重定向}
 
-重定向只认识真正的文件（或文件描述符），有两种：\texttt{>} 把标准输出定向到文件（写）；\texttt{<}把文件内容定向到标准输入（读）。  
+重定向只认识真正的文件（或文件描述符），有两种：\texttt{>} 把标准输出定向到文件（写）；\texttt{<}把文件内容定向到标准输入（读）。
 \begin{lstlisting}[language=bash]
 echo "Hello, World!" > hello.txt   # 新建或覆盖文件
 cat < hello.txt                    # 把文件当输入
@@ -462,19 +513,17 @@ diff <(echo "$out") <(ls) # 用进程替换再比一次
 \begin{table}[ht]\small
   \centering
   \begin{tabular}{llll}
-\toprule
-机制 & 数据形态 & 左侧何时开始 & 右侧何时开始 \\
-\midrule
-\texttt{cmd1 | cmd2} & 管道字节流 & 立即 & 立即 \\
-\texttt{cmd < file} & 已有文件 & 立即 & - \\
-\texttt{cmd <<< "\$str"} & 临时文件 & 字符串生成完后 & 字符串生成完后 \\
-\texttt{cmd <(cmd1)} & 命名管道/FD & 立即 & 立即 \\
-\texttt{str=\$(cmd1); cmd2 <<< "\$str"} & 变量$\rightarrow$临时文件 & cmd1 结束后 & cmd1 结束后 \\
-\bottomrule
-\end{tabular}
+    \toprule
+    机制 & 数据形态 & 左侧何时开始 & 右侧何时开始 \\
+    \midrule
+    \texttt{cmd1 | cmd2} & 管道字节流 & 立即 & 立即 \\
+    \texttt{cmd < file} & 已有文件 & 立即 & - \\
+    \texttt{cmd <<< "\$str"} & 临时文件 & 字符串生成完后 & 字符串生成完后 \\
+    \texttt{cmd <(cmd1)} & 命名管道/FD & 立即 & 立即 \\
+    \texttt{str=\$(cmd1); cmd2 <<< "\$str"} & 变量$\rightarrow$临时文件 & cmd1 结束后 & cmd1 结束后 \\
+    \bottomrule
+  \end{tabular}
 \end{table}
-
-
 
 掌握这四种手法后，你就可以根据各种实际条件，灵活选择最简洁、最高效的写法。
 
@@ -832,5 +881,16 @@ GLFW_IM_MODULE=ibus
 之后，打开系统设置-区域和语言，找到输入法一项，运行fcitx。之后，点击添加输入法，找到拼音输入（或者你喜欢的输入），将其添加为拼音输入法。
 
 现在重启电脑就可以输入中文了。
+
+\subsection{总结}
+
+上面的过程就是从头安装ArchLinux的全过程了。实际上我们可以看到，上述过程总体上大概可以分为四部分：
+\begin{enumerate}
+  \item 准备工作：准备好安装介质（这里是U盘）、改BIOS设置、联网等。
+  \item U盘根阶段：从U盘启动，进入Linux的安装环境；准备硬盘（分区、格式化、挂载等）；安装基础系统。
+  \item 机器根阶段：从U盘\texttt{chroot}到新的系统，安装剩余的软件包，配置系统（主机名、时区、locale等）；做启动引导。
+  \item 后续的各种配置。
+\end{enumerate}
+实际上几乎所有的系统安装过程都可以大致分为这四个部分。只不过不同的系统在细节上有不同，而且许多系统会把这些步骤都封装好，用户只需要简单地点击几下就可以完成安装。
 
 \end{document}
