@@ -86,6 +86,10 @@ pacman -S mingw-w64-ucrt-x86_64-gdb
   有的同学可能不是按照上述推荐的方式安装GCC的，而是通过其他方式（例如直接下载预编译版本）安装的GCC。如果是这种情况，务必记住GCC和非ASCII字符是死敌，因此请不要将GCC安装在包含非ASCII字符（如汉字、空格）的路径下！（最大的坑可能是你的用户名中包含非ASCII字符，例如汉字！）
 \end{caution}
 
+\begin{caution}
+  有些同学的Windows系统可能不是使用UTF-8编码的（例如使用GBK编码），这会导致GCC无法正确处理包含非ASCII字符的文件名，从而引发各种奇怪的问题。因此，建议将系统的区域设置更改为使用UTF-8编码。具体步骤见第一章\ref{sec:locale}节。如不愿修改该设置项，则务必注意不要使用非ASCII文件名！
+\end{caution}
+
 \subsection{Python、虚拟环境及其配置}\label{sec:virtualenv}
 
 如果仅仅是安装Python，那可比安装C系编译器简单得多了，直接去官网上下载就行了，只要记得安装时勾选“添加到Path”就行了。然而，这样安装会有一个问题：会将Python安装到全局环境中。
@@ -611,7 +615,7 @@ C系有着自己的调试器：GDB（GNU Debugger），它是一个强大的调�
 
 例如我在调试某数万行的大型项目时，出现断言错误。于是本人在代码中添加了以下打印语句：
 
-\begin{figure}[htbp]
+\begin{figure}[ht]
   \centering
   \includegraphics[width=0.8\textwidth]{images/printlog.png}
   \caption{打日志的例子}
@@ -627,7 +631,7 @@ C系有着自己的调试器：GDB（GNU Debugger），它是一个强大的调�
 
 我们可以逐行执行代码，查看变量的变化，从而定位问题所在。
 
-\begin{figure}[htbp]
+\begin{figure}[ht]
   \centering
   \includegraphics[width=0.8\textwidth]{images/breakpoints.png}
   \caption{打断点的例子}
@@ -639,7 +643,7 @@ C系有着自己的调试器：GDB（GNU Debugger），它是一个强大的调�
 
 写测试代码是指编写一些专门用于测试的代码，以便在运行时验证程序的正确性。测试代码可以帮助我们发现潜在的问题，并确保程序的功能正常。这也是用于较大型项目的调试手段，但是小型项目也可以使用。我们可以在这些测试代码中模拟各种可能出现的情况（包括常规值、边界值、异常值等），从而验证程序的正确性和健壮性。
 
-\begin{figure}[!ht]
+\begin{figure}[ht]
   \centering
   \includegraphics[width=0.8\textwidth]{images/tests.png}
   \caption{我为本人实习的项目编写的集成测试}
@@ -661,7 +665,7 @@ debug 最重要的一件事是缩小错误出现的范围，为达成这一目�
 
 2002 年以前，Linux 内核开发完全依赖于 Linus 一个人手工检查并合并全世界发来的补丁，这样工作量非常大。于是，Linus 的一个朋友介绍了 BitMover 公司开发的商业 VCS 软件 BitKeeper 免费授权给 Linux 开发团队使用。此举招致了 FSF 的 RMS 等人的批评，认为在自由软件开发中使用非自由软件是“道德上有污点”的行为。但是作为实用主义者的 Linus 并不在意这些事情，BitKeeper 作为去中心化的 VCS，满足了 Linus 的需求。然而好景不长，有 Linux 内核开发者逆向了 BitKeeper 的协议，致使 BitMover 公司在 2005 年决定收回其授权。Git 就是在这种条件下诞生的，据说第一版 Git 是 Linus 利用 1 周休假时间完成的。随着Linux的广泛应用，Git也逐渐成为了最流行的去中心化版本控制系统，也是目前最流行的版本控制系统。
 
-\begin{figure}[htbp]
+\begin{figure}[ht]
   \centering
   \includegraphics[width=0.8\textwidth]{images/git.png}
   \caption{一个典型的Git工作流程}
@@ -678,7 +682,7 @@ Git有三个目录共同完成版本控制：工作区、暂存区、版本库�
   \item 我拿出了这些文件，并且对文件A进行修改。此时，工作区有AB两个文件，但是暂存区依然是空的。我们的任何修改都不会被暂存区记录，Git也不会知道我对这些文件进行了修改。
 
   \item 我觉得修改差不多了，现在把A放进暂存区。现在Git知道我对A进行了一些修改了。
-    \begin{figure}[!ht]
+    \begin{figure}[ht]
       \begin{subfigure}[t]{0.45\linewidth}
         \centering
         \includegraphics[width=\linewidth]{images/git-graph-no-modified.png}
@@ -692,7 +696,7 @@ Git有三个目录共同完成版本控制：工作区、暂存区、版本库�
     \end{figure}
   \item 我又对B进行了类似的修改，此时B也进暂存区了。
   \item 我觉得修改差不多了。我认为我应该永久保存目前的状态，于是就把暂存区提交到版本库。此时版本库多了一个Y节点，指针也指向Y节点，有修改过的AB两个文件。此时，暂存区又清空了，而工作区和版本库的Y版本一致。
-    \begin{figure}[!ht]
+    \begin{figure}[ht]
       \begin{subfigure}[t]{0.45\linewidth}
         \centering
         \includegraphics[width=\linewidth]{images/git-b-changed.png}
@@ -788,7 +792,7 @@ Git有三个目录共同完成版本控制：工作区、暂存区、版本库�
 \end{lstlisting}
 
 使用图解来表示一下：
-\begin{figure}[htbp]
+\begin{figure}[ht]
   \centering
   \includegraphics[width=0.8\textwidth]{images/git-reset.png}
   \caption{Git的回退操作}
@@ -841,7 +845,7 @@ git checkout main
 \end{lstlisting}
 这样会把上述feature上的三个提交从C变基到E，变成F'和G'。我们可以用图解来理解这个过程：
 
-\begin{figure}[htbp]
+\begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth]{images/git-rebase.png}
   \caption{分支变基示意图}
@@ -861,7 +865,7 @@ git merge feature
 
 这时候我们在main分支上，并试图将E和G合并在一起。这时，会自动创建一个特殊的提交Merge，它有两个父提交。之后的提交就会以Merge为父提交，而不是E或G中的任何一个。
 
-\begin{figure}[htbp]
+\begin{figure}[ht]
   \centering
   \includegraphics[width=0.75\textwidth]{images/git-merge.png}
   \caption{分支合并示意图}
@@ -959,7 +963,7 @@ Cherry-Pick（摘樱桃）操作（也叫挑拣）是指从一些提交中选择
 \end{lstlisting}
 我们可以在GitHub上的仓库页面中找到这个 URL，如图所示。
 
-\begin{figure}[htbp]
+\begin{figure}[ht]
   \centering
   \includegraphics[width=0.5\textwidth]{images/example.png}
   \caption{GitHub 上的仓库页面}
@@ -1024,7 +1028,7 @@ git push -f origin main
 
 我们打开GitHub的一个仓库的时候，映入眼帘的类似这张图片内容。可以看到，这些图片中有很多不同的概念和功能。我们来逐一介绍一下。
 
-\begin{figure}[!ht]
+\begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth]{images/github.png}
   \caption{GitHub 仓库页面}

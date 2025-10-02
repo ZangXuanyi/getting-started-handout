@@ -1,16 +1,53 @@
 \documentclass[../main.tex]{subfiles}
 
 \begin{document}
-\chapter{理科生玩转Python}\label{chap:python-advanced}
+\chapter{Python常用包}\label{chap:python-advanced}
 \begin{flushright}
-  \emph{这里默认你已经会Python的基本语法了，如果不会，请先阅读《Python高速入门》一节！}
+  { \kaishu 这里默认你已经会Python的基本语法了，如果不会，请先阅读《Python高速入门》一节！}
 \end{flushright}
 
-Python作为时下最流行的高级脚本语言之一，在多个领域有着广泛的应用；不仅是文科学生可以利用它来进行数据分析、自然语言处理等工作，理科生也可以利用它来进行科学计算、机器学习等任务。本章将介绍Python的一些非常常用的包（理工科常用），涵盖了机器学习、数学建模、数值计算、信号处理、算法可视化等大量内容，供大家按需使用。
+Python作为时下最流行的高级脚本语言之一，在多个领域有着广泛的应用；不仅是文科学生可以利用它来进行数据分析、自然语言处理等工作，理科生也可以利用它来进行科学计算、机器学习等任务。本章将介绍一些非常常用的包，涵盖了机器学习、数学建模、数值计算、信号处理、算法可视化等大量内容，供大家按需使用。
+
+\section{超级Excel：Pandas}
+
+Pandas是一个强大的数据分析库，可以帮助我们处理表格数据。
+
+Pandas比较喜欢的文件是CSV（逗号分隔的值）文件，我们可以使用\texttt{read\_csv()}函数来读取CSV文件，并将其转换为DataFrame对象。当然，Pandas也支持其他格式的文件，如Excel、JSON等。
+
+\begin{lstlisting}[language=python]
+import pandas as pd
+df = pd.read_csv("data.csv")  # 读取CSV文件
+print(df.head())  # 输出前5行数据
+df.to_csv("output.csv", index=False)  # 将DataFrame保存为CSV文件
+\end{lstlisting}
+
+然后，对于这个DataFrame对象，我们可以使用各种方法来处理数据，例如筛选、排序、分组等：
+\begin{lstlisting}[language=python]
+filtered_df = df[df["age"] > 18]  # 筛选年龄大于18的数据
+sorted_df = df.sort_values(by="name")  # 按照姓名排序
+df[df['朝代'] == '唐']['作者'].value_counts()  # 输出唐代谁被提及最多
+pd.merge(df1, df2, on='书名')  # 合并两个表，随意拼接
+\end{lstlisting}
+
+\section{自动分词的结巴：jieba}
+jieba是一个中文分词库，可以帮助我们对中文文本进行分词处理。它可以将一段连续的中文文本切分成一个个单独的词语。
+
+比方说，我想要把一整段《红楼梦》切成“贾宝玉”“林黛玉”“葬花”等词语，并统计频次：
+\begin{lstlisting}[language=python]
+import jieba
+with open("book.txt", "r", encoding="utf-8") as file:
+    text = file.read()
+words = jieba.cut("林黛玉葬花")  # 分词，精确模式
+jieba.add_word("林黛玉葬花")  # 添加新词，这个词会被识别为一个整体
+\end{lstlisting}
+
+当然，三件套最好一起用：Pandas读数据$\rightarrow$jieba分词$ \rightarrow $Pandas统计$
+\rightarrow
+$Matplotlib可视化。这样可以轻松地完成论文中最让文科生们头痛的“数据分析”部分了！不过以上三件套的使用方法只是冰山一角，文科生们可以通过查阅相关文档和教程来深入学习。
 
 \section{PyTorch：让你的电脑会学习}
 \begin{flushright}
-  \emph{建议本节阅读者有一定的线性代数基础。}
+  { \kaishu 建议本节阅读者有一定的线性代数基础。}
 \end{flushright}
 
 PyTorch是一个开源的机器学习框架，广泛应用于科研领域，和大名鼎鼎的TensorFlow齐名。由于PyTorch更加灵活、动态，因此在学生和科研人员中更受欢迎；而TensorFlow则因为性能更强大而多用于生产环境。当然，我们在这里不讨论后者（因为我也不大会用）。
@@ -233,7 +270,7 @@ print("Test accuracy:", accuracy_score(all_true, all_pred))
 \section{NumPy+SciPy：科学计算的利器}
 
 \begin{flushright}
-  \emph{建议本节阅读者有一定的线性代数和高等数学基础。}
+  { \kaishu 建议本节阅读者有一定的线性代数和高等数学基础。}
 \end{flushright}
 
 NumPy和SciPy是Python中用于科学计算的两个重要库。NumPy提供了高效的多维数组对象和各种数学函数，而SciPy则在此基础上提供了更多的科学计算功能，如优化、积分、插值等。掌握了这两个库，Python就具有了MATLAB的核心战斗力，却又保留了Python的灵活性和易用性。
@@ -376,7 +413,7 @@ plt.show()  # 显示图形
 \end{lstlisting}
 上述代码使用\texttt{plt.plot}函数绘制了一个简单的折线图，并添加了坐标轴标签、标题和图例。最后使用\texttt{plt.show()}函数显示图形。
 
-\begin{figure}[htbp]
+\begin{figure}[ht]
   \centering
   \includegraphics[width=0.8\textwidth]{images/plt/Figure_1.png}
 \end{figure}
@@ -401,7 +438,7 @@ plt.show()  # 显示图形
 \end{lstlisting}
 上述代码使用\texttt{plt.subplots}函数创建了一个图形和坐标轴对象，然后使用坐标轴对象的\texttt{plot}方法绘制曲线。这样可以更灵活地控制图形的各个部分。
 
-\begin{figure}[htbp]
+\begin{figure}[ht]
   \centering
   \includegraphics[width=0.8\textwidth]{images/plt/Figure_2.png}
 \end{figure}
@@ -427,7 +464,7 @@ plt.ylabel('Y-axis')
 plt.show()
 \end{lstlisting}
 
-\begin{figure}
+\begin{figure}[ht]
   \centering
   \includegraphics[width=0.8\textwidth]{images/plt/Figure_3.png}
 \end{figure}
@@ -465,7 +502,7 @@ plt.show()
 \end{lstlisting}
 上述代码创建了一个包含两个子图的图形窗口，分别绘制了正弦函数和余弦函数。\\使用\texttt{plt.tight\_layout()}函数可以自动调整子图之间的间距。
 
-\begin{figure}[htbp]
+\begin{figure}[ht]
   \centering
   \includegraphics[width=0.8\textwidth]{images/plt/Figure_4.png}
 \end{figure}
@@ -481,7 +518,7 @@ plt.style.use(['science', 'ieee'])  # 需安装 SciencePlots
 plt.style.use(['science', 'ieee', 'no-latex'])  # 需安装 SciencePlots
 \end{lstlisting}
 
-\begin{figure}[htbp]
+\begin{figure}[ht]
   \centering
   \includegraphics[width=0.8\textwidth]{images/plt/Figure_5.png}
   \caption{使用SciencePlots风格绘制的图形}
@@ -512,7 +549,7 @@ plt.rcParams['axes.unicode_minus'] = False  # 解决负号显示为方块的问�
 \section{SymPy：符号计算高级计算器}
 
 \begin{flushright}
-  \emph{建议本节阅读者有一定的高等数学基础。}
+  { \kaishu 建议本节阅读者有一定的高等数学基础。}
 \end{flushright}
 
 SymPy是一个用于符号计算的Python库。符号计算是指对数学表达式进行符号操作，而不是数值计算；或者说，\textbf{求解析解而不是数值解}。SymPy可以用于求解方程、积分、微分、矩阵运算等多种数学操作。它的语法类似于Mathematica和Maple，但使用Python语言编写，因此更易于学习和使用。
@@ -586,19 +623,74 @@ SymPy还提供了矩阵和线性代数的功能，可以进行矩阵运算、求
 
 祝愿玩得开心，下次计算不用抄公式抄到手软！
 
-\section{小练：抛体运动}
+\section{爬虫}
 
-我们可以通过这个小项目来玩上述库，深化一下对它们的理解。当然，仅凭以上讲过的内容并不能很好地完成这些项目，同学们需要自己去查阅相关文档和资料，才能更好地完成这些小项目。
+爬虫很难说是一个包。它实际上是一种技术，或者说是一种思维方式。爬虫的核心思想是：模拟浏览器行为，自动化地获取网页内容。Python中有许多用于爬虫的库，如Requests、BeautifulSoup、Scrapy等。
 
-抛体运动是一个经典的物理问题。我们在高中阶段已经对该问题进行了深入的讨论和学习，但是并没有考虑诸如空气阻力等因素。现在，我们考虑空气阻力的影响，并使用相关的库来模拟抛体运动的轨迹。
+一般而言，爬虫的基本流程包括以下几个步骤：
+\begin{enumerate}
+  \item 发送HTTP请求：使用Requests库发送HTTP请求，获取网页内容。
+  \item 解析网页内容：使用BeautifulSoup库解析HTML内容，提取所需的数据。
+  \item 存储数据：将提取的数据存储到本地文件或数据库中。
+\end{enumerate}
+以下是一个简单的爬虫示例，使用Requests和BeautifulSoup库来爬取一个网页的标题：
+\begin{lstlisting}[language=python]
+import requests
+from bs4 import BeautifulSoup
+url = 'https://example.com'
+response = requests.get(url)
+soup = BeautifulSoup(response.text, 'html.parser')
+title = soup.find('title').text
+print(title)
+\end{lstlisting}
+上述代码发送了一个HTTP GET请求，获取了网页内容，并使用BeautifulSoup解析HTML，提取了网页的标题并打印出来。
 
-思考：
-\begin{itemize}
-  \item 怎么计算轨迹？要数值解还是解析解？
-  \item 怎么画图？画静态图还是动态图？
-  \item 怎么考虑空气阻力？是线性还是非线性？
-\end{itemize}
+当然，上述代码只是一个非常简单的爬虫示例，实际应用中可能需要处理更多的细节，如处理分页、模拟登录、处理JavaScript渲染等。另一方面，很多网站实际上已经做了反爬虫处理，想要成功爬取数据可能需要更多的技巧和方法。出于个人原因，笔者也很少使用爬虫技术，因此我在这里就不做过多介绍了，感兴趣的同学可以自行查找相关资料进行了解。
 
-欢迎同学们踊跃思考，做出更好玩的demo！
+\begin{caution}
+  爬虫涉及到法律和道德问题，爬取数据时应当遵守网站的robots.txt文件和相关法律法规，避免侵犯他人的权益。
+\end{caution}
+
+\section{OpenAI：自己做自己的Agent}
+
+Cherry Studio等软件给了我们一个强大的图形界面，让我们可以通过各种方式来使用LLM。但是涉及到一些自动化的任务时，还是需要自己编写代码来实现。OpenAI官方提供了一个Python SDK，可以让我们方便地使用OpenAI的各种模型和功能。
+
+实际上，OpenAI的Python SDK非常简单易用，甚至可以说是简陋到傻瓜级别的。我们如果希望使用该包，只需要记住代码分为两步：定义client，使用client。以下是一个简单的示例，使用OpenAI的GPT-4模型来生成文本：
+\begin{lstlisting}[language=python]
+from openai import OpenAI
+
+API_KEY = 'your_api_key' # 这个是必须的
+BASE_URL = 'https://example.com/v1'  # 请改成服务供应商提供的地址
+
+# 定义 client
+client = OpenAI(api_key=API_KEY, base_url=BASE_URL)
+
+# 使用 client
+with client.chat.completions.create(
+    model='gpt-4o', # 取决于实际情况
+    messages=[
+        {'role': 'system', 'content': 'You are a helpful assistant.'},
+        {'role': 'user', 'content': 'Hello, how are you?'}
+    ] # Prompts需要自己写
+    # 这里也可以添加 temperature, max_tokens 等参数
+) as response:
+    print(response.choices[0].message.content)
+\end{lstlisting}
+
+在上述代码中，我们首先定义了一个OpenAI客户端，然后使用该客户端发送了一个聊天请求，获取了模型的回复并打印出来。使用\texttt{with}语句可以确保资源的正确释放，是良好的习惯。
+
+于是上述库的使用就这么简单，疑似确实是傻瓜级别的。更多的功能和用法可以参考相关文档。当然，如果希望进行记忆持久化等功能，那需要其他的库来实现，例如\texttt{langchain}和\texttt{langgraph}等。
+
+
+\begin{thinking}
+  以下内容是一些简单的实践选题，供同学们参考。可以使用LaTeX来形成实验报告！
+  \begin{enumerate}
+    \item 用《红楼梦》文本做词-人共现网络：试着读入一段红楼梦文本，统计人物和词语的共现关系，并使用SnowNLP等库为人物的情绪打分，最终观察人物的情绪走势。
+    \item 用PyTorch试着复现线性回归的解析解：试着生成一百万个三维点，使用PyTorch实现线性回归，并与解析解进行对比。提示：解析解可以使用Numpy求得，公式是$w^* = (X^TX)^{-1}X^Ty$。
+    \item 使用多个库做信号处理，做出一个简单的调音器：可以使用pyaudio库来辅助录音，使用SciPy来做FFT变换，使用Matplotlib来做频谱图，使用SymPy来做滤波器设计。
+    \item 使用PyTorch训练一个简单的神经网络来做手写数字特征提取；然后使用UMAP来降维可视化。提示：ResNet。
+    \item 混沌摆模拟：使用SciPy的ODE求解器来模拟一个混沌摆的运动轨迹，然后使用Matplotlib来绘制相空间图和时间序列图。你能做出一个动画吗？如果你有GPU，可以使用PyTorch来并行，看看混沌敏感性。
+  \end{enumerate}
+\end{thinking}
 
 \end{document}

@@ -38,14 +38,14 @@ Linux内核采用了GPL协议，这使得任何人都可以自由地使用、修
     \midrule
     \endfirsthead          % 首页表头
 
-    \multicolumn{4}{c}{\footnotesize\itshape 续表~\ref{tab:linux-distros}}\\[.5ex]
+    \multicolumn{4}{c}{\footnotesize 续表~\ref{tab:linux-distros}}\\[.5ex]
     \toprule
     发行版 & 特点 & 更新频率 & 适用情况 \\
     \midrule
     \endhead               % 后续页表头
 
     \midrule
-    \multicolumn{3}{r}{\footnotesize\itshape 接下页}
+    \multicolumn{3}{r}{\footnotesize 接下页}
     \endfoot               % 每页底部（除末页）
 
     \bottomrule
@@ -440,7 +440,7 @@ Nano是一个简单易用的文本编辑器，它有着直观的界面和快捷�
       \item \texttt{echo}命令用于在终端输出文本。
         \begin{itemize}
           \item \texttt{-n}：不在输出末尾添加换行符。
-          \item \texttt{-e}：启用转义字符的解释，例如\texttt{\textbackslash n}表示换行，\texttt{\t}表示制表符。
+          \item \texttt{-e}：启用转义字符的解释，例如\texttt{\textbackslash n}表示换行，\texttt{\textbackslash t}表示制表符。
           \item \texttt{-E}：禁用转义字符的解释。
           \item \texttt{-c}：不输出任何内容。
           \item \texttt{-C}：将输出内容转换为大写字母。
@@ -892,5 +892,16 @@ GLFW_IM_MODULE=ibus
   \item 后续的各种配置。
 \end{enumerate}
 实际上几乎所有的系统安装过程都可以大致分为这四个部分。只不过不同的系统在细节上有不同，而且许多系统会把这些步骤都封装好，用户只需要简单地点击几下就可以完成安装。
+
+\begin{thinking}
+  \begin{enumerate}
+    \item \texttt{sl}这个玩具软件仅有200行源代码，却能让你在终端里看到一列火车呼啸而过。请你阅读它的源代码，并简要描述它的实现原理；如果希望把该软件改成系统服务，开机就自动跑一列火车，你需要解决哪些问题？试着实践一下。
+    \item 对比\texttt{apt}、\texttt{pacman}的实现。为什么后者更容易实现滚动更新和回滚？怎么验证？
+    \item \texttt{bin}、\texttt{sbin}、\texttt{usr/bin}这三个东西都是什么？为什么会有这么多类似的目录？它们之间有什么区别？为什么直到2020年仍然有发行版保持着\texttt{/bin}和\texttt{/usr/bin}的分离？能否把它们合并？如果可以，怎么做？
+    \item \texttt{chmod 777 /}到底给敌人开了多少额外的后门？试着统计一个正常的系统中所有777文件分别被多少个不同的进程打开过。
+    \item 管道和\texttt{Here-String}的内存和延迟有多少？为什么后者会OOM,而管道不会？\texttt{Here-String}的实现原理是什么？如果要改进它，你会怎么做？
+    \item 试着在虚拟机里安装Arch Linux和NixOS；然后，试着将Arch的安装步骤翻译成\texttt{configuration.nix}，并试着生成ISO。对比两者的异同，然后说明声明式系统在可维护性上的优势。但是为什么即使这样，Arch用户仍然比NixOS用户多？
+  \end{enumerate}
+\end{thinking}
 
 \end{document}
