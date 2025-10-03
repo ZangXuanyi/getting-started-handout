@@ -1,7 +1,3 @@
-\documentclass[../main.tex]{subfiles}
-
-\begin{document}
-
 \chapter{文字排版}
 
 文本编辑工具是我们表达思想、传递知识的重要手段。无论是在科研、写作还是展示中，排版都是重要且必要的内容；我们需要选择合适的排版工具，以大大提高作品质量。
@@ -393,7 +389,7 @@ LaTeX 还支持各种数学符号和运算符，例如乘号 (\texttt{\textbacks
 可以使用 \texttt{\textbackslash emph\{文本\}} 命令来强调文本，通常会将文本设置为斜体，实际情况下可能会根据文档类和宏包的不同而有所变化。除此之外：
 \begin{itemize}
   \item \texttt{\textbackslash textbf\{文本\}} ：\textbf{粗体，Bold}。
-  \item \texttt{\textbackslash textit\{文本\}} ：\kaishu{斜体}，\textit{Italic}。
+  \item \texttt{\textbackslash textit\{文本\}} ：斜体，\textit{Italic}。
   \item \texttt{\textbackslash texttt\{文本\}} ：\texttt{等宽字体，Typewriter}。
   \item \texttt{\textbackslash textsf\{文本\}} ：\textsf{无衬线字体，Sans-serif}。
   \item \texttt{\textbackslash textsc\{文本\}} ：小型大写字母，\textsc{Small caps}。
@@ -547,40 +543,44 @@ LaTeX的字体分三种：常规字体、无衬线字体和等宽字体。常规
 
 对于非常长的代码文件，建议将其拆分成多个文件进行管理。LaTeX 也不例外，虽然tex文件是以文本内容为主的，但是对于动辄几十页上万行的文档，拆分成多个文件也是必要的，LaTeX也支持这种做法。
 
-一些比较经典的手段是使用 \texttt{\textbackslash input\{文件名\}} 或 \texttt{\textbackslash include\{文件名\}} 命令来引入其他 LaTeX 文件。但是这两个命令风格比较老，不建议使用。
+有三种手段来实现多文件管理。
 
-现代的LaTeX，我们建议使用 \texttt{\textbackslash subfile\{文件名\}} 命令来引入其他 LaTeX 文件，这个命令是由 \texttt{subfiles} 宏包提供的。这样能够较好地保证文件的独立性，不仅可以在主文件中编译，也可以在子文件中独立编译，使得调试更加方便。
+\subsubsection{input}
 
-举例说明：我们可以写一个主要文件 main.tex，内容如下：
+使用 \texttt{\textbackslash input\{文件名\}} 命令来插入其他文件的内容。这个命令会将指定文件的内容直接插入到当前位置，等效于将文件内容复制粘贴到当前位置。例如：
 \begin{lstlisting}[language={[LaTeX]TeX}]
-  \documentclass{article}
+  \input{chapter1.tex}
+\end{lstlisting}
+上述代码会将 \texttt{chapter1.tex} 文件的内容插入到当前位置。这是最轻量级的手段，也是最常见的手段，适合编写短文件，例如学术论文分section等。
+
+\subsubsection{include和includeonly}
+
+使用 \texttt{\textbackslash include\{文件名\}} 命令来插入其他文件的内容。这个命令会将指定文件的内容插入到当前位置，并且会在插入内容前后自动添加分页符，格外适合章节的划分。例如：
+\begin{lstlisting}[language={[LaTeX]TeX}]
+  \include{chapter1}
+\end{lstlisting}
+上述代码会将 \texttt{chapter1.tex} 文件的内容插入到当前位置，并在插入内容前后添加分页符。
+
+如果只想编译部分文件，可以使用 \texttt{\textbackslash includeonly\{文件名1, 文件名2, ...\}} 命令来指定只编译哪些文件。例如：
+\begin{lstlisting}[language={[LaTeX]TeX}]
+  \includeonly{chapter1, chapter3}
+  ...
+  \include{chapter1}
+  \include{chapter2}
+  \include{chapter3}
+\end{lstlisting}
+上述代码只会编译 \texttt{chapter1.tex} 和 \texttt{chapter3.tex} 文件的内容，而忽略 \texttt{chapter2.tex} 文件的内容，但是能够正确地处理引用和目录。
+
+这种方法适用于report和book文档类，适合编写长文件，例如书籍分chapter等。
+
+\subsubsection{subfiles}
+使用 \texttt{subfiles} 宏包来管理多文件。首先，在主文件中加载 \texttt{subfiles} 宏包，然后使用 \texttt{\textbackslash subfile\{文件名\}} 命令来插入其他文件的内容。例如：
+\begin{lstlisting}[language={[LaTeX]TeX}]
   \usepackage{subfiles}
-
-  \begin{document}
-  \title{我的 LaTeX 文档}
-  \author{张三}
-  \date{\today}
-  \maketitle
-
-  \section{引言}
-  这是一个 LaTeX 文档的示例。
-
-  \subfile{section1.tex} % 引入 section1.tex 文件
-  \subfile{section2.tex} % 引入 section2.tex 文件
-
-  \end{document}
+  ...
+  \subfile{chapter1.tex}
 \end{lstlisting}
-
-然后，我们可以创建两个子文件 section1.tex 和 section2.tex，内容如下：
-\begin{lstlisting}[language={[LaTeX]TeX}]
-  \documentclass[main.tex]{subfiles} % 指定主文件是main.tex
-
-  \section{第一节}
-  这是第一节的内容。
-
-  \subsection{子节}
-  这是第一节的子节内容。
-\end{lstlisting}
+上述代码会将 \texttt{chapter1.tex} 文件的内容插入到当前位置。需要注意的是，使用 \texttt{subfiles} 宏包时，每个子文件都需要有自己的导言区和正文部分。子文件的导言区将继承主文件的设置，也可以添加自己的设置。
 
 需要注意的是，采用多文件来管理文档的时候，我们在应对多文件引用时，需要多次编译才能得到正确的引用和目录，一般来说是三次。（而单文件文档只需要两次编译即可。）
 
@@ -821,4 +821,3 @@ This is *emphasized* text. // 红色加粗
 默认情况下，该方法定义的变量是有类似 C 系的变量作用域的。let和show结合使用，则可以制作出各种各样的模板。
 
 对于更进一步的使用（例如 Touying 和 Pinit 等著名包的使用），我们不做更多介绍了，感兴趣的同学可以自行查找相关资料进行了解。函数文档可以去查看\href{https://typst.app/docs/}{Typst 官方文档}，已经发布的包可以在\href{https://typst.app/universe/}{Typst Universe}上查看，对于中文问题可以查看\href{https://guide.typst.dev/FAQ.html}{Typst中文社区导航}，对了还有Typst非官方中文交流群（QQ群号：793548390），欢迎来交流。
-\end{document}

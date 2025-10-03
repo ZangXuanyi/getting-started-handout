@@ -1,7 +1,3 @@
-\documentclass[../main.tex]{subfiles}
-
-\begin{document}
-
 \chapter{正式踏入编程世界}
 
 对于计算机小白而言，编程的世界可能会显得有些陌生和复杂。要想在这个世界中游刃有余，我们需要掌握的两个重要要素是\textbf{工具}和\textbf{环境}。
@@ -617,7 +613,7 @@ C系有着自己的调试器：GDB（GNU Debugger），它是一个强大的调�
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.8\textwidth]{images/printlog.png}
+  \includegraphics[width=0.8\textwidth]{103/printlog.png}
   \caption{打日志的例子}
 \end{figure}
 
@@ -633,7 +629,7 @@ C系有着自己的调试器：GDB（GNU Debugger），它是一个强大的调�
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.8\textwidth]{images/breakpoints.png}
+  \includegraphics[width=0.8\textwidth]{103/breakpoints.png}
   \caption{打断点的例子}
 \end{figure}
 
@@ -645,7 +641,7 @@ C系有着自己的调试器：GDB（GNU Debugger），它是一个强大的调�
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.8\textwidth]{images/tests.png}
+  \includegraphics[width=0.8\textwidth]{103/tests.png}
   \caption{我为本人实习的项目编写的集成测试}
 \end{figure}
 
@@ -667,7 +663,7 @@ debug 最重要的一件事是缩小错误出现的范围，为达成这一目�
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.8\textwidth]{images/git.png}
+  \includegraphics[width=0.8\textwidth]{103/git.png}
   \caption{一个典型的Git工作流程}
   \label{fig:git-workflow}
 \end{figure}
@@ -685,13 +681,13 @@ Git有三个目录共同完成版本控制：工作区、暂存区、版本库�
     \begin{figure}[ht]
       \begin{subfigure}[t]{0.45\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{images/git-graph-no-modified.png}
+        \includegraphics[width=\linewidth]{103/git-graph-no-modified.png}
       \end{subfigure}
       \hfill               % 把左右撑开
       %----- 右图 -----
       \begin{subfigure}[t]{0.45\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{images/git-a-changed.png}
+        \includegraphics[width=\linewidth]{103/git-a-changed.png}
       \end{subfigure}
     \end{figure}
   \item 我又对B进行了类似的修改，此时B也进暂存区了。
@@ -699,13 +695,13 @@ Git有三个目录共同完成版本控制：工作区、暂存区、版本库�
     \begin{figure}[ht]
       \begin{subfigure}[t]{0.45\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{images/git-b-changed.png}
+        \includegraphics[width=\linewidth]{103/git-b-changed.png}
       \end{subfigure}
       \hfill               % 把左右撑开
       %----- 右图 -----
       \begin{subfigure}[t]{0.45\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{images/git-commited.png}
+        \includegraphics[width=\linewidth]{103/git-commited.png}
       \end{subfigure}
     \end{figure}
 \end{enumerate}
@@ -794,7 +790,7 @@ Git有三个目录共同完成版本控制：工作区、暂存区、版本库�
 使用图解来表示一下：
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.8\textwidth]{images/git-reset.png}
+  \includegraphics[width=0.8\textwidth]{103/git-reset.png}
   \caption{Git的回退操作}
   \label{fig:git-reset}
 \end{figure}
@@ -847,7 +843,7 @@ git checkout main
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=\textwidth]{images/git-rebase.png}
+  \includegraphics[width=\textwidth]{103/git-rebase.png}
   \caption{分支变基示意图}
   \label{fig:git-rebase}
 \end{figure}
@@ -867,7 +863,7 @@ git merge feature
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.75\textwidth]{images/git-merge.png}
+  \includegraphics[width=0.75\textwidth]{103/git-merge.png}
   \caption{分支合并示意图}
   \label{fig:git-merge}
 \end{figure}
@@ -965,7 +961,7 @@ Cherry-Pick（摘樱桃）操作（也叫挑拣）是指从一些提交中选择
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.5\textwidth]{images/example.png}
+  \includegraphics[width=0.5\textwidth]{103/example.png}
   \caption{GitHub 上的仓库页面}
   \label{fig:github-repo}
 \end{figure}
@@ -1030,7 +1026,7 @@ git push -f origin main
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=\textwidth]{images/github.png}
+  \includegraphics[width=\textwidth]{103/github.png}
   \caption{GitHub 仓库页面}
   \label{fig:github}
 \end{figure}
@@ -1197,6 +1193,3 @@ VS Code 提供了一个名为 Remote-SSH 的扩展，可以帮助我们通过 SS
 然后，Code会弹出一个新的窗口，试图连接到远程服务器，可能会要求你输入远程服务器的密码和系统类型等信息。连接完成后，就可以在远程服务器上进行开发了。此时，Code会在左侧的资源管理器中显示远程服务器的文件系统（当然你需要打开一个文件夹）。
 
 在Code中，如果不是用终端而是用Code的图形界面来打开新的文件夹，那么每一次打开文件夹都会重新进行一次身份验证。如果你使用的是密码，则需要反复输入，非常麻烦。这时我们一定要尽可能地使用密钥进行登录。
-
-
-\end{document}

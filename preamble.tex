@@ -1,0 +1,80 @@
+%=================  北京大学计算机基础能力手册  =================%
+%                          preamble.tex                          %
+%================================================================%
+
+%---------- 常用宏包 ----------
+\usepackage{geometry}
+\geometry{b5paper, margin=0.5in}
+\usepackage{amssymb,amsmath}
+\usepackage{fontspec}
+\usepackage{xeCJK}
+\usepackage{graphicx}
+\graphicspath{{./images/}}
+\usepackage{longtable,array,booktabs}
+\usepackage{multicol}
+\usepackage{subcaption}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage[table]{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,xparse,most,breakable}
+\usepackage{manyfoot,perpage}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{fontawesome5}
+\usepackage{authblk}
+
+%---------- 页面与字体 ----------
+\setmainfont{Source Serif Pro Light}
+\setsansfont{Source Sans Pro Light}
+\setmonofont{Source Code Pro Light}
+\setCJKmainfont[ItalicFont=Source Han Serif CN]{Source Han Serif CN}
+\setCJKsansfont{Source Han Sans CN}
+\setCJKmonofont{Source Han Sans CN}
+
+%---------- 列表、代码、脚注 ----------
+\setlist{nosep}
+\lstset{
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\color{blue},
+  commentstyle=\color{green!50!black},
+  stringstyle=\color{red},
+  numbers=left,numberstyle=\tiny\color{gray},stepnumber=1,numbersep=5pt,
+  backgroundcolor=\color{white},
+  showspaces=false,showstringspaces=false,breaklines=true,frame=single
+}
+
+\DeclareNewFootnote{B}[roman]
+\renewcommand{\thefootnoteB}{}          % 无编号
+\makeatletter
+\let\fnB@mark\relax                      % 不输出标记
+% 重新定义 \href：正文蓝色下划线 + 外部箭头 + 底部脚注
+\let\oldhref\href
+\renewcommand{\href}[2]{%
+  \oldhref{#1}{\color{blue}\underline{#2}\raisebox{0.2ex}{\tiny$\nearrow$}}%
+  \footnotetextB{\textbf{#2}: \url{#1}}%
+}
+\makeatother
+
+\hypersetup{colorlinks=false,pdfborder={0 0 0}}
+
+%---------- tcolorbox 环境 ----------
+\newtcolorbox{warning}{enhanced,colback=red!4!white,colframe=red!75!black,coltitle=white,fonttitle=\bfseries,title=警告,top=2mm,bottom=2mm,left=2.5mm,right=2.5mm,boxrule=0.6pt,breakable}
+\newtcolorbox{caution}{enhanced,colback=orange!5!white,colframe=orange!60!black,coltitle=white,fonttitle=\bfseries,title=注意,top=2mm,bottom=2mm,left=2.5mm,right=2.5mm,boxrule=0.6pt,breakable}
+\newtcolorbox{tip}{enhanced,colback=cyan!3!white,colframe=cyan!65!black,coltitle=white,fonttitle=\bfseries,title=提示,top=2mm,bottom=2mm,left=2.5mm,right=2.5mm,boxrule=0.6pt,breakable}
+\newtcolorbox{note}{enhanced,colback=teal!3!white,colframe=teal!60!black,coltitle=white,fonttitle=\bfseries,title=说明,top=2mm,bottom=2mm,left=2.5mm,right=2.5mm,boxrule=0.6pt,breakable}
+\newtcolorbox{example}[1][]{enhanced,colback=blue!3!white,colframe=blue!70!black,coltitle=white,fonttitle=\bfseries,title={\IfBlankTF{#1}{例题}{例题 (#1)}},top=2mm,bottom=2mm,left=2.5mm,right=2.5mm,boxrule=0.6pt,breakable}
+\newtcolorbox{answer}{enhanced,colback=green!4!white,colframe=green!65!black,coltitle=white,fonttitle=\bfseries,title=答案,top=2mm,bottom=2mm,left=2.5mm,right=2.5mm,boxrule=0.6pt,breakable}
+\newtcolorbox{exercise}{enhanced,colback=violet!4!white,colframe=violet!70!black,coltitle=white,fonttitle=\bfseries,title=练习,top=2mm,bottom=2mm,left=2.5mm,right=2.5mm,boxrule=0.6pt,breakable}
+\newtcolorbox{thinking}{enhanced,colback=yellow!4!white,colframe=yellow!70!black,coltitle=white,fonttitle=\bfseries,title=开放性思考和探索,top=2mm,bottom=2mm,left=2.5mm,right=2.5mm,boxrule=0.6pt,breakable}
+
+%---------- 标题信息 ----------
+\title{\Huge\textbf{北京大学计算机基础能力手册}}
+\author[1]{臧炫懿}
+\affil[1]{北京大学学生Linux俱乐部}
+\affil[ ]{\faGithub\ \texttt{ZangXuanyi/getting-started-handout}}
+\affil[ ]{\faEnvelope\ \texttt{zangxuanyi@stu.pku.edu.cn}}
+\renewcommand*{\Authsep}{, }
+\renewcommand*{\Authand}{, }
+\renewcommand*{\Authands}{, }
+\date{}

@@ -1,9 +1,6 @@
-\documentclass[../main.tex]{subfiles}
-
-\begin{document}
 \chapter{Python常用包}\label{chap:python-advanced}
 \begin{flushright}
-  { \kaishu 这里默认你已经会Python的基本语法了，如果不会，请先阅读《Python高速入门》一节！}
+这里默认你已经会Python的基本语法了，如果不会，请先阅读《Python高速入门》一节！
 \end{flushright}
 
 Python作为时下最流行的高级脚本语言之一，在多个领域有着广泛的应用；不仅是文科学生可以利用它来进行数据分析、自然语言处理等工作，理科生也可以利用它来进行科学计算、机器学习等任务。本章将介绍一些非常常用的包，涵盖了机器学习、数学建模、数值计算、信号处理、算法可视化等大量内容，供大家按需使用。
@@ -47,7 +44,7 @@ $Matplotlib可视化。这样可以轻松地完成论文中最让文科生们头
 
 \section{PyTorch：让你的电脑会学习}
 \begin{flushright}
-  { \kaishu 建议本节阅读者有一定的线性代数基础。}
+建议本节阅读者有一定的线性代数基础。
 \end{flushright}
 
 PyTorch是一个开源的机器学习框架，广泛应用于科研领域，和大名鼎鼎的TensorFlow齐名。由于PyTorch更加灵活、动态，因此在学生和科研人员中更受欢迎；而TensorFlow则因为性能更强大而多用于生产环境。当然，我们在这里不讨论后者（因为我也不大会用）。
@@ -270,7 +267,7 @@ print("Test accuracy:", accuracy_score(all_true, all_pred))
 \section{NumPy+SciPy：科学计算的利器}
 
 \begin{flushright}
-  { \kaishu 建议本节阅读者有一定的线性代数和高等数学基础。}
+  {建议本节阅读者有一定的线性代数和高等数学基础。}
 \end{flushright}
 
 NumPy和SciPy是Python中用于科学计算的两个重要库。NumPy提供了高效的多维数组对象和各种数学函数，而SciPy则在此基础上提供了更多的科学计算功能，如优化、积分、插值等。掌握了这两个库，Python就具有了MATLAB的核心战斗力，却又保留了Python的灵活性和易用性。
@@ -415,7 +412,7 @@ plt.show()  # 显示图形
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.8\textwidth]{images/plt/Figure_1.png}
+  \includegraphics[width=0.8\textwidth]{203/Figure_1.png}
 \end{figure}
 
 除了使用简洁的\texttt{pyplot}以外，还可以使用面向对象风格的API来绘图，便于封装和复用：
@@ -440,7 +437,7 @@ plt.show()  # 显示图形
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.8\textwidth]{images/plt/Figure_2.png}
+  \includegraphics[width=0.8\textwidth]{203/Figure_2.png}
 \end{figure}
 
 \subsection{和其他包协同工作}
@@ -466,7 +463,7 @@ plt.show()
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.8\textwidth]{images/plt/Figure_3.png}
+  \includegraphics[width=0.8\textwidth]{203/Figure_3.png}
 \end{figure}
 
 或者使用Pandas绘制数据框的图形：
@@ -504,7 +501,7 @@ plt.show()
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.8\textwidth]{images/plt/Figure_4.png}
+  \includegraphics[width=0.8\textwidth]{203/Figure_4.png}
 \end{figure}
 
 \subsection{风格和导出}
@@ -520,7 +517,7 @@ plt.style.use(['science', 'ieee', 'no-latex'])  # 需安装 SciencePlots
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.8\textwidth]{images/plt/Figure_5.png}
+  \includegraphics[width=0.8\textwidth]{203/Figure_5.png}
   \caption{使用SciencePlots风格绘制的图形}
 \end{figure}
 
@@ -549,7 +546,7 @@ plt.rcParams['axes.unicode_minus'] = False  # 解决负号显示为方块的问�
 \section{SymPy：符号计算高级计算器}
 
 \begin{flushright}
-  { \kaishu 建议本节阅读者有一定的高等数学基础。}
+建议本节阅读者有一定的高等数学基础。
 \end{flushright}
 
 SymPy是一个用于符号计算的Python库。符号计算是指对数学表达式进行符号操作，而不是数值计算；或者说，\textbf{求解析解而不是数值解}。SymPy可以用于求解方程、积分、微分、矩阵运算等多种数学操作。它的语法类似于Mathematica和Maple，但使用Python语言编写，因此更易于学习和使用。
@@ -692,5 +689,3 @@ with client.chat.completions.create(
     \item 混沌摆模拟：使用SciPy的ODE求解器来模拟一个混沌摆的运动轨迹，然后使用Matplotlib来绘制相空间图和时间序列图。你能做出一个动画吗？如果你有GPU，可以使用PyTorch来并行，看看混沌敏感性。
   \end{enumerate}
 \end{thinking}
-
-\end{document}
