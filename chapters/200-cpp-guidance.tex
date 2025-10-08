@@ -1,7 +1,3 @@
-\documentclass[../main.tex]{subfiles}
-
-\begin{document}
-
 \chapter{C++高速入门}
 
 本章会快速带领大家过一遍C++的基本语法和常用特性，除了用作预习材料以外，还可以在期末考试复习的时候来快速回顾其基本语法与常用的高级特性。
@@ -21,25 +17,115 @@
 一个简单的C++程序如下：
 \begin{lstlisting}[language=C++]
 #include <iostream>
-using namespace std;
 
 int main() {
     int age = 18;
-    cout << "I am " << age;
+    std::cout << "I am " << age;
     return 0;
 }
 \end{lstlisting}
 逐行拆解之：
 \begin{itemize}
   \item \texttt{\#include <iostream>}：告诉编译器，我要用输入输出工具。
-  \item \texttt{using namespace std;}：使用标准命名空间，这样我们就可以直接使用\texttt{cout}而不需要加上\texttt{std::}前缀。
   \item \texttt{int main()}：程序的入口函数，告诉电脑程序从这里开始执行。\texttt{int}表示这个函数返回一个整数值。
   \item \texttt{int age = 18;}：跟电脑说，我要在内存找个地方放个整数，这个地方叫age，放个18进去。
-  \item \texttt{cout << "I am " << age; }：把东西一股脑全送到屏幕上。
+  \item \texttt{std::cout << "I am " << age; }：把东西一股脑全送到屏幕上。
   \item \texttt{return 0;}：返回0，告诉操作系统：一切OK。除非你知道你在做什么，否则这里不要改成其他数字。
 \end{itemize}
 
-以上就是骨架。接下来该往骨架里面填肉了：
+以上就是骨架。接下来该往骨架里面填肉了。
+
+\subsection{头文件、源文件}
+
+\textbf{头文件}是一些预先写好的代码的集合。通过包含头文件，我们可以使用这些预先写好的代码，而不需要重新编写它们。头文件的扩展名通常是\texttt{.h}或\texttt{.hpp}。引入头文件只需要在文件的开头使用\texttt{\#include}指令即可。
+
+头文件有两种类型：标准库头文件和自定义头文件。标准库头文件是C++标准库提供的头文件，通常使用尖括号括起来，例如\texttt{<iostream>}、\texttt{<vector>}等，这样会先在系统路径中查找，再去当前路径中查找；自定义头文件是用户自己编写的头文件，通常使用双引号括起来，例如\texttt{"myheader.h"}，这样会先在当前路径中查找，再去系统路径中查找。
+
+与“头文件”相对应的是\textbf{源文件}，它们通常包含程序的主要逻辑和实现代码。源文件的扩展名通常是\texttt{.cpp}、\texttt{.cxx}或\texttt{.cc}。源文件可以包含头文件，并且可以定义函数、类和变量等。
+
+\begin{lstlisting}[language=C++]
+// 这是一个源文件
+#include <iostream>  // 引入标准库头文件
+#include "myheader.h"  // 引入自定义头文件
+
+int main() {
+    // 使用头文件中的代码
+    return 0;
+}
+\end{lstlisting}
+
+\begin{warning}
+    严格禁止使用所谓的“万能头文件”\texttt{\# include <bits/stdc++.h>}，\textbf{尤其是在工程中！}该头文件有三个严重的问题：
+    \begin{itemize}
+        \item 该头文件不是C++标准的与部分，而是GCC编译器提供的一个非标准头文件。使用该头文件会导致代码在不同编译器下表现不同，严重地影响代码的可移植性。
+        \item 该头文件会引入整个标准库，从而显著地降低代码的可维护性，具体表现为：
+        \begin{itemize}
+            \item 显著地增加编译时间，尤其是在大型项目中。
+            \item 引入大量实际上并不需要的库，严重地增加了命名冲突的风险。
+            \item 引入大量宏定义，可能会导致意想不到的行为。
+        \end{itemize}
+    \end{itemize}
+    综上所述，严格禁止使用该头文件！多背几个常用的头文件名称并不难，且对代码质量有显著提升。
+\end{warning}
+
+\subsection{命名空间}
+
+我们知道，一个软件还是程序，可能由很多人来完成。为了方便，每一个人都有可能定义自己的东西，例如功能（函数）、数据（变量）等。那么，如果两个人给自己不同的东西起了同样的名字怎么办？这时，电脑就无法区分它们了。
+
+一个简单的方法是加强沟通，减少重名的可能性。但是，这样做并不现实。有的项目可能有数百人参与，沟通成本过高；有的项目是给下游使用的，这时又不可能沟通。这个问题非常棘手。
+
+为了解决这个问题，C++引入了\textbf{命名空间}的概念。命名空间可以参照我们说过的虚拟环境概念来理解：每一个人都有自己的一个沙盒，在自己的沙盒里可以随便起名字，互不干扰。这样一来，即使两个人起了同样的名字，也不会冲突，因为它们属于不同的命名空间。
+\begin{lstlisting}[language=C++]
+    namespace Alice {
+        int value = 42; // 数据（变量）
+        void show() {   // 功能（方法）
+            std::cout << "Alice's value: " << value << std::endl;
+        }
+    }
+    namespace Bob {
+        int value = 100; // 数据（变量）
+        void show() {    // 功能（方法）
+            std::cout << "Bob's value: " << value << std::endl;
+        }
+    }
+\end{lstlisting}
+这样，两者并不冲突。
+
+但是新的问题又来了：有时候，别人在他们的命名空间里写了一些东西，而这些东西又是我们想要的。为了方便起见，肯定不能写第二遍。那么，我们该怎么办呢？可以这样写：
+\begin{lstlisting}[language=C++]
+    Alice::show(); // 调用Alice命名空间中的show函数
+    Bob::show();   // 调用Bob命名空间中的show函数   
+\end{lstlisting}
+于是困扰我们的重名问题就彻底解决了。
+
+为了帮助我们更好的开发，C++提供了一些东西减少我们的重复劳动。这些东西被C++放在了“标准”命名空间中，也就是\texttt{std}。诸如\texttt{cout}、\texttt{cin}、\texttt{endl}等都在这个命名空间中。因此，我们在使用这些东西的时候，必须加上\texttt{std::}前缀，例如\texttt{std::cout}、\texttt{std::cin}、\texttt{std::endl}等。
+
+为了方便起见，可以使用\texttt{using namespace std;}来引入整个\texttt{std}命名空间，这样在这个文件以及其下游文件中，就可以直接使用标准空间中的东西，而不需要加上\texttt{std::}前缀了。但是这样做也是有风险的：这会把整个标准命名空间都引进来，容易导致重名冲突等问题。
+
+\begin{warning}
+    严格禁止在工程头文件中使用\texttt{using namespace std;}！这会污染全局的命名空间，从而导致重名冲突等问题。头文件是给别人用的，绝对不应污染别人的命名空间。如果确实想用，我们有以下手段来解决污染命名空间问题：
+    
+    \begin{enumerate}
+        \item 每一次使用标准命名空间中的东西时，都加上\texttt{std::}前缀。
+        \begin{lstlisting}
+    std::cout << "Hello, World!" << std::endl;
+        \end{lstlisting}
+        \item 只引入需要的东西，例如：
+        \begin{lstlisting}
+    using std::cout;
+    using std::endl;
+        \end{lstlisting}
+        这样就只引入了\texttt{cout}和\texttt{endl}，而不会污染其他的东西。而一般人也不会去定义诸如\texttt{cout}和\texttt{endl}这样的名字，所以这样基本上可以认为是安全的。
+    \end{enumerate}
+\end{warning}
+
+\begin{caution}
+    在工程上，源文件也不推荐使用\texttt{using namespace std;}。但是这样做是可以容忍的，因为源文件是给自己用的，一般不至于污染命名空间，但是风险也是相当大的。对此，这需要大家自己权衡利弊了。如果项目周期非常短（例如做题），那么这么做没有毛病。但是如果是写工程这种长周期开发，则推荐老老实实用上面提到的两种方法来避免污染命名空间。
+\end{caution}
+
+\begin{note}
+    为了简便，本书中大部分代码都使用了\texttt{using namespace std;}，但是请大家务必牢记上述警告和注意事项。
+\end{note}
 
 \subsection{基本变量及其运算}
 
@@ -119,6 +205,7 @@ constexpr double EPI = E * PI;
 
 在现代\texttt{C++}中，\texttt{const}常变量不依靠运行时初始化来确定其值（例如\lstinline[language=c++]|const int b = 1;|），其表现就和\texttt{constexpr}常量一样了。因此，在大多数时候，我们也可以把\texttt{const}常变量当作\texttt{constexpr}常量来使用。但如希望严谨表达意图，仍建议使用\texttt{constexpr}来声明常量。
 
+\begin{tip}
 还是不懂？可以通过以下例子理解一下变量、运行时常量、编译期常量的区别：
 \begin{lstlisting}[language=C++]
     int sqr(int x) { return x * x; } // 普通函数
@@ -137,14 +224,14 @@ constexpr double EPI = E * PI;
   \midrule
   \endfirsthead          % 首页表头
 
-  \multicolumn{3}{c}{\footnotesize\itshape 续表~\ref{tab:long}}\\[.5ex]
+  \multicolumn{3}{c}{\footnotesize 续表~\ref{tab:long}}\\[.5ex]
   \toprule
   声明 & 编译器表现 & 理由 \\
   \midrule
   \endhead               % 后续页表头
 
   \midrule
-  \multicolumn{3}{r}{\footnotesize\itshape 接下页}
+  \multicolumn{3}{r}{\footnotesize 接下页}
   \endfoot               % 每页底部（除末页）
 
   \bottomrule
@@ -173,6 +260,7 @@ constexpr double EPI = E * PI;
   \rowcolor{red!15}\texttt{constexpr int a19 = sqr\_cv(a0);} & 编译失败 & 立即函数不可以在运行时调用 \\
 \end{longtable}
 \end{small}
+\end{tip}
 
 \subsection{判断和循环}
 有时候，代码需要根据不同的条件或不同的输入来执行不同的操作；有时候，一段代码需要执行很多次，但是并不知道具体要执行多少次。C++提供了条件语句和循环语句来实现这些功能。
@@ -493,15 +581,25 @@ int main() {
 
 \section{C++的进阶使用}
 
-\subsection{定义宏}
+\subsection{宏和预处理指令}
 
 宏是一种预处理指令，它可以在编译之前对代码进行替换和扩展。宏的基本格式如下：
 \begin{lstlisting}[language=C++]
 #define 宏名 替换内容
 \end{lstlisting}
-宏在编译器对代码进行预处理的时候进行纯文本替换。宏名通常使用大写字母来表示，以便于和变量区分。替换内容可以是任意的代码片段，包括变量、表达式、语句等。
+宏在编译器对代码进行预处理的时候进行纯文本替换。宏名通常使用大写字母来表示，以便于和变量区分。替换内容可以是任意的代码片段，包括变量、表达式、语句等。宏常用于定义常量，但是用宏定义的常量没有类型，而是字面值。
 
-宏定义是预处理语句，不需要加分号。这一点的性质和\texttt{\#include}类似。
+我们可能会看到，诸如\texttt{\#define}、\texttt{\#include}等均以符号\texttt{\#}开头，这些都是预处理指令，有时候也叫做编译指令。预处理指令和常规代码的行为有区别：它们实际上并非代码的一部分，而是在编译器对代码进行预处理的时候进行处理的。预处理指令通常用于定义宏、包含头文件、条件编译等。常用的预处理指令还有\texttt{\#pragma}、\texttt{\#ifdef}等。活用编译指令可以让代码更灵活、更高效。
+
+\begin{tip}
+    用宏定义的常量和用\texttt{const}或\texttt{constexpr}定义的常量有一些区别。宏定义的常量没有类型，因此在使用时需要注意类型转换的问题；而\texttt{const}或\texttt{constexpr}定义的常量有类型，可以更好地进行类型检查和转换。此外，宏定义的常量在预处理阶段进行替换，因此可能会导致一些意想不到的问题，例如宏展开时的优先级问题等。而\texttt{const}或\texttt{constexpr}定义的常量在编译阶段进行处理，更加安全可靠。  
+\end{tip}
+
+\begin{warning}
+    严格禁止使用所谓的“火车头”预处理指令！
+
+    所谓的火车头预处理指令，指的是在代码的开头使用大量的\texttt{\#pragma}来指定编译器的行为。这种做法显著地导致了代码的可移植性和可维护性变差。因为不同的编译器对\texttt{\#pragma}的支持程度不同，甚至同一编译器的不同版本对某些\texttt{\#pragma}的支持也可能不同。而且你辛辛苦苦打一大堆\texttt{\#pragma}，实际上优化效果还不如一个简单的\texttt{-O3}。这种完全属于歪门邪道的做法，严重违反了代码简洁和可维护的原则。
+\end{warning}
 
 \subsection{更进阶的变量类型}
 C++提供了许多更进阶的变量类型和特性，可以帮助我们更好地组织代码和数据。以下是一些常见的进阶变量类型和特性：
@@ -517,7 +615,7 @@ int arr[10];
 \end{lstlisting}
 以上的数组arr中的元素可以通过索引来访问，例如arr[0]表示第一个元素，arr[1]表示第二个元素，以此类推，一直到arr[9]表示第十个元素。没有arr[10]，访问这个会出错。我们不能像Python一样访问arr[-1]，因为C++不支持负索引。
 
-在C和C++中，数组的大小应当是一个常量，或者说C风格的数组是\textbf{无法动态扩展的}。
+在C和C++中，数组的大小应当是一个字面值、常量或常变量，或者说C风格的数组是\textbf{无法动态扩展的}。
 
 \begin{caution}
   变长数组（VLA）是C99标准引入的特性，允许数组的大小在运行时确定，但它在C11中被变为可选特性。C++不支持任何VLA特性。容易引起误会的是，GCC 和 Clang++ 编译器提供了包含 VLA 的GNU 扩展语法，并且默认引入这些扩展，因此，VLA （例如\texttt{int n; int a[n];}）在这些编译器下可行。反之，如果关闭这些扩展（通过添加 \texttt{--pedantic-errors} 选项）或者非 GNU 兼容的编译器（如 MSVC），则 VLA 不可用。在实际操作中，我们不要去写VLA，它们可能会导致代码在不同编译器下的表现不一致。C中，我们需要使用数组但是长度不确定的时候，可以将数组开得大一些，例如题目有1000个元素，那么就开1000个元素或者稍多元素的数组；C++中，我们可以使用向量\texttt{std::vector}来代替数组，该类可以动态扩展。
@@ -767,29 +865,7 @@ void swap(int& a, int& b) {
 使用传指针其实也可以实现同样的功能。但是，传值不能实现同样的功能：传值的本质是复制参数的值到函数内部，因此在函数内部修改参数不会影响原变量。至于引用和指针，则对应的可以理解为剪切，因此能够直接修改原变量的值。
 
 
-\subsection{头文件及其编写，与多文件编程}
-
-头文件是一些预先写好的代码的集合，通常包含函数、类、变量等的声明和定义。通过包含头文件，我们可以使用这些预先写好的代码，而不需要重新编写它们，其扩展名通常是\texttt{.h}或\texttt{.hpp}。对应的，我们将自己编写的代码放在源文件中，扩展名通常是\texttt{.cpp}。
-
-引入头文件只需要在文件的开头使用\texttt{\#include}指令即可。头文件有两种类型：标准库头文件和自定义头文件。标准库头文件是C++标准库提供的头文件，通常使用尖括号括起来，例如\texttt{<iostream>}、\texttt{<vector>}等，这样会先在系统路径中查找，再去当前路径中查找；自定义头文件是用户自己编写的头文件，通常使用双引号括起来，例如\texttt{"myheader.h"}，这样会先在当前路径中查找，再去系统路径中查找。
-
-\begin{lstlisting}[language=C++]
-#include <iostream>  // 引入标准库头文件
-#include "myheader.h"  // 引入自定义头文件
-using namespace std;
-int main() {
-    // 使用头文件中的代码
-    return 0;
-}
-\end{lstlisting}
-
-\begin{caution}
-    虽然我们在一些地方可以见到诸如\texttt{\# include <bits/stdc++.h>}这样的头文件，被称为“万能头文件”，但是该头文件并不是C++标准库的一部分，而是GCC编译器提供的一个非标准头文件，包含了几乎所有的标准库头文件。使用该头文件可能会导致代码在不同编译器下无法编译通过，因此不推荐使用；另一方面，该头文件会显著增加编译时间。
-
-    在做题中，我们实际上仅考虑代码在GCC编译器下的表现，代码生命周期短（即用即丢）也完全不需要考虑维护问题，因此使用这个头文件一般不会出现问题。但是，在工程开发中，为了遵循模块化、可维护性、可移植性原则与方便静态分析等，因此非常不推荐使用这个“万能头”，而是在用到标准库时仅引入所需的头文件。
-
-    笔者个人推荐同学们彻底抛弃“万能头”，养成良好的编程习惯，而不是当“接头霸王”。
-\end{caution}
+\subsection{头文件的编写，与多文件编程}
 
 自己写头文件时，通常包括以下内容：
 \begin{itemize}
@@ -1027,33 +1103,6 @@ int main() {
 
 \section{C++的高级特性}
 C++提供了许多高级特性，可以帮助我们更好地组织代码和数据。
-
-\subsection{命名空间}
-
-命名空间（namespace）是C++中的一个重要特性，它允许我们将代码组织在不同的命名空间中，以避免名称冲突。命名空间的基本格式如下：
-\begin{lstlisting}[language=C++]
-namespace 命名空间名 {
-    // 代码
-}
-\end{lstlisting}
-以上代码的意思是：声明一个名为命名空间名的命名空间，命名空间中的代码可以在这个命名空间内访问。我们可以在不同的命名空间中定义同名的变量、函数等，而不会发生冲突。如果希望在命名空间外调用命名空间内的变量或函数，可以使用\texttt{命名空间名::变量名}或\texttt{命名空间名::函数名}的方式来访问。
-例如，我们可以声明一个名为\texttt{MyNamespace}的命名空间：
-\begin{lstlisting}[language=C++]
-namespace MyNamespace {
-    int x = 10;  // 命名空间内的变量
-    void foo() {  // 命名空间内的函数
-        cout << "Hello from MyNamespace!" << endl;
-    }
-}
-
-int main() {
-    MyNamespace::foo();  // 调用命名空间内的函数
-    cout << "x: " << MyNamespace::x << endl;  // 访问命名空间内的变量
-    return 0;
-}
-\end{lstlisting}
-
-在C++中，标准库内大多数函数和方法都定义在\texttt{std}命名空间中，因此我们需要使用\texttt{using namespace std;}来引入标准库的命名空间。这样，我们就可以直接使用标准库中的函数和方法，而不需要每次都加上\texttt{std::}前缀。
 
 \subsection{面向对象编程}
 
@@ -1531,13 +1580,17 @@ int main() {
     cout << "Result: " << func(5) << endl;  // 调用函数指针并输出结果
 \end{lstlisting}
 
-\section{STL}
+\section{STL和其他标准库}
 
 STL（Standard Template Library）是C++的最重要特性，它提供了一组通用的模板类和函数，可以帮助我们更高效地处理数据结构和算法。STL包含了许多常用的数据结构和算法，例如向量（vector）、链表（list）、集合（set）、映射（map）等。
 
 简单地说，STL可以看作是：容器+迭代器+算法。容器把数据结构当变量类型用，迭代器把指针当普通函数用，算法把现成高复杂的轮子当函数用，这玩意能让你用三行代码完成 C 里三十行甚至三百行的工作，还自带内存管理和类型安全。
 
 于是，C++开发就变成了：打开编辑器，敲下头文件，剩下的一律交给STL。
+
+\begin{warning}
+    严格禁止自己对STL进行重新实现！STL的实现经过了大量的优化和测试，自己重新实现容易出错且效率低下、维护困难，也不安全。STL确实存在时间复杂度常数项大的问题，但是这永远不应该成为你重新实现的理由，你自己实现的东西几乎必然会比STL更慢、更不安全、更难用；就算是比STL快，也基本上会被\texttt{-O2}抹平一切差距（工程上哪有不开优化的）。除非你的实现确实全方位吊打STL，但是那样的话你也不需要STL了，你可以直接去为ISO C++标准委员会做贡献了！
+\end{warning}
 
 \subsection{容器}
 
@@ -1951,5 +2004,3 @@ return 0;
 \end{table}
 
 当然，有些时候，我们在本地能够通过编译，但是提交到OJ上却CE。此时，需要检查是不是在本地使用了非标准的扩展功能，或者使用了OJ不支持的头文件等。
-
-\end{document}

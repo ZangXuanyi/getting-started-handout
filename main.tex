@@ -1,238 +1,33 @@
-\documentclass[openany]{ctexbook}
-
-\usepackage{geometry}
-\usepackage{amssymb}
-\usepackage{amsmath}
-\usepackage{subfiles}
-\usepackage{listings}
-\usepackage{graphicx}
-\usepackage{authblk}
-\usepackage{fontawesome5}
-\usepackage{draftwatermark}
-\usepackage[table]{xcolor}
-\usepackage{longtable}
-\usepackage{array}
-\usepackage{multicol}
-\usepackage[most]{tcolorbox}
-\tcbuselibrary{skins,xparse}
-\usepackage{subcaption}
-\usepackage{enumitem}
-\usepackage{booktabs}
-\usepackage{xurl}              % 比 url 更 aggressive，允许在任意字符断行
-\def\UrlBreaks{\do. \do@ \do\ \do/ \do! \do_ \do| \do; \do: \do?} % 再补一刀
-\usepackage{hyperref}
-
-\lstset{
-  basicstyle=\ttfamily\footnotesize,
-  keywordstyle=\color{blue},
-  commentstyle=\color{green!50!black},
-  stringstyle=\color{red},
-  numbers=left,
-  numberstyle=\tiny\color{gray},
-  stepnumber=1,
-  numbersep=5pt,
-  backgroundcolor=\color{white},
-  showspaces=false,
-  showstringspaces=false,
-  breaklines=true,
-  frame=single
-}
-
-\setlist{nosep}
-
-\makeatletter
-\let\oldhref\href
-\renewcommand{\href}[2]{%
-  \oldhref{#1}{%
-    \color{blue}\underline{#2}%
-    \raisebox{0.2ex}{\tiny$\nearrow$}% 右上箭头
-  }%
-}
-
-\geometry{b5paper, margin=0.5in}
-% \setcounter{tocdepth}{2}
-
-\SetWatermarkText{LCPU-2025}           % 设置水印内容
-\SetWatermarkLightness{0.97}             % 设置水印透明度 0-1
-\SetWatermarkScale{0.8}
-
-\definecolor{expbg}{RGB}{255,245,240}   % 例题背景
-\definecolor{expfr}{RGB}{255,94,77}    % 例题边框/标题
-
-\definecolor{solnfr}{RGB}{46,204,113}  % 解答边框/标题
-\definecolor{solnbg}{RGB}{240,255,240} % 解答背景
-
-\definecolor{probfr}{RGB}{0,123,255}   % 习题边框/标题
-\definecolor{probbg}{RGB}{240,247,255} % 习题背景
-
-%------- 三种环境 -------
-%--------------------------------------------------
-% 1. 警告：高饱和橙红
-\newtcolorbox{warning}{
-  enhanced,
-  colback = red!4!white,
-  colframe = red!75!black,
-  coltitle = white,
-  fonttitle = \bfseries,
-  title = 警告,
-  top = 2mm, bottom = 2mm, left = 2.5mm, right = 2.5mm,
-  boxrule = 0.6pt,
-  breakable,
-  % sharp corners,
-}
-
-%--------------------------------------------------
-% 2. 注意：稳重暗黄
-\newtcolorbox{caution}{
-  enhanced,
-  colback = orange!5!white,
-  colframe = orange!60!black,
-  coltitle = white,
-  fonttitle = \bfseries,
-  title = 注意,
-  top = 2mm, bottom = 2mm, left = 2.5mm, right = 2.5mm,
-  boxrule = 0.6pt,
-  breakable,
-  % sharp corners,
-}
-
-%--------------------------------------------------
-% 3. 提示：柔和蓝绿
-\newtcolorbox{tip}{
-  enhanced,
-  colback = cyan!3!white,
-  colframe = cyan!65!black,
-  coltitle = white,
-  fonttitle = \bfseries,
-  title = 提示,
-  top = 2mm, bottom = 2mm, left = 2.5mm, right = 2.5mm,
-  boxrule = 0.6pt,
-  breakable,
-  % sharp corners,
-}
-
-%--------------------------------------------------
-% 4. 说明：中性天青
-\newtcolorbox{note}{
-  enhanced,
-  colback = teal!3!white,
-  colframe = teal!60!black,
-  coltitle = white,
-  fonttitle = \bfseries,
-  title = 说明,
-  top = 2mm, bottom = 2mm, left = 2.5mm, right = 2.5mm,
-  boxrule = 0.6pt,
-  breakable,
-  % sharp corners,
-}
-
-%--------------------------------------------------
-% 5. 例题：理性深空蓝
-\newtcolorbox{example}[1][]{%
-  enhanced,
-  colback = blue!3!white,
-  colframe = blue!70!black,
-  coltitle = white,
-  fonttitle = \bfseries,
-  title = {\IfBlankTF{#1}{例题}{例题 (#1)}},  % 可选子标题
-  top = 2mm, bottom = 2mm, left = 2.5mm, right = 2.5mm,
-  boxrule = 0.6pt,
-  % sharp corners,
-  breakable,
-}
-
-%--------------------------------------------------
-% 6. 答案：温和草绿
-\newtcolorbox{answer}{
-  enhanced,
-  colback = green!4!white,
-  colframe = green!65!black,
-  coltitle = white,
-  fonttitle = \bfseries,
-  title = 答案,
-  top = 2mm, bottom = 2mm, left = 2.5mm, right = 2.5mm,
-  boxrule = 0.6pt,
-  % sharp corners,
-  breakable,
-}
-
-%--------------------------------------------------
-% 7. 练习：活力紫
-\newtcolorbox{exercise}{
-  enhanced,
-  colback = violet!4!white,
-  colframe = violet!70!black,
-  coltitle = white,
-  fonttitle = \bfseries,
-  title = 练习,
-  top = 2mm, bottom = 2mm, left = 2.5mm, right = 2.5mm,
-  boxrule = 0.6pt,
-  % sharp corners,
-  breakable,
-}
-
-\title{\Huge\textbf{北京大学计算机基础能力手册}}
-
-\author{臧炫懿}
+\documentclass[openany,fontset=none]{ctexbook}
+\input{preamble}
 
 \begin{document}
-
 \maketitle
-
 \frontmatter
-
-\subfile{chapters/00-introduction.tex}
+\include{chapters/000-introduction}
 
 \mainmatter
-
 \tableofcontents
 
-\part{零基础起步}
-
-\subfile{chapters/01-encounter.tex}
-
-\subfile{chapters/02-knowledge-acquirement.tex}
-
-\subfile{chapters/03-initial-usage.tex}
-
-\subfile{chapters/04-buy.tex}
-
-\part{大学计算机前置}
-
-\subfile{chapters/05-coding.tex}
-
-\subfile{chapters/06-text-processing.tex}
-
-\subfile{chapters/07-drive-your-pc.tex}
-
-\subfile{chapters/08-play-with-linux.tex}
+\part{打好基础}
+\include{chapters/100-encounter}
+\include{chapters/101-knowledge-acquirement}
+\include{chapters/102-buy}
+\include{chapters/103-coding}
+\include{chapters/104-text-processing}
+\include{chapters/105-play-with-linux}
+\include{chapters/106-mini-ics}
 
 \part{走向开发}
-
-\subfile{chapters/09-pragmatic-coding.tex}
-
-\subfile{chapters/10-debugging.tex}
-
-\subfile{chapters/11-construction.tex}
-
-\subfile{chapters/12-cpp-package.tex}
-
-\part{附录}
-
-\appendix
-
-\subfile{chapters/100-mini-ics.tex}
-
-\subfile{chapters/101-cpp-guidance.tex}
-
-\subfile{chapters/102-python-guidance.tex}
-
-\subfile{chapters/104-python-advanced.tex}
-
-\subfile{chapters/999-other-tutorials.tex}
+\include{chapters/200-cpp-guidance}
+\include{chapters/201-cpp-project}
+\include{chapters/202-python-guidance}
+\include{chapters/203-python-packages}
+\include{chapters/204-pragmatic-coding}
+\include{chapters/205-debugging}
 
 \backmatter
-
-\subfile{chapters/99-postscript.tex}
-
+\part{附录}
+\include{chapters/900-other-tutorials}
+\include{chapters/901-postscript}
 \end{document}
