@@ -27,11 +27,13 @@ int main() {
 逐行拆解之：
 \begin{itemize}
   \item \texttt{\#include <iostream>}：告诉编译器，我要用输入输出工具。
-  \item \texttt{int main()}：程序的入口函数，告诉电脑程序从这里开始执行。\texttt{int}表示这个函数返回一个整数值。
+  \item \texttt{int main()}：程序的入口函数，告诉电脑：程序从这里开始执行。\texttt{int}表示这个函数返回一个整数值。
   \item \texttt{int age = 18;}：跟电脑说，我要在内存找个地方放个整数，这个地方叫age，放个18进去。
   \item \texttt{std::cout << "I am " << age; }：把东西一股脑全送到屏幕上。
   \item \texttt{return 0;}：返回0，告诉操作系统：一切OK。除非你知道你在做什么，否则这里不要改成其他数字。
 \end{itemize}
+
+在C++中，有两种代码：一种是以\texttt{\#}开头的预处理指令，另一种是常规语句。预处理指令指的是在编译之前进行的一些操作，例如包含头文件、定义宏等，详见\ref{sec:macro}。常规语句则指的是程序的主要逻辑。常规语句应以分号结尾，且在结尾之后应换行（除非写注释）。压行是不好的行为，会影响代码的可读性。
 
 以上就是骨架。接下来该往骨架里面填肉了。
 
@@ -55,9 +57,9 @@ int main() {
 \end{lstlisting}
 
 \begin{warning}
-    严格禁止使用所谓的“万能头文件”\texttt{\# include <bits/stdc++.h>}，\textbf{尤其是在工程中！}该头文件有三个严重的问题：
+    严格禁止使用所谓的“万能头文件”\texttt{\#include <bits/stdc++.h>}，\textbf{尤其是在工程中！}该头文件有三个严重的问题：
     \begin{itemize}
-        \item 该头文件不是C++标准的与部分，而是GCC编译器提供的一个非标准头文件。使用该头文件会导致代码在不同编译器下表现不同，严重地影响代码的可移植性。
+        \item 该头文件不是C++标准的一部分，而是GCC编译器提供的一个非标准头文件。使用该头文件会导致代码在不同编译器下表现不同，严重地影响代码的可移植性。
         \item 该头文件会引入整个标准库，从而显著地降低代码的可维护性，具体表现为：
         \begin{itemize}
             \item 显著地增加编译时间，尤其是在大型项目中。
@@ -216,7 +218,7 @@ constexpr double EPI = E * PI;
 
 那么对于以下声明，编译器的表现如下表所示。其中，编译失败的情形用红色标出；用\texttt{const}声明的运行时常量表现为编译期常量的特殊情形则使用蓝色标出。
 \begin{small}            % 整体字号
-\begin{longtable}[c]{l|ll}
+\begin{longtable}[c]{lll}
   \caption{变量/常量声明与编译器表现}
   \label{tab:long}\\
   \toprule
@@ -238,25 +240,25 @@ constexpr double EPI = E * PI;
   \endlastfoot           % 末页底部
 
   \texttt{int a0 = 5;} & 变量 & 显然 \\
-  \rowcolor{blue!15}\texttt{const int a1 = 5;} & 编译期常量 & 不依赖运行时初始化 \\
-  \texttt{constexpr int a2 = 5;} & 编译期常量 & 字面值 \\
-  \texttt{const int a3 = a0;} & 运行时常量 & 依赖运行时值\texttt{a0} \\
-  \rowcolor{red!15}\texttt{constexpr int a4 = a0;} & 编译失败 & 严格编译期常量不能用运行时值初始化 \\
+  \rowcolor{blue!15}\texttt{const int a1 = 5;} & 常量 & 不依赖运行时初始化 \\
+  \texttt{constexpr int a2 = 5;} & 常量 & 字面值 \\
+  \texttt{const int a3 = a0;} & 常变量 & 依赖运行时值\texttt{a0} \\
+  \rowcolor{red!15}\texttt{constexpr int a4 = a0;} & 编译失败 & 严格常量不能用运行时值初始化 \\
   \texttt{int a5 = sqr(1);} & 变量 & 显然 \\
-  \texttt{const int a6 = sqr(1);} & 运行时常量 & 依赖运行时函数 \\
-  \rowcolor{red!15}\texttt{constexpr int a7 = sqr(1);} & 编译失败 & 严格编译期常量不能用运行时函数初始化 \\
+  \texttt{const int a6 = sqr(1);} & 常变量 & 依赖运行时函数 \\
+  \rowcolor{red!15}\texttt{constexpr int a7 = sqr(1);} & 编译失败 & 严格常量不能用运行时函数初始化 \\
   \texttt{int a8 = sqr\_c(1);} & 变量 & 显然 \\
-  \texttt{const int a8 = sqr\_c(1);} & 运行时常量 & 依赖运行时函数 \\
-  \rowcolor{red!15}\texttt{constexpr int a9 = sqr\_c(1);} & 编译失败 & 严格编译期常量不能用运行时函数初始化 \\
+  \texttt{const int a8 = sqr\_c(1);} & 常变量 & 依赖运行时函数 \\
+  \rowcolor{red!15}\texttt{constexpr int a9 = sqr\_c(1);} & 编译失败 & 严格常量不能用运行时函数初始化 \\
   \texttt{int a10 = sqr\_ce(1);} & 变量 & 显然 \\
-  \rowcolor{blue!15}\texttt{const int a11 = sqr\_ce(1);} & 编译期常量 & \texttt{constexpr}函数接受常量则在编译期初始化 \\
-  \texttt{const int a12 = sqr\_ce(a0);} & 运行时常量 & 依赖运行时值\texttt{a0} \\
-  \texttt{constexpr int a13 = sqr\_ce(1);} & 编译期常量 & 显然 \\
-  \rowcolor{red!15}\texttt{constexpr int a14 = sqr\_ce(a0);} & 编译失败 & 严格编译期常量不能用运行时值初始化 \\
+  \rowcolor{blue!15}\texttt{const int a11 = sqr\_ce(1);} & 常量 & 该函数接受常量则在编译期初始化 \\
+  \texttt{const int a12 = sqr\_ce(a0);} & 常变量 & 依赖运行时值\texttt{a0} \\
+  \texttt{constexpr int a13 = sqr\_ce(1);} & 常量 & 显然 \\
+  \rowcolor{red!15}\texttt{constexpr int a14 = sqr\_ce(a0);} & 编译失败 & 严格常量不能用运行时值初始化 \\
   \rowcolor{red!15}\texttt{int a15 = sqr\_cv(1);} & 编译失败 & 立即函数不可以在运行时调用 \\
-  \rowcolor{blue!15}\texttt{const int a16 = sqr\_cv(1);} & 编译时常量 & 显然 \\
+  \rowcolor{blue!15}\texttt{const int a16 = sqr\_cv(1);} & 常量 & 显然 \\
   \rowcolor{red!15}\texttt{const int a17 = sqr\_cv(a0);} & 编译失败 & 立即函数不可以在运行时调用 \\
-  \texttt{constexpr int a18 = sqr\_cv(1);} & 编译时常量 & 显然 \\
+  \texttt{constexpr int a18 = sqr\_cv(1);} & 常量 & 显然 \\
   \rowcolor{red!15}\texttt{constexpr int a19 = sqr\_cv(a0);} & 编译失败 & 立即函数不可以在运行时调用 \\
 \end{longtable}
 \end{small}
@@ -581,7 +583,7 @@ int main() {
 
 \section{C++的进阶使用}
 
-\subsection{宏和预处理指令}
+\subsection{宏和预处理指令}\label{sec:macro}
 
 宏是一种预处理指令，它可以在编译之前对代码进行替换和扩展。宏的基本格式如下：
 \begin{lstlisting}[language=C++]
@@ -865,7 +867,21 @@ void swap(int& a, int& b) {
 使用传指针其实也可以实现同样的功能。但是，传值不能实现同样的功能：传值的本质是复制参数的值到函数内部，因此在函数内部修改参数不会影响原变量。至于引用和指针，则对应的可以理解为剪切，因此能够直接修改原变量的值。
 
 
-\subsection{头文件的编写，与多文件编程}
+\subsection{多文件编程}
+
+在本章开头我就讲了头文件的一些事项。有时候，我们自己需要写一个项目，这个项目代码量较大，可能有数千行。此时，我们需要多文件编程，以便于代码的组织和管理。
+
+C++的多文件编程，文件结构通常是这样的：
+\begin{lstlisting}
+project/
+    main.cpp // 主要的程序入口
+    module1.cpp // 模块1的实现
+    module1.h // 模块1的头文件
+    module2.cpp // 模块2的实现
+    module2.h // 模块2的头文件
+    ... 这里可能还有其他文件
+\end{lstlisting}
+由此可见，除了主要程序入口（\texttt{main}函数所在的文件）之外，其他的头文件和源文件通常是成对出现的。在头文件中，一般包括类、函数、变量等的声明；在源文件中，一般包括类、函数、变量等的定义和实现。
 
 自己写头文件时，通常包括以下内容：
 \begin{itemize}
@@ -890,12 +906,12 @@ int add(int a, int b) {  // 函数定义
 \begin{lstlisting}[language=C++]
 #include <iostream>
 #include "myheader.h"  // 引入头文件
-using namespace std;
+
 int main() {
     int x = 5;
     int y = 10;
     int sum = add(x, y);  // 调用add函数
-    cout << "Sum: " << sum << endl;  // 输出结果
+    std::cout << "Sum: " << sum << std::endl;  // 输出结果
     return 0;
 }
 \end{lstlisting}
@@ -904,6 +920,10 @@ int main() {
 g++ main.cpp myheader.cpp -o myprogram
 \end{lstlisting}
 这样，我们就完成了一个简单的多文件编程。在上述编译命令中，两个源文件的顺序无关紧要。
+
+如果源文件数量过多，那么就不应该使用诸如gcc等工具手动地编译。此时，应该使用\texttt{Makefile}、\texttt{CMake}、\texttt{XMake}、\texttt{Conan}等构建工具来管理编译过程。关于后三个构建工具的使用，将在下一章中介绍。
+
+再强调一遍：在多文件编程中，不建议使用\texttt{using namespace std;}。尤其是头文件，严格禁止在头文件中使用该语句！
 
 \subsection{输入输出的规范化}
 
@@ -963,17 +983,25 @@ int main() {
 }
 \end{lstlisting}
 
-对于输入方面，则复杂得多。{\color{red}\textbf{在输入较为复杂的情况下（例如逗号分隔而不是空格分隔的输入等），对于不会\texttt{getline}等现代输入方式和不会用流的同学，我们建议使用C风格的输入输出函数以省事。}}
+对于输入方面，则复杂得多。我们推荐同学们使用更安全的C++风格输入输出方法，也就是\texttt{cin}、\texttt{cout}、\texttt{getline}等。
 
-可以使用循环来处理不确定数量的输入：
+对于确定数量的干净\footnote{这里的干净指的是简单的空格分割或换行符分割，没有诸如逗号等其他符号。与之相对应的脏数据则是指包含了各种符号、格式不统一等复杂情况的数据。}输入，可以直接使用\texttt{cin}：
+\begin{lstlisting}[language=C++]
+int a, b, c;
+// 假设输入格式为：1 2 3
+cin >> a >> b >> c;  // 读入三个整数
+\end{lstlisting}
+
+对于不确定数量的干净输入，可以使用循环配合\texttt{cin}：
 \begin{lstlisting}[language=C++]
 int n;
 while (cin >> n) {
     // 处理输入的n
 }
 \end{lstlisting}
+上述代码会一直读取输入，直到遇到文件结束符（EOF）或者输入错误为止。其能工作的原因是\texttt{cin}在读取失败时会返回流对象的一个“失败”状态，该失败状态在布尔上下文中被解释为\texttt{false}，从而终止循环。
 
-另外，对于逗号分割（而不是空格分割）的输入，现代C++的方式是使用\texttt{getline}读一行，然后使用字符串流（\texttt{stringstream}）来处理字符串。下文演示了这种方式，并将逗号分割的整数字符串转换为整数数组：
+如果遇到脏输入，则情况变得复杂许多。常见的脏输入包括逗号分割的数字、带有多余空格的字符串等。对于这些情况，推荐使用\texttt{getline}配合字符串流（\texttt{stringstream}）来处理。下文演示了这种方式，并将逗号分割的整数字符串转换为整数数组：
 \begin{lstlisting}[language=C++]
 #include <iostream>
 #include <sstream>
@@ -999,7 +1027,7 @@ int main(){
     // 如果转换为double，可以使用stod
 }
 \end{lstlisting}
-这种数据在工程上比较常见，因此掌握这种输入方式是非常有必要的。同时，\texttt{getline}和\texttt{stringstream}的配合也能帮助我们轻松地过滤脏数据，例如多余的空格等。
+这种数据在工程上比较常见，因此掌握这种输入方式是非常有必要的。
 
 除此之外，使用C风格的输入输出函数（\texttt{scanf}）也可以处理逗号分割的输入。
 \begin{lstlisting}[language=C++]
@@ -1020,6 +1048,18 @@ int main() {
     // scanf("%d,%d,%d", &a, &b, &c);
 }
 \end{lstlisting}
+
+工程上，脏数据非常常见，因此掌握这些输入方式是非常有必要的。
+\begin{caution}
+    流对象处理输入输出的本质依然是操作缓冲区。因此，有一部分OIer认为他们自己维护缓冲区的输入方式更快、更好。诚然，\texttt{getline}等方法处理缓冲区的性能大概比手动操作缓冲区低了约5到10\%，但是实际上我并不推荐手动维护缓冲区，尤其是在工程上。原因有三：
+    \begin{itemize}
+        \item 不安全。这是最大的一个弊病。手动维护缓冲区和不穿衣服在街上乱晃是一个道理，属于是把自己的安全完全交给了用户的善意。恶意用户攻击你的缓冲区将变得轻而易举。
+        \item 不易懂。仅代码量一项，手动维护缓冲区就比使用流对象多出不少代码量，且难以阅读。这违背了工程代码的可读性原则。
+        \item 难维护。我们在做题的时候，不少题目虽然算法简单但是边界条件复杂（例如日历问题），做这些题目的时候应付边界条件的时间几乎可以占到做题时间的一半。对于工程而言，手动维护缓冲区需要自己处理各种边界情况，估计也没有几个团队会有这个时间和精力去维护这些边界条件。
+    \end{itemize}
+    
+    综上所述，虽然手动维护缓冲区在某些情况下可能会有一些性能优势，但是这种优势并不值得我们为之付出安全性、可读性和可维护性的代价。这就是工程代码为了安全、可读、可维护而牺牲性能的一个典型例子；另一方面，可以看到竞赛思维和工程思维有显著的差异，不能够混为一谈。
+\end{caution}
 
 \subsection{小练}
 
@@ -1876,6 +1916,83 @@ int main() {
   \item \texttt{size()}：获取位集合的大小。
   \item \texttt{to\_string()}：将位集合转换为字符串。
 \end{itemize}
+
+\subsection{正则表达式}
+
+在\ref{sec:regex}中，我们已经介绍了正则表达式的基本概念和语法。C++11引入了头文件\texttt{<regex>}，提供了一组类和函数来处理正则表达式。
+
+主要的类有以下几种：
+\begin{itemize}
+  \item \texttt{std::regex}：表示一个正则表达式对象。
+  \item \texttt{std::smatch}：表示一个字符串匹配结果容器，需要搭配\texttt{std::string}使用。
+  \item \texttt{std::cmatch}：也是一个字符串匹配结果容器，但需要搭配\texttt{const char[]}使用。
+\end{itemize}
+“字符串匹配结果容器”指的是这是一个容器，能够存储匹配的详细结果。其存储的对象是\texttt{std::sub\_match}对象。特别的，其\texttt{0}索引存储的是整个字符串匹配的结果，而其余的索引存储各个捕获组\footnote{捕获组指的是把正则表达式里面的一部分模式用圆括号标出来，并告诉引擎这段子串一旦匹配成功就单独记下来方便以后反复使用。}匹配的字符串。
+
+主要的函数有以下几种：
+\begin{itemize}
+  \item \texttt{std::regex\_match}：检查整个字符串是否匹配正则表达式。
+  \item \texttt{std::regex\_search}：检查字符串中是否包含匹配正则表达式的子串。
+  \item \texttt{std::regex\_replace}：将字符串中匹配正则表达式的部分替换为指定的字符串。在这里，允许使用诸如\texttt{\$\&}（整个匹配）、\texttt{\$ <number>}（\texttt{<number>}是捕获组的index，0是整个匹配）
+  等占位符。
+\end{itemize}
+
+代码举例：\footnote{声明：由于过于繁杂，本段代码由LLM生成}
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <regex>
+#include <string>
+
+int main() {
+    /*========  1. 正则与待测字符串  ========*/
+    // 匹配中国大陆常见手机号格式：XXX-XXX-XXXXX（3-3-5）
+    std::regex  pattern(R"((\d{3})-(\d{3})-(\d{5}))");
+    std::string good = "123-456-78910";   // 完全匹配
+    std::string bad  = "123-456-789ab";   // 最后一段不是数字
+    std::string text = "Call me at 123-456-78910 or 987-654-32100.";
+
+    /*========  2. std::regex_match：整串必须完全匹配 ========*/
+    bool is_good = std::regex_match(good, pattern);
+    bool is_bad  = std::regex_match(bad,  pattern);
+    std::cout << std::boolalpha;
+    std::cout << "good match : " << is_good << '\n';   // true
+    std::cout << "bad  match : " << is_bad  << '\n';   // false
+
+    /*========  3. 取出捕获组 ========*/
+    std::smatch m;
+    if (std::regex_match(good, m, pattern)) {
+        std::cout << "\n捕获组演示：\n";
+        std::cout << "整 match : " << m[0] << '\n';     // 123-456-78910
+        std::cout << "第1组    : " << m[1] << '\n';     // 123
+        std::cout << "第2组    : " << m[2] << '\n';     // 456
+        std::cout << "第3组    : " << m[3] << '\n';     // 78910
+    }
+
+    /*========  4. std::regex_search：只要子串匹配即可 ========*/
+    if (std::regex_search(text, m, pattern)) {
+        std::cout << "\nsearch 找到： " << m[0] << '\n'; // 123-456-78910
+    }
+
+    /*========  5. std::regex_replace：替换 + 占位符 ========*/
+    // 把电话号码换成“区号$1-局号$2-号码$3”的形式
+    std::string repl = std::regex_replace(text, pattern,
+                                          "区号$1-局号$2-号码$3");
+    std::cout << "\nreplace 结果：\n" << repl << '\n';
+    // -> Call me at 区号123-局号456-号码78910 or 区号987-局号654-号码32100.
+
+    /*========  6. 常用占位符小结 ========*/
+    // $&   整个匹配
+    // $n   第 n 个捕获组，n=0 等价于 $&
+    // $$   字面量 '$'
+    std::string demo = "Price: 199USD";
+    std::regex  pr(R"((\d+)(USD))");
+    std::cout << "\n占位符演示：\n"
+              << std::regex_replace(demo, pr, "$1 $$100") // 199 $100
+              << '\n';
+
+    return 0;
+}
+\end{lstlisting}
 
 \subsection{小练}
 
