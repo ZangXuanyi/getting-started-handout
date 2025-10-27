@@ -219,6 +219,8 @@ LaTeX的安装冗长且复杂，通常需要安装一个完整的 TeX 发行版�
   sudo fc-cache -fsv
 \end{lstlisting}
 
+其他的发行版虽然略有不同，但是也大同小异；总体上都可以大致分为从ISO镜像安装文件和配置相关环境（环境变量、字体）这两步。
+
 \subsection{LaTeX 在VS Code的配置}
 
 一般情况下，LaTeX 有两个编译器：pdfLaTeX 和 XeLaTeX。前者是传统的 LaTeX 编译器，适合简单的英文文档；后者则支持 Unicode 字符和 OpenType 字体，适合处理中文文档。我们建议通过手动配置来指定使用 XeLaTeX 编译器。
@@ -261,7 +263,7 @@ LaTeX的安装冗长且复杂，通常需要安装一个完整的 TeX 发行版�
 \end{lstlisting}
 这样每次保存文档时，VS Code 都会自动编译 LaTeX 文档。将 \texttt{"onSave"} 改为 \texttt{"never"} 则可以关闭自动编译功能。
 
-\subsection{LaTeX 的语法}
+\subsection{LaTeX 文档的基本结构}
 
 一个 LaTeX 文档通常由以下几个部分组成：
 \begin{itemize}
@@ -289,6 +291,8 @@ E=mc^2
 LaTeX 是一种强大的排版工具，适用于学术论文和书籍等文档的排版。
 \end{document}
 \end{lstlisting}
+
+简单地说，一篇tex代码中，大致上是包含了两种内容：一种是以反斜杠为前缀的命令，这些命令通常会影响排版效果；另一种是普通的文本内容，这些内容会直接出现在最终的文档中。例如上文中， \texttt{\textbackslash section\{引言\}} 是一个命令，而“这是一篇 LaTeX 文档。我们可以在这里写一些数学公式：”则是普通的文本内容。本书也是使用LaTeX编写的，因此你可以通过查看本书的源代码来学习更多 LaTeX 的用法。
 
 \subsubsection{文档类声明}
 文档类声明是 LaTeX 文档的第一行，指定了文档的类型和格式。常用的文档类包括：
@@ -328,7 +332,7 @@ LaTeX其实还有“注释”部分，这些部分仅在tex源码中存在，但
   \end{document}
 \end{lstlisting}
 
-\subsection{LaTeX 的常用命令}
+\subsection{LaTeX 的语法}
 
 \subsubsection{标题}
 
@@ -351,11 +355,33 @@ LaTeX其实还有“注释”部分，这些部分仅在tex源码中存在，但
   这是一个强制 \ 空格的例子。
 \end{lstlisting}
 
+LaTeX还提供了更宽的空格，例如 \texttt{\textbackslash quad} 和 \texttt{\textbackslash qquad}，分别表示一个和两个字符宽度的空格。
+
 \subsubsection{转义字符和反斜杠}
 
 在 LaTeX 中，反斜杠 (\textbackslash) 是一个特殊字符，用于引入命令和转义。例如\texttt{\textbackslash \$}可以强制输出美元符号而不是将其视为数学公式的开始。如果需要在文本中输入反斜杠本身，不可以使用两个反斜杠 (\textbackslash\textbackslash)，而是需要使用 \texttt{\textbackslash textbackslash} 命令来实际地打出一个反斜杠。
 
-除此之外，LaTeX支持飘号\textasciitilde ，但是默认的飘号极不美观。我们可以使用 \texttt{\textbackslash textasciitilde} 命令来打出一个美观的飘号。
+LaTeX还支持飘号\texttt{\textasciitilde} ，但是默认的飘号极不美观。我们可以使用 \texttt{\textbackslash textasciitilde} 命令来打出一个美观的飘号。其他的一些常见的符合上述条件的符号见下表，在正文中直接打出这些符号本身虽然不会导致编译错误但不美观，建议使用对应的命令来打出这些符号。
+\begin{table}[h]
+  \centering
+  \begin{tabular}{cc}
+    \toprule
+    符号 & 命令 \\
+    \midrule
+    \textasciiacute & \texttt{\textbackslash textasciiacute} \\
+    \textbackslash & \texttt{\textbackslash textbackslash} \\
+    \textbar & \texttt{\textbackslash textbar} \\
+    \textbraceleft & \texttt{\textbackslash textbraceleft} \\
+    \textbraceright & \texttt{\textbackslash textbraceright} \\
+    \textasciibreve & \texttt{\textbackslash textasciibreve} \\
+    \textasciicaron & \texttt{\textbackslash textasciicaron} \\
+    \textasciicircum & \texttt{\textbackslash textasciicircum} \\
+    \textasciidieresis & \texttt{\textbackslash textasciidieresis} \\
+    \textasciigrave & \texttt{\textbackslash textasciigrave} \\
+    \textasciimacron & \texttt{\textbackslash textasciimacron} \\
+    \bottomrule    
+  \end{tabular}
+\end{table}
 
 \subsubsection{数学公式}
 
@@ -436,6 +462,50 @@ LaTeX 还支持各种数学符号和运算符，例如乘号 (\texttt{\textbacks
 
 caption 命令用于添加表格的标题，label 命令用于给表格添加标签\footnote{需要hyperref宏包}，以便在文档中引用。上述代码展示的标签是一个标签的习惯命名方式，不必严格按照这个格式来命名标签。
 
+如果不希望使用table这个“浮动体”环境，可以直接使用tabular环境来创建表格，例如：
+\begin{lstlisting}[language={[LaTeX]TeX}]
+  \begin{tabular}{|c|c|c|}
+    \hline
+    列1 & 列2 & 列3 \\
+    \hline
+    内容1 & 内容2 & 内容3 \\
+    内容4 & 内容5 & 内容6 \\
+    \hline
+  \end{tabular}
+\end{lstlisting}
+上述代码创建了一个没有标题和标签的简单表格。由于没有使用table环境，因此表格不会作为浮动体出现，而是直接出现在文本中。当然简洁之余也有一些缺点，例如无法添加标题和标签，无法使用浮动体的特性调整表格的位置等。
+
+另外，如果我们需要一个非常长、可能跨页的表格，则普通的\texttt{table}不适用。我们可以使用\texttt{longtable}宏包来实现跨页表格：
+\begin{lstlisting}[language={[LaTeX]TeX}]
+  \usepackage{longtable} % 引入对应包
+
+  \begin{longtable}{|c|c|c|}
+    \caption{示例表格}\label{table:long} \\ % 这一步是可选的，但是只要写了东西就必须跟着换行
+    \hline
+    列1 & 列2 & 列3 \\
+    \hline
+    \endfirsthead % 结束首页表头
+
+    \multicolumn{3}{c}{\footnotesize 续表~\ref{tab:long}}\\[.5ex] % 这一步是续表的标题，你可以把它改成你想要的
+    \hline
+    列1 & 列2 & 列3 \\
+    \hline
+    \endhead % 结束后续所有页表的表头
+
+    \hline
+    \multicolumn{3}{r}{续下页} \\ % 这一步是续下页的提示，你可以把它改成你想要的
+    \endfoot % 结束后续所有页表的表尾
+
+    \hline
+    \endlastfoot % 结束最后一页表的表尾，我这里留空了，你也可以添加任意内容
+
+    内容1 & 内容2 & 内容3 \\
+    内容4 & 内容5 & 内容6 \\
+    % 这里是表格内容，可以有任意多行，一般来说会有很多行
+  \end{longtable}
+\end{lstlisting}
+longtable表的用法与普通的table表类似，但是多了几个命令来处理跨页的表头和表尾。
+
 \subsubsection{图片}
 
 使用 \texttt{graphicx} 宏包来插入图片。首先，在导言区加载这个宏包，然后使用 \texttt{figure} 环境来插入图片。例如：
@@ -506,15 +576,36 @@ LaTeX 的宏包是扩展 LaTeX 功能的重要工具。通过加载不同的宏�
   \item \texttt{algorithm2e}：用于排版算法。
 \end{itemize}
 
-\subsection{LaTeX 与汉语专题}
+\subsection{LaTeX 的字体设置}
+
+在LaTeX中，可以使用 \texttt{fontspec} 宏包来设置字体。这个宏包允许我们使用系统中安装的任何字体，并且可以设置字体的大小、样式和其他属性。
+
+可以使用 \texttt{\textbackslash setmainfont\{字体名\}} 命令来设置正文的主字体，使用 \texttt{\textbackslash setsansfont\{字体名\}} 命令来设置无衬线字体，使用 \texttt{\textbackslash setmonofont\{字体名\}} 命令来设置等宽字体。例如：
+\begin{lstlisting}[language={[LaTeX]TeX}]
+  \usepackage{fontspec}
+  \setmainfont{Times New Roman}
+  \setsansfont{Arial}
+  \setmonofont{Courier New}
+\end{lstlisting}
+当然，为了美观起见，我们往往使用一套字体组合来进行排版，例如思源系列：
+\begin{lstlisting}[language={[LaTeX]TeX}]
+  \usepackage{fontspec}
+  \setmainfont{Source Serif Pro} % 思源宋体
+  \setsansfont{Source Sans Pro}  % 思源黑体
+  \setmonofont{Source Code Pro}  % 思源等宽
+\end{lstlisting}
+
+\subsection{LaTeX 的汉语排版，与字体专题}
 
 非常遗憾的是，LaTeX对于汉语、日语、朝鲜语等非字母语言的支持稍差。因此我们在使用LaTeX排版中文文档的时候，请确保使用 XeLaTeX 编译器，并且在导言区加载 \texttt{ctex} 宏包。这个宏包提供了对中文的支持，包括中文字体、段落格式等，这也是LaTeX主流的中文排版方式，其底层宏包是 \texttt{xeCJK}（C指中，J指日，K指韩）。
 
 LaTeX的字体分三种：常规字体、无衬线字体和等宽字体。常规字体是指普通的衬线字体，通常用于正文；无衬线字体是指没有衬线的字体，通常用于标题或强调；等宽字体是指每个字符宽度相同的字体，通常用于代码或表格。对于Windows下的中文字体，默认情况下 LaTeX 使用的是宋体（SimSun）作为常规字体，微软雅黑（Microsoft YaHei）作为无衬线字体，等宽字体则使用仿宋（FangSong）。
 
-需要指出的是，Windows 系统中，在 LaTeX 中对宋体（SimSun）进行加粗，实际上得到的是黑体（SimHei）；同理斜体是楷体（KaiTi）。而在 Linux 中，宋体（FandolSong-Regular）的粗体是真粗体（FandolSong-Bold）。这和MS Word 中的宋体加粗是不同的：MS Word 中的宋体加粗实际上是“伪粗体”，只是通过加粗字形来实现的。因此，同学们在使用 LaTeX 排版中文文档时，请注意这一点。
+需要指出的是，Windows 系统中，在 LaTeX 中对宋体（SimSun）进行加粗，实际上得到的是黑体；而斜体是楷体（KaiTi）。而在 Linux 中，LaTeX默认使用的宋体（FandolSong-Regular）的粗体是真粗体（FandolSong-Bold）。这和MS Word 中的宋体加粗是不同的：MS Word 中的宋体加粗实际上是“伪粗体”，只是通过加粗字形来实现的。同理，在 Linux中，FandolSong-Regular 的斜体是 FandolKai-Regular，而不是 FandolSong-Italic（因为没有这个字体）；但是在MS Word 中，宋体斜体实际上是“伪斜体”，是通过倾斜字形来实现的。因此，同学们在使用 LaTeX 排版中文文档时，请注意这一点。
 
-我们可以使用 \texttt{ctex} 宏包来设置中文文档的格式和字体。以下是一个简单的示例：
+另一方面，汉语和字母文字相比的一个特性是每个字符天生等宽。因此，大多数汉语字体是\textbf{没有专门的等宽字体}的，这一点与字母文字的字体有着巨大的不同。如果使用默认字体，则其等宽字体用仿宋实现。
+
+我们可以使用 \texttt{ctex} 宏包来使用更“中文排版”的风格设置中文文档的格式和字体。以下是一个简单的示例：
 
 \begin{lstlisting}[language={[LaTeX]TeX}]
   \documentclass{article}
@@ -537,6 +628,17 @@ LaTeX的字体分三种：常规字体、无衬线字体和等宽字体。常规
   }
   % 这段代码的意思是把section的默认写法从一个数字变成：“第X节”，
   % 并设置前后垂直间距等。
+\end{lstlisting}
+
+另外，如果想批量的设置全文的字体，可以使用 \texttt{fontspec} 宏包来设置字体。这个宏包允许我们使用系统中安装的任何字体，并且可以设置字体的大小、样式和其他属性。对于中文字体，则需要搭配 \texttt{xeCJK} 宏包来使用；然而，\texttt{ctex} 宏包已经包含了 \texttt{xeCJK} 宏包，因此我们只需要额外加载 \texttt{fontspec} 宏包即可。
+
+假设使用思源系列字体，我们可以使用以下代码来设置中文字体：
+\begin{lstlisting}[language={[LaTeX]TeX}]
+  \usepackage{fontspec}
+  \usepackage[fontset=none]{ctex}      % 关闭ctex的默认字体设置，防止冲突
+  \setCJKmainfont{Source Han Serif CN} % 思源宋体
+  \setCJKsansfont{Source Han Sans CN}  % 思源黑体
+  \setCJKmonofont{Source Han Sans CN}  % 中文没有等宽字体，常用无衬线代替
 \end{lstlisting}
 
 \subsection{LaTeX 与多文件}
@@ -697,6 +799,8 @@ ModernCV 是一个用于制作简历的 LaTeX 文档类。它提供了多种简�
 如你所见，ModernCV 的使用非常简单。我们只需在导言区加载 \texttt{moderncv} 宏包，并设置主题和颜色，然后使用 \texttt{\textbackslash name}、\texttt{\textbackslash email} 和 \texttt{\textbackslash social} 等命令来添加个人信息。正文部分则使用 \texttt{\textbackslash section} 和 \texttt{\textbackslash cventry} 等命令来添加简历内容。这样就可以快速地生成一份简洁、美观的简历，免除了使用Word等工具排版的烦恼。
 
 该包的另一个极为良好的特性是可以自动压缩空白区域，可以有效地避免“半页纸尴尬”。但是与其这样，感觉确实不如多整点活填满这页纸（大嘘）。所以欢迎来LCPU玩混项目（不是）。
+
+以上便是LaTeX的基本内容。作为一门宏语言，它也需要大量的实际训练才能熟练掌握，也希望同学们能多多练习，争取早日入门。
 
 \section{Typst}
 

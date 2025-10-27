@@ -25,9 +25,9 @@
 \usepackage{authblk}
 
 %---------- 页面与字体 ----------
-\setmainfont{Source Serif Pro Light}
-\setsansfont{Source Sans Pro Light}
-\setmonofont{Source Code Pro Light}
+\setmainfont{Source Serif Pro}
+\setsansfont{Source Sans Pro}
+\setmonofont{Source Code Pro}
 \setCJKmainfont[ItalicFont=Source Han Serif CN]{Source Han Serif CN}
 \setCJKsansfont{Source Han Sans CN}
 \setCJKmonofont{Source Han Sans CN}
@@ -59,14 +59,14 @@
 \hypersetup{colorlinks=false,pdfborder={0 0 0}}
 
 %---------- tcolorbox 环境 ----------
-\newtcolorbox{warning}{enhanced,colback=red!4!white,colframe=red!75!black,coltitle=white,fonttitle=\bfseries,title=警告,top=2mm,bottom=2mm,left=2.5mm,right=2.5mm,boxrule=0.6pt,breakable}
-\newtcolorbox{caution}{enhanced,colback=orange!5!white,colframe=orange!60!black,coltitle=white,fonttitle=\bfseries,title=注意,top=2mm,bottom=2mm,left=2.5mm,right=2.5mm,boxrule=0.6pt,breakable}
-\newtcolorbox{tip}{enhanced,colback=cyan!3!white,colframe=cyan!65!black,coltitle=white,fonttitle=\bfseries,title=提示,top=2mm,bottom=2mm,left=2.5mm,right=2.5mm,boxrule=0.6pt,breakable}
-\newtcolorbox{note}{enhanced,colback=teal!3!white,colframe=teal!60!black,coltitle=white,fonttitle=\bfseries,title=说明,top=2mm,bottom=2mm,left=2.5mm,right=2.5mm,boxrule=0.6pt,breakable}
-\newtcolorbox{example}[1][]{enhanced,colback=blue!3!white,colframe=blue!70!black,coltitle=white,fonttitle=\bfseries,title={\IfBlankTF{#1}{例题}{例题 (#1)}},top=2mm,bottom=2mm,left=2.5mm,right=2.5mm,boxrule=0.6pt,breakable}
-\newtcolorbox{answer}{enhanced,colback=green!4!white,colframe=green!65!black,coltitle=white,fonttitle=\bfseries,title=答案,top=2mm,bottom=2mm,left=2.5mm,right=2.5mm,boxrule=0.6pt,breakable}
-\newtcolorbox{exercise}{enhanced,colback=violet!4!white,colframe=violet!70!black,coltitle=white,fonttitle=\bfseries,title=练习,top=2mm,bottom=2mm,left=2.5mm,right=2.5mm,boxrule=0.6pt,breakable}
-\newtcolorbox{thinking}{enhanced,colback=yellow!4!white,colframe=yellow!70!black,coltitle=white,fonttitle=\bfseries,title=开放性思考和探索,top=2mm,bottom=2mm,left=2.5mm,right=2.5mm,boxrule=0.6pt,breakable}
+\newtcolorbox{warning}{enhanced,colback=red!4!white,colframe=red!75!black,coltitle=white,fonttitle=\bfseries,title=警告,top=2mm,bottom=2mm,left=2.5mm,right=2.5mm,boxrule=0.6pt,breakable,fontupper=\small,before upper={\setlength{\parindent}{2em}}}
+\newtcolorbox{caution}{enhanced,colback=orange!5!white,colframe=orange!60!black,coltitle=white,fonttitle=\bfseries,title=注意,top=2mm,bottom=2mm,left=2.5mm,right=2.5mm,boxrule=0.6pt,breakable,fontupper=\small,before upper={\setlength{\parindent}{2em}}}
+\newtcolorbox{tip}{enhanced,colback=cyan!3!white,colframe=cyan!65!black,coltitle=white,fonttitle=\bfseries,title=提示,top=2mm,bottom=2mm,left=2.5mm,right=2.5mm,boxrule=0.6pt,breakable,fontupper=\small,before upper={\setlength{\parindent}{2em}}}
+\newtcolorbox{note}{enhanced,colback=teal!3!white,colframe=teal!60!black,coltitle=white,fonttitle=\bfseries,title=说明,top=2mm,bottom=2mm,left=2.5mm,right=2.5mm,boxrule=0.6pt,breakable,fontupper=\small,before upper={\setlength{\parindent}{2em}}}
+\newtcolorbox{example}[1][]{enhanced,colback=blue!3!white,colframe=blue!70!black,coltitle=white,fonttitle=\bfseries,title={\IfBlankTF{#1}{例题}{例题 (#1)}},top=2mm,bottom=2mm,left=2.5mm,right=2.5mm,boxrule=0.6pt,breakable,fontupper=\small,before upper={\setlength{\parindent}{2em}}}
+\newtcolorbox{answer}{enhanced,colback=green!4!white,colframe=green!65!black,coltitle=white,fonttitle=\bfseries,title=答案,top=2mm,bottom=2mm,left=2.5mm,right=2.5mm,boxrule=0.6pt,breakable,fontupper=\small,before upper={\setlength{\parindent}{2em}}}
+\newtcolorbox{exercise}{enhanced,colback=violet!4!white,colframe=violet!70!black,coltitle=white,fonttitle=\bfseries,title=练习,top=2mm,bottom=2mm,left=2.5mm,right=2.5mm,boxrule=0.6pt,breakable,fontupper=\small,before upper={\setlength{\parindent}{2em}}}
+\newtcolorbox{thinking}{enhanced,colback=yellow!4!white,colframe=yellow!70!black,coltitle=white,fonttitle=\bfseries,title=开放性思考和探索,top=2mm,bottom=2mm,left=2.5mm,right=2.5mm,boxrule=0.6pt,breakable,fontupper=\small,before upper={\setlength{\parindent}{2em}}}
 
 %---------- 标题信息 ----------
 \title{\Huge\textbf{北京大学计算机基础能力手册}}
