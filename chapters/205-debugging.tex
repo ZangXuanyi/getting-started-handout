@@ -8,7 +8,7 @@
 
 \section{先救命}
 
-最常见的情况是：代码崩溃了，程序完全无法执行。对于Python而言，它的报错信息非常详细，通常可以直接定位到出错的行数和错误类型，因此往往只需要根据报错信息进行修复即可。
+最常见的情况是：代码崩溃了，程序完全无法执行。对于Python而言，它的报错信息非常详细，通常可以直接定位到出错的行数和错误类型，因此往往只需要根据报错信息进行修复即可；但堆栈深层或异步、多线程场景中依然需要调试器来辅助定位问题。
 
 而对于C/C++这类语言而言，它们是静态的，运行时错误能过编译，而且它们的报错信息通常非常简洁，仅凭报错信息很难定位到具体的错误地点。因此，我们需要使用一些调试工具来帮助我们定位错误。
 
@@ -28,7 +28,7 @@
 
 在GDB中，我们可以使用以下命令来设置断点、运行程序、查看变量等：
 \begin{itemize}
-  \item \texttt{break}：设置断点，可以简写为\texttt{b}，例如\texttt{break main}在\texttt{main}函数处设置断点。也可以在特定的某一行设置断点，例如\texttt{break 42}在第42行设置断点；也可以利用偏移量来设置断点，例如\texttt{break +10}在当前行的往前数10行设置断点。
+  \item \texttt{break}：设置断点，可以简写为\texttt{b}，例如\texttt{break main}在\texttt{main}函数处设置断点。也可以在特定的某一行设置断点，例如\texttt{break 42}在第42行设置断点；也可以利用偏移量来设置断点，例如\texttt{break +10}在当前行的往后继续数10行，在那里设置断点。
   \item \texttt{run}：运行程序。可以简写为\texttt{r}。
   \item \texttt{next}：执行下一行代码，可以简写为\texttt{n}。如果当前行是函数调用，则不会进入函数内部，而是把这个函数视为一个整体往下执行一行。该命令有一个变体\texttt{ni}，它是汇编级别的断点定位，也就是执行下一条汇编指令。
   \item \texttt{step}：也是执行下一行代码，可以简写为\texttt{s}。如果当前行是函数调用，则会进入函数内部，逐行执行函数内部的代码。\texttt{si}是它的变体，表示汇编级别的单步执行。
@@ -72,7 +72,7 @@
 
 Valgrind会输出内存泄漏的详细信息，包括泄漏的内存地址、大小、调用栈等信息。我们可以根据这些信息来定位内存泄漏的代码。
 
-Valgrind跑完以后别急着关，如果是开源项目或者协作项目，把definitely lost那行抄下来贴到issue上面，省得以后再犯同样的错误。
+Valgrind跑完以后别急着关，如果是开源项目或者协作项目，把definitely lost那行抄下来贴到issue上面，省得以后再犯同样的错误。当然，你也需要附上suppressions过滤后的结果，避免误报。
 
 \subsubsection{未定义行为}
 
@@ -88,14 +88,14 @@ Valgrind跑完以后别急着关，如果是开源项目或者协作项目，把
 
 这种情况可以使用perf来分析问题，由Linux内核提供。只需要在运行程序时加上\texttt{perf}命令即可，例如：
 \begin{lstlisting}[language=bash]
-    perf record -g ./your_program && perf report
+    perf record -g -o perf.data ./your_program && perf report -i perf.data
 \end{lstlisting}
 
 \subsection{内存占用过高}
 
 这种情况可以使用massif来分析问题，该工具由Valgrind提供。例如：
 \begin{lstlisting}[language=bash]
-    valgrind --tool=massif ./your_program
+    valgrind --tool=massif --massif-out-file=ms.out ./your_program
 \end{lstlisting}
 
 运行完毕后，可以使用\texttt{ms\_print}命令来查看内存使用情况，例如：
@@ -142,9 +142,9 @@ tmux和screen是两个常用的终端复用工具，可以在一个终端中创�
 
 docker和上述两个东西不太一样。上述两个东西只能做到“守护终端”，但是对于环境的变化无能为力。而使用docker可以做到隔离环境，甚至可以做到“守护进程”。我们可以使用Docker来创建一个隔离的测试环境，例如：
 \begin{lstlisting}[language=bash]
-    docker run -it --rm -v $(pwd):/app -w /app python:3.9 bash
+    docker run -it --rm --name <your-container> -v $(pwd):/app -w /app python:3.9 bash
 \end{lstlisting}
-以上代码的含义是创建一个Python 3.9的Docker容器，并将当前目录挂载到容器的/app目录下，然后进入容器的bash终端。这样，我们就可以在隔离的环境中进行测试了。上述命令中，\texttt{-it}表示交互式终端，\texttt{--rm}表示容器退出后自动删除，\texttt{-v}表示挂载目录，\texttt{-w}表示设置工作目录。如果我们不希望容器退出后自动删除，可以去掉\texttt{--rm}选项。当然，上述命令还是太长了，我们往往写成一个脚本来执行，或者利用\texttt{alias}命令等来充分简化命令。
+以上代码的含义是创建一个Python 3.9的Docker容器，并将当前目录挂载到容器的/app目录下，然后进入容器的bash终端，其名称为\texttt{<your-container>}。这样，我们就可以在隔离的环境中进行测试了。上述命令中，\texttt{-it}表示交互式终端，\texttt{--rm}表示容器退出后自动删除，\texttt{-v}表示挂载目录，\texttt{-w}表示设置工作目录。如果我们不希望容器退出后自动删除，可以去掉\texttt{--rm}选项。当然，上述命令还是太长了，我们往往写成一个脚本来执行，或者利用\texttt{alias}命令等来充分简化命令。
 
 我们也可以让测试代码在docker容器里面跑起来以后，再退出来，使用其他代码（例如测试代码）来访问这个容器。此时我们需要再docker容器中预留端口，也就是：
 \begin{lstlisting}[language=bash]
@@ -195,6 +195,7 @@ class TestMyFunction(unittest.TestCase):
 
     def test_case_2(self):
         self.assertRaises(ValueError, my_function, -1, 2)
+
 if __name__ == '__main__':
     unittest.main()
 \end{lstlisting}
@@ -250,6 +251,8 @@ def test_my_function_parametrized(a, b, expected):
 
 \section{去工作}
 
+\subsection{部署}
+
 代码调试完成了，现在该把代码部署到生产环境了。部署代码的方式有很多种，具体取决于项目的类型和规模。对于小型项目，我们可以直接将代码上传到服务器上运行；对于大型项目，我们可以使用CI/CD工具来自动化部署流程。
 
 GitHub Actions是一个常用的CI/CD工具，可以帮助我们自动化部署流程。我们可以编写一个GitHub Actions工作流文件，定义部署的步骤和条件。例如：
@@ -283,3 +286,15 @@ jobs:
 在这个示例中，我们定义了一个名为\texttt{Deploy}的工作流，当代码推送到\texttt{main}分支时触发。工作流包含了几个步骤：检出代码、设置Python环境、安装依赖、运行测试和部署到服务器。当然，具体的部署步骤需要根据项目的实际情况进行调整。
 
 除了自动部署以外，CI/CD工具还可以帮助我们进行代码质量检查、性能测试等工作。我们可以在工作流中添加相应的步骤来实现这些功能。
+
+\subsection{回滚}
+
+有时候，部署完成后我们会发现代码出现了问题，导致服务无法正常运行。这时候，我们需要进行回滚操作，将代码恢复到之前的稳定版本。
+
+最简单的回滚方式是使用Git的版本控制功能。我们可以使用\texttt{git revert}命令来撤销最近的提交，或者使用\texttt{git checkout}命令来切换到之前的某个版本。
+
+有些时候部署的代码并不是直接从Git仓库中拉取的，而是经过打包、编译等步骤生成的二进制文件或者Docker镜像等。这时候，我们需要使用相应的工具来进行回滚操作。例如，如果我们使用Docker来部署服务，我们可以使用\texttt{docker rollback}命令来回滚到之前的镜像版本，也就是：
+\begin{lstlisting}[language=bash]
+    docker service update --image your_image:previous_version your_service
+\end{lstlisting}
+这样就可以将服务回滚到之前的版本。
