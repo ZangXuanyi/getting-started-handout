@@ -33,7 +33,7 @@ C和C++虽然古老且写起来不太舒服，但是在今天依然是非常重�
 手动编译的过程通常是：先从官网下载源代码，然后编译：
 \begin{lstlisting}
 git clone https://github.com/fmtlib/fmt.git
-cmaks -S fmt -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+cmake -S fmt -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 cmake --build build
 sudo cmake --install build --prefix /opt/fmt
 \end{lstlisting}
