@@ -415,13 +415,15 @@ python
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 \end{lstlisting}
 
-在VS Code中配置Rust比较简单，只需要下载\texttt{rust-analyzer}插件即可。然后用VS Code打开一个空文件夹，打开VS Code的终端（快捷键：\texttt{Ctrl + `}）,\texttt{cargo init} 初始化当前的空文件夹。然后在\texttt{src/main.rs}里即可看到\texttt{main}函数的上方有着运行和调试的符号，点击即可运行或调试。
+在VS Code中配置Rust比较简单，只需要下载\texttt{rust-analyzer}插件即可。
+
+VS Code打开一个空文件夹，打开VS Code的终端（快捷键：\texttt{Ctrl + `}）,\texttt{cargo init} 初始化当前的空文件夹。然后在\texttt{src/main.rs}里即可看到\texttt{main}函数的上方有着运行和调试的按钮，点击即可运行或调试。\texttt{cargo new helloworld} 会在当前文件夹下建立helloworld子文件夹并完成初始化，更加便捷。
 
 \begin{caution}
-  初始化后，文件夹下应有着\texttt{Cargo.toml}，否则便无法为其提供运行的功能，因为运行是依赖于\texttt{cargo}的。初学者往往会急于创建\texttt{main.rs}而没有用\texttt{cargo init}或\texttt{cargo new dir}来初始化文件夹，然后就会发现\texttt{rust-analyzer}报错\texttt{Failed to discover workspace. Consider adding the Cargo.toml of the workspace to the linkedProjects setting.}
+  初始化后，对应的文件夹下应有着\texttt{Cargo.toml}，否则\texttt{rust-analyzer}无法提供运行的功能，因为\texttt{rust-analyzer}的运行功能依赖于\texttt{cargo}的。初学者往往会急于创建\texttt{main.rs}，然后就会发现\texttt{rust-analyzer}报错\texttt{Failed to discover workspace. Consider adding the Cargo.toml of the workspace to the linkedProjects setting.}
 \end{caution}
 
-为了便于调试，我们下载\texttt{codelldb}插件，之后按F5就可以开始调试了。
+为了便于调试，我们安装\texttt{codelldb}插件，之后点击\texttt{main}函数上方的\texttt{Debug}按钮就可以开始调试了。
 
 \subsection{go环境搭建}
 
@@ -448,7 +450,7 @@ python
   # go env |findstr "GOPROXY" # windows 确认配置
 \end{lstlisting}
 
-下载\texttt{go tools}：\texttt{Ctrl+Shift+P}打开命令面板输入\texttt{Go: Install/Update Tools}，选择所有并确定，这将会下载\texttt{go tools}。
+下载\texttt{go tools}。\texttt{Ctrl+Shift+P}打开命令面板输入\texttt{>Go: Install/Update Tools}，选择所有并确定，这将会下载\texttt{go tools}。
 
 新建文件夹，用\texttt{VS Code}打开此文件夹，新建\texttt{main.go}文件，\texttt{Ctrl + `} 打开终端，输入\texttt{go mod init helloworld}，编辑\texttt{main.go}
 
@@ -463,17 +465,16 @@ func main() {
   name := "Go Developers"
   hello := "hello world"
   fmt.Println("Azure for", name, hello)
-  hello_world()
 }
 \end{lstlisting}
 
-按F5即可调试。
+可以使用vscode带有的图形化调试按钮进行调试，\texttt{go run main.go} 即可运行此文件，当然也可以安装\texttt{Code Runner}插件来一键运行
 
 \begin{note}
   现在Go使用\texttt{go module} 管理依赖，也就是\texttt{go.mod}文件。现在推荐这么做，有些项目可能还在用\texttt{Go Path}来管理，同学遇到了此种项目可自行搜集资料。
 \end{note}
 
-有同学可能发现了，调试的时候并没有输出可执行文件。输出可执行文件：\texttt{go build -o main.exe main.go}, \texttt{-o}选项可以指定可执行文件的名字。如果是多文件编译呢？假设源代码均位于src目录下，\texttt{go build src/*.go}。同学们也可了解一下如何交叉编译。
+有同学可能发现了，调试/调试的时候并没有输出可执行文件。输出可执行文件：\texttt{go build -o main.exe main.go}, \texttt{-o}选项可以指定可执行文件的名字。如果是多文件编译呢？假设源代码均位于src目录下，\texttt{go build src/*.go}。同学们也可了解一下如何交叉编译。
 
 
 \section{在VS Code中配置Git}
@@ -507,7 +508,7 @@ VS Code为Git提供了一个视窗化界面，可以方便地进行版本控制�
   oh-my-posh init pwsh
 \end{lstlisting}
 
-如果你使用的是其他终端，例如cmd，你可以在Oh My Posh的\href{https://ohmyposh.dev/docs/installation}{安装文档}中找到相应的安装方法。
+如果你使用的是其他终端，例如cmd，你可以在Oh My Posh的\href{https://ohmyposh.dev/docs/installation/prompt}{安装文档}中找到相应的安装方法。
 
 \subsection{配置Oh My Posh}
 
@@ -530,11 +531,11 @@ VS Code为Git提供了一个视窗化界面，可以方便地进行版本控制�
   oh-my-posh init pwsh | Invoke-Expression
 \end{lstlisting}
 
-接下来，你可以在PowerShell中运行命令来设置Oh My Posh的主题了。主题及其安装方法可以在Oh My Posh的\href{https://ohmyposh.dev/docs/themes}{主题文档}中找到。
+接下来，你可以在PowerShell中运行命令来设置Oh My Posh的主题了。\href{https://ohmyposh.dev/docs/themes}{其他主题}及\href{https://ohmyposh.dev/docs/installation/customize}{其安装方法}可自行查阅。例如使用\texttt{powerlevel10k_classic}为主题：编辑Powershell配置文件，在文件末尾编辑\texttt{oh-my-posh init pwsh --config 'powerlevel10k_classic' | Invoke-Expression}，重启终端后即可
 
 \subsection{在VS Code中配置终端}
 
-VS Code内置了终端功能，可以方便地在编辑器中运行命令。终端默认使用系统的命令行工具，例如在Windows上是cmd，在Linux上是bash。
+VS Code内置了终端功能，可以方便地在编辑器中运行命令。终端默认使用系统的命令行工具，例如在Windows上是PowerShell，在Linux上是bash。
 
 你可以通过快捷键\texttt{Ctrl + `}（反引号）打开终端，也可以通过菜单\texttt{视图 > 终端}来打开。终端打开后，你可以在其中输入命令，和在普通命令行中一样。
 
