@@ -14,7 +14,7 @@
 
 什么，你问我怎么确定编译错误？我认为编译错误应该由编译器来判断，而不是我们来判断；编译过一次以后，你的代码编辑器应该也能够显示哪里有编译错误！
 
-\subsection{使用调试器}
+\subsection{使用调试器}\label{sec:gdb}
 
 我们在开发的过程中可以使用VS Code调试器，但是有时候我们无法获取程序源码。在这种情况下，我建议同学们使用那个最经典的调试工具——\texttt{gdb}。它是GNU项目的一部分，支持多种编程语言，包括C、C++、Fortran等。当然对于一些会读汇编的同学们而言，我觉得可以用objdump这类反汇编器来反汇编程序，并对这些汇编代码进行阅读；常见的反汇编器还有著名的IDA Pro，它是一个商业软件，价格很贵，但是功能绝对对得起它的价格：它甚至能够对反汇编出来的东西进行自动分析！
 \begin{lstlisting}[language=bash]
@@ -117,17 +117,15 @@ IO卡死通常是因为程序在等待某个IO操作完成，例如网络请求�
 
 经过以上的两步骤，我们总算是把程序的主要问题解决了个差不多。但是，为了保证程序的稳定性和可靠性，我们还需要进行一些额外的调养工作——测试。
 
-\subsection{隔离}
-
 我们最好是找个地方把需要测试的代码隔离开来，放到一个单独的地方，防止其他代码或者文件影响测试结果；对于服务类型的项目，则更是如此。我们可以使用tmux、screen或者Docker来隔离测试环境。
 
-\subsubsection{使用tmux和screen}
+\subsection{轻量级隔离：tmux和screen}\label{sec:tmux}
 
 tmux和screen是两个常用的终端复用工具，可以在一个终端中创建多个会话，方便我们进行隔离测试。使用方法非常简单，只需要在终端中输入\texttt{tmux}或\texttt{screen}即可进入一个新的会话。
 
 在tmux中，我们可以使用以下命令来创建新的窗口、分割窗口等：
 \begin{lstlisting}
-    tmux new session -s session_name # 创建一个新的会话
+    tmux new-session -s session_name # 创建一个新的会话
     tmux ls # 列出所有会话
     tmux attach -t session_name # 连接到指定的会话
 \end{lstlisting}
@@ -138,49 +136,82 @@ tmux和screen是两个常用的终端复用工具，可以在一个终端中创�
     screen -r session_name # 连接到指定的会话
 \end{lstlisting}
 
-\subsubsection{使用Docker}
+\subsection{重量级隔离：Docker}\label{sec:docker}
 
-docker和上述两个东西不太一样。上述两个东西只能做到“守护终端”，但是对于环境的变化无能为力。而使用docker可以做到隔离环境，甚至可以做到“守护进程”。我们可以使用Docker来创建一个隔离的测试环境，例如：
+docker和上述两个东西不太一样。上述两个东西只能做到“守护终端”，但是对于环境的变化无能为力。使用docker可以做到隔离环境，甚至可以做到“守护进程”，但也复杂得多。
+
+docker有四个比较重要的概念需要了解：
+\begin{itemize}
+    \item \textbf{镜像}：镜像是一个只读的模板，包含了运行某个应用程序所需的所有文件和依赖。我们可以从Docker Hub等公共仓库中拉取镜像，或者自己构建镜像。
+    \item \textbf{容器}：容器是镜像的一个运行实例，它是一个轻量级、可移植且可写的运行环境。我们可以在容器中运行应用程序，并且容器之间相互隔离。
+    \item \textbf{仓库}：仓库是镜像的存储位置，可以是公共的也可以是私有的。我们可以将镜像推送到仓库中，或者从仓库中拉取镜像。
+    \item \textbf{注册中心}：注册中心是一个集中管理仓库的服务。Docker Hub是一个公共的注册中心，我们也可以搭建自己的私有注册中心。公司内部一般也有自己的私有注册中心，用来存储公司内部的镜像，如Harbor等。
+\end{itemize}
+所以实际上，每一个docker中都是运行了一个轻量级的小系统，这个系统和宿主机是隔离的，互不影响。这个系统里面可以安装各种各样的软件包和依赖，完全按照我们的需求来配置环境。
+
+\subsubsection{简单使用}
+
+我们可以使用Docker来创建一个隔离的测试环境，例如：
 \begin{lstlisting}[language=bash]
     docker run -it --rm --name <your-container> -v $(pwd):/app -w /app python:3.9 bash
 \end{lstlisting}
-以上代码的含义是创建一个Python 3.9的Docker容器，并将当前目录挂载到容器的/app目录下，然后进入容器的bash终端，其名称为\texttt{<your-container>}。这样，我们就可以在隔离的环境中进行测试了。上述命令中，\texttt{-it}表示交互式终端，\texttt{--rm}表示容器退出后自动删除，\texttt{-v}表示挂载目录，\texttt{-w}表示设置工作目录。如果我们不希望容器退出后自动删除，可以去掉\texttt{--rm}选项。当然，上述命令还是太长了，我们往往写成一个脚本来执行，或者利用\texttt{alias}命令等来充分简化命令。
+以上代码的含义是创建一个Python 3.9的Docker容器，并将当前目录挂载到容器的/app目录下，然后进入容器的bash终端，其名称为\texttt{<your-container>}。这样，我们就可以在隔离的环境中进行测试了。上述命令中：
+\begin{itemize}
+    \item \texttt{-i}表示交互式终端，该参数会保持标准输入流打开，否则cat等交互命令无法使用；
+    \item \texttt{-t}表示分配一个伪终端，这样我们就可以在容器中使用终端命令了；
+    \item \texttt{--rm}表示容器退出后自动删除（但不会删除挂载在外面的文件）；
+    \item \texttt{--name <your-container>}表示容器的名称，可以自定义；
+    \item \texttt{-v \$(pwd):/app}表示将当前目录挂载到容器的/app目录下，在Windows Powershell中需要使用\texttt{-v \${PWD}:/app}；
+    \item \texttt{-w /app}表示设置容器的工作目录为/app，实际上是设置容器内的\texttt{PWD}环境变量为/app；若目录不存在会报错。
+    \item \texttt{python:3.9}表示使用Python 3.9的官方镜像作为基础镜像，不写默认最新版，\textbf{生产环境必须显式指明版本}；
+    \item \texttt{bash}表示进入容器后执行的命令，这里是进入bash终端。
+\end{itemize}
+当然，上述命令还是太长了，我们往往写成一个脚本来执行，或者利用\texttt{alias}命令等来充分简化命令。
+
+上述命令中我们创建了一个临时容器，容器退出后会自动删除，适用于临时调试使用。如果我们想要创建一个持久化的容器，可以去掉\texttt{--rm}参数，适宜长期服务或长期调试使用。
+
+\subsubsection{增删改查、启动停止、进入退出}
+
+在上述命令创建容器后，会直接进入容器的bash终端。希望从容器中离开，可以使用\texttt{Ctrl + P + Q}组合键，这样可以让容器继续在后台运行。如果直接使用\texttt{exit}命令或者\texttt{Ctrl + D}组合键退出容器，则会停止容器的运行。如果在容器中输入\texttt{Ctrl + C}，则会中断当前运行的命令，并向容器发送SIGINT信号，\textbf{可能}导致容器停止运行，这实际上取决于PID1进程对SIGINT信号的处理方式。
+
+如想重新进入容器，可以使用\texttt{docker attach <your-container>}命令，但只能进入正在运行的容器。也可以使用\texttt{docker exec <your-container> <command>}命令来在容器中执行命令（这也是我们更推荐的方式，而不是每次都attach），例如：
+\begin{lstlisting}[language=bash]
+    docker exec -it <your-container> bash
+\end{lstlisting}
+上述命令会在容器中启动一个新的bash终端。
+
+在容器外，我们可以用\texttt{docker ps}命令来查看正在运行的容器，如果在上述命令末尾加上\texttt{-a}参数，则可以查看所有容器，包括未运行的容器。
+
+可以利用\texttt{docker start}命令来启动一个已经存在的容器，例如：
+\begin{lstlisting}[language=bash]
+    docker start -i <your-container>
+\end{lstlisting}
+上述命令中的\texttt{-i}参数表示进入容器的交互式终端。
+
+这个start还可以替代为：
+\begin{itemize}
+    \item \texttt{docker restart <your-container>}：重启容器；
+    \item \texttt{docker stop <your-container>}：停止容器（发送SIGTERM信号，优雅关闭进程，10秒后若进程仍未退出则发送SIGKILL信号强制关闭进程）；
+    \item \texttt{docker kill <your-container>}：强制终止容器（发送SIGKILL信号，强制关闭进程）；
+    \item \texttt{docker pause <your-container>}：暂停容器（冻结cgroup，阻止进程调度）；
+    \item \texttt{docker unpause <your-container>}：恢复容器。
+\end{itemize}
+
+如果确实不想要这个容器了，可以使用\texttt{docker rm <your-container>}命令来删除容器。也可以用\texttt{docker container prune}命令来删除所有未运行的容器。
+
+\subsection{端口映射}
 
 我们也可以让测试代码在docker容器里面跑起来以后，再退出来，使用其他代码（例如测试代码）来访问这个容器。此时我们需要再docker容器中预留端口，也就是：
 \begin{lstlisting}[language=bash]
     docker run -it --rm -p 8000:8000 -v $(pwd):/app -w /app python:3.9 bash
 \end{lstlisting}
-上述命令是做了一个端口映射，我们可以在本地的8000端口访问容器中的8000端口。
+上述命令是做了一个端口映射，我们可以在本地的8000端口访问容器中的8000端口。解释其参数：
+\begin{itemize}
+    \item \texttt{-p 8000:8000}表示将本地的8000端口映射到容器的8000端口。前面的8000是本地端口，后面的8000是容器端口。这两个顺序\textbf{不可逆}，因为实际操作中映射的端口可能并不相同，例如\texttt{-p 8080:80}表示将本地的8080端口映射到容器的80端口，写反了不会报错但会导致无法访问。该操作默认使用TCP协议，也可以指定使用UDP协议，例如\texttt{-p 8000:8000/udp}。
+    \item 如需一次性映射多个端口，可以多次使用\texttt{-p}参数，例如\texttt{-p 8000:8000 -p 9000:9000}。
+\end{itemize}
 
-希望从容器中离开，可以使用\texttt{Ctrl + P + Q}组合键，这样可以让容器继续在后台运行。如果直接使用\texttt{exit}命令或者\texttt{Ctrl + D}组合键退出容器，则会停止容器的运行。
-
-默认情况下，离开容器不会关闭容器，除非服务挂了。可以利用\texttt{docker ps}命令来查看所有容器。
-\begin{lstlisting}
-    docker ps -a // 查看所有容器，包括未运行的
-    docker ps // 只查看正在运行的
-\end{lstlisting}
-
-这时候我们可以使用\texttt{docker exec}或者\texttt{docker attach}命令来进入正在运行的容器，例如：
-\begin{lstlisting}[language=bash]
-    docker exec -it container_name bash // 启动一个新的bash终端
-    docker attach container_name // 连接到容器的主终端，不会启动新的终端
-\end{lstlisting}
-
-当然，也可以在容器外使用\texttt{docker exec}命令来在容器内执行一些命令，例如：
-\begin{lstlisting}[language=bash]
-    docker exec -it container_name python your_script.py
-\end{lstlisting}
-这样会在容器内执行\texttt{your\_script.py}脚本。当然也可以执行诸如\texttt{ls}、\texttt{top}等命令来查看容器内的文件和进程，这样命令的输出会在容器外显示。
-
-如果服务确实挂了，我们可以使用\texttt{docker start}命令来重新启动容器，例如：
-\begin{lstlisting}[language=bash]
-    docker start container_name
-\end{lstlisting}
-
-如果我们不想要这个容器了，可以使用\texttt{docker rm}命令来删除它，例如：
-\begin{lstlisting}[language=bash]
-    docker rm container_name
-\end{lstlisting}
+容器间的通信建议自己建立一个bridge网络而不是走默认bridge网络，具体可以参考Docker官方文档。
 
 \subsection{单元测试}
 

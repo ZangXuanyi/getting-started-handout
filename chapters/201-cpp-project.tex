@@ -170,7 +170,7 @@ conda-forge也能管理C++包：
 
 一个比较古老的构建方法是使用\texttt{makefile}构建，这是非常经典的构建方式，几乎所有的编程语言都可以使用。但是因为风格过老，现在已经不大流行。目前较为常见的构建方式是\texttt{CMake}和\texttt{XMake}，它们风格现代，功能强大。
 
-\section{CMake}
+\section{CMake}\label{sec:cmake}
 
 C系语言功能非常强大是公认的不争事实。但是它的构建一直是一个巨大的痛点：使用include来链接库是非常麻烦的事情，文件一多，gcc直接变成一种折磨（\texttt{gcc a.c b.c ... -o project}，还得管依赖关系，还得管编译顺序），困难得让人完全不想用。
 
@@ -458,7 +458,7 @@ CMake虽然强大，但也有一些常见的坑需要注意：
 
 这里帮各位把\href{https://cmake.org/cmake/help/latest/guide/tutorial/}{CMake官方说明文档}贴出来了，感兴趣的同学可以去看看；也可以看看这本电子书：Professional CMake: A Practical Guide（作者：Craig Scott），这本书是CMake的权威指南，内容非常全面，适合深入学习CMake。
 
-\section{XMake}
+\section{XMake}\label{sec:xmake}
 
 不少同学可能会疑惑：怎么又来一个XMake？
 
@@ -633,7 +633,7 @@ project/
 
 如果使用了CI等工具，需要将CI脚本中的相关命令从CMake转换为XMake。
 
-\section{Meson}
+\section{Meson}\label{sec:meson}
 
 Meson是一个开源的构建系统，主要目标是尽可能地提高开发者的生产力。它力求快速、易用，并提供最现代化的软件构建工具。Meson的设计哲学是“不挡路”（Don't get in your way），致力于让构建过程尽可能简单、快速和可靠。
 

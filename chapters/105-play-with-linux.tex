@@ -286,7 +286,7 @@ sudo apt-get install -f # 修复依赖问题
 
 虽然我们有很多文本编辑器可以在图形化的Linux上使用，但是在终端中，这两个编辑器依然是最常用的，而且也是不得不用的（尤其是VIM！）。因此，我将会在这里简要介绍一下这两个编辑器。
 
-\subsubsection{VIM}
+\subsubsection{VIM}\label{sec:vim}
 
 VIM是一个强大的文本编辑器，它有着丰富的功能和插件，可以满足各种需求。
 VIM有两种状态：命令状态和编辑状态。默认情况下，VIM处于命令状态。在命令状态下，我们可以使用各种命令来操作文件；在编辑状态下，我们可以直接输入文本。在这两种方式之间的切换非常简单，只需要按下\texttt{i}键即可进入编辑状态，按下\texttt{Esc}键即可返回命令状态。
@@ -337,7 +337,7 @@ Nano是一个简单易用的文本编辑器，它有着直观的界面和快捷�
   \end{itemize}
 \end{multicols}
 
-\subsection{再临终端命令行}
+\subsection{再临终端命令行}\label{sec:shell}
 
 在表\ref{tab:terminal-commands}中，我们初步认识了一些常用的命令。接下来我们会对它们进行一定的扩展。
 
@@ -942,6 +942,12 @@ WSL，或Windows Subsystem for Linux，是微软为Windows 10及更高版本用�
 
 现在是2025年，我们现在指的WSL指的几乎都是WSL2。其极度轻量，启动速度几块，占用内存极低，估计和一个浏览器标签页差不多；甚至能和Windows共用显卡、网络、文件系统，复制粘贴甚至都随便互通。虽然说WSL不是一个完整的Linux系统，但对于大多数人而言，WSL确实是最好的Linux使用方式。
 
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.8\textwidth]{105/wsl.png}
+  \caption{WSL中的ArchLinux（fastfetch）}
+\end{figure}
+
 \subsection{快速安装}
 
 管理员权限在PowerShell里运行：
@@ -1088,6 +1094,33 @@ WSL还支持systemd服务，2025年微软终于正式支持了这个功能：
   sudo apt install sl && sl
 \end{lstlisting}
 小火车跑起来，你就拥有了一台“开机即用”的Linux系统！
+
+\subsection{实用例：用WSL配置C/C++环境}\label{sec:wsl-cpp}
+
+我们已经介绍过了如何在Windows上配置C/C++环境，这一过程虽说不上繁琐，但足以让新手望而却步。使用WSL，可以大大简化这个过程。
+
+首先，假设你没有安装过任何WSL发行版。打开PowerShell，输入以下命令：
+\begin{lstlisting}
+  wsl --install # 默认安装 Ubuntu 发行版，完全足够
+\end{lstlisting}
+等待安装完成后，重启电脑。重启后，在开始界面找到Ubuntu图标，点击打开。第一次打开时，会提示你创建一个Linux用户名和密码，按照提示操作即可。
+
+接下来，换源并更新系统：
+\begin{lstlisting}
+  sudo apt update && sudo apt upgrade -y
+\end{lstlisting}
+换源操作请参考\href{https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/}{清华大学开源软件镜像站的帮助页面}。
+
+然后，安装C/C++开发环境：
+\begin{lstlisting}
+  sudo apt install gcc gdb # CMake先不装，新手用不上
+\end{lstlisting}
+
+下一步，打开你的VS Code，在欢迎页上选择“连接到”，在弹出的菜单里选择WSL，此时如果没有安装过WSL插件则会自动安装。连接成功后，VS Code会自动打开一个新的窗口，左下角会显示你当前连接的WSL发行版名称。
+
+然后你就需要在该窗口里安装一个C++插件，以便于代码高亮、补全等。按下\texttt{Ctrl+Shift+X}打开扩展商店，搜索“C++”，找到由微软官方发布的那个，点击安装即可。
+
+现在，你就可以愉快地在WSL里编写C/C++代码了！（当然你依然需要创建一个工作目录，并在里面创建源代码文件，否则扩展不起作用。）
 
 \begin{thinking}
   \begin{enumerate}
