@@ -477,11 +477,10 @@ func main() {
   name := "Go Developers"
   hello := "hello world"
   fmt.Println("Azure for", name, hello)
-  hello_world()
 }
 \end{lstlisting}
 
-按F5即可调试。
+可以使用vscode带有的图形化调试按钮进行调试，\texttt{go run main.go} 即可运行此文件，当然也可以安装\texttt{Code Runner}插件来一键运行
 
 \begin{note}
   现在Go使用 \texttt{go module}  管理依赖，也就是 \texttt{go.mod} 文件。现在推荐这么做，有些项目可能还在用 \texttt{Go Path} 来管理，同学遇到了此种项目可自行搜集资料。
@@ -514,7 +513,7 @@ func main() {
   oh-my-posh init pwsh
 \end{lstlisting}
 
-如果你使用的是其他终端，例如cmd，你可以在Oh My Posh的\href{https://ohmyposh.dev/docs/installation}{安装文档}中找到相应的安装方法。
+如果你使用的是其他终端，例如cmd，你可以在Oh My Posh的\href{https://ohmyposh.dev/docs/installation/prompt}{安装文档}中找到相应的安装方法。
 
 \subsection{配置Oh My Posh}
 
@@ -537,11 +536,11 @@ func main() {
   oh-my-posh init pwsh | Invoke-Expression
 \end{lstlisting}
 
-接下来，你可以在PowerShell中运行命令来设置Oh My Posh的主题了。主题及其安装方法可以在Oh My Posh的\href{https://ohmyposh.dev/docs/themes}{主题文档}中找到。
+接下来，你可以在PowerShell中运行命令来设置Oh My Posh的主题了。\href{https://ohmyposh.dev/docs/themes}{其他主题}及\href{https://ohmyposh.dev/docs/installation/customize}{其安装方法}可自行查阅。例如使用\texttt{powerlevel10k_classic}为主题：编辑Powershell配置文件，在文件末尾编辑\texttt{oh-my-posh init pwsh --config 'powerlevel10k_classic' | Invoke-Expression}，重启终端后即可
 
 \subsection{在VS Code中配置终端}
 
-VS Code内置了终端功能，可以方便地在编辑器中运行命令。终端默认使用系统的命令行工具，例如在Windows上是cmd，在Linux上是bash。
+VS Code内置了终端功能，可以方便地在编辑器中运行命令。终端默认使用系统的命令行工具，例如在Windows上是PowerShell，在Linux上是bash。
 
 你可以通过快捷键 \texttt{Ctrl + `} （反引号）打开终端，也可以通过菜单 \texttt{视图 > 终端} 来打开。终端打开后，你可以在其中输入命令，和在普通命令行中一样。
 
