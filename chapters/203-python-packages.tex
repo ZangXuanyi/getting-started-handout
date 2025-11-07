@@ -9,7 +9,7 @@ Python作为时下最流行的高级脚本语言之一，在多个领域有着�
 
 Pandas是一个强大的数据分析库，可以帮助我们处理表格数据。
 
-Pandas比较喜欢的文件是CSV（逗号分隔的值）文件，我们可以使用\texttt{read\_csv()}函数来读取CSV文件，并将其转换为DataFrame对象。当然，Pandas也支持其他格式的文件，如Excel、JSON等。
+Pandas比较喜欢的文件是CSV（逗号分隔的值）文件，我们可以使用 \texttt{read\_csv()} 函数来读取CSV文件，并将其转换为DataFrame对象。当然，Pandas也支持其他格式的文件，如Excel、JSON等。
 
 \begin{lstlisting}[language=python]
 import pandas as pd
@@ -98,7 +98,7 @@ print(x.grad)  # 输出 x 的梯度，输出应当是[2., 4., 6.]
 
 \end{lstlisting}
 
-上文中的\texttt{x\@ y.T}的意思是矩阵乘法（点乘），\texttt{y.T}表示\texttt{y}的转置。PyTorch的张量支持广播（Broadcasting）机制，这意味着当两个张量的形状不同时，PyTorch会自动调整它们的形状以进行运算。relu是一个函数，用于将负值变为0，非负值不变。
+上文中的 \texttt{x\@ y.T} 的意思是矩阵乘法（点乘）， \texttt{y.T} 表示 \texttt{y} 的转置。PyTorch的张量支持广播（Broadcasting）机制，这意味着当两个张量的形状不同时，PyTorch会自动调整它们的形状以进行运算。relu是一个函数，用于将负值变为0，非负值不变。
 
 \subsection{数据集、数据加载器、预处理}
 
@@ -120,9 +120,9 @@ for x, y in train_dl:        # x.shape == [256, 1, 28, 28]
     ... # 这里应当存在一些代码用于表示训练逻辑，但是这里懒得写了
 \end{lstlisting}
 
-\subsection{\texttt{nn.Module}搭积木式写网络}
+\subsection{ \texttt{nn.Module} 搭积木式写网络}
 
-PyTorch的\texttt{nn.Module}是一个非常强大的模块化网络构建工具。我们可以通过继承该类来定义自己的网络结构。例如：
+PyTorch的 \texttt{nn.Module} 是一个非常强大的模块化网络构建工具。我们可以通过继承该类来定义自己的网络结构。例如：
 
 \begin{lstlisting}
     import torch.nn as nn
@@ -143,9 +143,9 @@ class MLP(nn.Module):
 model = MLP().cuda() if torch.cuda.is_available() else MLP()
 \end{lstlisting}
 
-上述代码定义了一个叫做MLP的多层感知机（MLP）模型\footnote{MLP是最基础的神经网络结构之一，适用于处理结构化数据，如图像、文本等。}。它包含了一个输入层、一个隐藏层和一个输出层。我们使用\texttt{nn.Flatten}将输入的28x28的图像展平为一维向量，然后通过两个全连接层（\texttt{nn.Linear}）进行处理，中间使用ReLU激活函数（\texttt{nn.ReLU}）来增加非线性。
+上述代码定义了一个叫做MLP的多层感知机（MLP）模型\footnote{MLP是最基础的神经网络结构之一，适用于处理结构化数据，如图像、文本等。}。它包含了一个输入层、一个隐藏层和一个输出层。我们使用 \texttt{nn.Flatten} 将输入的28x28的图像展平为一维向量，然后通过两个全连接层（ \texttt{nn.Linear} ）进行处理，中间使用ReLU激活函数（ \texttt{nn.ReLU} ）来增加非线性。
 
-在上述实践中，我们使用\texttt{nn.Sequential}来将多个层按顺序组合起来，并使用\texttt{nn.Module}的\texttt{forward}方法定义了前向传播的逻辑。
+在上述实践中，我们使用 \texttt{nn.Sequential} 来将多个层按顺序组合起来，并使用 \texttt{nn.Module} 的 \texttt{forward} 方法定义了前向传播的逻辑。
 
 \subsection{真正训练}
 
@@ -168,7 +168,7 @@ for epoch in range(3):
     print(f"epoch {epoch}: loss={loss.item():.4f}")
 \end{lstlisting}
 
-上述代码展示了一个简单的训练循环。我们使用Adam优化器（\texttt{torch.optim.Adam}）来更新模型参数，使用交叉熵损失函数（\texttt{nn.CrossEntropyLoss}）来计算损失。每个epoch中，我们遍历数据加载器（\texttt{train\_dl}），获取输入数据和标签，然后进行前向传播、计算损失、反向传播和参数更新。
+上述代码展示了一个简单的训练循环。我们使用Adam优化器（ \texttt{torch.optim.Adam} ）来更新模型参数，使用交叉熵损失函数（ \texttt{nn.CrossEntropyLoss} ）来计算损失。每个epoch中，我们遍历数据加载器（ \texttt{train\_dl} ），获取输入数据和标签，然后进行前向传播、计算损失、反向传播和参数更新。
 
 \subsection{做个实验}
 
@@ -256,7 +256,7 @@ all_true = torch.cat(all_true).numpy()
 print("Test accuracy:", accuracy_score(all_true, all_pred))
 \end{lstlisting}
 
-以上代码使用的是784 to 1的线性分类器（Logistic Regression），通过sigmoid函数将输出转换为概率。我们使用二元交叉熵损失函数（\texttt{nn.BCEWithLogitsLoss}）来计算损失，并使用随机梯度下降（SGD）优化器来更新模型参数。
+以上代码使用的是784 to 1的线性分类器（Logistic Regression），通过sigmoid函数将输出转换为概率。我们使用二元交叉熵损失函数（ \texttt{nn.BCEWithLogitsLoss} ）来计算损失，并使用随机梯度下降（SGD）优化器来更新模型参数。
 
 同学们很可能看不懂这些代码的细节，顶多能知道每一块代码是做什么的。不过，没关系！只要理解了整体用法，剩下的就是逐步掌握细节；而这则需要同学们在之后的课程和学习中不断探索和实践，不断优化自己的模型、调整模型的参数，从而真正成为机器学习的高手。
 
@@ -324,7 +324,7 @@ norms = np.sqrt(np.einsum('ij,ij->i', pts, pts))  # 使用爱因斯坦求和约�
 SciPy是站在NumPy上的科学计算库，提供了更多的科学计算功能，如优化、插值、积分、信号处理等。SciPy的模块化设计使得它可以非常方便地进行各种科学计算，可以将高阶算法压成一行随便用，显著加快了运算效率。
 
 \subsubsection{优化}
-SciPy提供了许多优化算法，可以用于许多问题，例如梯度下降、牛顿法、共轭梯度等。我们可以使用\texttt{scipy.optimize}模块来进行优化，以下函数是一个最小化函数的例子：
+SciPy提供了许多优化算法，可以用于许多问题，例如梯度下降、牛顿法、共轭梯度等。我们可以使用 \texttt{scipy.optimize} 模块来进行优化，以下函数是一个最小化函数的例子：
 \begin{lstlisting}
 from scipy.optimize import minimize
 
@@ -334,11 +334,11 @@ print(result.x, result.nit)   # [1. 1.] 24
 \end{lstlisting}
 以上代码使用BFGS算法最小化Rosenbrock函数，初始点为(2, 2)，最终结果应当接近(1, 1)。不知道Rosenbrock函数是什么的同学可以看\href{https://en.wikipedia.org/wiki/Rosenbrock_function}{维基百科}。
 
-比较常见的minimize优化参数包括jac（梯度计算方式）、tol（容忍度）、options（其他选项）等。SciPy还提供了许多其他的优化函数，如\texttt{scipy.optimize.linprog}用于线性规划，\texttt{scipy.optimize.curve\_fit}用于曲线拟合等。这些函数同学们都可以查阅\href{https://docs.scipy.org/doc/scipy/reference/optimize.html}{SciPy官方文档}。
+比较常见的minimize优化参数包括jac（梯度计算方式）、tol（容忍度）、options（其他选项）等。SciPy还提供了许多其他的优化函数，如 \texttt{scipy.optimize.linprog} 用于线性规划， \texttt{scipy.optimize.curve\_fit} 用于曲线拟合等。这些函数同学们都可以查阅\href{https://docs.scipy.org/doc/scipy/reference/optimize.html}{SciPy官方文档}。
 
 \subsubsection{稀疏矩阵}
 
-稀疏矩阵在科学计算中非常常见。SciPy提供了\texttt{scipy.sparse}模块来处理稀疏矩阵。
+稀疏矩阵在科学计算中非常常见。SciPy提供了 \texttt{scipy.sparse} 模块来处理稀疏矩阵。
 
 \begin{lstlisting}[language=python]
 from scipy.sparse import diags
@@ -350,17 +350,17 @@ L = diags(data, k, shape=(n, n), format='csr')  # 三对角稀疏
 from scipy.sparse.linalg import spsolve
 x = spsolve(L, np.ones(n))  # 求解 Lx = 1
 \end{lstlisting}
-以上代码创建了一个三对角稀疏矩阵L，主对角线为2，次对角线为-1。SciPy的稀疏矩阵支持许多操作，如矩阵乘法、求逆等。例如上述元素代码中使用\texttt{spsolve}函数来求解线性方程组$Lx = 1$，其中$1$是一个全1向量。
+以上代码创建了一个三对角稀疏矩阵L，主对角线为2，次对角线为-1。SciPy的稀疏矩阵支持许多操作，如矩阵乘法、求逆等。例如上述元素代码中使用 \texttt{spsolve} 函数来求解线性方程组$Lx = 1$，其中$1$是一个全1向量。
 
 \subsubsection{数值积分}
 
-有些时候，对于一些积分我们不是很容易求出解析解，这时候就需要数值积分了。SciPy提供了\texttt{scipy.integrate}模块来进行数值积分。
+有些时候，对于一些积分我们不是很容易求出解析解，这时候就需要数值积分了。SciPy提供了 \texttt{scipy.integrate} 模块来进行数值积分。
 \begin{lstlisting}[language=python]
 from scipy.integrate import quad
 val, abserr = quad(lambda x: np.exp(-x**2), 0, np.inf)
 print(np.sqrt(np.pi)/2 - val)  # 输出误差， ~1e-13
 \end{lstlisting}
-上述代码使用\texttt{quad}函数计算了从0到无穷大的高斯函数的积分，结果应当接近$\sqrt{\pi}/2$。\texttt{quad}函数返回两个值：积分值和绝对误差。
+上述代码使用 \texttt{quad} 函数计算了从0到无穷大的高斯函数的积分，结果应当接近$\sqrt{\pi}/2$。 \texttt{quad} 函数返回两个值：积分值和绝对误差。
 
 \subsection{两个一起，双倍开心}
 
@@ -408,14 +408,14 @@ plt.title('Simple Plot')  # 添加标题
 plt.legend()  # 添加图例
 plt.show()  # 显示图形
 \end{lstlisting}
-上述代码使用\texttt{plt.plot}函数绘制了一个简单的折线图，并添加了坐标轴标签、标题和图例。最后使用\texttt{plt.show()}函数显示图形。
+上述代码使用 \texttt{plt.plot} 函数绘制了一个简单的折线图，并添加了坐标轴标签、标题和图例。最后使用 \texttt{plt.show()} 函数显示图形。
 
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.8\textwidth]{203/Figure_1.png}
 \end{figure}
 
-除了使用简洁的\texttt{pyplot}以外，还可以使用面向对象风格的API来绘图，便于封装和复用：
+除了使用简洁的 \texttt{pyplot} 以外，还可以使用面向对象风格的API来绘图，便于封装和复用：
 
 \begin{lstlisting}
 import matplotlib.pyplot as plt
@@ -433,7 +433,7 @@ ax.set_title('Matplotlib Example')  # 添加标题
 fig.tight_layout()  # 自动调整布局
 plt.show()  # 显示图形
 \end{lstlisting}
-上述代码使用\texttt{plt.subplots}函数创建了一个图形和坐标轴对象，然后使用坐标轴对象的\texttt{plot}方法绘制曲线。这样可以更灵活地控制图形的各个部分。
+上述代码使用 \texttt{plt.subplots} 函数创建了一个图形和坐标轴对象，然后使用坐标轴对象的 \texttt{plot} 方法绘制曲线。这样可以更灵活地控制图形的各个部分。
 
 \begin{figure}[ht]
   \centering
@@ -479,7 +479,7 @@ ax.set_ylabel('Current (mA)')
 
 \subsection{子图布局}
 
-在实际应用中，我们经常需要将多个图形绘制在同一个窗口中，这就需要用到子图的概念。Matplotlib提供了\texttt{subplot}和\texttt{subplots}函数来创建子图。
+在实际应用中，我们经常需要将多个图形绘制在同一个窗口中，这就需要用到子图的概念。Matplotlib提供了 \texttt{subplot} 和 \texttt{subplots} 函数来创建子图。
 
 \begin{lstlisting}[language=python]
 import matplotlib.pyplot as plt
@@ -497,7 +497,7 @@ axs[1].set_title('Cosine Function')
 plt.tight_layout()
 plt.show()
 \end{lstlisting}
-上述代码创建了一个包含两个子图的图形窗口，分别绘制了正弦函数和余弦函数。\\使用\texttt{plt.tight\_layout()}函数可以自动调整子图之间的间距。
+上述代码创建了一个包含两个子图的图形窗口，分别绘制了正弦函数和余弦函数。\\使用 \texttt{plt.tight\_layout()} 函数可以自动调整子图之间的间距。
 
 \begin{figure}[ht]
   \centering
@@ -506,11 +506,11 @@ plt.show()
 
 \subsection{风格和导出}
 
-Matplotlib支持多种风格，可以通过\texttt{plt.style.use}函数来设置风格。例如，我们可以使用\texttt{science}和\texttt{ieee}风格来绘制图形，使得图形符合IEEE论文的格式要求：
+Matplotlib支持多种风格，可以通过 \texttt{plt.style.use} 函数来设置风格。例如，我们可以使用 \texttt{science} 和 \texttt{ieee} 风格来绘制图形，使得图形符合IEEE论文的格式要求：
 \begin{lstlisting}[language=python]
 plt.style.use(['science', 'ieee'])  # 需安装 SciencePlots
 \end{lstlisting}
-当然，如使用该风格，则默认需要LaTeX来渲染文本，而这是非常缓慢的。因此可以在该列表中添加\texttt{no-latex}选项，以禁用LaTeX渲染：
+当然，如使用该风格，则默认需要LaTeX来渲染文本，而这是非常缓慢的。因此可以在该列表中添加 \texttt{no-latex} 选项，以禁用LaTeX渲染：
 \begin{lstlisting}[language=python]
 plt.style.use(['science', 'ieee', 'no-latex'])  # 需安装 SciencePlots
 \end{lstlisting}
@@ -530,15 +530,15 @@ plt.savefig('figure.png', dpi=600, transparent=True) # PNG图
 \subsection{常见坑与提示}
 
 \begin{itemize}
-  \item 中文字体乱码：提前设置rcParams，或者使用\texttt{matplotlib.font\_manager}来设置中文字体。
+  \item 中文字体乱码：提前设置rcParams，或者使用 \texttt{matplotlib.font\_manager} 来设置中文字体。
     \begin{lstlisting}[language=python]
 import matplotlib.pyplot as plt
 plt.rcParams['font.sans-serif'] = ['SimHei']  # 设置中文字体
 plt.rcParams['axes.unicode_minus'] = False  # 解决负号显示为方块的问题
     \end{lstlisting}
-  \item 在Jupiter中不显示：使用\texttt{\%matplotlib inline}命令来确保图形在Jupyter Notebook中显示。
-  \item 颜色过多：使用\texttt{tab:}前缀来使用Matplotlib内置的颜色表，避免颜色过多导致的混乱。
-  \item 图例遮挡：使用\texttt{plt.legend(loc='best')}自动解决图例位置问题。
+  \item 在Jupiter中不显示：使用 \texttt{\%matplotlib inline} 命令来确保图形在Jupyter Notebook中显示。
+  \item 颜色过多：使用 \texttt{tab:} 前缀来使用Matplotlib内置的颜色表，避免颜色过多导致的混乱。
+  \item 图例遮挡：使用 \texttt{plt.legend(loc='best')} 自动解决图例位置问题。
 \end{itemize}
 
 除此之外，Matplotlib还有许多其他的功能，如动画、3D绘图等，这些内容同学们可以在\href{https://matplotlib.org/stable/gallery/index.html}{Matplotlib官方示例}中找到。
@@ -583,7 +583,7 @@ SymPy的基本数据类型有三个：符号、表达式、等号。符号是Sym
     nonlinsolve([x**2+y**2-1, x-y], (x, y))  # 求解非线性方程组
 \end{lstlisting}
 
-多元函数也可以使用上述方法来求导和积分，这里就不写了。需要注意的是，这里的求导数都是\textbf{偏导数}。一个非常有趣的事情是：在该库中，使用\texttt{-oo}和\texttt{oo}来表示负无穷和正无穷，而不是使用\texttt{float('inf')}。（疑似有些过于符号化了）
+多元函数也可以使用上述方法来求导和积分，这里就不写了。需要注意的是，这里的求导数都是\textbf{偏导数}。一个非常有趣的事情是：在该库中，使用 \texttt{-oo} 和 \texttt{oo} 来表示负无穷和正无穷，而不是使用 \texttt{float('inf')} 。（疑似有些过于符号化了）
 
 \subsection{矩阵和线性代数}
 SymPy还提供了矩阵和线性代数的功能，可以进行矩阵运算、求逆、求特征值等操作。SymPy的矩阵是一个二维数组，可以进行各种矩阵运算，如加法、乘法、转置等。
@@ -606,7 +606,7 @@ SymPy还提供了矩阵和线性代数的功能，可以进行矩阵运算、求
     latex(Integral(exp(-x**2), (x, 0, oo)))
 \end{lstlisting}
 
-如果需要将表达式可视化，可以使用SymPy的\texttt{plot}函数来绘制函数图像：
+如果需要将表达式可视化，可以使用SymPy的 \texttt{plot} 函数来绘制函数图像：
 \begin{lstlisting}[language=python]
     plot(sin(x)/x, (x, -10, 10))
 \end{lstlisting}
@@ -674,9 +674,9 @@ with client.chat.completions.create(
     print(response.choices[0].message.content)
 \end{lstlisting}
 
-在上述代码中，我们首先定义了一个OpenAI客户端，然后使用该客户端发送了一个聊天请求，获取了模型的回复并打印出来。使用\texttt{with}语句可以确保资源的正确释放，是良好的习惯。
+在上述代码中，我们首先定义了一个OpenAI客户端，然后使用该客户端发送了一个聊天请求，获取了模型的回复并打印出来。使用 \texttt{with} 语句可以确保资源的正确释放，是良好的习惯。
 
-于是上述库的使用就这么简单，疑似确实是傻瓜级别的。更多的功能和用法可以参考相关文档。当然，如果希望进行记忆持久化等功能，那需要其他的库来实现，例如\texttt{langchain}和\texttt{langgraph}等。
+于是上述库的使用就这么简单，疑似确实是傻瓜级别的。更多的功能和用法可以参考相关文档。当然，如果希望进行记忆持久化等功能，那需要其他的库来实现，例如 \texttt{langchain} 和 \texttt{langgraph} 等。
 
 
 \begin{thinking}
