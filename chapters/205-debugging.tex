@@ -16,7 +16,7 @@
 
 \subsection{使用调试器}\label{sec:gdb}
 
-我们在开发的过程中可以使用VS Code调试器，但是有时候我们无法获取程序源码。在这种情况下，我建议同学们使用那个最经典的调试工具——\texttt{gdb}。它是GNU项目的一部分，支持多种编程语言，包括C、C++、Fortran等。当然对于一些会读汇编的同学们而言，我觉得可以用objdump这类反汇编器来反汇编程序，并对这些汇编代码进行阅读；常见的反汇编器还有著名的IDA Pro，它是一个商业软件，价格很贵，但是功能绝对对得起它的价格：它甚至能够对反汇编出来的东西进行自动分析！
+我们在开发的过程中可以使用VS Code调试器，但是有时候我们无法获取程序源码。在这种情况下，我建议同学们使用那个最经典的调试工具—— \texttt{gdb} 。它是GNU项目的一部分，支持多种编程语言，包括C、C++、Fortran等。当然对于一些会读汇编的同学们而言，我觉得可以用objdump这类反汇编器来反汇编程序，并对这些汇编代码进行阅读；常见的反汇编器还有著名的IDA Pro，它是一个商业软件，价格很贵，但是功能绝对对得起它的价格：它甚至能够对反汇编出来的东西进行自动分析！
 \begin{lstlisting}[language=bash]
     objdump -d ./your_program > asm.s
 \end{lstlisting}
@@ -28,30 +28,30 @@
 
 在GDB中，我们可以使用以下命令来设置断点、运行程序、查看变量等：
 \begin{itemize}
-  \item \texttt{break}：设置断点，可以简写为\texttt{b}，例如\texttt{break main}在\texttt{main}函数处设置断点。也可以在特定的某一行设置断点，例如\texttt{break 42}在第42行设置断点；也可以利用偏移量来设置断点，例如\texttt{break +10}在当前行的往后继续数10行，在那里设置断点。
-  \item \texttt{run}：运行程序。可以简写为\texttt{r}。
-  \item \texttt{next}：执行下一行代码，可以简写为\texttt{n}。如果当前行是函数调用，则不会进入函数内部，而是把这个函数视为一个整体往下执行一行。该命令有一个变体\texttt{ni}，它是汇编级别的断点定位，也就是执行下一条汇编指令。
-  \item \texttt{step}：也是执行下一行代码，可以简写为\texttt{s}。如果当前行是函数调用，则会进入函数内部，逐行执行函数内部的代码。\texttt{si}是它的变体，表示汇编级别的单步执行。
-  \item \texttt{continue}：继续运行直到下一个断点，可以简写为\texttt{c}。
-  \item \texttt{print}：打印变量的值，例如\texttt{print variable}，可以简写为\texttt{p variable}。如果变量是一个结构体或类的实例，可以使用\texttt{print variable.field}来打印某个字段的值。
-  \item \texttt{backtrace}：查看函数调用栈，可以简写为\texttt{bt}。这对于定位程序崩溃时的调用路径非常有用。
-  \item \texttt{layout}：切换到图形界面模式，可以使用\texttt{layout src}来显示源代码，使用\texttt{layout asm}来显示汇编代码。
-  \item \texttt{info}：查看程序的状态，例如\texttt{info breakpoints}查看断点信息，\texttt{info registers}查看寄存器状态，\texttt{info locals}查看局部变量等。
-  \item \texttt{watch}：设置观察点，当某个变量的值发生变化时暂停执行，例如\texttt{watch variable}。这对于调试复杂的逻辑错误非常有用。
-  \item \texttt{set}：强制设置变量的值，例如\texttt{set variable = value}。这对于调试时修改变量的值非常有用。
-  \item \texttt{list}：查看源代码（带行号），可以简写为\texttt{l}。
-  \item \texttt{quit}：退出GDB。
+  \item  \texttt{break} ：设置断点，可以简写为 \texttt{b} ，例如 \texttt{break main} 在 \texttt{main} 函数处设置断点。也可以在特定的某一行设置断点，例如 \texttt{break 42} 在第42行设置断点；也可以利用偏移量来设置断点，例如 \texttt{break +10} 在当前行的往后继续数10行，在那里设置断点。
+  \item  \texttt{run} ：运行程序。可以简写为 \texttt{r} 。
+  \item  \texttt{next} ：执行下一行代码，可以简写为 \texttt{n} 。如果当前行是函数调用，则不会进入函数内部，而是把这个函数视为一个整体往下执行一行。该命令有一个变体 \texttt{ni} ，它是汇编级别的断点定位，也就是执行下一条汇编指令。
+  \item  \texttt{step} ：也是执行下一行代码，可以简写为 \texttt{s} 。如果当前行是函数调用，则会进入函数内部，逐行执行函数内部的代码。 \texttt{si} 是它的变体，表示汇编级别的单步执行。
+  \item  \texttt{continue} ：继续运行直到下一个断点，可以简写为 \texttt{c} 。
+  \item  \texttt{print} ：打印变量的值，例如 \texttt{print variable} ，可以简写为 \texttt{p variable} 。如果变量是一个结构体或类的实例，可以使用 \texttt{print variable.field} 来打印某个字段的值。
+  \item  \texttt{backtrace} ：查看函数调用栈，可以简写为 \texttt{bt} 。这对于定位程序崩溃时的调用路径非常有用。
+  \item  \texttt{layout} ：切换到图形界面模式，可以使用 \texttt{layout src} 来显示源代码，使用 \texttt{layout asm} 来显示汇编代码。
+  \item  \texttt{info} ：查看程序的状态，例如 \texttt{info breakpoints} 查看断点信息， \texttt{info registers} 查看寄存器状态， \texttt{info locals} 查看局部变量等。
+  \item  \texttt{watch} ：设置观察点，当某个变量的值发生变化时暂停执行，例如 \texttt{watch variable} 。这对于调试复杂的逻辑错误非常有用。
+  \item  \texttt{set} ：强制设置变量的值，例如 \texttt{set variable = value} 。这对于调试时修改变量的值非常有用。
+  \item  \texttt{list} ：查看源代码（带行号），可以简写为 \texttt{l} 。
+  \item  \texttt{quit} ：退出GDB。
 \end{itemize}
 
-当然，如果想要显示行号的话，我们编译代码的时候需要加上\texttt{-g}选项，例如：
+当然，如果想要显示行号的话，我们编译代码的时候需要加上 \texttt{-g} 选项，例如：
 \begin{lstlisting}[language=bash]
     gcc -g -o your_program your_program.c
 \end{lstlisting}
-也只有加上了\texttt{-g}选项，GDB才能够显示源代码和行号，\texttt{s}和\texttt{n}命令才能够逐行执行源代码，但是\texttt{si}和\texttt{ni}命令仍然能够正常执行。
+也只有加上了 \texttt{-g} 选项，GDB才能够显示源代码和行号， \texttt{s} 和 \texttt{n} 命令才能够逐行执行源代码，但是 \texttt{si} 和 \texttt{ni} 命令仍然能够正常执行。
 
 以上命令其实很复杂，需要同学们多加练习才能熟练掌握。这里我推荐一个GDB的小练习：CMU ICS Lab2：BombLab。这个练习的目的是让同学们通过GDB来调试一个被加密的程序，找到正确的输入来“拆弹”。这个练习非常有趣，而且可以帮助同学们熟悉GDB的使用。
 
-当然，GDB的TUI界面还是太老了，我推荐装个插件\texttt{pwndbg}，它可以让GDB的TUI现代化得多。
+当然，GDB的TUI界面还是太老了，我推荐装个插件 \texttt{pwndbg} ，它可以让GDB的TUI现代化得多。
 
 \subsection{尸检}
 
@@ -61,11 +61,11 @@
 
 段错误可以使用core dump来分析。core dump是程序崩溃时操作系统生成的一个文件，包含了程序的内存状态和寄存器状态等信息。我们可以使用GDB来分析core dump文件。
 
-\texttt{ulimit -c unlimited}命令可以设置core dump文件的大小限制为无限制。然后运行崩溃的程序，等着程序再崩溃一次。然后运行：\texttt{gdb ./your\_program core}。这会加载core dump文件，并且可以使用\texttt{bt}命令查看函数调用栈，使用\texttt{info locals}查看局部变量等。
+ \texttt{ulimit -c unlimited} 命令可以设置core dump文件的大小限制为无限制。然后运行崩溃的程序，等着程序再崩溃一次。然后运行： \texttt{gdb ./your\_program core} 。这会加载core dump文件，并且可以使用 \texttt{bt} 命令查看函数调用栈，使用 \texttt{info locals} 查看局部变量等。
 
 \subsubsection{内存泄漏}
 
-内存泄漏可以使用Valgrind来分析。Valgrind是一个开源的内存调试工具，可以检测内存泄漏、未初始化内存读取等问题。使用Valgrind非常简单，只需要在运行程序时加上\texttt{valgrind}命令即可，例如：
+内存泄漏可以使用Valgrind来分析。Valgrind是一个开源的内存调试工具，可以检测内存泄漏、未初始化内存读取等问题。使用Valgrind非常简单，只需要在运行程序时加上 \texttt{valgrind} 命令即可，例如：
 \begin{lstlisting}[language=bash]
     valgrind --leak-check=full ./your_program
 \end{lstlisting}
@@ -78,7 +78,7 @@ Valgrind跑完以后别急着关，如果是开源项目或者协作项目，把
 
 越界和未定义行为可以使用ASan和UBSan来分析。ASan（AddressSanitizer）是一个内存错误检测工具，可以检测越界访问、使用后释放等问题。UBSan（UndefinedBehaviorSanitizer）是一个未定义行为检测工具，可以检测整数溢出、空指针解引用等问题。
 
-我们在编译文件的时候，可以加上\texttt{-fsanitize=address}和\texttt{-fsanitize=undefined}选项来启用ASan和UBSan。
+我们在编译文件的时候，可以加上 \texttt{-fsanitize=address} 和 \texttt{-fsanitize=undefined} 选项来启用ASan和UBSan。
 
 \section{再治病}
 
@@ -86,7 +86,7 @@ Valgrind跑完以后别急着关，如果是开源项目或者协作项目，把
 
 \subsection{CPU占用过高}
 
-这种情况可以使用perf来分析问题，由Linux内核提供。只需要在运行程序时加上\texttt{perf}命令即可，例如：
+这种情况可以使用perf来分析问题，由Linux内核提供。只需要在运行程序时加上 \texttt{perf} 命令即可，例如：
 \begin{lstlisting}[language=bash]
     perf record -g -o perf.data ./your_program && perf report -i perf.data
 \end{lstlisting}
@@ -98,7 +98,7 @@ Valgrind跑完以后别急着关，如果是开源项目或者协作项目，把
     valgrind --tool=massif --massif-out-file=ms.out ./your_program
 \end{lstlisting}
 
-运行完毕后，可以使用\texttt{ms\_print}命令来查看内存使用情况，例如：
+运行完毕后，可以使用 \texttt{ms\_print} 命令来查看内存使用情况，例如：
 \begin{lstlisting}[language=bash]
     ms_print massif.out.<pid>
 \end{lstlisting}
@@ -111,7 +111,7 @@ IO卡死通常是因为程序在等待某个IO操作完成，例如网络请求�
 \end{lstlisting}
 然后盯着它看，找谁疯狂IO就可以了。
 
-当然，对于Node.js和Python服务，可以使用\texttt{--inspect}模式；然后打开Chrome浏览器，输入\texttt{chrome://inspect}，火焰图和前端一样香。
+当然，对于Node.js和Python服务，可以使用 \texttt{--inspect} 模式；然后打开Chrome浏览器，输入 \texttt{chrome://inspect} ，火焰图和前端一样香。
 
 \section{再调养}
 
@@ -121,7 +121,7 @@ IO卡死通常是因为程序在等待某个IO操作完成，例如网络请求�
 
 \subsection{轻量级隔离：tmux和screen}\label{sec:tmux}
 
-tmux和screen是两个常用的终端复用工具，可以在一个终端中创建多个会话，方便我们进行隔离测试。使用方法非常简单，只需要在终端中输入\texttt{tmux}或\texttt{screen}即可进入一个新的会话。
+tmux和screen是两个常用的终端复用工具，可以在一个终端中创建多个会话，方便我们进行隔离测试。使用方法非常简单，只需要在终端中输入 \texttt{tmux} 或 \texttt{screen} 即可进入一个新的会话。
 
 在tmux中，我们可以使用以下命令来创建新的窗口、分割窗口等：
 \begin{lstlisting}
@@ -155,49 +155,49 @@ docker有四个比较重要的概念需要了解：
 \begin{lstlisting}[language=bash]
     docker run -it --rm --name <your-container> -v $(pwd):/app -w /app python:3.9 bash
 \end{lstlisting}
-以上代码的含义是创建一个Python 3.9的Docker容器，并将当前目录挂载到容器的/app目录下，然后进入容器的bash终端，其名称为\texttt{<your-container>}。这样，我们就可以在隔离的环境中进行测试了。上述命令中：
+以上代码的含义是创建一个Python 3.9的Docker容器，并将当前目录挂载到容器的/app目录下，然后进入容器的bash终端，其名称为 \texttt{<your-container>} 。这样，我们就可以在隔离的环境中进行测试了。上述命令中：
 \begin{itemize}
-    \item \texttt{-i}表示交互式终端，该参数会保持标准输入流打开，否则cat等交互命令无法使用；
-    \item \texttt{-t}表示分配一个伪终端，这样我们就可以在容器中使用终端命令了；
-    \item \texttt{--rm}表示容器退出后自动删除（但不会删除挂载在外面的文件）；
-    \item \texttt{--name <your-container>}表示容器的名称，可以自定义；
-    \item \texttt{-v \$(pwd):/app}表示将当前目录挂载到容器的/app目录下，在Windows Powershell中需要使用\texttt{-v \${PWD}:/app}；
-    \item \texttt{-w /app}表示设置容器的工作目录为/app，实际上是设置容器内的\texttt{PWD}环境变量为/app；若目录不存在会报错。
-    \item \texttt{python:3.9}表示使用Python 3.9的官方镜像作为基础镜像，不写默认最新版，\textbf{生产环境必须显式指明版本}；
-    \item \texttt{bash}表示进入容器后执行的命令，这里是进入bash终端。
+    \item  \texttt{-i} 表示交互式终端，该参数会保持标准输入流打开，否则cat等交互命令无法使用；
+    \item  \texttt{-t} 表示分配一个伪终端，这样我们就可以在容器中使用终端命令了；
+    \item  \texttt{--rm} 表示容器退出后自动删除（但不会删除挂载在外面的文件）；
+    \item  \texttt{--name <your-container>} 表示容器的名称，可以自定义；
+    \item  \texttt{-v \$(pwd):/app} 表示将当前目录挂载到容器的/app目录下，在Windows Powershell中需要使用 \texttt{-v \${PWD} :/app}；
+    \item  \texttt{-w /app} 表示设置容器的工作目录为/app，实际上是设置容器内的 \texttt{PWD} 环境变量为/app；若目录不存在会报错。
+    \item  \texttt{python:3.9} 表示使用Python 3.9的官方镜像作为基础镜像，不写默认最新版，\textbf{生产环境必须显式指明版本}；
+    \item  \texttt{bash} 表示进入容器后执行的命令，这里是进入bash终端。
 \end{itemize}
-当然，上述命令还是太长了，我们往往写成一个脚本来执行，或者利用\texttt{alias}命令等来充分简化命令。
+当然，上述命令还是太长了，我们往往写成一个脚本来执行，或者利用 \texttt{alias} 命令等来充分简化命令。
 
-上述命令中我们创建了一个临时容器，容器退出后会自动删除，适用于临时调试使用。如果我们想要创建一个持久化的容器，可以去掉\texttt{--rm}参数，适宜长期服务或长期调试使用。
+上述命令中我们创建了一个临时容器，容器退出后会自动删除，适用于临时调试使用。如果我们想要创建一个持久化的容器，可以去掉 \texttt{--rm} 参数，适宜长期服务或长期调试使用。
 
 \subsubsection{增删改查、启动停止、进入退出}
 
-在上述命令创建容器后，会直接进入容器的bash终端。希望从容器中离开，可以使用\texttt{Ctrl + P + Q}组合键，这样可以让容器继续在后台运行。如果直接使用\texttt{exit}命令或者\texttt{Ctrl + D}组合键退出容器，则会停止容器的运行。如果在容器中输入\texttt{Ctrl + C}，则会中断当前运行的命令，并向容器发送SIGINT信号，\textbf{可能}导致容器停止运行，这实际上取决于PID1进程对SIGINT信号的处理方式。
+在上述命令创建容器后，会直接进入容器的bash终端。希望从容器中离开，可以使用 \texttt{Ctrl + P + Q} 组合键，这样可以让容器继续在后台运行。如果直接使用 \texttt{exit} 命令或者 \texttt{Ctrl + D} 组合键退出容器，则会停止容器的运行。如果在容器中输入 \texttt{Ctrl + C} ，则会中断当前运行的命令，并向容器发送SIGINT信号，\textbf{可能}导致容器停止运行，这实际上取决于PID1进程对SIGINT信号的处理方式。
 
-如想重新进入容器，可以使用\texttt{docker attach <your-container>}命令，但只能进入正在运行的容器。也可以使用\texttt{docker exec <your-container> <command>}命令来在容器中执行命令（这也是我们更推荐的方式，而不是每次都attach），例如：
+如想重新进入容器，可以使用 \texttt{docker attach <your-container>} 命令，但只能进入正在运行的容器。也可以使用 \texttt{docker exec <your-container> <command>} 命令来在容器中执行命令（这也是我们更推荐的方式，而不是每次都attach），例如：
 \begin{lstlisting}[language=bash]
     docker exec -it <your-container> bash
 \end{lstlisting}
 上述命令会在容器中启动一个新的bash终端。
 
-在容器外，我们可以用\texttt{docker ps}命令来查看正在运行的容器，如果在上述命令末尾加上\texttt{-a}参数，则可以查看所有容器，包括未运行的容器。
+在容器外，我们可以用 \texttt{docker ps} 命令来查看正在运行的容器，如果在上述命令末尾加上 \texttt{-a} 参数，则可以查看所有容器，包括未运行的容器。
 
-可以利用\texttt{docker start}命令来启动一个已经存在的容器，例如：
+可以利用 \texttt{docker start} 命令来启动一个已经存在的容器，例如：
 \begin{lstlisting}[language=bash]
     docker start -i <your-container>
 \end{lstlisting}
-上述命令中的\texttt{-i}参数表示进入容器的交互式终端。
+上述命令中的 \texttt{-i} 参数表示进入容器的交互式终端。
 
 这个start还可以替代为：
 \begin{itemize}
-    \item \texttt{docker restart <your-container>}：重启容器；
-    \item \texttt{docker stop <your-container>}：停止容器（发送SIGTERM信号，优雅关闭进程，10秒后若进程仍未退出则发送SIGKILL信号强制关闭进程）；
-    \item \texttt{docker kill <your-container>}：强制终止容器（发送SIGKILL信号，强制关闭进程）；
-    \item \texttt{docker pause <your-container>}：暂停容器（冻结cgroup，阻止进程调度）；
-    \item \texttt{docker unpause <your-container>}：恢复容器。
+    \item  \texttt{docker restart <your-container>} ：重启容器；
+    \item  \texttt{docker stop <your-container>} ：停止容器（发送SIGTERM信号，优雅关闭进程，10秒后若进程仍未退出则发送SIGKILL信号强制关闭进程）；
+    \item  \texttt{docker kill <your-container>} ：强制终止容器（发送SIGKILL信号，强制关闭进程）；
+    \item  \texttt{docker pause <your-container>} ：暂停容器（冻结cgroup，阻止进程调度）；
+    \item  \texttt{docker unpause <your-container>} ：恢复容器。
 \end{itemize}
 
-如果确实不想要这个容器了，可以使用\texttt{docker rm <your-container>}命令来删除容器。也可以用\texttt{docker container prune}命令来删除所有未运行的容器。
+如果确实不想要这个容器了，可以使用 \texttt{docker rm <your-container>} 命令来删除容器。也可以用 \texttt{docker container prune} 命令来删除所有未运行的容器。
 
 \subsection{端口映射}
 
@@ -207,8 +207,8 @@ docker有四个比较重要的概念需要了解：
 \end{lstlisting}
 上述命令是做了一个端口映射，我们可以在本地的8000端口访问容器中的8000端口。解释其参数：
 \begin{itemize}
-    \item \texttt{-p 8000:8000}表示将本地的8000端口映射到容器的8000端口。前面的8000是本地端口，后面的8000是容器端口。这两个顺序\textbf{不可逆}，因为实际操作中映射的端口可能并不相同，例如\texttt{-p 8080:80}表示将本地的8080端口映射到容器的80端口，写反了不会报错但会导致无法访问。该操作默认使用TCP协议，也可以指定使用UDP协议，例如\texttt{-p 8000:8000/udp}。
-    \item 如需一次性映射多个端口，可以多次使用\texttt{-p}参数，例如\texttt{-p 8000:8000 -p 9000:9000}。
+    \item  \texttt{-p 8000:8000} 表示将本地的8000端口映射到容器的8000端口。前面的8000是本地端口，后面的8000是容器端口。这两个顺序\textbf{不可逆}，因为实际操作中映射的端口可能并不相同，例如 \texttt{-p 8080:80} 表示将本地的8080端口映射到容器的80端口，写反了不会报错但会导致无法访问。该操作默认使用TCP协议，也可以指定使用UDP协议，例如 \texttt{-p 8000:8000/udp} 。
+    \item 如需一次性映射多个端口，可以多次使用 \texttt{-p} 参数，例如 \texttt{-p 8000:8000 -p 9000:9000} 。
 \end{itemize}
 
 容器间的通信建议自己建立一个bridge网络而不是走默认bridge网络，具体可以参考Docker官方文档。
@@ -230,7 +230,7 @@ class TestMyFunction(unittest.TestCase):
 if __name__ == '__main__':
     unittest.main()
 \end{lstlisting}
-在这个示例中，我们定义了一个测试类\texttt{TestMyFunction}，它继承自\texttt{unittest.TestCase}。我们在这个类中定义了两个测试用例，分别测试了\texttt{my\_function}函数的正确性和异常处理。最后，我们使用\texttt{unittest.main()}来运行所有的测试用例。这是一个非常简单的单元测试示例，实际的单元测试可能会更加复杂，要涉及几乎所有的代码逻辑。因此测试工程师这个职业也不是什么轻松的工作。
+在这个示例中，我们定义了一个测试类 \texttt{TestMyFunction} ，它继承自 \texttt{unittest.TestCase} 。我们在这个类中定义了两个测试用例，分别测试了 \texttt{my\_function} 函数的正确性和异常处理。最后，我们使用 \texttt{unittest.main()} 来运行所有的测试用例。这是一个非常简单的单元测试示例，实际的单元测试可能会更加复杂，要涉及几乎所有的代码逻辑。因此测试工程师这个职业也不是什么轻松的工作。
 
 在编写测试用例的时候，除了涉及到大多数的常规数据以外，也要尽可能地考虑一些特殊值（例如边界情况等），也需要故意混入一些显然错误的数据来测试程序的健壮性和异常处理能力。
 
@@ -256,7 +256,7 @@ def test_my_function_parametrized(a, b, expected):
     assert my_function(a, b) == expected
 \end{lstlisting}
 
-对于服务类项目，我们的测试代码可以是自动调用这个服务来做一些事情，看看能不能产生符合预期的结果。比如说，我们可以使用\texttt{requests}库来发送HTTP请求，验证服务的响应是否正确。
+对于服务类项目，我们的测试代码可以是自动调用这个服务来做一些事情，看看能不能产生符合预期的结果。比如说，我们可以使用 \texttt{requests} 库来发送HTTP请求，验证服务的响应是否正确。
 
 \section{买保险}
 
@@ -314,7 +314,7 @@ jobs:
             scp -r . user@server:/path/to/deploy
             ssh user@server 'cd /path/to/deploy && ./deploy.sh'
 \end{lstlisting}
-在这个示例中，我们定义了一个名为\texttt{Deploy}的工作流，当代码推送到\texttt{main}分支时触发。工作流包含了几个步骤：检出代码、设置Python环境、安装依赖、运行测试和部署到服务器。当然，具体的部署步骤需要根据项目的实际情况进行调整。
+在这个示例中，我们定义了一个名为 \texttt{Deploy} 的工作流，当代码推送到 \texttt{main} 分支时触发。工作流包含了几个步骤：检出代码、设置Python环境、安装依赖、运行测试和部署到服务器。当然，具体的部署步骤需要根据项目的实际情况进行调整。
 
 除了自动部署以外，CI/CD工具还可以帮助我们进行代码质量检查、性能测试等工作。我们可以在工作流中添加相应的步骤来实现这些功能。
 
@@ -322,9 +322,9 @@ jobs:
 
 有时候，部署完成后我们会发现代码出现了问题，导致服务无法正常运行。这时候，我们需要进行回滚操作，将代码恢复到之前的稳定版本。
 
-最简单的回滚方式是使用Git的版本控制功能。我们可以使用\texttt{git revert}命令来撤销最近的提交，或者使用\texttt{git checkout}命令来切换到之前的某个版本。
+最简单的回滚方式是使用Git的版本控制功能。我们可以使用 \texttt{git revert} 命令来撤销最近的提交，或者使用 \texttt{git checkout} 命令来切换到之前的某个版本。
 
-有些时候部署的代码并不是直接从Git仓库中拉取的，而是经过打包、编译等步骤生成的二进制文件或者Docker镜像等。这时候，我们需要使用相应的工具来进行回滚操作。例如，如果我们使用Docker来部署服务，我们可以使用\texttt{docker rollback}命令来回滚到之前的镜像版本，也就是：
+有些时候部署的代码并不是直接从Git仓库中拉取的，而是经过打包、编译等步骤生成的二进制文件或者Docker镜像等。这时候，我们需要使用相应的工具来进行回滚操作。例如，如果我们使用Docker来部署服务，我们可以使用 \texttt{docker rollback} 命令来回滚到之前的镜像版本，也就是：
 \begin{lstlisting}[language=bash]
     docker service update --image your_image:previous_version your_service
 \end{lstlisting}

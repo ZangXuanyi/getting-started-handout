@@ -51,9 +51,9 @@ IDE（集成开发环境，Integrated Development Environment）是一种软件�
 但是它们的缺点非常明显：Visual Studio（一般简称VS）和PyCharm都非常臃肿，尤其是前者如果安装全家桶需要大量的磁盘空间和内存资源。同时，它们更注重于超大型项目的开发，这一“超大”往往动辄涉及数十万甚至上百万行代码，我们日常学习使用的代码量远远达不到这个级别，只能说是“杀鸡焉用牛刀”。VS的另一个缺点是它实际上专精于Windows平台和微软的.NET生态系统，虽然它也支持C++和Python等语言，但很笨重。至于DevC++，它的功能少得可怜且只支持C/C++。虽然比较适合初学者，但扩展性极差，完全无法满足更复杂的开发需求。换句话说，所有的IDE都有一个共同的缺点：它们往往过于臃肿，且不够灵活。因此，我并不推荐初学阶段就使用这些IDE。从长远来看，使用更加通用的编辑器会更有利于你在编程世界中游刃有余。
 
 \begin{note}
-  Visual Studio 把一个工作目录视为一个“项目”，当用户使用编译功能时会把整个项目编译一遍。而在同一个项目中，不能同时存在多个同名的变量和函数，因此即使我们在VS中新建了不同的C++文件且他们在逻辑上并无任何关联，但是VS依然会把它们视为同一个项目的一部分，从而导致命名冲突的问题。对于初学者来说，这无疑是一个巨大的坑，往往表现为“我这个\texttt{main}函数怎么出现了重定义的错误？”。
+  Visual Studio 把一个工作目录视为一个“项目”，当用户使用编译功能时会把整个项目编译一遍。而在同一个项目中，不能同时存在多个同名的变量和函数，因此即使我们在VS中新建了不同的C++文件且他们在逻辑上并无任何关联，但是VS依然会把它们视为同一个项目的一部分，从而导致命名冲突的问题。对于初学者来说，这无疑是一个巨大的坑，往往表现为“我这个 \texttt{main} 函数怎么出现了重定义的错误？”。
 
-  另外，VS出于安全性考量，禁用了C系的一部分函数，例如\texttt{printf}。当我们试图对这些函数进行调用时，VS会报错并提示我们使用更安全的版本，例如\texttt{printf\_s}。这无疑给初学者带来了不必要的困扰。当然这个困扰并非不能解决，只需要在文件开头定义宏\texttt{\#define \_CRT\_SECURE\_NO\_WARNINGS}即可，但这无疑增加了学习的难度。另外，\texttt{printf\_s}等并不是标准函数，这会导致代码的可移植性变差。
+  另外，VS出于安全性考量，禁用了C系的一部分函数，例如 \texttt{printf} 。当我们试图对这些函数进行调用时，VS会报错并提示我们使用更安全的版本，例如 \texttt{printf\_s} 。这无疑给初学者带来了不必要的困扰。当然这个困扰并非不能解决，只需要在文件开头定义宏 \texttt{\#define \_CRT\_SECURE\_NO\_WARNINGS} 即可，但这无疑增加了学习的难度。另外， \texttt{printf\_s} 等并不是标准函数，这会导致代码的可移植性变差。
 
   综上所述，我非常建议新手远离VS，即使是简陋的DevC++也比VS强。每一年都会有大量的同学因为使用VS而陷入困境，浪费了大量的时间和精力。
 \end{note}
@@ -63,7 +63,7 @@ IDE（集成开发环境，Integrated Development Environment）是一种软件�
 最Geek的一批程序员最喜欢使用命令行编辑器，例如VIM、Emacs、NeoVim等。这些编辑器通常具有强大的功能和高度的可定制性，适合喜欢命令行操作和自定义配置的用户。但是这些编辑器的使用难度极高，学习曲线陡峭，对于初学者来说极不友好。技术人中有一个非常著名的笑话：“怎么生成一段随机的字符串？答：只需要让不会用VIM的人试着退出VIM就可以了！”
 
 \begin{tip}
-  退出VIM的命令是\texttt{:q}，如果你在编辑器中输入了内容并且想要保存，可以使用\texttt{:wq}命令；如果你不想保存，可以使用\texttt{:q!}命令强制退出。纵然如此，我个人还是建议同学们学着使用一下vim这个经典TUI编辑器，这是因为在将来的开发中，我们或多或少都会面对一些情况：不得不从远端登录某机器，且这个机器甚至还不能安装一些诸如nano的更现代的编辑器！
+  退出VIM的命令是 \texttt{:q} ，如果你在编辑器中输入了内容并且想要保存，可以使用 \texttt{:wq} 命令；如果你不想保存，可以使用 \texttt{:q!} 命令强制退出。纵然如此，我个人还是建议同学们学着使用一下vim这个经典TUI编辑器，这是因为在将来的开发中，我们或多或少都会面对一些情况：不得不从远端登录某机器，且这个机器甚至还不能安装一些诸如nano的更现代的编辑器！
 \end{tip}
 
 笔者个人非常推荐Visual Studio Code（简称VS Code或者Code），它是一款轻量级的编辑器，具有良好的扩展性和社区支持，可以满足不同用户的需求。VS Code支持多种编程语言，并且有丰富的插件生态系统，可以根据需要安装各种插件来增强功能。它同时也为调试和版本控制功能添加了GUI，非常适合初学者和中小型项目开发者使用。
@@ -86,7 +86,7 @@ IDE（集成开发环境，Integrated Development Environment）是一种软件�
 
 我们应该上官网下载安装包进行安装。我们需要安装的是System Installer版本，而不是User Installer版本。因为User Installer版本会将VS Code安装在用户目录下，而System Installer版本会将VS Code安装在系统目录下，这样可以方便地在所有用户之间共享VS Code，并且能够把它直接放在环境变量中。
 
-在安装之前，我们应当确定自己计算机的CPU架构是x86-64还是arm64。在Windows系统下，我们可以使用\texttt{systeminfo}指令来查看系统信息，或者右键点击“此电脑”选择“属性”来查看系统类型。在官网上下载的Code架构应当和操作系统的架构一致。
+在安装之前，我们应当确定自己计算机的CPU架构是x86-64还是arm64。在Windows系统下，我们可以使用 \texttt{systeminfo} 指令来查看系统信息，或者右键点击“此电脑”选择“属性”来查看系统类型。在官网上下载的Code架构应当和操作系统的架构一致。
 
 安装完成后，我们需要设置环境变量，以便在命令行中直接使用code命令。不过如果你在安装时选择了“Add to PATH”选项，则不需要手动设置环境变量。
 
@@ -113,20 +113,34 @@ VS Code的不少有用的设置项都隐藏在设置菜单中且默认关闭，�
 
 对于Python等语言，其变量类型是动态的，因此我们在编写代码时（尤其是有许多包的时候），往往很难确定某个变量的类型是什么。VS Code提供了内联提示功能，可以在代码中直接显示变量的类型信息，帮助我们更好地理解代码。
 
-启用方式：在设置界面搜索\texttt{inlay Hints}，然后往下翻，找到你喜欢的语言对应的内联提示选项并启用它们即可。
+启用方式：在设置界面搜索 \texttt{inlay Hints} ，然后往下翻，找到你喜欢的语言对应的内联提示选项并启用它们即可。
 
 \subsubsection{随系统主题切换颜色}
 
 有时候，我们的系统主题会根据时间自动切换深色和浅色模式。如果VS Code的主题不能随系统主题切换，则会显得格格不入，手动调整也很麻烦。VS Code提供了一个选项，可以让主题随系统主题自动切换。
 
-启用方式：在设置界面搜索\texttt{color theme}，找到这一项：\texttt{window.autoDetectColorScheme}，然后启用它即可。同时，你还需要在上面指定\texttt{workbench.preferredDarkColorTheme}等四个选项，来指定深色和浅色主题以及对应的高对比度主题。
+启用方式：在设置界面搜索 \texttt{color theme} ，找到这一项： \texttt{window.autoDetectColorScheme} ，然后启用它即可。同时，你还需要在上面指定 \texttt{workbench.preferredDarkColorTheme} 等四个选项，来指定深色和浅色主题以及对应的高对比度主题。
 
 我个人推荐GitHub系和Ayu系的主题。当然也可以使用“现代深色”，这是VS Code的默认主题，美观大方，但有点太黑，对应的“现代浅色”配色又不如GitHub Light好看。喜欢纯黑色的可以使用Absolute Black主题。
+
+\subsubsection{搜索、替换和正则替换}
+
+VS Code的搜索和替换功能支持正则表达式，可以帮助我们更高效地进行文本处理。
+
+首先，搜索和替换功能可以在左边的搜索按钮找到，这个搜索是针对整个工作区的搜索。或者也可以使用快捷键 \texttt{Ctrl + F} 或 \texttt{Ctrl + H} 来打开搜索和替换面板，该面板仅会搜索当前打开的文件。
+
+在搜索和替换面板中，有一个小的正则表达式图标（类似于 \texttt{.*} ），点击它可以启用正则表达式模式。启用后，我们就可以使用正则表达式来进行搜索和替换了。在该正则表达式中，我们可以用括号来捕获分组，然后在替换文本中使用 \texttt{\$1} 、 \texttt{\$2} 等来引用这些分组。
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.8\textwidth]{103/regex.png}
+  \caption{VS Code中的正则替换实例}
+\end{figure}
 
 \section{在纯Windows上搭建C/C++编程环境}\label{sec:c-install-on-windows}
 
 \begin{note}
-  下文经常提到的一个东西“环境变量”是操作系统的重要变量\texttt{PATH}。该变量存储了一系列路径，当用户在命令行中输入一个命令时，操作系统会在这些路径中查找对应的可执行文件。如果找到了，就会运行该文件，否则会提示“命令未找到”之类的错误。因此，在安装编译器、解释器等工具时，通常需要将它们的安装路径添加到\texttt{PATH}变量中，以便在任何位置都能使用这些工具。否则，每次输入命令时都要指定完整路径，极其不便。
+  下文经常提到的一个东西“环境变量”是操作系统的重要变量 \texttt{PATH} 。该变量存储了一系列路径，当用户在命令行中输入一个命令时，操作系统会在这些路径中查找对应的可执行文件。如果找到了，就会运行该文件，否则会提示“命令未找到”之类的错误。因此，在安装编译器、解释器等工具时，通常需要将它们的安装路径添加到 \texttt{PATH} 变量中，以便在任何位置都能使用这些工具。否则，每次输入命令时都要指定完整路径，极其不便。
 \end{note}
 
 \subsection{C系编译器及其环境配置}\label{sec:c-install}
@@ -151,10 +165,10 @@ pacman -S mingw-w64-ucrt-x86_64-gdb
 一般情况下，用户需要将MSYS2的bin目录添加到系统的PATH环境变量中。具体步骤如下：
 
 \begin{itemize}
-  \item 找到MSYS2的安装目录，通常是\texttt{C:\textbackslash msys64}。
-  \item 将\texttt{C:\textbackslash msys64\textbackslash ucrt64\textbackslash bin}添加到系统的PATH环境变量中。（请按照你的实际安装路径进行调整，下同）
-  \item 在PowerShell或者CMD中运行以下命令来验证是否配置成功：\texttt{gcc --version}。如果输出了GCC的版本信息，则说明配置成功。
-  \item 需要在Windows的PowerShell或者CMD中运行POSIX风格工具时，也可以将下列路径也添加到用户的PATH环境变量中：\texttt{C:\textbackslash msys64\textbackslash usr\textbackslash bin}。但这样具有环境冲突风险，需要注意保证该变量的查找顺序在比ucrt64的bin目录更靠后，以避免冲突。
+  \item 找到MSYS2的安装目录，通常是 \texttt{C:\textbackslash msys64} 。
+  \item 将 \texttt{C:\textbackslash msys64\textbackslash ucrt64\textbackslash bin} 添加到系统的PATH环境变量中。（请按照你的实际安装路径进行调整，下同）
+  \item 在PowerShell或者CMD中运行以下命令来验证是否配置成功： \texttt{gcc --version} 。如果输出了GCC的版本信息，则说明配置成功。
+  \item 需要在Windows的PowerShell或者CMD中运行POSIX风格工具时，也可以将下列路径也添加到用户的PATH环境变量中： \texttt{C:\textbackslash msys64\textbackslash usr\textbackslash bin} 。但这样具有环境冲突风险，需要注意保证该变量的查找顺序在比ucrt64的bin目录更靠后，以避免冲突。
 \end{itemize}
 
 \begin{caution}
@@ -172,7 +186,7 @@ pacman -S mingw-w64-ucrt-x86_64-gdb
 \begin{lstlisting}[language=bash]
 sudo pacman -S gcc gdb
 \end{lstlisting}
-  即可安装GCC和GDB。其他的发行版则使用对应的包管理器安装即可，例如Debian/Ubuntu使用\texttt{apt}，Fedora使用\texttt{dnf}等。
+  即可安装GCC和GDB。其他的发行版则使用对应的包管理器安装即可，例如Debian/Ubuntu使用 \texttt{apt} ，Fedora使用 \texttt{dnf} 等。
 
   macOS也是类UNIX系统，因此使用HomeBrew安装GCC也是非常简单的：
 \begin{lstlisting}[language=bash]
@@ -186,13 +200,13 @@ brew install gcc gdb
 
 \begin{enumerate}
   \item 安装C/C++插件：在VS Code的插件市场中搜索并安装C/C++插件。建议直接安装微软提供的全家桶。
-  \item 配置tasks.json文件：在VS Code中创建一个C++文件\texttt{*.cpp}或者\texttt{*.cc}，然后随便输入一些什么代码，然后编译之。首次编译C++代码时，VS Code会提示你创建一个\texttt{tasks.json}文件。选择“C/C++: g++.exe 生成活动文件”，这将会在项目根目录下创建一个\texttt{.vscode/tasks.json}文件。（如果你创建的是C文件\texttt{*.c}，那么你可以选择“C/C++: gcc.exe 生成活动文件”）
-  \item 配置launch.json文件：在VS Code中按下\texttt{F5}，选择“C++ (GDB/LLDB)”，然后选择“g++.exe build and debug active file”。这将会在项目根目录下创建一个\texttt{launch.json}文件。（如果没有后一步，可以忽略之。）
+  \item 配置tasks.json文件：在VS Code中创建一个C++文件 \texttt{*.cpp} 或者 \texttt{*.cc} ，然后随便输入一些什么代码，然后编译之。首次编译C++代码时，VS Code会提示你创建一个 \texttt{tasks.json} 文件。选择“C/C++: g++.exe 生成活动文件”，这将会在项目根目录下创建一个 \texttt{.vscode/tasks.json} 文件。（如果你创建的是C文件 \texttt{*.c} ，那么你可以选择“C/C++: gcc.exe 生成活动文件”）
+  \item 配置launch.json文件：在VS Code中按下 \texttt{F5} ，选择“C++ (GDB/LLDB)”，然后选择“g++.exe build and debug active file”。这将会在项目根目录下创建一个 \texttt{launch.json} 文件。（如果没有后一步，可以忽略之。）
 \end{enumerate}
 
-如果你并不信任自动生成的配置文件或者需要更多的功能（例如开\texttt{-O2}优化），可以手动创建并修改\texttt{tasks.json}和\texttt{launch.json}文件。这两个文件都应该放在项目根目录下的\texttt{.vscode}文件夹中。
+如果你并不信任自动生成的配置文件或者需要更多的功能（例如开 \texttt{-O2} 优化），可以手动创建并修改 \texttt{tasks.json} 和 \texttt{launch.json} 文件。这两个文件都应该放在项目根目录下的 \texttt{.vscode} 文件夹中。
 
-以下是一个简单的\texttt{tasks.json}文件示例（其实就是上面自动生成的那个，按照笔者的计算机环境稍微改了改）：
+以下是一个简单的 \texttt{tasks.json} 文件示例（其实就是上面自动生成的那个，按照笔者的计算机环境稍微改了改）：
 
 \begin{lstlisting}
 {
@@ -220,7 +234,7 @@ brew install gcc gdb
 }
 \end{lstlisting}
 
-以下是一个简单的\texttt{launch.json}文件示例：
+以下是一个简单的 \texttt{launch.json} 文件示例：
 
 \begin{lstlisting}
 {
@@ -253,13 +267,13 @@ brew install gcc gdb
 
 如不想用JSON文件进行配置，我们还可以使用UI配置相关功能。
 
-在Code中按下\texttt{Ctrl + Shift + P}，找到“C/C++: Edit Configurations (UI)”选项。这样就可以通过图形界面来配置C/C++的编译和调试选项。
+在Code中按下 \texttt{Ctrl + Shift + P} ，找到“C/C++: Edit Configurations (UI)”选项。这样就可以通过图形界面来配置C/C++的编译和调试选项。
 
 一般地，我们需要更改以下内容：
 \begin{itemize}
   \item 配置名称：默认即可。
   \item 编译器路径：选择你要选用的编译器的路径。该选项一般会自动检测电脑上的编译器。
-  \item 编译器参数：留空即可。如需要，可以添加一个\texttt{-O2}或者\texttt{-O3}来开启编译优化，或者添加一个\texttt{-g}来开启调试信息。但是，\texttt{-g}会严重拖慢编译速度，因此建议只在调试时开启。
+  \item 编译器参数：留空即可。如需要，可以添加一个 \texttt{-O2} 或者 \texttt{-O3} 来开启编译优化，或者添加一个 \texttt{-g} 来开启调试信息。但是， \texttt{-g} 会严重拖慢编译速度，因此建议只在调试时开启。
   \item IntelliSense模式：根据你的系统、编译器、CPU架构选择对应的模式。该选项会为你打开对应的代码补全、语法高亮、错误警示功能。
   \item 包含路径：不用动。
   \item 定义：不用动。
@@ -267,17 +281,17 @@ brew install gcc gdb
   \item 高级：一个都不用动。
 \end{itemize}
 
-调试配置没有UI配置选项，我们还得老老实实地手动编辑\texttt{launch.json}文件。当然默认调试已经够了，如果你不需要更复杂的调试功能，完全可以不修改。
+调试配置没有UI配置选项，我们还得老老实实地手动编辑 \texttt{launch.json} 文件。当然默认调试已经够了，如果你不需要更复杂的调试功能，完全可以不修改。
 
 如果你确实做了这些事情，但是你的VS Code仍然无法编译和调试C/C++代码，那么你可能需要检查以下几点：
 \begin{itemize}
-  \item 使用\texttt{where g++}命令来确定你的编译器是不是在PATH环境变量中，另外你还需要确定上述识别出的编译器是不是你想用的那个。
+  \item 使用 \texttt{where g++} 命令来确定你的编译器是不是在PATH环境变量中，另外你还需要确定上述识别出的编译器是不是你想用的那个。
   \item 检查你的C++目录和编译器目录是否包含非ASCII字符（如汉字、空格等）。
-  \item 检查你是不是错误地使用了\texttt{gcc}来编译C++代码。C++代码需要使用\texttt{g++}来编译，而不是\texttt{gcc}。
+  \item 检查你是不是错误地使用了 \texttt{gcc} 来编译C++代码。C++代码需要使用 \texttt{g++} 来编译，而不是 \texttt{gcc} 。
   \item 检查你的包含路径是否正确。VS Code会自动检测你的编译器和标准库，但如果你使用了自定义的路径或者安装了多个版本的编译器，可能需要手动配置包含路径。
   \item 检查你改的几个配置文件是不是正确的配置文件。
 \end{itemize}
-一般情况下，修正的方法很简单：如果是环境变量、路径等问题，重新设置就可以；如果是配置文件问题，杀掉当前所有终端，删除\texttt{.vscode}文件夹，然后重新编译调试就可以了。
+一般情况下，修正的方法很简单：如果是环境变量、路径等问题，重新设置就可以；如果是配置文件问题，杀掉当前所有终端，删除 \texttt{.vscode} 文件夹，然后重新编译调试就可以了。
 
 另外，如果希望使用Code的插件来帮助你编译并运行C/C++代码，则需要打开一个工作文件夹。否则，插件无法为你提供编译和运行的功能。当然，\lstinline[language=bash]|g++ main.cpp -o main.exe && ./main.exe|也并非不可。
 
@@ -294,9 +308,9 @@ brew install gcc gdb
 g++ main.cpp -O2 -g -o main.exe
 ./main.exe
 \end{lstlisting}
-上述命令的含义是：使用\texttt{g++}编译器编译\texttt{main.cpp}文件，开启\texttt{-O2}优化，开启调试信息\texttt{-g}，并将生成的可执行文件命名为\texttt{main.exe}。然后，使用\texttt{./main.exe}命令来运行生成的可执行文件。
+上述命令的含义是：使用 \texttt{g++} 编译器编译 \texttt{main.cpp} 文件，开启 \texttt{-O2} 优化，开启调试信息 \texttt{-g} ，并将生成的可执行文件命名为 \texttt{main.exe} 。然后，使用 \texttt{./main.exe} 命令来运行生成的可执行文件。
 
-命令行能提供更高的灵活性，可以随意增删改编译选项，例如添加\texttt{-Wall}来开启所有警告等。我个人非常推荐同学们学会使用命令行来编译和运行代码，这样可以更好地理解编译过程，并且能够更好地控制编译选项。
+命令行能提供更高的灵活性，可以随意增删改编译选项，例如添加 \texttt{-Wall} 来开启所有警告等。我个人非常推荐同学们学会使用命令行来编译和运行代码，这样可以更好地理解编译过程，并且能够更好地控制编译选项。
 
 \section{Python、虚拟环境及其配置}\label{sec:virtualenv}
 
@@ -327,33 +341,33 @@ conda有两个发行版，一个是Anaconda，另一个是Miniconda。Anaconda�
     conda init powershell
 \end{lstlisting}
 
-你应该将上述命令替换为你所使用的终端类型，例如在Linux上可以使用\texttt{bash}或\texttt{zsh}。然后你需要重启终端，以使初始化生效。
+你应该将上述命令替换为你所使用的终端类型，例如在Linux上可以使用 \texttt{bash} 或 \texttt{zsh} 。然后你需要重启终端，以使初始化生效。
 
 我们可以创建一个新的虚拟环境，例如：
 \begin{lstlisting}[language=bash]
     conda create -n myenv python=3.10
 \end{lstlisting}
-这样就可以创建一个名为\texttt{myenv}的虚拟环境，并安装Python 3.10的尽可能新的版本。
+这样就可以创建一个名为 \texttt{myenv} 的虚拟环境，并安装Python 3.10的尽可能新的版本。
 
 下面我们需要激活虚拟环境：
 \begin{lstlisting}[language=bash]
     conda activate myenv
 \end{lstlisting}
-这样就进入了虚拟环境，你可以在终端上看到提示符前面有\texttt{(myenv)}，表示当前处于\texttt{myenv}虚拟环境中。如没有，可能是终端配置失败或者其他原因，安装OhMyPosh的部分主题也可能会导致这个问题（最大的可能是你的主题没有Python虚拟环境对应的section）。
+这样就进入了虚拟环境，你可以在终端上看到提示符前面有 \texttt{(myenv)} ，表示当前处于 \texttt{myenv} 虚拟环境中。如没有，可能是终端配置失败或者其他原因，安装OhMyPosh的部分主题也可能会导致这个问题（最大的可能是你的主题没有Python虚拟环境对应的section）。
 
-现在在Python中我们一般流行使用\texttt{pip}来安装包，它从PyPI安装和管理第三方库。现在不流行直接使用conda管理包了。
+现在在Python中我们一般流行使用 \texttt{pip} 来安装包，它从PyPI安装和管理第三方库。现在不流行直接使用conda管理包了。
 
-我们可以使用以下命令安装一个包，例如安装\texttt{NumPy}库：
+我们可以使用以下命令安装一个包，例如安装 \texttt{NumPy} 库：
 \begin{lstlisting}[language=bash]
     pip install numpy
 \end{lstlisting}
 这将会在当前虚拟环境中安装NumPy库，而不会影响全局的Python环境。
 
-如果你需要安装多个包，可以将它们写在一个文件中，例如\texttt{requirements.txt}，然后使用以下命令安装：
+如果你需要安装多个包，可以将它们写在一个文件中，例如 \texttt{requirements.txt} ，然后使用以下命令安装：
 \begin{lstlisting}[language=bash]
     pip install -r requirements.txt
 \end{lstlisting}
-以上命令也常用于项目的依赖管理，可以方便地安装和更新项目所需的所有包；同时也可以通过修改\texttt{requirements.txt}文件来管理项目的依赖版本，适宜分发。
+以上命令也常用于项目的依赖管理，可以方便地安装和更新项目所需的所有包；同时也可以通过修改 \texttt{requirements.txt} 文件来管理项目的依赖版本，适宜分发。
 
 \subsection{在VS Code中配置Python}
 
@@ -361,7 +375,7 @@ conda有两个发行版，一个是Anaconda，另一个是Miniconda。Anaconda�
 
 你会在右下角看到一个黄色按钮“选择Python解释器”，点击它可以选择你想要使用的Python解释器。一般情况下，你可以选择“Python 3.x (conda)”或者“Python 3.x (venv)”等选项，这样VS Code就会自动识别你当前的虚拟环境。
 
-当然，我们非常建议同学们趁早熟悉纯命令行运行Python的方式，例如\texttt{python main.py}，这样可以更好地理解Python的运行机制，同时也更便于调试（？）。
+当然，我们非常建议同学们趁早熟悉纯命令行运行Python的方式，例如 \texttt{python main.py} ，这样可以更好地理解Python的运行机制，同时也更便于调试（？）。
 
 \subsection{不依赖VS Code的运行方式}
 
@@ -369,7 +383,7 @@ conda有两个发行版，一个是Anaconda，另一个是Miniconda。Anaconda�
 \begin{lstlisting}[language=bash]
 python main.py
 \end{lstlisting}
-上述命令的含义是：使用当前虚拟环境中的Python解释器来运行\texttt{main.py}文件。
+上述命令的含义是：使用当前虚拟环境中的Python解释器来运行 \texttt{main.py} 文件。
 
 我们也可以指定特定的Python解释器来运行代码，例如：
 \begin{lstlisting}[language=bash]
@@ -381,7 +395,7 @@ python main.py
 \begin{lstlisting}[language=bash]
 python
 \end{lstlisting}
-这将会启动一个交互式的Python解释器，你可以在其中输入Python代码并立即执行。想要退出该环境，可以使用\texttt{exit()}命令或者按下\texttt{Ctrl + D}（Linux/macOS）或\texttt{Ctrl + Z}（Windows），以输入一个EOF信号。如果你在Linux上不小心按下了\texttt{Ctrl + Z}，则会将Python进程挂起，此时可以使用\texttt{fg}命令将其恢复。
+这将会启动一个交互式的Python解释器，你可以在其中输入Python代码并立即执行。想要退出该环境，可以使用 \texttt{exit()} 命令或者按下 \texttt{Ctrl + D} （Linux/macOS）或 \texttt{Ctrl + Z} （Windows），以输入一个EOF信号。如果你在Linux上不小心按下了 \texttt{Ctrl + Z} ，则会将Python进程挂起，此时可以使用 \texttt{fg} 命令将其恢复。
 
 \section{Rust 和 Go的环境搭建与配置}
 
@@ -402,7 +416,7 @@ python
 
 \href{https://rustup.rs}{rustup下载}后，就可以点击rustup-init.exe安装了。
 
-在linux上换源方式：将以下设置环境变量的命令放在\texttt{\textasciitilde/.zshrc}里（如果你的终端是其他终端，则按实际情况改为\texttt{\textasciitilde/.bashrc}或者其他的什么东西）。
+在linux上换源方式：将以下设置环境变量的命令放在 \texttt{\textasciitilde/.zshrc} 里（如果你的终端是其他终端，则按实际情况改为 \texttt{\textasciitilde/.bashrc} 或者其他的什么东西）。
 
 \begin{lstlisting}[language=bash]
   export RUSTUP_DIST_SERVER=https://mirrors.ustc.edu.cn/rust-static
@@ -415,15 +429,13 @@ python
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 \end{lstlisting}
 
-在VS Code中配置Rust比较简单，只需要下载\texttt{rust-analyzer}插件即可。
-
-VS Code打开一个空文件夹，打开VS Code的终端（快捷键：\texttt{Ctrl + `}）,\texttt{cargo init} 初始化当前的空文件夹。然后在\texttt{src/main.rs}里即可看到\texttt{main}函数的上方有着运行和调试的按钮，点击即可运行或调试。\texttt{cargo new helloworld} 会在当前文件夹下建立helloworld子文件夹并完成初始化，更加便捷。
+在VS Code中配置Rust比较简单，只需要下载 \texttt{rust-analyzer} 插件即可。然后用VS Code打开一个空文件夹，打开VS Code的终端（快捷键： \texttt{Ctrl + `} ）, \texttt{cargo init}  初始化当前的空文件夹。然后在 \texttt{src/main.rs} 里即可看到 \texttt{main} 函数的上方有着运行和调试的符号，点击即可运行或调试。
 
 \begin{caution}
-  初始化后，对应的文件夹下应有着\texttt{Cargo.toml}，否则\texttt{rust-analyzer}无法提供运行的功能，因为\texttt{rust-analyzer}的运行功能依赖于\texttt{cargo}的。初学者往往会急于创建\texttt{main.rs}，然后就会发现\texttt{rust-analyzer}报错\texttt{Failed to discover workspace. Consider adding the Cargo.toml of the workspace to the linkedProjects setting.}
+  初始化后，文件夹下应有着 \texttt{Cargo.toml} ，否则便无法为其提供运行的功能，因为运行是依赖于 \texttt{cargo} 的。初学者往往会急于创建 \texttt{main.rs} 而没有用 \texttt{cargo init} 或 \texttt{cargo new dir} 来初始化文件夹，然后就会发现 \texttt{rust-analyzer} 报错 \texttt{Failed to discover workspace. Consider adding the Cargo.toml of the workspace to the linkedProjects setting.} 
 \end{caution}
 
-为了便于调试，我们安装\texttt{codelldb}插件，之后点击\texttt{main}函数上方的\texttt{Debug}按钮就可以开始调试了。
+为了便于调试，我们下载 \texttt{codelldb} 插件，之后按F5就可以开始调试了。
 
 \subsection{go环境搭建}
 
@@ -441,7 +453,7 @@ VS Code打开一个空文件夹，打开VS Code的终端（快捷键：\texttt{C
 \end{lstlisting}
 
 
-安装\texttt{golang.go}插件。然后在终端执行如下命令。（如果你有着足够“好”的网络，那可以不用设置\texttt{GOPROXY}）
+安装 \texttt{golang.go} 插件。然后在终端执行如下命令。（如果你有着足够“好”的网络，那可以不用设置 \texttt{GOPROXY} ）
 
 \begin{lstlisting}[language=bash]
   go env -w GO111MODULE=on # 启用 Go Modules 功能
@@ -450,9 +462,9 @@ VS Code打开一个空文件夹，打开VS Code的终端（快捷键：\texttt{C
   # go env |findstr "GOPROXY" # windows 确认配置
 \end{lstlisting}
 
-下载\texttt{go tools}。\texttt{Ctrl+Shift+P}打开命令面板输入\texttt{>Go: Install/Update Tools}，选择所有并确定，这将会下载\texttt{go tools}。
+下载 \texttt{go tools} ： \texttt{Ctrl+Shift+P} 打开命令面板输入 \texttt{Go: Install/Update Tools} ，选择所有并确定，这将会下载 \texttt{go tools} 。
 
-新建文件夹，用\texttt{VS Code}打开此文件夹，新建\texttt{main.go}文件，\texttt{Ctrl + `} 打开终端，输入\texttt{go mod init helloworld}，编辑\texttt{main.go}
+新建文件夹，用 \texttt{VS Code} 打开此文件夹，新建 \texttt{main.go} 文件， \texttt{Ctrl + `}  打开终端，输入 \texttt{go mod init helloworld} ，编辑 \texttt{main.go} 
 
 \begin{lstlisting}[language=go]
 package main
@@ -471,17 +483,10 @@ func main() {
 可以使用vscode带有的图形化调试按钮进行调试，\texttt{go run main.go} 即可运行此文件，当然也可以安装\texttt{Code Runner}插件来一键运行
 
 \begin{note}
-  现在Go使用\texttt{go module} 管理依赖，也就是\texttt{go.mod}文件。现在推荐这么做，有些项目可能还在用\texttt{Go Path}来管理，同学遇到了此种项目可自行搜集资料。
+  现在Go使用 \texttt{go module}  管理依赖，也就是 \texttt{go.mod} 文件。现在推荐这么做，有些项目可能还在用 \texttt{Go Path} 来管理，同学遇到了此种项目可自行搜集资料。
 \end{note}
 
-有同学可能发现了，调试/调试的时候并没有输出可执行文件。输出可执行文件：\texttt{go build -o main.exe main.go}, \texttt{-o}选项可以指定可执行文件的名字。如果是多文件编译呢？假设源代码均位于src目录下，\texttt{go build src/*.go}。同学们也可了解一下如何交叉编译。
-
-
-\section{在VS Code中配置Git}
-
-在VS Code中配置Git同样非常简单。只需要安装Git，并确保Git的可执行文件在系统的PATH环境变量中。然后在VS Code中打开一个Git仓库，VS Code会自动识别并启用Git功能。
-
-VS Code为Git提供了一个视窗化界面，可以方便地进行版本控制操作，例如提交、推送、拉取等。你可以在左侧的活动栏中找到Git图标，点击它即可打开Git视图。但我个人依然推荐使用命令行进行Git操作，因为命令行提供了更高的灵活性和控制力。
+有同学可能发现了，调试的时候并没有输出可执行文件。输出可执行文件： \texttt{go build -o main.exe main.go} ,  \texttt{-o} 选项可以指定可执行文件的名字。如果是多文件编译呢？假设源代码均位于src目录下， \texttt{go build src/*.go} 。同学们也可了解一下如何交叉编译。
 
 \section{美化你的终端}
 
@@ -537,9 +542,9 @@ VS Code为Git提供了一个视窗化界面，可以方便地进行版本控制�
 
 VS Code内置了终端功能，可以方便地在编辑器中运行命令。终端默认使用系统的命令行工具，例如在Windows上是PowerShell，在Linux上是bash。
 
-你可以通过快捷键\texttt{Ctrl + `}（反引号）打开终端，也可以通过菜单\texttt{视图 > 终端}来打开。终端打开后，你可以在其中输入命令，和在普通命令行中一样。
+你可以通过快捷键 \texttt{Ctrl + `} （反引号）打开终端，也可以通过菜单 \texttt{视图 > 终端} 来打开。终端打开后，你可以在其中输入命令，和在普通命令行中一样。
 
-如果你希望在VS Code中使用Oh My Posh，只需要把Code的终端字体设置为Nerd Font即可。你可以在VS Code的设置中搜索\texttt{terminal.integrated.fontFamily}，然后将其值设置为你安装的Nerd Font的名称，例如\texttt{MesloLGS Nerd Font}。
+如果你希望在VS Code中使用Oh My Posh，只需要把Code的终端字体设置为Nerd Font即可。你可以在VS Code的设置中搜索 \texttt{terminal.integrated.fontFamily} ，然后将其值设置为你安装的Nerd Font的名称，例如 \texttt{MesloLGS Nerd Font} 。
 
 \section{编写程序的基本素养}
 
@@ -551,7 +556,7 @@ VS Code内置了终端功能，可以方便地在编辑器中运行命令。终�
 
 \subsubsection{C++}
 
-对于C++，我们可以使用以下代码来编写第一个程序。你可以在VS Code中创建一个新的C++文件，例如\texttt{hello.cpp}（\textbf{该文件的路径不能包含空格和中文！}），然后输入以下代码：
+对于C++，我们可以使用以下代码来编写第一个程序。你可以在VS Code中创建一个新的C++文件，例如 \texttt{hello.cpp} （\textbf{该文件的路径不能包含空格和中文！}），然后输入以下代码：
 
 \begin{lstlisting}[language=C++]
 #include <iostream>
@@ -616,7 +621,7 @@ print("Their sum is:", a + b)
 而这也导致了一个问题：编译器可以识别全部的语法错误和部分的语义错误，因此一份能够编译通过的C++代码，通常代码本身是正确的，但是算法可能因为极端数据出现错误，例如除零等；而Python则无法检查语法错误和语义错误，解释器只会在按顺序运行代码，直到在出现问题的的地方停止。Python 自身的动态类型系统与缺少编译器带来的静态查错系统，使得实际写出来的 Python 代码中经常包含大量的错误。
 
 \begin{note}
-  在Python的较新版本中引入了“类型注释”，例如\texttt{func(para: int) -> int}。VS Code的Pylance插件能够识别类型注释，并在编辑器中提供有限的类型检查。一些新生代程序员在编写程序时，会使用类型注释来帮助自己检查代码的正确性，防止出现错误。在C++的较新版本中，也引入了“类型推断”，我们可以把部分变量声明为\texttt{auto}类型，例如\texttt{for(auto item : items)}，其中\texttt{items}是一个列表。编译器能够自动推断变量的类型，从而减少了代码的冗余。由此可见，编程语言的发展是不断演进的，程序员们不断引入新的特性和语法，以提高代码的可读性和可维护性；同时，我们还可以看到，强类型语言和动态类型语言之间的界限正在逐渐模糊。
+  在Python的较新版本中引入了“类型注释”，例如 \texttt{func(para: int) -> int} 。VS Code的Pylance插件能够识别类型注释，并在编辑器中提供有限的类型检查。一些新生代程序员在编写程序时，会使用类型注释来帮助自己检查代码的正确性，防止出现错误。在C++的较新版本中，也引入了“类型推断”，我们可以把部分变量声明为 \texttt{auto} 类型，例如 \texttt{for(auto item : items)} ，其中 \texttt{items} 是一个列表。编译器能够自动推断变量的类型，从而减少了代码的冗余。由此可见，编程语言的发展是不断演进的，程序员们不断引入新的特性和语法，以提高代码的可读性和可维护性；同时，我们还可以看到，强类型语言和动态类型语言之间的界限正在逐渐模糊。
 \end{note}
 
 \subsection{学会阅读错误信息}
@@ -645,7 +650,7 @@ C:/.../crtexewin.c:70: undefined reference to `WinMain'
 collect2.exe: error: ld returned 1 exit status
 \end{lstlisting}
 
-虽然信息略显抽象，但我们还是可以看到很多有用的信息。 ld 是 C++ 中的链接器，再往上看可以发现对 WinMain 的引用是未定义的。这提示我们去看 main 函数，从而发现这里将\texttt{main}函数写成了\texttt{mian}，因此链接器无法找到 main 函数，从而引发错误。
+虽然信息略显抽象，但我们还是可以看到很多有用的信息。 ld 是 C++ 中的链接器，再往上看可以发现对 WinMain 的引用是未定义的。这提示我们去看 main 函数，从而发现这里将 \texttt{main} 函数写成了 \texttt{mian} ，因此链接器无法找到 main 函数，从而引发错误。
 
 而Python给出的错误信息则更为直观，例如以下代码：
 
@@ -673,9 +678,9 @@ Traceback (most recent call last):
 TypeError: unsupported operand type(s) for +: 'int' and 'str'
 \end{lstlisting}
 
-可以看到，解释器对第10行和第2行进行了报错。第10行的报错是因为在调用\texttt{calc}函数时，传入的\texttt{numbers}列表中包含了一个字符串“60”，而\texttt{calc}函数期望的是一个数字列表，因此在计算平均值时出现了类型错误（TypeError）。而第2行的报错则是因为在计算总和时，无法将整数和字符串相加。于是我们发现了问题所在：在第9行，我们向\texttt{numbers}列表中添加了一个字符串“60”，而不是一个数字。我们可以通过将其改为\texttt{numbers.append(60)}来解决这个问题。
+可以看到，解释器对第10行和第2行进行了报错。第10行的报错是因为在调用 \texttt{calc} 函数时，传入的 \texttt{numbers} 列表中包含了一个字符串“60”，而 \texttt{calc} 函数期望的是一个数字列表，因此在计算平均值时出现了类型错误（TypeError）。而第2行的报错则是因为在计算总和时，无法将整数和字符串相加。于是我们发现了问题所在：在第9行，我们向 \texttt{numbers} 列表中添加了一个字符串“60”，而不是一个数字。我们可以通过将其改为 \texttt{numbers.append(60)} 来解决这个问题。
 
-顺便一提，这段代码在C++这种强类型语言中是无法通过编译的（\texttt{List<int>}类型不能进行append(string)），但 Python 的解释器还是运行代码直到遇到了具体的问题，在输出信息中可以看到第一个 \texttt{print()} 语句仍然被正常地执行。
+顺便一提，这段代码在C++这种强类型语言中是无法通过编译的（ \texttt{List<int>} 类型不能进行append(string)），但 Python 的解释器还是运行代码直到遇到了具体的问题，在输出信息中可以看到第一个  \texttt{print()}  语句仍然被正常地执行。
 
 \subsection{学会调试}\label{subsec:debugging}
 
@@ -888,7 +893,7 @@ Git有三个目录共同完成版本控制：工作区、暂存区、版本库�
 
     git gc --prune=now # 清理孤立提交
 \end{lstlisting}
-即使我们不使用\texttt{git gc}手动清理孤立提交，随着时间的推移（一般是90天提交记录过期），孤立提交也会被Git逐渐自动清理掉。
+即使我们不使用 \texttt{git gc} 手动清理孤立提交，随着时间的推移（一般是90天提交记录过期），孤立提交也会被Git逐渐自动清理掉。
 
 \subsubsection{排除相关文件}
 
@@ -985,11 +990,11 @@ git merge feature
 git branch -d feature
 \end{lstlisting}
 
-一般不建议直接删除分支，而是使用 \texttt{-d} 选项来删除已经合并的分支。如果分支没有被合并，可以使用 \texttt{-D} 选项强制删除。
+一般不建议直接删除分支，而是使用  \texttt{-d}  选项来删除已经合并的分支。如果分支没有被合并，可以使用  \texttt{-D}  选项强制删除。
 
 \subsubsection{压缩提交}
 
-有时候，我们在开发过程中，可能会有很多小的提交，这些提交可能是一些临时的修改或者调试信息。为了保持代码和版本库的整洁，我们可以使用 Git 的压缩提交功能，将多个提交合并为一个提交。这个压缩功能被称作是\textbf{Squash}，但是特别注意：没有\texttt{git squash}命令。
+有时候，我们在开发过程中，可能会有很多小的提交，这些提交可能是一些临时的修改或者调试信息。为了保持代码和版本库的整洁，我们可以使用 Git 的压缩提交功能，将多个提交合并为一个提交。这个压缩功能被称作是\textbf{Squash}，但是特别注意：没有 \texttt{git squash} 命令。
 
 我们一般只在分支合并的时候使用压缩提交。可以使用以下命令中的一个来压缩提交：
 \begin{lstlisting}[language=bash]
@@ -1030,6 +1035,14 @@ Cherry-Pick（摘樱桃）操作（也叫挑拣）是指从一些提交中选择
 
 使用视窗进行挑拣非常方便，我们只需要在提交列表中选择需要的提交，然后右键点击“Cherry-Pick”（汉化应该是挑拣）即可。这样会将选中的提交应用到当前分支上。
 
+\subsection{在VS Code中配置Git}
+
+在VS Code中配置Git同样非常简单。只需要安装Git，并确保Git的可执行文件在系统的PATH环境变量中。然后在VS Code中打开一个Git仓库，VS Code会自动识别并启用Git功能。
+
+VS Code为Git提供了一个视窗化界面，可以方便地进行版本控制操作，例如提交、推送、拉取等。你可以在左侧的活动栏中找到Git图标，点击它即可打开Git视图。另外，还有GitLens这个扩展也相当不错，该扩展提供了更多的Git功能和视图，例如查看提交历史、比较分支等，只可惜没有中文版。
+
+纵然如此，我个人依然推荐使用命令行进行Git操作，因为命令行提供了更高的灵活性和控制力。
+
 \section{GitHub与多人协作}\label{sec:github}
 
 \subsection{远程仓库}
@@ -1062,7 +1075,7 @@ git remote add origin <your-repo-url>
 \begin{lstlisting}[language=bash]
 git push -u origin main
 \end{lstlisting}
-这里的 \texttt{-u} 选项表示将本地的 main 分支与远程的 main 分支关联起来，以后可以直接使用 \texttt{git push} 和 \texttt{git pull} 命令进行推送和拉取。
+这里的  \texttt{-u}  选项表示将本地的 main 分支与远程的 main 分支关联起来，以后可以直接使用  \texttt{git push}  和  \texttt{git pull}  命令进行推送和拉取。
 
 如果本地分支名称和远程有区别，（例如本地仓库主要分支是master，而远程仓库的主要分支是main），我们可以使用以下命令来推送代码：
 \begin{lstlisting}[language=bash]
@@ -1084,7 +1097,7 @@ git clone <your-repo-url>
 \begin{lstlisting}[language=bash]
 git pull origin main
 \end{lstlisting}
-直接使用 \texttt{git pull} 命令也是可以的，因为我们之前已经使用 \texttt{-u} 选项将本地分支与远程分支关联起来了。然而，需要注意的是现代的拉取操作往往不推荐使用 \texttt{git pull} 命令，因为它会自动合并远程分支的代码到本地分支，这可能会导致冲突。更推荐的做法是先使用 \texttt{git fetch} 命令拉取远程仓库的代码，然后再手动合并：
+直接使用  \texttt{git pull}  命令也是可以的，因为我们之前已经使用  \texttt{-u}  选项将本地分支与远程分支关联起来了。然而，需要注意的是现代的拉取操作往往不推荐使用  \texttt{git pull}  命令，因为它会自动合并远程分支的代码到本地分支，这可能会导致冲突。更推荐的做法是先使用  \texttt{git fetch}  命令拉取远程仓库的代码，然后再手动合并：
 \begin{lstlisting}[language=bash]
 git fetch origin
 git merge origin/main
@@ -1095,7 +1108,7 @@ git merge origin/main
 \begin{lstlisting}[language=bash]
 git push origin main
 \end{lstlisting}
-直接使用 \texttt{git push} 命令也可以。
+直接使用  \texttt{git push}  命令也可以。
 
 如果存在某些提交在远程仓库中，而本地仓库没有这些提交，Git 会提示你先拉取远程仓库的代码，然后再推送本地的修改。这是因为 Git 不允许直接推送到远程仓库，除非本地仓库是最新的。如果你确定你不需要远程仓库的提交，可以使用以下命令强制推送本地的修改：
 \begin{lstlisting}[language=bash]
@@ -1213,23 +1226,23 @@ Lint 工具通常会在 PR 中自动运行，并将检查结果反馈给开发�
 ssh-keygen -t rsa -b 4096 -C "<你的邮箱地址>"
 \end{lstlisting}
 
-上述命令会生成一个 RSA 密钥对，密钥长度为 4096 位，并且会在密钥中添加一个注释（通常是你的邮箱地址）。执行该命令后，会提示你输入密钥的保存路径和密码。默认情况下，密钥对会保存在 \texttt{\textasciitilde/.ssh/id\_rsa} 和 \texttt{\textasciitilde/.ssh/id\_rsa.pub} 中。
+上述命令会生成一个 RSA 密钥对，密钥长度为 4096 位，并且会在密钥中添加一个注释（通常是你的邮箱地址）。执行该命令后，会提示你输入密钥的保存路径和密码。默认情况下，密钥对会保存在  \texttt{\textasciitilde/.ssh/id\_rsa}  和  \texttt{\textasciitilde/.ssh/id\_rsa.pub}  中。
 
 RSA密钥对是最常用的密钥对之一，不过因为 RSA 密钥对的安全性已经不如以前了，因此现在推荐使用 Ed25519 密钥对。可以使用以下命令生成 Ed25519 密钥对：
 \begin{lstlisting}[language=bash]
 ssh-keygen -t ed25519 -C "<你的邮箱地址>"
 \end{lstlisting}
 
-生成密钥对后，我们需要将公钥（\texttt{id\_rsa.pub} 或 \texttt{id\_ed25519.pub}）添加到远程服务器或服务（例如 GitHub、GitLab、CLab 等）的 SSH 密钥列表中。我们可以使用任何喜欢的编辑器打开上述公钥文件，复制其中的内容，并将其粘贴到指定的位置。\textbf{\color{red}同时，私钥（\texttt{id\_rsa} 或 \texttt{id\_ed25519}）必须保密，绝对不能泄露给任何人！}
+生成密钥对后，我们需要将公钥（ \texttt{id\_rsa.pub}  或  \texttt{id\_ed25519.pub} ）添加到远程服务器或服务（例如 GitHub、GitLab、CLab 等）的 SSH 密钥列表中。我们可以使用任何喜欢的编辑器打开上述公钥文件，复制其中的内容，并将其粘贴到指定的位置。\textbf{\color{red}同时，私钥（ \texttt{id\_rsa}  或  \texttt{id\_ed25519} ）必须保密，绝对不能泄露给任何人！}
 
 如果我们本地是Linux或者Mac且能够直接访问远程服务器，可以使用以下命令将公钥复制到远程服务器上：
 \begin{lstlisting}[language=bash]
 ssh-copy-id user@remote-server
 \end{lstlisting}
 
-我们也可以手动将公钥复制到远程服务器的 \texttt{\textasciitilde/.ssh/authorized\_keys} 文件中。我们可以使用记事本或者code等编辑器打开公钥文件，复制其中的内容，然后在远程服务器上使用以下命令将其添加到 \texttt{\textasciitilde/.ssh/authorized\_keys} 文件中。以上方法适用于无法使用 ssh-copy-id 命令的情况，例如Windows系统。
+我们也可以手动将公钥复制到远程服务器的  \texttt{\textasciitilde/.ssh/authorized\_keys}  文件中。我们可以使用记事本或者code等编辑器打开公钥文件，复制其中的内容，然后在远程服务器上使用以下命令将其添加到  \texttt{\textasciitilde/.ssh/authorized\_keys}  文件中。以上方法适用于无法使用 ssh-copy-id 命令的情况，例如Windows系统。
 
-为了保护私钥的安全，我们可以为私钥设置一个密码。这样，在使用私钥进行身份验证时，需要输入密码才能解锁私钥。可以在生成密钥对时设置密码，也可以在后续使用 \texttt{ssh-keygen} 命令修改密码。
+为了保护私钥的安全，我们可以为私钥设置一个密码。这样，在使用私钥进行身份验证时，需要输入密码才能解锁私钥。可以在生成密钥对时设置密码，也可以在后续使用  \texttt{ssh-keygen}  命令修改密码。
 
 设置密码的方式非常简单。在生成密钥对时，系统会提示你输入密码。如果你不想设置密码，可以直接按 Enter 键跳过。
 
@@ -1250,7 +1263,7 @@ ssh-keygen -p -f ~/.ssh/id_rsa
 \begin{lstlisting}[language=bash]
 ssh -i ~/.ssh/id_rsa user@remote-server
 \end{lstlisting}
-如果你使用的是 Ed25519 密钥对，则需要将 \texttt{id\_rsa} 替换为 \texttt{id\_ed25519}。
+如果你使用的是 Ed25519 密钥对，则需要将  \texttt{id\_rsa}  替换为  \texttt{id\_ed25519} 。
 
 如果你已经将私钥添加到 SSH Agent（实际上这确实是更一般的情况）中，可以直接使用以下命令连接到远程服务器：
 \begin{lstlisting}[language=bash]
@@ -1281,7 +1294,7 @@ ssh-add ~/.ssh/id_rsa
 
 VS Code 提供了一个名为 Remote-SSH 的扩展，可以帮助我们通过 SSH 连接到远程服务器，并在远程服务器上进行开发。这样，可以在SSH连接中使用一个很方便的图形化界面，以进行和Windows相似的便捷操作。
 
-安装 Remote-SSH 扩展后，我们可以在 VS Code 的界面找到远程连接的选项，一般是左下角的蓝色按钮，图标类似这个$\lessgtr$数学符号。点击这个按钮后，会弹出一个菜单，点选“连接到主机”选项，会让你输入\texttt{user\@ host}类似的远程服务器地址。输入完成后，如果是一个新的远程服务器，Code会让你把它加入到已知主机列表中，用户可以视情况添加到系统配置文件或者其他的配置文件中。
+安装 Remote-SSH 扩展后，我们可以在 VS Code 的界面找到远程连接的选项，一般是左下角的蓝色按钮，图标类似这个$\lessgtr$数学符号。点击这个按钮后，会弹出一个菜单，点选“连接到主机”选项，会让你输入 \texttt{user\@ host} 类似的远程服务器地址。输入完成后，如果是一个新的远程服务器，Code会让你把它加入到已知主机列表中，用户可以视情况添加到系统配置文件或者其他的配置文件中。
 
 然后，Code会弹出一个新的窗口，试图连接到远程服务器，可能会要求你输入远程服务器的密码和系统类型等信息。连接完成后，就可以在远程服务器上进行开发了。此时，Code会在左侧的资源管理器中显示远程服务器的文件系统（当然你需要打开一个文件夹）。
 
@@ -1316,7 +1329,7 @@ Key fingerprint = 1234 5678 90AB CDEF 1234  5678 90AB CDEF 1234 5678
 uid                              Your Name you@example.com
 sub   cv25519/0xF9E8D7C6B5A43210 2025-11-04 [E] [expires: 2027-11-04]
 \end{lstlisting}
-这里的 \texttt{0xA1B2C3D4E5F67890} 就是主密钥的ID，\texttt{0xF9E8D7C6B5A43210} 是子密钥的ID。这只是一个示例。
+这里的  \texttt{0xA1B2C3D4E5F67890}  就是主密钥的ID， \texttt{0xF9E8D7C6B5A43210}  是子密钥的ID。这只是一个示例。
 
 然后把fingerprint记下来，复制到一个比较安全的地方，后面不管是发X、Keybase还是Readme文件都需要用到它。
 
@@ -1324,7 +1337,7 @@ sub   cv25519/0xF9E8D7C6B5A43210 2025-11-04 [E] [expires: 2027-11-04]
 \begin{lstlisting}
 gpg: revocation certificate stored as /home/you/.gnupg/openpgp-revocs.d/12345678.rev
 \end{lstlisting}
-\textbf{\color{red}把这 \texttt{.rev} 文件和私钥一起离线备份！}
+\textbf{\color{red}把这  \texttt{.rev}  文件和私钥一起离线备份！}
 私钥丢了可以靠它吊销，否则别人冒用你就只能社死。
 
 其他一些操作：
@@ -1344,7 +1357,7 @@ gpg --armor --export-secret-keys 0xA1B2C3D4E5F67890 > privkey.asc
 \end{lstlisting}
 \end{itemize}
 
-\textbf{\color{red}私钥文件 \texttt{privkey.asc} 必须离线保存，绝对不能上传到任何网络！你也可以把它存到U盘里，然后把U盘藏起来。}
+\textbf{\color{red}私钥文件  \texttt{privkey.asc}  必须离线保存，绝对不能上传到任何网络！你也可以把它存到U盘里，然后把U盘藏起来。}
 
 \subsection{GPG密钥的使用}
 
@@ -1360,10 +1373,10 @@ gpg --armor --export-secret-keys 0xA1B2C3D4E5F67890 > privkey.asc
 \begin{lstlisting}[language=bash]
 gpg --armor --detach-sign <file>
 \end{lstlisting}
-这会生成一个名为 \texttt{<file>.asc} 的签名文件。解释一下：
+这会生成一个名为  \texttt{<file>.asc}  的签名文件。解释一下：
 \begin{itemize}
-  \item \texttt{--armor}：表示生成 ASCII 格式的签名文件，便于传输和存储。
-  \item \texttt{--detach-sign}：表示生成一个独立的签名文件，而不是将签名嵌入到原文件中。
+  \item  \texttt{--armor} ：表示生成 ASCII 格式的签名文件，便于传输和存储。
+  \item  \texttt{--detach-sign} ：表示生成一个独立的签名文件，而不是将签名嵌入到原文件中。
 \end{itemize}
 
 如果希望验证签名，可以使用以下命令：
@@ -1382,12 +1395,12 @@ gpg --armor --encrypt -r you@example.com <file>
 \end{lstlisting}
 上面两个命令是等价的，都是使用子密钥对文件进行加密操作。解释一下：
 \begin{itemize}
-  \item \texttt{--armor} 或 \texttt{-a}：表示生成 ASCII 格式的加密文件，便于传输和存储。
-  \item \texttt{--encrypt}：表示对文件进行加密操作。
-  \item \texttt{-r}：表示指定接收者的密钥 ID 或邮箱地址。
+  \item  \texttt{--armor}  或  \texttt{-a} ：表示生成 ASCII 格式的加密文件，便于传输和存储。
+  \item  \texttt{--encrypt} ：表示对文件进行加密操作。
+  \item  \texttt{-r} ：表示指定接收者的密钥 ID 或邮箱地址。
 \end{itemize}
 
-上面这两个命令会生成一个名为 \texttt{<file>.asc} 的加密文件。只有拥有对应私钥的用户才能解密该文件。这样就能够保护文件的机密性，防止未经授权的访问。
+上面这两个命令会生成一个名为  \texttt{<file>.asc}  的加密文件。只有拥有对应私钥的用户才能解密该文件。这样就能够保护文件的机密性，防止未经授权的访问。
 
 \subsubsection{邮件加密}
 
@@ -1404,16 +1417,16 @@ gpg> addkey
 \end{lstlisting}
 解释上述命令：
 \begin{itemize}
-  \item \texttt{--expert}：表示进入专家模式，可以进行更高级的操作。
-  \item \texttt{--edit-key}：表示编辑指定的密钥。
-  \item \texttt{addkey}：表示添加一个新的子密钥。
+  \item  \texttt{--expert} ：表示进入专家模式，可以进行更高级的操作。
+  \item  \texttt{--edit-key} ：表示编辑指定的密钥。
+  \item  \texttt{addkey} ：表示添加一个新的子密钥。
 \end{itemize}
 上述命令会进入一个交互式的界面，提示我们选择密钥类型、密钥长度、有效期等。选择“认证密钥”（Authentication key），然后按照提示完成操作即可。再然后，把认证子密钥搬上YubiKey：
 \begin{lstlisting}
 gpg --keytocard
 \end{lstlisting}
 
-从此，\texttt{ssh -A}也能走GPG代理了，方便极了。
+从此， \texttt{ssh -A} 也能走GPG代理了，方便极了。
 
 \subsection{信任网络：怎么证明你是你}
 
@@ -1439,9 +1452,9 @@ gpg> revkey
 \end{lstlisting}
 解释上述命令：
 \begin{itemize}
-  \item \texttt{--edit-key}：表示编辑指定的密钥。
-  \item \texttt{key 1}：表示选择要吊销的子密钥，这里是一个示例，实际操作中需要根据密钥ID进行选择。
-  \item \texttt{revkey}：表示吊销选定的子密钥。
+  \item  \texttt{--edit-key} ：表示编辑指定的密钥。
+  \item  \texttt{key 1} ：表示选择要吊销的子密钥，这里是一个示例，实际操作中需要根据密钥ID进行选择。
+  \item  \texttt{revkey} ：表示吊销选定的子密钥。
 \end{itemize}
 
 删除密钥的操作如下：

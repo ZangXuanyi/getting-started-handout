@@ -46,9 +46,9 @@ Markdown 的内容输入和纯文本文件几乎一模一样，接下来我们�
 
 在 Markdown 中，必须通过空行来进行分段。也就是说，如果你想要对文件进行分段，需要在两段之间加入一个空行。特别注意，Markdown 不接受缩进或者首行缩进，所以不要使用 Tab 键或者空格进行缩进！（否则会编译为代码块）
 
-而如果希望仅仅换行而不分段，则仅仅在行尾加入两个空格，然后另起一行，在新的行中书写; 或者使用 HTML 标记，也就是 \texttt{<br>} 符号，该符号无需另起一行也可以进行换行操作。
+而如果希望仅仅换行而不分段，则仅仅在行尾加入两个空格，然后另起一行，在新的行中书写; 或者使用 HTML 标记，也就是  \texttt{<br>}  符号，该符号无需另起一行也可以进行换行操作。
 
-对于分割线 (你经常会在知乎看见这种分割线)，请在单独一行上使用三个或多个星号 (\texttt{***})、连接号 (\texttt{---}) 或下划线 (\texttt{\_\_\_}) ，并且不能包含其他内容。为了兼容性考虑，请在该分割线前后加上空行。
+对于分割线 (你经常会在知乎看见这种分割线)，请在单独一行上使用三个或多个星号 ( \texttt{***} )、连接号 ( \texttt{---} ) 或下划线 ( \texttt{\_\_\_} ) ，并且不能包含其他内容。为了兼容性考虑，请在该分割线前后加上空行。
 
 \subsubsection{标题}
 
@@ -73,7 +73,7 @@ Markdown 使用井号（\#）来表示标题。井号的数量表示标题的层
 
 \subsubsection{转义}
 
-在 Markdown 中，如果需要输入特殊字符（例如星号、井号等），可以使用反斜杠 (\texttt{\textbackslash}) 来进行转义。例如，\texttt{\textbackslash*} 代表一个星号。
+在 Markdown 中，如果需要输入特殊字符（例如星号、井号等），可以使用反斜杠 ( \texttt{\textbackslash} ) 来进行转义。例如， \texttt{\textbackslash*}  代表一个星号。
 
 \subsubsection{代码和代码块}
 
@@ -91,7 +91,7 @@ Markdown 使用井号（\#）来表示标题。井号的数量表示标题的层
 
 \subsubsection{引用}
 
-在 Markdown 中，可以使用大于号 (\texttt{>}) 来表示引用。引用块也是可以嵌套的，只需要在每一行的开头添加一个大于号即可。例如：
+在 Markdown 中，可以使用大于号 ( \texttt{>} ) 来表示引用。引用块也是可以嵌套的，只需要在每一行的开头添加一个大于号即可。例如：
 
 \begin{lstlisting}
 > 这是一段引用文本。
@@ -171,7 +171,7 @@ LaTeX的安装冗长且复杂，通常需要安装一个完整的 TeX 发行版�
 
 \subsubsection{Windows机器}
 
-在安装新的 TexLive 之前，笔者建议彻底删除任何旧版的 CTeX 套装，同时检查环境变量中有没有\texttt{C:\textbackslash Windows\textbackslash System32}。如无，请将上述路径添加回环境变量中去。
+在安装新的 TexLive 之前，笔者建议彻底删除任何旧版的 CTeX 套装，同时检查环境变量中有没有 \texttt{C:\textbackslash Windows\textbackslash System32} 。如无，请将上述路径添加回环境变量中去。
 
 然后，检查自己的用户名是不是无空格的英文。如果不是，建议修改，这是一个一劳永逸的办法。另一个办法是执行以下命令（注意：PowerShell 用户请自行替换命令为正确的命令）:
 
@@ -187,7 +187,7 @@ LaTeX的安装冗长且复杂，通常需要安装一个完整的 TeX 发行版�
 
 将下载下来的虚拟光驱镜像装载到虚拟光驱中，然后执行其中的批处理文件进行安装。安装过程中，建议选择“安装所有包”以防出现各种未知的错误。之后，在弹出的窗口中选择清华源（校外）或者北大源（校内，速度更快）并进行下载安装。安装过程可能需要较长时间，请耐心等待。
 
-如果你不希望安装在默认的 \texttt{C:\textbackslash texlive} 目录下，可以在安装过程中选择自定义安装路径。但是，该目录不应包含任何非 ASCII 字符，或者说不应包含空格或其他非英文特殊字符。安装完成后，建议将 TeX Live 的 bin 目录添加到系统的环境变量中，以便在命令行中直接使用 LaTeX 命令。我们不建议安装TexLive 的 GUI 前端，因为它不易于使用。
+如果你不希望安装在默认的  \texttt{C:\textbackslash texlive}  目录下，可以在安装过程中选择自定义安装路径。但是，该目录不应包含任何非 ASCII 字符，或者说不应包含空格或其他非英文特殊字符。安装完成后，建议将 TeX Live 的 bin 目录添加到系统的环境变量中，以便在命令行中直接使用 LaTeX 命令。我们不建议安装TexLive 的 GUI 前端，因为它不易于使用。
 
 \subsubsection{Linux: 以Ubuntu为例}
 
@@ -261,7 +261,7 @@ LaTeX的安装冗长且复杂，通常需要安装一个完整的 TeX 发行版�
 \begin{lstlisting}
     "latex-workshop.latex.autoBuild.run": "onSave",
 \end{lstlisting}
-这样每次保存文档时，VS Code 都会自动编译 LaTeX 文档。将 \texttt{"onSave"} 改为 \texttt{"never"} 则可以关闭自动编译功能。
+这样每次保存文档时，VS Code 都会自动编译 LaTeX 文档。将  \texttt{"onSave"}  改为  \texttt{"never"}  则可以关闭自动编译功能。
 
 \subsection{LaTeX 文档的基本结构}
 
@@ -292,7 +292,7 @@ LaTeX 是一种强大的排版工具，适用于学术论文和书籍等文档�
 \end{document}
 \end{lstlisting}
 
-简单地说，一篇tex代码中，大致上是包含了两种内容：一种是以反斜杠为前缀的命令，这些命令通常会影响排版效果；另一种是普通的文本内容，这些内容会直接出现在最终的文档中。例如上文中， \texttt{\textbackslash section\{引言\}} 是一个命令，而“这是一篇 LaTeX 文档。我们可以在这里写一些数学公式：”则是普通的文本内容。本书也是使用LaTeX编写的，因此你可以通过查看本书的源代码来学习更多 LaTeX 的用法。
+简单地说，一篇tex代码中，大致上是包含了两种内容：一种是以反斜杠为前缀的命令，这些命令通常会影响排版效果；另一种是普通的文本内容，这些内容会直接出现在最终的文档中。例如上文中，  \texttt{\textbackslash section\{引言\} } 是一个命令，而“这是一篇 LaTeX 文档。我们可以在这里写一些数学公式：”则是普通的文本内容。本书也是使用LaTeX编写的，因此你可以通过查看本书的源代码来学习更多 LaTeX 的用法。
 
 \subsubsection{文档类声明}
 文档类声明是 LaTeX 文档的第一行，指定了文档的类型和格式。常用的文档类包括：
@@ -305,14 +305,14 @@ LaTeX 是一种强大的排版工具，适用于学术论文和书籍等文档�
   \item moderncv：现代英式简历。
 \end{itemize}
 
-要声明一个文档类，只需在文档的第一行使用 \texttt{\textbackslash documentclass} 命令。例如，要声明一个文章类型的文档，可以使用以下命令：
+要声明一个文档类，只需在文档的第一行使用  \texttt{\textbackslash documentclass}  命令。例如，要声明一个文章类型的文档，可以使用以下命令：
 \begin{lstlisting}[language={[LaTeX]TeX}]
   \documentclass{article}
 \end{lstlisting}
 
 \subsubsection{导言区}
 导言区是 LaTeX 文档的第二部分，用于加载宏包和设置文档的全局参数。宏包是 LaTeX 的扩展功能，可以提供额外的排版功能和样式。
-在导言区，可以使用 \texttt{\textbackslash usepackage} 命令来加载宏包。例如，要加载 amsmath 宏包以支持数学公式，可以使用以下命令：
+在导言区，可以使用  \texttt{\textbackslash usepackage}  命令来加载宏包。例如，要加载 amsmath 宏包以支持数学公式，可以使用以下命令：
 \begin{lstlisting}[language={[LaTeX]TeX}]
   \usepackage{amsmath}
 \end{lstlisting}
@@ -320,7 +320,7 @@ LaTeX 是一种强大的排版工具，适用于学术论文和书籍等文档�
 除此之外，还可以通过其他命令来设置文档的全局参数，例如字体、行距、页边距等。一些常用的全局参数设置命令可以在\ref{sec:latex-packages}中找到。
 
 \subsubsection{正文}
-正文是 LaTeX 文档的主要内容部分。在正文中，可以使用各种命令来添加标题、段落、列表、表格、图片等内容。正文部分被包裹在 \texttt{\textbackslash begin\{document\}} 到 \texttt{\textbackslash end\{document\}} 的块中间。
+正文是 LaTeX 文档的主要内容部分。在正文中，可以使用各种命令来添加标题、段落、列表、表格、图片等内容。正文部分被包裹在  \texttt{\textbackslash begin\{document\} } 到  \texttt{\textbackslash end\{document\} } 的块中间。
 
 LaTeX其实还有“注释”部分，这些部分仅在tex源码中存在，但是不会出现在最终的pdf文档中。注释部分以百分号（\%）开头，本行后面的内容会被 LaTeX 忽略。例如：
 
@@ -336,9 +336,9 @@ LaTeX其实还有“注释”部分，这些部分仅在tex源码中存在，但
 
 \subsubsection{标题}
 
-使用 \texttt{\textbackslash section}、\texttt{\textbackslash subsection} 和 \texttt{\textbackslash subsubsection} 命令来添加标题，这三个命令分别可以添加一级标题、二级标题和三级标题，这些标题会自动标号。对于\texttt{report}和\texttt{book}文档类，还可以使用 \texttt{\textbackslash chapter} 命令添加章节标题、\texttt{\textbackslash part} 命令添加部分标题，这些标题也会编号。
+使用  \texttt{\textbackslash section} 、 \texttt{\textbackslash subsection}  和  \texttt{\textbackslash subsubsection}  命令来添加标题，这三个命令分别可以添加一级标题、二级标题和三级标题，这些标题会自动标号。对于 \texttt{report} 和 \texttt{book} 文档类，还可以使用  \texttt{\textbackslash chapter}  命令添加章节标题、 \texttt{\textbackslash part}  命令添加部分标题，这些标题也会编号。
 
-我们还可以使用 \texttt{\textbackslash title}、\texttt{\textbackslash author} 和 \texttt{\textbackslash date} 命令来设置文档的标题、作者和日期。然后使用 \texttt{\textbackslash maketitle} 命令来生成标题页。同时，诸如 \texttt{\textbackslash section*}等命令可以生成无编号的标题。
+我们还可以使用  \texttt{\textbackslash title} 、 \texttt{\textbackslash author}  和  \texttt{\textbackslash date}  命令来设置文档的标题、作者和日期。然后使用  \texttt{\textbackslash maketitle}  命令来生成标题页。同时，诸如  \texttt{\textbackslash section*} 等命令可以生成无编号的标题。
 
 \subsubsection{段落}
 
@@ -346,39 +346,39 @@ LaTeX其实还有“注释”部分，这些部分仅在tex源码中存在，但
 
 \subsubsection{换行}
 
-如果需要在段落中换行，可以使用 \texttt{\textbackslash newline} 命令，或者在行尾添加两个空格后再换行。也可以使用 \texttt{\textbackslash \textbackslash} 来换行，我们一般使用的是这一种方式。
+如果需要在段落中换行，可以使用  \texttt{\textbackslash newline}  命令，或者在行尾添加两个空格后再换行。也可以使用  \texttt{\textbackslash \textbackslash}  来换行，我们一般使用的是这一种方式。
 
 \subsubsection{强制空格}
 
-对于纯英语的文本，LaTeX 会自动处理空格。但有时在英汉混写或纯汉语的文档中，代码中的空格不会编译，此时我们需要在文本中插入一个强制空格。可以使用 \texttt{\textbackslash } 命令来实现，这个反斜杠前后都应该加上空格。例如：
+对于纯英语的文本，LaTeX 会自动处理空格。但有时在英汉混写或纯汉语的文档中，代码中的空格不会编译，此时我们需要在文本中插入一个强制空格。可以使用  \texttt{\textbackslash }  命令来实现，这个反斜杠前后都应该加上空格。例如：
 \begin{lstlisting}[language={[LaTeX]TeX}]
   这是一个强制 \ 空格的例子。
 \end{lstlisting}
 
-LaTeX还提供了更宽的空格，例如 \texttt{\textbackslash quad} 和 \texttt{\textbackslash qquad}，分别表示一个和两个字符宽度的空格。
+LaTeX还提供了更宽的空格，例如  \texttt{\textbackslash quad}  和  \texttt{\textbackslash qquad} ，分别表示一个和两个字符宽度的空格。
 
 \subsubsection{转义字符和反斜杠}
 
-在 LaTeX 中，反斜杠 (\textbackslash) 是一个特殊字符，用于引入命令和转义。例如\texttt{\textbackslash \$}可以强制输出美元符号而不是将其视为数学公式的开始。如果需要在文本中输入反斜杠本身，不可以使用两个反斜杠 (\textbackslash\textbackslash)，而是需要使用 \texttt{\textbackslash textbackslash} 命令来实际地打出一个反斜杠。
+在 LaTeX 中，反斜杠 (\textbackslash) 是一个特殊字符，用于引入命令和转义。例如 \texttt{\textbackslash \$} 可以强制输出美元符号而不是将其视为数学公式的开始。如果需要在文本中输入反斜杠本身，不可以使用两个反斜杠 (\textbackslash\textbackslash)，而是需要使用  \texttt{\textbackslash textbackslash}  命令来实际地打出一个反斜杠。
 
-LaTeX还支持飘号\texttt{\textasciitilde} ，但是默认的飘号极不美观。我们可以使用 \texttt{\textbackslash textasciitilde} 命令来打出一个美观的飘号。其他的一些常见的符合上述条件的符号见下表，在正文中直接打出这些符号本身虽然不会导致编译错误但不美观，建议使用对应的命令来打出这些符号。
+LaTeX还支持飘号 \texttt{\textasciitilde}  ，但是默认的飘号极不美观。我们可以使用  \texttt{\textbackslash textasciitilde}  命令来打出一个美观的飘号。其他的一些常见的符合上述条件的符号见下表，在正文中直接打出这些符号本身虽然不会导致编译错误但不美观，建议使用对应的命令来打出这些符号。
 \begin{table}[h]
   \centering
   \begin{tabular}{cc}
     \toprule
     符号 & 命令 \\
     \midrule
-    \textasciiacute & \texttt{\textbackslash textasciiacute} \\
-    \textbackslash & \texttt{\textbackslash textbackslash} \\
-    \textbar & \texttt{\textbackslash textbar} \\
-    \textbraceleft & \texttt{\textbackslash textbraceleft} \\
-    \textbraceright & \texttt{\textbackslash textbraceright} \\
-    \textasciibreve & \texttt{\textbackslash textasciibreve} \\
-    \textasciicaron & \texttt{\textbackslash textasciicaron} \\
-    \textasciicircum & \texttt{\textbackslash textasciicircum} \\
-    \textasciidieresis & \texttt{\textbackslash textasciidieresis} \\
-    \textasciigrave & \texttt{\textbackslash textasciigrave} \\
-    \textasciimacron & \texttt{\textbackslash textasciimacron} \\
+    \textasciiacute &  \texttt{\textbackslash textasciiacute}  \\
+    \textbackslash &  \texttt{\textbackslash textbackslash}  \\
+    \textbar &  \texttt{\textbackslash textbar}  \\
+    \textbraceleft &  \texttt{\textbackslash textbraceleft}  \\
+    \textbraceright &  \texttt{\textbackslash textbraceright}  \\
+    \textasciibreve &  \texttt{\textbackslash textasciibreve}  \\
+    \textasciicaron &  \texttt{\textbackslash textasciicaron}  \\
+    \textasciicircum &  \texttt{\textbackslash textasciicircum}  \\
+    \textasciidieresis &  \texttt{\textbackslash textasciidieresis}  \\
+    \textasciigrave &  \texttt{\textbackslash textasciigrave}  \\
+    \textasciimacron &  \texttt{\textbackslash textasciimacron}  \\
     \bottomrule    
   \end{tabular}
 \end{table}
@@ -393,14 +393,14 @@ LaTeX 对数学公式的支持非常强大。可以使用美元符号 (\$) 来�
   $$ E=mc^2 $$
 \end{lstlisting}
 
-除此之外，也可以使用 \texttt{\textbackslash begin\{equation\}} 和 \texttt{\textbackslash end\{equation\}} 来包裹数学公式，这样可以自动编号公式。例如：
+除此之外，也可以使用  \texttt{\textbackslash begin\{equation\} } 和  \texttt{\textbackslash end\{equation\} } 来包裹数学公式，这样可以自动编号公式。例如：
 \begin{lstlisting}[language={[LaTeX]TeX}]
   \begin{equation}
   E=mc^2
   \end{equation}
 \end{lstlisting}
 
-对于多行公式\footnote{需要宏包\texttt{amsmath}}，可以使用 \texttt{\textbackslash begin\{align\}} 和 \texttt{\textbackslash end\{align\}} 来包裹公式，并使用 \texttt{\&} 符号来对齐公式。例如：
+对于多行公式\footnote{需要宏包 \texttt{amsmath} }，可以使用  \texttt{\textbackslash begin\{align\} } 和  \texttt{\textbackslash end\{align\} } 来包裹公式，并使用  \texttt{\&}  符号来对齐公式。例如：
 \begin{lstlisting}[language={[LaTeX]TeX}]
   \begin{align}
   E &= mc^2 \\
@@ -408,23 +408,23 @@ LaTeX 对数学公式的支持非常强大。可以使用美元符号 (\$) 来�
   \end{align}
 \end{lstlisting}
 
-LaTeX 还支持各种数学符号和运算符，例如乘号 (\texttt{\textbackslash times})、除号 (\texttt{\textbackslash div})、积分符号 (\texttt{\textbackslash int}) 等。可以通过查阅 LaTeX 的数学符号手册来了解更多数学符号的用法。
+LaTeX 还支持各种数学符号和运算符，例如乘号 ( \texttt{\textbackslash times} )、除号 ( \texttt{\textbackslash div} )、积分符号 ( \texttt{\textbackslash int} ) 等。可以通过查阅 LaTeX 的数学符号手册来了解更多数学符号的用法。
 
 \subsubsection{文本强调}
 
-可以使用 \texttt{\textbackslash emph\{文本\}} 命令来强调文本，通常会将文本设置为斜体，实际情况下可能会根据文档类和宏包的不同而有所变化。除此之外：
+可以使用  \texttt{\textbackslash emph\{文本\} } 命令来强调文本，通常会将文本设置为斜体，实际情况下可能会根据文档类和宏包的不同而有所变化。除此之外：
 \begin{itemize}
-  \item \texttt{\textbackslash textbf\{文本\}} ：\textbf{粗体，Bold}。
-  \item \texttt{\textbackslash textit\{文本\}} ：斜体，\textit{Italic}。
-  \item \texttt{\textbackslash texttt\{文本\}} ：\texttt{等宽字体，Typewriter}。
-  \item \texttt{\textbackslash textsf\{文本\}} ：\textsf{无衬线字体，Sans-serif}。
-  \item \texttt{\textbackslash textsc\{文本\}} ：小型大写字母，\textsc{Small caps}。
-  \item \texttt{\textbackslash underline\{文本\}} ：\underline{下划线，Underline}。
+  \item  \texttt{\textbackslash textbf\{文本\} } ：\textbf{粗体，Bold}。
+  \item  \texttt{\textbackslash textit\{文本\} } ：斜体，\textit{Italic}。
+  \item  \texttt{\textbackslash texttt\{文本\} } ： \texttt{等宽字体，Typewriter} 。
+  \item  \texttt{\textbackslash textsf\{文本\} } ：\textsf{无衬线字体，Sans-serif}。
+  \item  \texttt{\textbackslash textsc\{文本\} } ：小型大写字母，\textsc{Small caps}。
+  \item  \texttt{\textbackslash underline\{文本\} } ：\underline{下划线，Underline}。
 \end{itemize}
 
 \subsubsection{列表}
 
-使用 \texttt{itemize} 环境来创建无序列表，使用 \texttt{enumerate} 环境来创建有序列表。这个列表也是可以嵌套的，例如：
+使用  \texttt{itemize}  环境来创建无序列表，使用  \texttt{enumerate}  环境来创建有序列表。这个列表也是可以嵌套的，例如：
 \begin{lstlisting}[language={[LaTeX]TeX}]
   \begin{itemize}
   \item 列表项 1
@@ -439,7 +439,7 @@ LaTeX 还支持各种数学符号和运算符，例如乘号 (\texttt{\textbacks
 
 \subsubsection{表格}
 
-使用 \texttt{table} 环境来创建表格。以下是一个示例：
+使用  \texttt{table}  环境来创建表格。以下是一个示例：
 
 \begin{lstlisting}[language={[LaTeX]TeX}]
   \begin{table}
@@ -455,10 +455,10 @@ LaTeX 还支持各种数学符号和运算符，例如乘号 (\texttt{\textbacks
   \end{table}
 \end{lstlisting}
 
-上述代码创建了一个简单的表格，其中 \texttt{tabular} 环境用于定义表格的列格式，\texttt{l} 表示左对齐，\texttt{r} 表示右对齐；如果需要居中对齐，可以使用 \texttt{c}。上述\texttt{lr}意思是第一列左对齐，第二列右对齐，两列中间没有竖线，表格左右两边也没有竖线。如果需要添加竖线，可以使用 \texttt{|} 符号，例如 \texttt{|l|r|} 表示第一列左对齐，第二列右对齐，并且两列之间有一条竖线，表格的左右两边也有竖线。
+上述代码创建了一个简单的表格，其中  \texttt{tabular}  环境用于定义表格的列格式， \texttt{l}  表示左对齐， \texttt{r}  表示右对齐；如果需要居中对齐，可以使用  \texttt{c} 。上述 \texttt{lr} 意思是第一列左对齐，第二列右对齐，两列中间没有竖线，表格左右两边也没有竖线。如果需要添加竖线，可以使用  \texttt{|}  符号，例如  \texttt{|l|r|}  表示第一列左对齐，第二列右对齐，并且两列之间有一条竖线，表格的左右两边也有竖线。
 
-表格中的每一行使用 \texttt{\textbackslash\textbackslash} 来分隔，列之间使用 \texttt{\&} 来分隔（实际上是制表符）。
-用 \texttt{\textbackslash hline} 命令来添加水平线。如果想要添加粗线，可以使用 \texttt{\textbackslash hline\textbackslash hline}。
+表格中的每一行使用  \texttt{\textbackslash\textbackslash}  来分隔，列之间使用  \texttt{\&}  来分隔（实际上是制表符）。
+用  \texttt{\textbackslash hline}  命令来添加水平线。如果想要添加粗线，可以使用  \texttt{\textbackslash hline\textbackslash hline} 。
 
 caption 命令用于添加表格的标题，label 命令用于给表格添加标签\footnote{需要hyperref宏包}，以便在文档中引用。上述代码展示的标签是一个标签的习惯命名方式，不必严格按照这个格式来命名标签。
 
@@ -475,7 +475,7 @@ caption 命令用于添加表格的标题，label 命令用于给表格添加标
 \end{lstlisting}
 上述代码创建了一个没有标题和标签的简单表格。由于没有使用table环境，因此表格不会作为浮动体出现，而是直接出现在文本中。当然简洁之余也有一些缺点，例如无法添加标题和标签，无法使用浮动体的特性调整表格的位置等。
 
-另外，如果我们需要一个非常长、可能跨页的表格，则普通的\texttt{table}不适用。我们可以使用\texttt{longtable}宏包来实现跨页表格：
+另外，如果我们需要一个非常长、可能跨页的表格，则普通的 \texttt{table} 不适用。我们可以使用 \texttt{longtable} 宏包来实现跨页表格：
 \begin{lstlisting}[language={[LaTeX]TeX}]
   \usepackage{longtable} % 引入对应包
 
@@ -508,7 +508,7 @@ longtable表的用法与普通的table表类似，但是多了几个命令来处
 
 \subsubsection{图片}
 
-使用 \texttt{graphicx} 宏包来插入图片。首先，在导言区加载这个宏包，然后使用 \texttt{figure} 环境来插入图片。例如：
+使用  \texttt{graphicx}  宏包来插入图片。首先，在导言区加载这个宏包，然后使用  \texttt{figure}  环境来插入图片。例如：
 \begin{lstlisting}[language={[LaTeX]TeX}]
   \usepackage{graphicx}
 
@@ -520,16 +520,16 @@ longtable表的用法与普通的table表类似，但是多了几个命令来处
   \end{figure}
 \end{lstlisting}
 
-上述代码中，\texttt{includegraphics} 命令用于插入图片，\texttt{width} 参数用于设置图片的宽度，可以使用相对宽度（例如 \texttt{0.5\textbackslash textwidth} 表示图片宽度为文本宽度的一半）或者绝对宽度（例如 5cm）。\texttt{caption} 和 \texttt{label} 命令的用法与表格类似。
+上述代码中， \texttt{includegraphics}  命令用于插入图片， \texttt{width}  参数用于设置图片的宽度，可以使用相对宽度（例如  \texttt{0.5\textbackslash textwidth}  表示图片宽度为文本宽度的一半）或者绝对宽度（例如 5cm）。 \texttt{caption}  和  \texttt{label}  命令的用法与表格类似。
 
 \subsubsection{超链接与标签引用}
 
-可以使用 \texttt{hyperref} 宏包来创建超链接。首先，在导言区加载这个宏包，然后使用 \texttt{\textbackslash href\{链接地址\}\{链接文本\}} 命令来创建超链接。例如：
+可以使用  \texttt{hyperref}  宏包来创建超链接。首先，在导言区加载这个宏包，然后使用  \texttt{\textbackslash href\{链接地址\} \{链接文本\}} 命令来创建超链接。例如：
 \begin{lstlisting}[language={[LaTeX]TeX}]
   这是一个超链接：\href{https://www.example.com}{超链接文本}
 \end{lstlisting}
 
-标签引用则与超链接类似，可以使用 \texttt{\textbackslash label\{标签名\}} 命令来创建标签，然后使用 \texttt{\textbackslash ref\{标签名\}} 命令来引用标签。例如：
+标签引用则与超链接类似，可以使用  \texttt{\textbackslash label\{标签名\} } 命令来创建标签，然后使用  \texttt{\textbackslash ref\{标签名\} } 命令来引用标签。例如：
 \begin{lstlisting}[language={[LaTeX]TeX}]
   \section{引言}
   \label{sec:introduction}
@@ -541,46 +541,46 @@ longtable表的用法与普通的table表类似，但是多了几个命令来处
 
 \subsubsection{目录}
 
-使用 \texttt{\textbackslash tableofcontents} 命令可以生成文档的目录。LaTeX 会自动根据文档中的标题生成目录，并在需要时自动更新。
+使用  \texttt{\textbackslash tableofcontents}  命令可以生成文档的目录。LaTeX 会自动根据文档中的标题生成目录，并在需要时自动更新。
 
 目录也属于标签引用的一种，因此在使用目录之前，需要先编译一次文档以生成目录文件。之后再编译一次，目录就会出现在文档中。
 
 \subsubsection{脚注}
 
-可以使用 \texttt{\textbackslash footnote\{脚注内容\}} 命令来添加脚注。
+可以使用  \texttt{\textbackslash footnote\{脚注内容\} } 命令来添加脚注。
 
 \subsubsection{引用}
 
-可以使用 \texttt{\textbackslash quote\{引用内容\}} 命令来添加引用。LaTeX 还支持使用 \texttt{\textbackslash cite\{文献标签\}} 命令来引用文献，这需要在导言区加载 \texttt{biblatex} 。
+可以使用  \texttt{\textbackslash quote\{引用内容\} } 命令来添加引用。LaTeX 还支持使用  \texttt{\textbackslash cite\{文献标签\} } 命令来引用文献，这需要在导言区加载  \texttt{biblatex}  。
 
 \subsubsection{参考文献}
 
-可以使用 BibTeX 或 BibLaTeX 来管理参考文献。可以在导言区加载 \texttt{biblatex} 宏包，并使用 \texttt{\textbackslash addbibresource\{*.bib\}} 命令来添加参考文献文件。
+可以使用 BibTeX 或 BibLaTeX 来管理参考文献。可以在导言区加载  \texttt{biblatex}  宏包，并使用  \texttt{\textbackslash addbibresource\{*.bib\} } 命令来添加参考文献文件。
 
-在正文中，可以使用 \texttt{\textbackslash cite\{文献标签\}} 命令来引用文献。文献标签通常是一个唯一的标识符，用于在参考文献列表中查找对应的文献条目。
+在正文中，可以使用  \texttt{\textbackslash cite\{文献标签\} } 命令来引用文献。文献标签通常是一个唯一的标识符，用于在参考文献列表中查找对应的文献条目。
 
-在文档末尾使用 \texttt{\textbackslash printbibliography} 命令来生成参考文献列表。
+在文档末尾使用  \texttt{\textbackslash printbibliography}  命令来生成参考文献列表。
 
 bib文件需要遵循一定的格式来编写，我们可以自行查找相关资料。
 
 \subsection{LaTeX 的宏包}\label{sec:latex-packages}
 
-LaTeX 的宏包是扩展 LaTeX 功能的重要工具。通过加载不同的宏包，可以实现各种排版效果和功能。除了我们刚刚提到的 \texttt{amsmath}、\texttt{graphicx}、\texttt{hyperref} 和 \texttt{biblatex} 等常用宏包外，还有许多其他有用的宏包。例如：
+LaTeX 的宏包是扩展 LaTeX 功能的重要工具。通过加载不同的宏包，可以实现各种排版效果和功能。除了我们刚刚提到的  \texttt{amsmath} 、 \texttt{graphicx} 、 \texttt{hyperref}  和  \texttt{biblatex}  等常用宏包外，还有许多其他有用的宏包。例如：
 
 \begin{itemize}
-  \item \texttt{geometry}：用于设置页面布局和边距。
-  \item \texttt{fontspec}：用于设置字体，特别是在 XeLaTeX 中。
-  \item \texttt{tikz}：用于绘制图形和图表。
-  \item \texttt{pgfplots}：用于绘制函数图像和数据可视化。
-  \item \texttt{listings}：用于排版代码。
-  \item \texttt{algorithm2e}：用于排版算法。
+  \item  \texttt{geometry} ：用于设置页面布局和边距。
+  \item  \texttt{fontspec} ：用于设置字体，特别是在 XeLaTeX 中。
+  \item  \texttt{tikz} ：用于绘制图形和图表。
+  \item  \texttt{pgfplots} ：用于绘制函数图像和数据可视化。
+  \item  \texttt{listings} ：用于排版代码。
+  \item  \texttt{algorithm2e} ：用于排版算法。
 \end{itemize}
 
 \subsection{LaTeX 的字体设置}
 
-在LaTeX中，可以使用 \texttt{fontspec} 宏包来设置字体。这个宏包允许我们使用系统中安装的任何字体，并且可以设置字体的大小、样式和其他属性。
+在LaTeX中，可以使用  \texttt{fontspec}  宏包来设置字体。这个宏包允许我们使用系统中安装的任何字体，并且可以设置字体的大小、样式和其他属性。
 
-可以使用 \texttt{\textbackslash setmainfont\{字体名\}} 命令来设置正文的主字体，使用 \texttt{\textbackslash setsansfont\{字体名\}} 命令来设置无衬线字体，使用 \texttt{\textbackslash setmonofont\{字体名\}} 命令来设置等宽字体。例如：
+可以使用  \texttt{\textbackslash setmainfont\{字体名\} } 命令来设置正文的主字体，使用  \texttt{\textbackslash setsansfont\{字体名\} } 命令来设置无衬线字体，使用  \texttt{\textbackslash setmonofont\{字体名\} } 命令来设置等宽字体。例如：
 \begin{lstlisting}[language={[LaTeX]TeX}]
   \usepackage{fontspec}
   \setmainfont{Times New Roman}
@@ -597,7 +597,7 @@ LaTeX 的宏包是扩展 LaTeX 功能的重要工具。通过加载不同的宏�
 
 \subsection{LaTeX 的汉语排版，与字体专题}
 
-非常遗憾的是，LaTeX对于汉语、日语、朝鲜语等非字母语言的支持稍差。因此我们在使用LaTeX排版中文文档的时候，请确保使用 XeLaTeX 编译器，并且在导言区加载 \texttt{ctex} 宏包。这个宏包提供了对中文的支持，包括中文字体、段落格式等，这也是LaTeX主流的中文排版方式，其底层宏包是 \texttt{xeCJK}（C指中，J指日，K指韩）。
+非常遗憾的是，LaTeX对于汉语、日语、朝鲜语等非字母语言的支持稍差。因此我们在使用LaTeX排版中文文档的时候，请确保使用 XeLaTeX 编译器，并且在导言区加载  \texttt{ctex}  宏包。这个宏包提供了对中文的支持，包括中文字体、段落格式等，这也是LaTeX主流的中文排版方式，其底层宏包是  \texttt{xeCJK} （C指中，J指日，K指韩）。
 
 LaTeX的字体分三种：常规字体、无衬线字体和等宽字体。常规字体是指普通的衬线字体，通常用于正文；无衬线字体是指没有衬线的字体，通常用于标题或强调；等宽字体是指每个字符宽度相同的字体，通常用于代码或表格。对于Windows下的中文字体，默认情况下 LaTeX 使用的是宋体（SimSun）作为常规字体，微软雅黑（Microsoft YaHei）作为无衬线字体，等宽字体则使用仿宋（FangSong）。
 
@@ -605,7 +605,7 @@ LaTeX的字体分三种：常规字体、无衬线字体和等宽字体。常规
 
 另一方面，汉语和字母文字相比的一个特性是每个字符天生等宽。因此，大多数汉语字体是\textbf{没有专门的等宽字体}的，这一点与字母文字的字体有着巨大的不同。如果使用默认字体，则其等宽字体用仿宋实现。
 
-我们可以使用 \texttt{ctex} 宏包来使用更“中文排版”的风格设置中文文档的格式和字体。以下是一个简单的示例：
+我们可以使用  \texttt{ctex}  宏包来使用更“中文排版”的风格设置中文文档的格式和字体。以下是一个简单的示例：
 
 \begin{lstlisting}[language={[LaTeX]TeX}]
   \documentclass{article}
@@ -630,7 +630,7 @@ LaTeX的字体分三种：常规字体、无衬线字体和等宽字体。常规
   % 并设置前后垂直间距等。
 \end{lstlisting}
 
-另外，如果想批量的设置全文的字体，可以使用 \texttt{fontspec} 宏包来设置字体。这个宏包允许我们使用系统中安装的任何字体，并且可以设置字体的大小、样式和其他属性。对于中文字体，则需要搭配 \texttt{xeCJK} 宏包来使用；然而，\texttt{ctex} 宏包已经包含了 \texttt{xeCJK} 宏包，因此我们只需要额外加载 \texttt{fontspec} 宏包即可。
+另外，如果想批量的设置全文的字体，可以使用  \texttt{fontspec}  宏包来设置字体。这个宏包允许我们使用系统中安装的任何字体，并且可以设置字体的大小、样式和其他属性。对于中文字体，则需要搭配  \texttt{xeCJK}  宏包来使用；然而， \texttt{ctex}  宏包已经包含了  \texttt{xeCJK}  宏包，因此我们只需要额外加载  \texttt{fontspec}  宏包即可。
 
 假设使用思源系列字体，我们可以使用以下代码来设置中文字体：
 \begin{lstlisting}[language={[LaTeX]TeX}]
@@ -649,21 +649,21 @@ LaTeX的字体分三种：常规字体、无衬线字体和等宽字体。常规
 
 \subsubsection{input}
 
-使用 \texttt{\textbackslash input\{文件名\}} 命令来插入其他文件的内容。这个命令会将指定文件的内容直接插入到当前位置，等效于将文件内容复制粘贴到当前位置。例如：
+使用  \texttt{\textbackslash input\{文件名\} } 命令来插入其他文件的内容。这个命令会将指定文件的内容直接插入到当前位置，等效于将文件内容复制粘贴到当前位置。例如：
 \begin{lstlisting}[language={[LaTeX]TeX}]
   \input{chapter1.tex}
 \end{lstlisting}
-上述代码会将 \texttt{chapter1.tex} 文件的内容插入到当前位置。这是最轻量级的手段，也是最常见的手段，适合编写短文件，例如学术论文分section等。
+上述代码会将  \texttt{chapter1.tex}  文件的内容插入到当前位置。这是最轻量级的手段，也是最常见的手段，适合编写短文件，例如学术论文分section等。
 
 \subsubsection{include和includeonly}
 
-使用 \texttt{\textbackslash include\{文件名\}} 命令来插入其他文件的内容。这个命令会将指定文件的内容插入到当前位置，并且会在插入内容前后自动添加分页符，格外适合章节的划分。例如：
+使用  \texttt{\textbackslash include\{文件名\} } 命令来插入其他文件的内容。这个命令会将指定文件的内容插入到当前位置，并且会在插入内容前后自动添加分页符，格外适合章节的划分。例如：
 \begin{lstlisting}[language={[LaTeX]TeX}]
   \include{chapter1}
 \end{lstlisting}
-上述代码会将 \texttt{chapter1.tex} 文件的内容插入到当前位置，并在插入内容前后添加分页符。
+上述代码会将  \texttt{chapter1.tex}  文件的内容插入到当前位置，并在插入内容前后添加分页符。
 
-如果只想编译部分文件，可以使用 \texttt{\textbackslash includeonly\{文件名1, 文件名2, ...\}} 命令来指定只编译哪些文件。例如：
+如果只想编译部分文件，可以使用  \texttt{\textbackslash includeonly\{文件名1, 文件名2, ...\} } 命令来指定只编译哪些文件。例如：
 \begin{lstlisting}[language={[LaTeX]TeX}]
   \includeonly{chapter1, chapter3}
   ...
@@ -671,18 +671,18 @@ LaTeX的字体分三种：常规字体、无衬线字体和等宽字体。常规
   \include{chapter2}
   \include{chapter3}
 \end{lstlisting}
-上述代码只会编译 \texttt{chapter1.tex} 和 \texttt{chapter3.tex} 文件的内容，而忽略 \texttt{chapter2.tex} 文件的内容，但是能够正确地处理引用和目录。
+上述代码只会编译  \texttt{chapter1.tex}  和  \texttt{chapter3.tex}  文件的内容，而忽略  \texttt{chapter2.tex}  文件的内容，但是能够正确地处理引用和目录。
 
 这种方法适用于report和book文档类，适合编写长文件，例如书籍分chapter等。
 
 \subsubsection{subfiles}
-使用 \texttt{subfiles} 宏包来管理多文件。首先，在主文件中加载 \texttt{subfiles} 宏包，然后使用 \texttt{\textbackslash subfile\{文件名\}} 命令来插入其他文件的内容。例如：
+使用  \texttt{subfiles}  宏包来管理多文件。首先，在主文件中加载  \texttt{subfiles}  宏包，然后使用  \texttt{\textbackslash subfile\{文件名\} } 命令来插入其他文件的内容。例如：
 \begin{lstlisting}[language={[LaTeX]TeX}]
   \usepackage{subfiles}
   ...
   \subfile{chapter1.tex}
 \end{lstlisting}
-上述代码会将 \texttt{chapter1.tex} 文件的内容插入到当前位置。需要注意的是，使用 \texttt{subfiles} 宏包时，每个子文件都需要有自己的导言区和正文部分。子文件的导言区将继承主文件的设置，也可以添加自己的设置。
+上述代码会将  \texttt{chapter1.tex}  文件的内容插入到当前位置。需要注意的是，使用  \texttt{subfiles}  宏包时，每个子文件都需要有自己的导言区和正文部分。子文件的导言区将继承主文件的设置，也可以添加自己的设置。
 
 需要注意的是，采用多文件来管理文档的时候，我们在应对多文件引用时，需要多次编译才能得到正确的引用和目录，一般来说是三次。（而单文件文档只需要两次编译即可。）
 
@@ -714,20 +714,20 @@ Beamer类文档的基本结构和普通的LaTeX文档类似。然而，在正文
   \end{document}
 \end{lstlisting}
 
-如上述代码所示，创建帧有两种方式：一种是使用 \texttt{\textbackslash frame\{\}} 命令，另一种是使用 \texttt{frame} 环境。前者适合内容较少的帧，后者适合内容较多的帧。在帧中添加标题可以使用 \texttt{\textbackslash frametitle\{标题\}} 命令，如希望添加简单文字、图片、公式等内容，可以直接在帧中编写，方法和普通的 LaTeX 文档几乎完全相同。然而，如果希望添加表格、代码等浮动内容，则需要在该帧加上 \texttt{[fragile]} 选项，也就是：
+如上述代码所示，创建帧有两种方式：一种是使用  \texttt{\textbackslash frame\{\} } 命令，另一种是使用  \texttt{frame}  环境。前者适合内容较少的帧，后者适合内容较多的帧。在帧中添加标题可以使用  \texttt{\textbackslash frametitle\{标题\} } 命令，如希望添加简单文字、图片、公式等内容，可以直接在帧中编写，方法和普通的 LaTeX 文档几乎完全相同。然而，如果希望添加表格、代码等浮动内容，则需要在该帧加上  \texttt{[fragile]}  选项，也就是：
 \begin{lstlisting}[language={[LaTeX]TeX}]
   \begin{frame}[fragile]
 \end{lstlisting}
 
 \subsubsection{Beamer的常用强调}
 
-经常做幻灯片的同学们都知道，在幻灯片中希望强调某些内容的时候，最好不要仅使用字体的简单变化，而是结合显隐、颜色等手段来突出重点。对于部分颜色的文字，可以使用 \texttt{\textbackslash textcolor\{颜色名\}\{文本\}} 命令来实现。例如：
+经常做幻灯片的同学们都知道，在幻灯片中希望强调某些内容的时候，最好不要仅使用字体的简单变化，而是结合显隐、颜色等手段来突出重点。对于部分颜色的文字，可以使用  \texttt{\textbackslash textcolor\{颜色名\} \{文本\}} 命令来实现。例如：
 \begin{lstlisting}[language={[LaTeX]TeX}]
   \textcolor{red}{这是红色的文本}
   \textcolor{blue}{这是蓝色的文本}
 \end{lstlisting}
 
-另外，它也提供了一些“块”命令来强调内容，例如 \texttt{block}、\texttt{alertblock} 和 \texttt{exampleblock} 等环境。例如：
+另外，它也提供了一些“块”命令来强调内容，例如  \texttt{block} 、 \texttt{alertblock}  和  \texttt{exampleblock}  等环境。例如：
 \begin{lstlisting}[language={[LaTeX]TeX}]
   \begin{block}{普通块}
     这是一个普通块。
@@ -748,9 +748,9 @@ Beamer类文档的基本结构和普通的LaTeX文档类似。然而，在正文
     \item<3-> 第三项
   \end{itemize}
 \end{lstlisting}
-上述代码中，\texttt{<1->} 表示从这页的第一帧开始显示这一项，以此类推。如果只想在某一帧显示某一项，可以使用 \texttt{<n>} 的形式，例如 \texttt{<2>} 表示只在第二帧显示这一项。上述代码也可以用在其他环境中，例如段落、公式等。
+上述代码中， \texttt{<1->}  表示从这页的第一帧开始显示这一项，以此类推。如果只想在某一帧显示某一项，可以使用  \texttt{<n>}  的形式，例如  \texttt{<2>}  表示只在第二帧显示这一项。上述代码也可以用在其他环境中，例如段落、公式等。
 
-除了这种简单的显隐效果外，还可以使用 \texttt{\textbackslash pause} 命令来实现逐步显示的效果。例如：
+除了这种简单的显隐效果外，还可以使用  \texttt{\textbackslash pause}  命令来实现逐步显示的效果。例如：
 \begin{lstlisting}[language={[LaTeX]TeX}]
   这是第一部分内容。
   \pause
@@ -761,11 +761,11 @@ Beamer 还支持更复杂的显隐效果，感兴趣的同学可以查阅 Beamer
 
 \subsubsection{Beamer的主题}
 
-结构主题决定了幻灯片的整体风格。Beamer 提供了多种内置主题，用户可以根据需要选择合适的主题。可以使用 \texttt{\textbackslash usetheme\{主题名\}} 命令来设置主题。内置的主题有许多，我们可以通过查阅 Beamer 的文档来了解这些主题的具体名称和效果。我个人比较喜欢使用\texttt{Berlin}主题，该主题简洁大方，适合大多数场合。
+结构主题决定了幻灯片的整体风格。Beamer 提供了多种内置主题，用户可以根据需要选择合适的主题。可以使用  \texttt{\textbackslash usetheme\{主题名\} } 命令来设置主题。内置的主题有许多，我们可以通过查阅 Beamer 的文档来了解这些主题的具体名称和效果。我个人比较喜欢使用 \texttt{Berlin} 主题，该主题简洁大方，适合大多数场合。
 
-配色主题决定了幻灯片的配色方案。可以使用 \texttt{\textbackslash usecolortheme\{配色主题名\}} 命令来设置配色主题。内置的配色主题也有许多，例如 \texttt{dolphin}、\texttt{seahorse}、\texttt{beetle} 等。
+配色主题决定了幻灯片的配色方案。可以使用  \texttt{\textbackslash usecolortheme\{配色主题名\} } 命令来设置配色主题。内置的配色主题也有许多，例如  \texttt{dolphin} 、 \texttt{seahorse} 、 \texttt{beetle}  等。
 
-字体主题决定了幻灯片中使用的字体样式。可以使用 \texttt{\textbackslash usefonttheme\{字体主题名\}} 命令来设置字体主题。一般情况下，Beamer使用的字体系列和常规文档（serif）不同，我们可以使用\texttt{\textbackslash usefonttheme\{serif\}}来强制使用衬线字体。如果仅希望更改公式部分的字体，可以使用\texttt{\textbackslash usefonttheme[onlymath]\{serif\}}。
+字体主题决定了幻灯片中使用的字体样式。可以使用  \texttt{\textbackslash usefonttheme\{字体主题名\} } 命令来设置字体主题。一般情况下，Beamer使用的字体系列和常规文档（serif）不同，我们可以使用 \texttt{\textbackslash usefonttheme\{serif\} }来强制使用衬线字体。如果仅希望更改公式部分的字体，可以使用 \texttt{\textbackslash usefonttheme[onlymath]\{serif\} }。
 
 另外，Beamer 允许用户创建自己的主题，或者使用第三方提供的主题包。创建自定义主题需要一定的 LaTeX 和 Beamer 知识，建议有一定经验的用户尝试。
 
@@ -796,7 +796,7 @@ ModernCV 是一个用于制作简历的 LaTeX 文档类。它提供了多种简�
 \end{document}
 \end{lstlisting}
 
-如你所见，ModernCV 的使用非常简单。我们只需在导言区加载 \texttt{moderncv} 宏包，并设置主题和颜色，然后使用 \texttt{\textbackslash name}、\texttt{\textbackslash email} 和 \texttt{\textbackslash social} 等命令来添加个人信息。正文部分则使用 \texttt{\textbackslash section} 和 \texttt{\textbackslash cventry} 等命令来添加简历内容。这样就可以快速地生成一份简洁、美观的简历，免除了使用Word等工具排版的烦恼。
+如你所见，ModernCV 的使用非常简单。我们只需在导言区加载  \texttt{moderncv}  宏包，并设置主题和颜色，然后使用  \texttt{\textbackslash name} 、 \texttt{\textbackslash email}  和  \texttt{\textbackslash social}  等命令来添加个人信息。正文部分则使用  \texttt{\textbackslash section}  和  \texttt{\textbackslash cventry}  等命令来添加简历内容。这样就可以快速地生成一份简洁、美观的简历，免除了使用Word等工具排版的烦恼。
 
 该包的另一个极为良好的特性是可以自动压缩空白区域，可以有效地避免“半页纸尴尬”。但是与其这样，感觉确实不如多整点活填满这页纸（大嘘）。所以欢迎来LCPU玩混项目（不是）。
 
@@ -811,14 +811,14 @@ Typst 是一种新兴的排版语言，由著名的语言神Rust编写，旨在�
 官方提供了Typst的WebAPP，我们可以直接使用之，但是其中文字体和版本控制都不优秀。如果希望在本地使用，则可以在VS Code中安装插件 Tinymist Typst。安装完成后，用户可以在 VS Code 中创建 .typ 文件，并使用 Typst 语法进行排版。
 
 \begin{note}
-  官方提供了typst的命令行程序，可以使用Rust工具链安装或其他包管理安装。使用\texttt{typst watch main.typ}，之后就可以随意编辑main.typ，在能支持动态加载的pdf预览器如SumatraPDF和okular中预览pdf了。这种预览方式相比于tinymist预览内存占用小，平时推荐使用tinymist插件预览，除非长文本内存占用极大。
+  官方提供了typst的命令行程序，可以使用Rust工具链安装或其他包管理安装。使用 \texttt{typst watch main.typ} ，之后就可以随意编辑main.typ，在能支持动态加载的pdf预览器如SumatraPDF和okular中预览pdf了。这种预览方式相比于tinymist预览内存占用小，平时推荐使用tinymist插件预览，除非长文本内存占用极大。
 \end{note}
 
 \subsection{Typst 的语法}
 
 Typst 有两类语言模式：标记模式和脚本模式，而本质上都可以归结为脚本模式。
 
-在默认情况下，Typst 使用标记模式进行排版，使用类似于Markdown的简单语法来编写文档。如果希望进入脚本模式，可以使用井号\texttt{\#} 来切换到脚本模式，例如\texttt{\#heading(strong([加粗]))}是一个合法的语法。大段的脚本代码则可以使用花括号，例如\texttt{\#\{1+1\}}。
+在默认情况下，Typst 使用标记模式进行排版，使用类似于Markdown的简单语法来编写文档。如果希望进入脚本模式，可以使用井号 \texttt{\#}  来切换到脚本模式，例如 \texttt{\#heading(strong([加粗]))} 是一个合法的语法。大段的脚本代码则可以使用花括号，例如 \texttt{\#\{1+1\} }。
 
 在脚本模式中，也可以使用方括号来进入标记模式，这将成为脚本模式的“内容块”或者标记元素。
 

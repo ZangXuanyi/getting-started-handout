@@ -132,9 +132,9 @@ sl
 
 执行以上命令，我们就可以看到一个小火车在终端上跑了过去。
 
-\texttt{sl}是一个玩具软件，它的全称是Steam Locomotive，是一个在终端上显示火车动画的程序。这不仅能够展示ASCII艺术的魅力，还能矫正打错的\texttt{ls}命令（列出目录内容）。
+ \texttt{sl} 是一个玩具软件，它的全称是Steam Locomotive，是一个在终端上显示火车动画的程序。这不仅能够展示ASCII艺术的魅力，还能矫正打错的 \texttt{ls} 命令（列出目录内容）。
 
-\texttt{apt}是Debian及其衍生发行版（如Ubuntu）中用于管理软件包的工具。它可以用来安装、更新和删除软件包。
+ \texttt{apt} 是Debian及其衍生发行版（如Ubuntu）中用于管理软件包的工具。它可以用来安装、更新和删除软件包。
 
 于是我们就能看到，一个程序就这么跑起来了。
 
@@ -150,16 +150,16 @@ sl
 那么，我们怎么知道有什么程序，我们又怎么使用它们呢？对于第一个问题，我们可以通过搜索来解决；对于第二个问题，我们可以通过手册来解决。
 
 \begin{itemize}
-  \item \texttt{<program> -h}：这是最简单的方式，直接查看程序的帮助信息。通常会列出所有可用的子命令和选项。
-  \item \texttt{man <program>}：这是查看程序手册的方式。手册通常会提供更详细的信息，包括子命令的用法、选项的含义等。但是这个手册可能会比较长，需要耐心阅读。
-  \item \texttt{tldr <program>}：这个命令会给出一些常用的命令示例和简要说明。当然，\texttt{tldr}需要自己安装，当然，安装方法和\texttt{sl}类似。
+  \item  \texttt{<program> -h} ：这是最简单的方式，直接查看程序的帮助信息。通常会列出所有可用的子命令和选项。
+  \item  \texttt{man <program>} ：这是查看程序手册的方式。手册通常会提供更详细的信息，包括子命令的用法、选项的含义等。但是这个手册可能会比较长，需要耐心阅读。
+  \item  \texttt{tldr <program>} ：这个命令会给出一些常用的命令示例和简要说明。当然， \texttt{tldr} 需要自己安装，当然，安装方法和 \texttt{sl} 类似。
 \end{itemize}
 
 \section{Linux的文件系统}
 
 好的，我们刚刚已经知道怎么使用Linux了。接下来，我们来看看Linux的文件系统。我们不会涉及到任何复杂的概念，只会介绍一些最基本的内容。
 
-思考以下问题：我们刚刚确实输入了\texttt{sl}命令，但是我们并没有输入\texttt{sl}的路径。那这个\texttt{sl}到底在哪里呢？我们怎么知道它在哪里？（其实我们知不知道真无所谓）终端又怎么知道它在哪里？小火车又是怎么跑起来的？
+思考以下问题：我们刚刚确实输入了 \texttt{sl} 命令，但是我们并没有输入 \texttt{sl} 的路径。那这个 \texttt{sl} 到底在哪里呢？我们怎么知道它在哪里？（其实我们知不知道真无所谓）终端又怎么知道它在哪里？小火车又是怎么跑起来的？
 
 为了解决这一问题，计算机前辈们发挥了聪明才智：只要把所有的东西都归纳为一个概念，那么不就可以方便的管理了吗？于是，文件系统就诞生了。
 
@@ -177,45 +177,45 @@ UNIX和Linux认为，所有的东西都是\textbf{文件}。文件系统就是�
 
 我们在上一章中提到，Windows系统下，物理先于文件存在，所以有盘符一说。但是Linux不这么认为：Linux认为什么都是文件。于是，Linux的根目录\text{/}就成了所有文件的起点。所有的文件都在这个根目录下。
 
-于是，我们就能够通过目录来解决这一问题。目录是一个特殊的文件，它可以包含其他文件和子目录。我们可以使用\texttt{ls}命令来查看当前目录下的文件和子目录，也可以使用\texttt{cd}命令来切换目录。
+于是，我们就能够通过目录来解决这一问题。目录是一个特殊的文件，它可以包含其他文件和子目录。我们可以使用 \texttt{ls} 命令来查看当前目录下的文件和子目录，也可以使用 \texttt{cd} 命令来切换目录。
 
-Linux的目录结构和Windows极其相似，只是没有盘符，并且使用\texttt{/}作为分隔符，而不是\texttt{\textbackslash}。我们可以使用\texttt{/}来表示根目录，使用\texttt{..}来表示上一级目录，使用\texttt{./}来表示当前目录。需要注意的是，Linux的文件系统是区分大小写的，所以\texttt{/home}和\texttt{/Home}是两个不同的目录。
+Linux的目录结构和Windows极其相似，只是没有盘符，并且使用 \texttt{/} 作为分隔符，而不是 \texttt{\textbackslash} 。我们可以使用 \texttt{/} 来表示根目录，使用 \texttt{..} 来表示上一级目录，使用 \texttt{./} 来表示当前目录。需要注意的是，Linux的文件系统是区分大小写的，所以 \texttt{/home} 和 \texttt{/Home} 是两个不同的目录。
 
-Linux还有一个重要的目录：用户的家目录，通常位于\texttt{/home/username}。在这个目录下，用户可以存放一些配置文件。我们可以使用\texttt{\textasciitilde}来表示当前用户的家目录。我们不推荐把自己的杂七杂八文件放在根目录或者家目录下，而是放在家目录的子目录下。这样可以更好地组织文件，并且避免与系统文件冲突。
+Linux还有一个重要的目录：用户的家目录，通常位于 \texttt{/home/username} 。在这个目录下，用户可以存放一些配置文件。我们可以使用 \texttt{\textasciitilde} 来表示当前用户的家目录。我们不推荐把自己的杂七杂八文件放在根目录或者家目录下，而是放在家目录的子目录下。这样可以更好地组织文件，并且避免与系统文件冲突。
 
-我们在上一章提到，处于安全性考虑，对于可执行文件，如果没有提供路径，系统会在一些特定的目录下查找。因此假如有一个可执行文件\texttt{hello}，我们应当使用\texttt{./hello}来运行它，而不是直接使用\texttt{hello}。
+我们在上一章提到，处于安全性考虑，对于可执行文件，如果没有提供路径，系统会在一些特定的目录下查找。因此假如有一个可执行文件 \texttt{hello} ，我们应当使用 \texttt{./hello} 来运行它，而不是直接使用 \texttt{hello} 。
 
-如果我们想要在任何地方都能运行这个程序，我们可以把它加入PATH环境变量中去。PATH是一个环境变量，它包含了一些目录的路径，系统会在未提供路径时去这些目录下查找可执行文件。我们可以使用\texttt{echo \$PATH}命令来查看当前的PATH变量。
+如果我们想要在任何地方都能运行这个程序，我们可以把它加入PATH环境变量中去。PATH是一个环境变量，它包含了一些目录的路径，系统会在未提供路径时去这些目录下查找可执行文件。我们可以使用 \texttt{echo \$PATH} 命令来查看当前的PATH变量。
 
 \subsection{文件是谁的，有什么属性}
 
-作为多机系统，Linux 中文件如果对每个访问者都相同，那就没有安全性可言了。Linux 的做法是，抽象出了“用户”这个实体（其实就是在 \texttt{/etc/passwd} 里面定义的一行 UID 和用户名的对应而已）。为了方便用户的文件共享，同时抽象出了组（Group）的概念，代表一组互相信任的用户。
+作为多机系统，Linux 中文件如果对每个访问者都相同，那就没有安全性可言了。Linux 的做法是，抽象出了“用户”这个实体（其实就是在  \texttt{/etc/passwd}  里面定义的一行 UID 和用户名的对应而已）。为了方便用户的文件共享，同时抽象出了组（Group）的概念，代表一组互相信任的用户。
 
-对文件的基本操作有读、写、执行三种，一般用字母表示为r、w、x。我们使用权限位来表示这三种操作。每个文件都有三个权限位，分别对应所有者、组和其他用户。我们可以使用\texttt{ls -l}命令来查看文件的权限。
+对文件的基本操作有读、写、执行三种，一般用字母表示为r、w、x。我们使用权限位来表示这三种操作。每个文件都有三个权限位，分别对应所有者、组和其他用户。我们可以使用 \texttt{ls -l} 命令来查看文件的权限。
 
-举例：一个用户创建了一个文件，这个文件对他的权限是rwx，对同组用户的权限是r-x，对其他用户的权限是r--。那么这个文件的权限就是\texttt{rwxr-xr--}。而这个代表方式还是太笨重了，于是Linux又引入了数字表示法。
+举例：一个用户创建了一个文件，这个文件对他的权限是rwx，对同组用户的权限是r-x，对其他用户的权限是r--。那么这个文件的权限就是 \texttt{rwxr-xr--} 。而这个代表方式还是太笨重了，于是Linux又引入了数字表示法。
 
 数字表示法是一个“独热编码”（One-hot Encoding），也就是rwx被看作三个相互独立的二进制位，对应位上1表示有该权限，0表示没有该权限。然后把这三个位的值拼成一个三位的二进制数，就代表了其最终权限。例如：某用户对文件有读、写权限，没有执行权限，即rw-，对应的二进制数是110，转换成十进制就是6。而二进制中的100是4，010是2，001是1，于是就可以把一个用户对文件的权限表示为一个0到7的数字，例如7=4+2+1表示rwx，5=4+0+1表示r-x，等等。
 
-因此我们的文件权限可以用一个三位八进制来表示，从左到右的每一位分别对应所有者、组和其他用户的权限。例如，权限为\texttt{rwxr-xr--}的文件可以表示为\texttt{754}。另一个常见的权限编码是\texttt{644}，你能说明其含义吗？\footnote{其含义是：所有者有着读写权限，组和其他用户只有读权限。}
+因此我们的文件权限可以用一个三位八进制来表示，从左到右的每一位分别对应所有者、组和其他用户的权限。例如，权限为 \texttt{rwxr-xr--} 的文件可以表示为 \texttt{754} 。另一个常见的权限编码是 \texttt{644} ，你能说明其含义吗？\footnote{其含义是：所有者有着读写权限，组和其他用户只有读权限。}
 
-但有一个用户比较特殊，那就是root用户。root用户是系统管理员，拥有对所有文件的最高权限。无论文件的权限如何设置，root用户都可以对其进行读、写、执行操作；换句话说，root用户对所有文件的权限都是\texttt{rwx}或者7。
+但有一个用户比较特殊，那就是root用户。root用户是系统管理员，拥有对所有文件的最高权限。无论文件的权限如何设置，root用户都可以对其进行读、写、执行操作；换句话说，root用户对所有文件的权限都是 \texttt{rwx} 或者7。
 
-我们可以使用\texttt{chmod}命令来修改文件的权限。例如，\texttt{chmod 777 file.txt}将会把指定文件的权限设置为777。
+我们可以使用 \texttt{chmod} 命令来修改文件的权限。例如， \texttt{chmod 777 file.txt} 将会把指定文件的权限设置为777。
 
 \begin{tip}
   修改文件权限需要有相应的权限，否则会报错。例如你无法给一个对你来说权限是0的文件加上可执行权限。
 \end{tip}
 
 \begin{warning}
-  不要执行这类抽象的命令：\texttt{chmod 777 /}，这会导致系统所有成员全部被视同root用户，进而导致系统无法正常工作。
+  不要执行这类抽象的命令： \texttt{chmod 777 /} ，这会导致系统所有成员全部被视同root用户，进而导致系统无法正常工作。
   
-  这样就会导致所有用户都可以写根目录，随便替换\texttt{/bin/sh}、\texttt{/etc/passwd}、\texttt{usr/bin/sudo}等关键文件，乃至随意植入cron、systemd等定时任务，\textbf{等同于整个安全阵地完全失守，自毁长城}。
+  这样就会导致所有用户都可以写根目录，随便替换 \texttt{/bin/sh} 、 \texttt{/etc/passwd} 、 \texttt{usr/bin/sudo} 等关键文件，乃至随意植入cron、systemd等定时任务，\textbf{等同于整个安全阵地完全失守，自毁长城}。
 \end{warning}
 
 所以可执行文件并不是因为这个文件本身有什么特别，而是这个文件被你赋予了可执行的性质。一个简单的文本文件也可以被加上可执行的权限，也可以发挥操作其他文件的作用。
 
-例如，如果你会写 Python 的话，写一个从输入读取 2 个数字，输出他们和的程序，输出结果到控制台。在本地跑起来这个程序之后，把 \texttt{\#!/usr/bin/env python3} 放在脚本的第一行（这个特殊的一行叫 Shebang）。给这个脚本加上可执行的属性，然后直接运行这个文本！
+例如，如果你会写 Python 的话，写一个从输入读取 2 个数字，输出他们和的程序，输出结果到控制台。在本地跑起来这个程序之后，把  \texttt{\#!/usr/bin/env python3}  放在脚本的第一行（这个特殊的一行叫 Shebang）。给这个脚本加上可执行的属性，然后直接运行这个文本！
 
 \subsection{文件的联系}
 
@@ -230,7 +230,7 @@ Linux还有一个重要的目录：用户的家目录，通常位于\texttt{/hom
     ln a b           # 创建硬链接 b 指向 a
     ln -s a c       # 创建软链接 c 指向 a
   \end{lstlisting}
-  现在这里有了b和c两个新的文件。试着利用\texttt{ls -l}命令查看它们的属性，看看有什么区别。然后尝试删除a文件，看看b和c会发生什么变化。
+  现在这里有了b和c两个新的文件。试着利用 \texttt{ls -l} 命令查看它们的属性，看看有什么区别。然后尝试删除a文件，看看b和c会发生什么变化。
 \end{tip}
 
 \section{Linux的进一步使用}
@@ -271,7 +271,7 @@ sudo apt-get install <package-name>
 sudo apt-get remove <package-name>
 \end{lstlisting}
 
-有时候，我们不得不使用一些其他安装方式，例如从\texttt{*.deb}包安装。对于这些情况，我们可以使用以下命令：
+有时候，我们不得不使用一些其他安装方式，例如从 \texttt{*.deb} 包安装。对于这些情况，我们可以使用以下命令：
 
 \begin{lstlisting}[language=bash]
 sudo dpkg -i <package-name>.deb # 安装 .deb 包
@@ -289,36 +289,36 @@ sudo apt-get install -f # 修复依赖问题
 \subsubsection{VIM}\label{sec:vim}
 
 VIM是一个强大的文本编辑器，它有着丰富的功能和插件，可以满足各种需求。
-VIM有两种状态：命令状态和编辑状态。默认情况下，VIM处于命令状态。在命令状态下，我们可以使用各种命令来操作文件；在编辑状态下，我们可以直接输入文本。在这两种方式之间的切换非常简单，只需要按下\texttt{i}键即可进入编辑状态，按下\texttt{Esc}键即可返回命令状态。
+VIM有两种状态：命令状态和编辑状态。默认情况下，VIM处于命令状态。在命令状态下，我们可以使用各种命令来操作文件；在编辑状态下，我们可以直接输入文本。在这两种方式之间的切换非常简单，只需要按下 \texttt{i} 键即可进入编辑状态，按下 \texttt{Esc} 键即可返回命令状态。
 
 编辑状态下的VIM乏善可陈，完全可以把这玩意当成一个没有鼠标的Windows记事本来使用，这里根本没有什么好说的。我们的重点在于命令状态下的VIM。
 在命令状态下，我们可以使用各种命令来操作文件。以下是一些常用的命令：
 
 \begin{multicols}{2}
   \begin{itemize}
-    \item \texttt{h}：向左移动光标。
-    \item \texttt{j}：向下移动光标。
-    \item \texttt{k}：向上移动光标。
-    \item \texttt{l}：向右移动光标。
-    \item \texttt{w}：移动到下一个单词的开头。
-    \item \texttt{b}：移动到上一个单词的开头。
-    \item \texttt{0}：移动到行首。
-    \item \texttt{\$}：移动到行尾。
-    \item \texttt{gg}：移动到文件开头。
-    \item \texttt{G}：移动到文件结尾。
-    \item \texttt{dd}：删除当前行。
-    \item \texttt{yy}：复制当前行。
-    \item \texttt{p}：粘贴。
-    \item \texttt{u}：撤销。
-    \item \texttt{Ctrl+r}：重做。
-    \item \texttt{:w}：保存文件。
-    \item \texttt{:q}：退出VIM。
-    \item \texttt{:wq}：保存并退出VIM。
-    \item \texttt{:q!}：强制退出VIM，不保存文件。
+    \item  \texttt{h} ：向左移动光标。
+    \item  \texttt{j} ：向下移动光标。
+    \item  \texttt{k} ：向上移动光标。
+    \item  \texttt{l} ：向右移动光标。
+    \item  \texttt{w} ：移动到下一个单词的开头。
+    \item  \texttt{b} ：移动到上一个单词的开头。
+    \item  \texttt{0} ：移动到行首。
+    \item  \texttt{\$} ：移动到行尾。
+    \item  \texttt{gg} ：移动到文件开头。
+    \item  \texttt{G} ：移动到文件结尾。
+    \item  \texttt{dd} ：删除当前行。
+    \item  \texttt{yy} ：复制当前行。
+    \item  \texttt{p} ：粘贴。
+    \item  \texttt{u} ：撤销。
+    \item  \texttt{Ctrl+r} ：重做。
+    \item  \texttt{:w} ：保存文件。
+    \item  \texttt{:q} ：退出VIM。
+    \item  \texttt{:wq} ：保存并退出VIM。
+    \item  \texttt{:q!} ：强制退出VIM，不保存文件。
   \end{itemize}
 \end{multicols}
 
-想给Vim装插件其实也是一种挺折腾的工作。目前最通行的方式是利用插件管理器，比如Vundle、Pathogen、vim-plug等。安装插件管理器后，我们可以通过编辑\texttt{~/.vimrc}文件来添加插件，具体也可以参考各插件管理器的文档。而使用NeoVim等衍生版本则会更方便一些。
+想给Vim装插件其实也是一种挺折腾的工作。目前最通行的方式是利用插件管理器，比如Vundle、Pathogen、vim-plug等。安装插件管理器后，我们可以通过编辑 \texttt{~/.vimrc} 文件来添加插件，具体也可以参考各插件管理器的文档。而使用NeoVim等衍生版本则会更方便一些。
 
 \subsubsection{Nano}
 
@@ -326,14 +326,14 @@ Nano是一个简单易用的文本编辑器，它有着直观的界面和快捷�
 
 \begin{multicols}{2}
   \begin{itemize}
-    \item \texttt{Ctrl+O}：保存文件。
-    \item \texttt{Ctrl+X}：退出Nano。
-    \item \texttt{Ctrl+K}：剪切当前行。
-    \item \texttt{Ctrl+U}：粘贴。
-    \item \texttt{Ctrl+W}：查找文本。
-    \item \texttt{Ctrl+\textbackslash}：替换文本。
-    \item \texttt{Ctrl+C}：显示光标位置。
-    \item \texttt{Ctrl+G}：显示帮助信息。
+    \item  \texttt{Ctrl+O} ：保存文件。
+    \item  \texttt{Ctrl+X} ：退出Nano。
+    \item  \texttt{Ctrl+K} ：剪切当前行。
+    \item  \texttt{Ctrl+U} ：粘贴。
+    \item  \texttt{Ctrl+W} ：查找文本。
+    \item  \texttt{Ctrl+\textbackslash} ：替换文本。
+    \item  \texttt{Ctrl+C} ：显示光标位置。
+    \item  \texttt{Ctrl+G} ：显示帮助信息。
   \end{itemize}
 \end{multicols}
 
@@ -344,137 +344,137 @@ Nano是一个简单易用的文本编辑器，它有着直观的界面和快捷�
 \begin{itemize}
   \item \textbf{系统命令}
     \begin{itemize}
-      \item \texttt{sudo}命令用于提权。
-      \item \texttt{poweroff}和\texttt{shutdown}两个命令用于关机。
-      \item \texttt{reboot}命令用于重启电脑。
-      \item \texttt{whoami}命令用于查看自己是哪个用户。
-      \item \texttt{which}命令用于查找可执行文件的路径。
-      \item \texttt{ps}命令用于显示当前运行的进程。
+      \item  \texttt{sudo} 命令用于提权。
+      \item  \texttt{poweroff} 和 \texttt{shutdown} 两个命令用于关机。
+      \item  \texttt{reboot} 命令用于重启电脑。
+      \item  \texttt{whoami} 命令用于查看自己是哪个用户。
+      \item  \texttt{which} 命令用于查找可执行文件的路径。
+      \item  \texttt{ps} 命令用于显示当前运行的进程。
         \begin{itemize}
-          \item \texttt{-e}：显示所有进程。
-          \item \texttt{-f}：以全格式显示进程信息，包括父进程ID、用户等。
-          \item \texttt{-l}：以长格式显示进程信息。
-          \item \texttt{-u}：显示指定用户的进程。
-          \item \texttt{-p}：显示指定进程ID的进程。
-          \item \texttt{-o}：自定义输出格式。
-          \item \texttt{-H}：以树形结构显示进程之间的关系。
-          \item \texttt{-j}：以作业控制格式显示进程信息。
-          \item \texttt{-x}：显示所有进程，包括没有控制终端的进程。
+          \item  \texttt{-e} ：显示所有进程。
+          \item  \texttt{-f} ：以全格式显示进程信息，包括父进程ID、用户等。
+          \item  \texttt{-l} ：以长格式显示进程信息。
+          \item  \texttt{-u} ：显示指定用户的进程。
+          \item  \texttt{-p} ：显示指定进程ID的进程。
+          \item  \texttt{-o} ：自定义输出格式。
+          \item  \texttt{-H} ：以树形结构显示进程之间的关系。
+          \item  \texttt{-j} ：以作业控制格式显示进程信息。
+          \item  \texttt{-x} ：显示所有进程，包括没有控制终端的进程。
         \end{itemize}
-      \item \texttt{kill}命令用于终止进程。
-      \item \texttt{fg}命令可以将后台运行的任务调回前台，这个命令可以恢复被\texttt{Ctrl+Z}挂起的任务。
-      \item \texttt{bg}命令可以将任务放到后台运行。
+      \item  \texttt{kill} 命令用于终止进程。
+      \item  \texttt{fg} 命令可以将后台运行的任务调回前台，这个命令可以恢复被 \texttt{Ctrl+Z} 挂起的任务。
+      \item  \texttt{bg} 命令可以将任务放到后台运行。
     \end{itemize}
   \item \textbf{列出和查找类}
     \begin{itemize}
-      \item \texttt{pwd}命令用于显示当前工作目录的绝对路径。
-      \item \texttt{ls}命令用于列出目录中的文件和子目录。
+      \item  \texttt{pwd} 命令用于显示当前工作目录的绝对路径。
+      \item  \texttt{ls} 命令用于列出目录中的文件和子目录。
         \begin{itemize}
-          \item \texttt{-l}：以长格式列出文件和目录的详细信息。
-          \item \texttt{-a}：列出所有文件和目录，包括隐藏文件。
-          \item \texttt{-h}：以人类可读的格式显示文件大小。
-          \item \texttt{-R}：递归地列出子目录中的文件和目录。
-          \item \texttt{-t}：按修改时间排序。
+          \item  \texttt{-l} ：以长格式列出文件和目录的详细信息。
+          \item  \texttt{-a} ：列出所有文件和目录，包括隐藏文件。
+          \item  \texttt{-h} ：以人类可读的格式显示文件大小。
+          \item  \texttt{-R} ：递归地列出子目录中的文件和目录。
+          \item  \texttt{-t} ：按修改时间排序。
         \end{itemize}
-      \item \texttt{tree}命令用于以树形结构显示目录中的文件和子目录。
-      \item \texttt{find}命令用于在目录中查找文件和目录。
+      \item  \texttt{tree} 命令用于以树形结构显示目录中的文件和子目录。
+      \item  \texttt{find} 命令用于在目录中查找文件和目录。
     \end{itemize}
   \item \textbf{文件系统操作类}
     \begin{itemize}
-      \item \texttt{cd}命令用于切换当前工作目录。
-      \item \texttt{mkdir}命令用于创建新目录。
+      \item  \texttt{cd} 命令用于切换当前工作目录。
+      \item  \texttt{mkdir} 命令用于创建新目录。
         \begin{itemize}
-          \item \texttt{-p}：递归地创建多级目录，如果上级目录不存在则一并创建。
-          \item \texttt{-v}：显示创建目录的详细信息。
-          \item \texttt{-m}：设置新目录的权限。
+          \item  \texttt{-p} ：递归地创建多级目录，如果上级目录不存在则一并创建。
+          \item  \texttt{-v} ：显示创建目录的详细信息。
+          \item  \texttt{-m} ：设置新目录的权限。
         \end{itemize}
-      \item \texttt{touch}命令用于创建新文件或更新现有文件的修改时间。
+      \item  \texttt{touch} 命令用于创建新文件或更新现有文件的修改时间。
         \begin{itemize}
-          \item \texttt{-a}：只更新访问时间。
-          \item \texttt{-m}：只更新修改时间。
-          \item \texttt{-c}：如果文件不存在则不创建。
-          \item \texttt{-t}：设置文件的时间戳。
-          \item \texttt{-r}：使用指定文件的时间戳。
+          \item  \texttt{-a} ：只更新访问时间。
+          \item  \texttt{-m} ：只更新修改时间。
+          \item  \texttt{-c} ：如果文件不存在则不创建。
+          \item  \texttt{-t} ：设置文件的时间戳。
+          \item  \texttt{-r} ：使用指定文件的时间戳。
         \end{itemize}
-      \item \texttt{rm}命令用于删除文件或目录。
+      \item  \texttt{rm} 命令用于删除文件或目录。
         \begin{itemize}
-          \item \texttt{-r}：递归地删除目录及其内容。
-          \item \texttt{-f}：强制删除文件或目录，不提示确认。
-          \item \texttt{-i}：在删除前提示确认。
-          \item \texttt{-v}：显示删除的详细信息。
+          \item  \texttt{-r} ：递归地删除目录及其内容。
+          \item  \texttt{-f} ：强制删除文件或目录，不提示确认。
+          \item  \texttt{-i} ：在删除前提示确认。
+          \item  \texttt{-v} ：显示删除的详细信息。
         \end{itemize}
-      \item \texttt{rmdir}命令用于删除空目录。
-      \item \texttt{cp}命令用于复制文件或目录。
+      \item  \texttt{rmdir} 命令用于删除空目录。
+      \item  \texttt{cp} 命令用于复制文件或目录。
         \begin{itemize}
-          \item \texttt{-r}：递归地复制目录及其内容。
-          \item \texttt{-f}：强制覆盖目标文件。
-          \item \texttt{-i}：在覆盖前提示确认。
-          \item \texttt{-v}：显示复制的详细信息。
-          \item \texttt{-u}：只在源文件比目标文件新时才进行复制。
+          \item  \texttt{-r} ：递归地复制目录及其内容。
+          \item  \texttt{-f} ：强制覆盖目标文件。
+          \item  \texttt{-i} ：在覆盖前提示确认。
+          \item  \texttt{-v} ：显示复制的详细信息。
+          \item  \texttt{-u} ：只在源文件比目标文件新时才进行复制。
         \end{itemize}
-      \item \texttt{mv}命令用于移动或重命名文件或目录。
+      \item  \texttt{mv} 命令用于移动或重命名文件或目录。
         \begin{itemize}
-          \item \texttt{-f}：强制覆盖目标文件。
-          \item \texttt{-i}：在覆盖前提示确认。
-          \item \texttt{-v}：显示移动的详细信息。
-          \item \texttt{-u}：只在源文件比目标文件新时才进行移动。
+          \item  \texttt{-f} ：强制覆盖目标文件。
+          \item  \texttt{-i} ：在覆盖前提示确认。
+          \item  \texttt{-v} ：显示移动的详细信息。
+          \item  \texttt{-u} ：只在源文件比目标文件新时才进行移动。
         \end{itemize}
-      \item \texttt{ln}命令用于创建链接。
+      \item  \texttt{ln} 命令用于创建链接。
         \begin{itemize}
-          \item \texttt{-s}：创建软链接（符号链接）。
-          \item \texttt{-f}：强制覆盖目标链接。
-          \item \texttt{-i}：在覆盖前提示确认。
-          \item \texttt{-v}：显示链接的详细信息。
-          \item \texttt{-T}：将目标视为一个普通文件，而不是目录。
+          \item  \texttt{-s} ：创建软链接（符号链接）。
+          \item  \texttt{-f} ：强制覆盖目标链接。
+          \item  \texttt{-i} ：在覆盖前提示确认。
+          \item  \texttt{-v} ：显示链接的详细信息。
+          \item  \texttt{-T} ：将目标视为一个普通文件，而不是目录。
         \end{itemize}
-      \item \texttt{tar}命令用于打包和解包文件。
+      \item  \texttt{tar} 命令用于打包和解包文件。
         \begin{itemize}
-          \item \texttt{-c}：创建一个新的归档文件。
-          \item \texttt{-x}：从归档文件中提取文件。
-          \item \texttt{-f}：指定归档文件的名称。
-          \item \texttt{-v}：显示详细的操作信息。
-          \item \texttt{-z}：使用 gzip 压缩或解压缩归档文件。
-          \item \texttt{-j}：使用 bzip2 压缩或解压缩归档文件。
-          \item \texttt{-J}：使用 xz 压缩或解压缩归档文件。
-          \item \texttt{-p}：保留文件的权限和时间戳。
-          \item \texttt{-C}：切换到指定目录后再进行打包或解包。
+          \item  \texttt{-c} ：创建一个新的归档文件。
+          \item  \texttt{-x} ：从归档文件中提取文件。
+          \item  \texttt{-f} ：指定归档文件的名称。
+          \item  \texttt{-v} ：显示详细的操作信息。
+          \item  \texttt{-z} ：使用 gzip 压缩或解压缩归档文件。
+          \item  \texttt{-j} ：使用 bzip2 压缩或解压缩归档文件。
+          \item  \texttt{-J} ：使用 xz 压缩或解压缩归档文件。
+          \item  \texttt{-p} ：保留文件的权限和时间戳。
+          \item  \texttt{-C} ：切换到指定目录后再进行打包或解包。
         \end{itemize}
     \end{itemize}
   \item \textbf{文本处理类}
     \begin{itemize}
-      \item \texttt{head}命令用于显示文件的前几行。
-      \item \texttt{tail}命令用于显示文件的后几行。
-      \item \texttt{cat}命令用于连接文件并打印到标准输出。
+      \item  \texttt{head} 命令用于显示文件的前几行。
+      \item  \texttt{tail} 命令用于显示文件的后几行。
+      \item  \texttt{cat} 命令用于连接文件并打印到标准输出。
         \begin{itemize}
-          \item \texttt{-n}：为每一行添加行号。
-          \item \texttt{-b}：为非空行添加行号。
-          \item \texttt{-s}：压缩连续的空行。
-          \item \texttt{-E}：在每行末尾显示\texttt{\$}符号。
-          \item \texttt{-T}：将制表符显示为\texttt{\^I}。
-          \item \texttt{-v}：显示不可见字符。
-          \item \texttt{-A}：显示所有不可见字符，包括空格和制表符。
-          \item \texttt{-e}：等同于\texttt{-vE}，显示不可见字符并在行末添加\texttt{\$}符号。
+          \item  \texttt{-n} ：为每一行添加行号。
+          \item  \texttt{-b} ：为非空行添加行号。
+          \item  \texttt{-s} ：压缩连续的空行。
+          \item  \texttt{-E} ：在每行末尾显示 \texttt{\$} 符号。
+          \item  \texttt{-T} ：将制表符显示为 \texttt{\^I} 。
+          \item  \texttt{-v} ：显示不可见字符。
+          \item  \texttt{-A} ：显示所有不可见字符，包括空格和制表符。
+          \item  \texttt{-e} ：等同于 \texttt{-vE} ，显示不可见字符并在行末添加 \texttt{\$} 符号。
         \end{itemize}
-      \item \texttt{echo}命令用于在终端输出文本。
+      \item  \texttt{echo} 命令用于在终端输出文本。
         \begin{itemize}
-          \item \texttt{-n}：不在输出末尾添加换行符。
-          \item \texttt{-e}：启用转义字符的解释，例如\texttt{\textbackslash n}表示换行，\texttt{\textbackslash t}表示制表符。
-          \item \texttt{-E}：禁用转义字符的解释。
-          \item \texttt{-c}：不输出任何内容。
-          \item \texttt{-C}：将输出内容转换为大写字母。
-          \item \texttt{-l}：将输出内容转换为小写字母。
-          \item \texttt{-a}：将输出内容转换为首字母大写字母。
-          \item \texttt{-s}：将输出内容转换为首字母小写字母。
-          \item \texttt{-p}：将输出内容转换为首字母大写字母，并将其他字母转换为小写字母。
+          \item  \texttt{-n} ：不在输出末尾添加换行符。
+          \item  \texttt{-e} ：启用转义字符的解释，例如 \texttt{\textbackslash n} 表示换行， \texttt{\textbackslash t} 表示制表符。
+          \item  \texttt{-E} ：禁用转义字符的解释。
+          \item  \texttt{-c} ：不输出任何内容。
+          \item  \texttt{-C} ：将输出内容转换为大写字母。
+          \item  \texttt{-l} ：将输出内容转换为小写字母。
+          \item  \texttt{-a} ：将输出内容转换为首字母大写字母。
+          \item  \texttt{-s} ：将输出内容转换为首字母小写字母。
+          \item  \texttt{-p} ：将输出内容转换为首字母大写字母，并将其他字母转换为小写字母。
         \end{itemize}
     \end{itemize}
 \end{itemize}
 
 \begin{warning}
-  导啊，咱们生产环境为啥执行 \texttt{dpkg} 会说 \texttt{command not found} 呀？\\
-  我之前干了啥？清了一下工作路径垃圾，好像是 \texttt{sudo rm -rf /}\\
+  导啊，咱们生产环境为啥执行  \texttt{dpkg}  会说  \texttt{command not found}  呀？\\
+  我之前干了啥？清了一下工作路径垃圾，好像是  \texttt{sudo rm -rf /} \\
   什么叫相对路径要加个点？\\
-  {\color{red}\textbf{警告：除非你知道你在输入什么，否则任何情况下均不要带上\texttt{sudo}执行删除命令！}}
+  {\color{red}\textbf{警告：除非你知道你在输入什么，否则任何情况下均不要带上 \texttt{sudo} 执行删除命令！}}
 \end{warning}
 
 \subsection{命令联动}
@@ -483,7 +483,7 @@ Nano是一个简单易用的文本编辑器，它有着直观的界面和快捷�
 
 \subsubsection{重定向}
 
-重定向只认识真正的文件（或文件描述符），有两种：\texttt{>} 把标准输出定向到文件（写）；\texttt{<}把文件内容定向到标准输入（读）。
+重定向只认识真正的文件（或文件描述符），有两种： \texttt{>}  把标准输出定向到文件（写）； \texttt{<} 把文件内容定向到标准输入（读）。
 \begin{lstlisting}[language=bash]
 echo "Hello, World!" > hello.txt   # 新建或覆盖文件
 cat < hello.txt                    # 把文件当输入
@@ -491,25 +491,25 @@ cat < hello.txt                    # 把文件当输入
 
 \subsubsection{管道}
 
-管道 \texttt{|} 在内核里创建一条匿名管道，让左边进程的标准输出直接成为右边进程的标准输入，两边同时运行。
+管道  \texttt{|}  在内核里创建一条匿名管道，让左边进程的标准输出直接成为右边进程的标准输入，两边同时运行。
 
 \begin{lstlisting}[language=bash]
 ls | grep "file"          # 边 ls 边 grep，流式处理
 \end{lstlisting}
 
-\subsubsection{\texttt{Here-String}}
+\subsubsection{ \texttt{Here-String} }
 
-\texttt{<<< word}是 Bash 的 here-string 语法，shell 会先把 \texttt{word} 的扩展结果写进一个临时文件（或匿名管道），再把该临时对象作为标准输入递给命令。因此它正好弥补了重定向只能读文件的不足。
+ \texttt{<<< word} 是 Bash 的 here-string 语法，shell 会先把  \texttt{word}  的扩展结果写进一个临时文件（或匿名管道），再把该临时对象作为标准输入递给命令。因此它正好弥补了重定向只能读文件的不足。
 
 \begin{lstlisting}[language=bash]
 grep "file" <<< "$(ls)"   # 等价于 ls | grep "file"，但没用管道
 \end{lstlisting}
 
-\texttt{Here-String}和管道有一定的区别。管道是流式的，边产生边消费；\texttt{Here-String}必须等整个字符串生成完才能开始消费。
+ \texttt{Here-String} 和管道有一定的区别。管道是流式的，边产生边消费； \texttt{Here-String} 必须等整个字符串生成完才能开始消费。
 
 \subsubsection{进程替换}
 
-进程替换是一种“把命令输出/输入伪装成文件名”的 Bash 特性。\texttt{<(cmd)} 把命令的标准输出绑定到一个命名管道（或 \texttt{/dev/fd/N}），返回一个可读文件名；\texttt{>(cmd)} 则把命令的标准输入绑定到一个命名管道，返回一个可写文件名。对任何“只能读文件”的工具（`diff`、`cat`、`sort`…）来说，这就像凭空多了两个临时文件。
+进程替换是一种“把命令输出/输入伪装成文件名”的 Bash 特性。 \texttt{<(cmd)}  把命令的标准输出绑定到一个命名管道（或  \texttt{/dev/fd/N} ），返回一个可读文件名； \texttt{>(cmd)}  则把命令的标准输入绑定到一个命名管道，返回一个可写文件名。对任何“只能读文件”的工具（`diff`、`cat`、`sort`…）来说，这就像凭空多了两个临时文件。
 
 \begin{lstlisting}[language=bash]
 diff <(cmd1) <(cmd2)      # 比较两条命令的输出，而无需临时落盘
@@ -518,7 +518,7 @@ sort >(uniq > result.txt) # 把排序结果直接丢给 uniq
 
 \subsubsection*{变量与命令替换}
 
-\texttt{\$(cmd)} 是“命令替换”，shell 会等待该命令执行结束，把它的全部标准输出当成一段文本收回来，可以赋给变量，也可以直接嵌入命令行。
+ \texttt{\$(cmd)}  是“命令替换”，shell 会等待该命令执行结束，把它的全部标准输出当成一段文本收回来，可以赋给变量，也可以直接嵌入命令行。
 
 \begin{lstlisting}[language=bash]
 out=$(ls)                 # 把 ls 的输出存进变量
@@ -526,7 +526,7 @@ grep "file" <<< "$out"    # 这里用 here-string 消费变量
 diff <(echo "$out") <(ls) # 用进程替换再比一次
 \end{lstlisting}
 
-\texttt{\$(cmd)} 本身不是管道，也不是重定向。它只是“把命令输出变成字符串”的一种手段。
+ \texttt{\$(cmd)}  本身不是管道，也不是重定向。它只是“把命令输出变成字符串”的一种手段。
 
 \begin{table}[ht]\small
   \centering
@@ -534,11 +534,11 @@ diff <(echo "$out") <(ls) # 用进程替换再比一次
     \toprule
     机制 & 数据形态 & 左侧何时开始 & 右侧何时开始 \\
     \midrule
-    \texttt{cmd1 | cmd2} & 管道字节流 & 立即 & 立即 \\
-    \texttt{cmd < file} & 已有文件 & 立即 & - \\
-    \texttt{cmd <<< "\$str"} & 临时文件 & 字符串生成完后 & 字符串生成完后 \\
-    \texttt{cmd <(cmd1)} & 命名管道/FD & 立即 & 立即 \\
-    \texttt{str=\$(cmd1); cmd2 <<< "\$str"} & 变量$\rightarrow$临时文件 & cmd1 结束后 & cmd1 结束后 \\
+     \texttt{cmd1 | cmd2}  & 管道字节流 & 立即 & 立即 \\
+     \texttt{cmd < file}  & 已有文件 & 立即 & - \\
+     \texttt{cmd <<< "\$str"}  & 临时文件 & 字符串生成完后 & 字符串生成完后 \\
+     \texttt{cmd <(cmd1)}  & 命名管道/FD & 立即 & 立即 \\
+     \texttt{str=\$(cmd1); cmd2 <<< "\$str"}  & 变量$\rightarrow$临时文件 & cmd1 结束后 & cmd1 结束后 \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -551,11 +551,11 @@ diff <(echo "$out") <(ls) # 用进程替换再比一次
 
 Oh My Zsh 是一个开源的、社区驱动的框架，用于管理 Zsh 配置。它提供了大量的插件和主题，可以帮助用户更好地使用 Zsh，提高工作效率，其官网为\url{ohmyz.sh}。
 
-安装、配置等内容请参考官网。其插件也是非常丰富的，我个人非常喜欢自动补全和语法高亮两个插件。而著名的\texttt{git}和\texttt{z}我个人反而很少用，主要是因为在别处已经彻底习惯用git命令的正常形式了，连图形化界面都几乎不用；而\texttt{z}我个人觉得没有必要，毕竟我用得最多的目录也就那么几个，结合KDE桌面和Dolphin文件管理器完全足够快速访问。
+安装、配置等内容请参考官网。其插件也是非常丰富的，我个人非常喜欢自动补全和语法高亮两个插件。而著名的 \texttt{git} 和 \texttt{z} 我个人反而很少用，主要是因为在别处已经彻底习惯用git命令的正常形式了，连图形化界面都几乎不用；而 \texttt{z} 我个人觉得没有必要，毕竟我用得最多的目录也就那么几个，结合KDE桌面和Dolphin文件管理器完全足够快速访问。
 
 除此以外，starship也是一个非常不错的跨平台终端美化工具，支持Bash、Zsh、Fish等多种shell。其官网为\url{starship.rs}。安装和配置也非常简单，推荐一试。
 
-另外，如果看腻了默认的\texttt{ls}，我们还有\texttt{lsd}和\texttt{exa}两个更好看的替代品。它们都支持彩色输出、图标显示等功能，可以让你的目录列表更加美观和易读。与之类似的是用\texttt{bat}替代\texttt{cat}，\texttt{htop}替代\texttt{top}，它们也都提供了更丰富的功能和更好的用户体验。当然，这些工具都需要单独安装。
+另外，如果看腻了默认的 \texttt{ls} ，我们还有 \texttt{lsd} 和 \texttt{exa} 两个更好看的替代品。它们都支持彩色输出、图标显示等功能，可以让你的目录列表更加美观和易读。与之类似的是用 \texttt{bat} 替代 \texttt{cat} ， \texttt{htop} 替代 \texttt{top} ，它们也都提供了更丰富的功能和更好的用户体验。当然，这些工具都需要单独安装。
 
 \section{安装 Arch Linux}
 
@@ -575,7 +575,7 @@ Oh My Zsh 是一个开源的、社区驱动的框架，用于管理 Zsh 配置�
 
 \subsubsection{进入安装环境}
 
-在跳出的选项框中，选择第一项，进入安装环境。之后，该安装环境就会自动给你加载一些内容。不需要管这些内容具体是什么，一路确认到命令行界面，此时你的用户是\texttt{root\@ archiso}，终端是zsh。从这一步开始，到安装完成为止，你的这个U盘就一定要一直插在电脑上。
+在跳出的选项框中，选择第一项，进入安装环境。之后，该安装环境就会自动给你加载一些内容。不需要管这些内容具体是什么，一路确认到命令行界面，此时你的用户是 \texttt{root\@ archiso} ，终端是zsh。从这一步开始，到安装完成为止，你的这个U盘就一定要一直插在电脑上。
 
 \subsubsection{禁用reflector服务}
 
@@ -587,7 +587,7 @@ Oh My Zsh 是一个开源的、社区驱动的框架，用于管理 Zsh 配置�
 
 \subsubsection{联网}
 
-我们使用\texttt{iwctl}来联网：
+我们使用 \texttt{iwctl} 来联网：
 
 \begin{lstlisting}[language=bash]
 iwctl # 进入交互式命令行
@@ -598,11 +598,11 @@ station wlan0 connect wifi-name # 进行连接，注意这里无法输入中文�
 exit # 连接成功后退出
 \end{lstlisting}
 
-可以使用\texttt{ping}等工具来检查是否联网了。在Linux下\texttt{ping}必须按下\texttt{Ctrl+C}终止输出。
+可以使用 \texttt{ping} 等工具来检查是否联网了。在Linux下 \texttt{ping} 必须按下 \texttt{Ctrl+C} 终止输出。
 
 \subsubsection{同步时间}
 
-我们使用\texttt{timedatectl}来同步系统的时间。这一步是必要的，这是因为 Linux 很多加密校验（HTTPS、GPG）依赖正确时间。如果时间差太多，证书会被判定过期。
+我们使用 \texttt{timedatectl} 来同步系统的时间。这一步是必要的，这是因为 Linux 很多加密校验（HTTPS、GPG）依赖正确时间。如果时间差太多，证书会被判定过期。
 
 \begin{lstlisting}
   timedatectl set-ntp true
@@ -620,7 +620,7 @@ exit # 连接成功后退出
 
 这两个操作对数据很危险！不要把含有重要数据的盘当作目标盘。
 
-\texttt{lsblk}命令可以帮助我们确定我们要把archlinux安装在哪里。一般有两种硬盘编号，要么是走SATA协议的sdx，其中x是字母；要么是走NVME协议的nvmexn1，其中x是数字。我们可以通过观察磁盘的大小、已存在的分区情况等判断。下文统一使用sda作为磁盘编号，请根据你自己的实际情况更改磁盘编号。
+ \texttt{lsblk} 命令可以帮助我们确定我们要把archlinux安装在哪里。一般有两种硬盘编号，要么是走SATA协议的sdx，其中x是字母；要么是走NVME协议的nvmexn1，其中x是数字。我们可以通过观察磁盘的大小、已存在的分区情况等判断。下文统一使用sda作为磁盘编号，请根据你自己的实际情况更改磁盘编号。
 
 \begin{lstlisting}[language=bash]
   cfdisk /dev/sda
@@ -634,7 +634,7 @@ exit # 连接成功后退出
 
 最后，应用分区表的修改。选中操作Write，并回车，输入yes,再回车，确认分区操作。
 
-分区完成后，可以再使用\texttt{lsblk}命令复查分区情况。
+分区完成后，可以再使用 \texttt{lsblk} 命令复查分区情况。
 
 现在，我们需要格式化各种分区。我们假设EFI分区是sda1，Swap分区是sda2，Btrfs分区是sda3。
 
@@ -661,11 +661,11 @@ mount /dev/sda1 /mnt/boot # 挂载 /boot 目录
 swapon /dev/sda2 # 挂载交换分区
 \end{lstlisting}
 
-用\texttt{df -h}命令和\texttt{free -h}来复查挂载情况。
+用 \texttt{df -h} 命令和 \texttt{free -h} 来复查挂载情况。
 
 \subsubsection{安装系统}
 
-现在终于到了最重要的一步：安装系统了。我们使用\texttt{pacstrap}来安装最基础的包和功能性软件。
+现在终于到了最重要的一步：安装系统了。我们使用 \texttt{pacstrap} 来安装最基础的包和功能性软件。
 
 \begin{lstlisting}
   pacstrap /mnt base base-devel linux linux-firmware btrfs-progs
@@ -678,7 +678,7 @@ swapon /dev/sda2 # 挂载交换分区
   pacman -S archlinux-keyring
 \end{lstlisting}
 
-然后经过一系列安装时信息的刷屏，就安装好了。之后，我们利用\texttt{genfstab}命令来根据当前挂载情况生成并写入fstab文件\footnote{该文件用来定义磁盘分区。它是 Linux 系统中重要的文件之一。}即可。
+然后经过一系列安装时信息的刷屏，就安装好了。之后，我们利用 \texttt{genfstab} 命令来根据当前挂载情况生成并写入fstab文件\footnote{该文件用来定义磁盘分区。它是 Linux 系统中重要的文件之一。}即可。
 
 \begin{lstlisting}
   genfstab
@@ -698,7 +698,7 @@ swapon /dev/sda2 # 挂载交换分区
 \end{lstlisting}
 输入你喜欢的主机名称，当然这里也不要包含特殊字符以及空格。
 
-下一步，设置\texttt{/etc/hosts}：
+下一步，设置 \texttt{/etc/hosts} ：
 \begin{lstlisting}
   vim /etc/hosts
 \end{lstlisting}
@@ -716,7 +716,7 @@ swapon /dev/sda2 # 挂载交换分区
 \end{lstlisting}
 这里没有北京，只有上海，所以不要傻傻的找北京了！
 
-使用vim或者nano编辑/etc/locale.gen，去掉 en\_US.UTF-8 UTF-8 以及 zh\_CN.UTF-8 UTF-8 行前的注释符号，并保存。之后用\texttt{locale-gen}命令来生成locale\footnote{这个文件决定了软件使用的语言、书写习惯、字符集等}。
+使用vim或者nano编辑/etc/locale.gen，去掉 en\_US.UTF-8 UTF-8 以及 zh\_CN.UTF-8 UTF-8 行前的注释符号，并保存。之后用 \texttt{locale-gen} 命令来生成locale\footnote{这个文件决定了软件使用的语言、书写习惯、字符集等}。
 
 \begin{lstlisting}
   locale-gen
@@ -803,7 +803,7 @@ ping 8.8.8.8 # 测试网络连接
 
 根用户的权限太高了，甚至高于系统本身。这导致其自由度太高、安全度太低，几乎毫无容错。因此，有必要创建一个非根用户。
 
-先做一点准备工作：使用vim或者nano编辑一下\texttt{~/.bash\_profile}文件：
+先做一点准备工作：使用vim或者nano编辑一下 \texttt{~/.bash\_profile} 文件：
 \begin{lstlisting}
   vim ~/.bash_profile
 \end{lstlisting}
@@ -837,7 +837,7 @@ ping 8.8.8.8 # 测试网络连接
 \begin{lstlisting}
   vim /etc/pacman.conf
 \end{lstlisting}
-然后去掉\texttt{[multilib]}一节中所有内容的注释即可。这样可以开启32位库的支持。
+然后去掉 \texttt{[multilib]} 一节中所有内容的注释即可。这样可以开启32位库的支持。
 
 然后在文档结尾处加入下面的文字来添加中国社区源：
 \begin{lstlisting}
@@ -867,7 +867,7 @@ Server = https://repo.huaweicloud.com/archlinuxcn/$arch # 华为开源镜像站
 
 值得注意的是，这时尚未安装任何显卡驱动。如果你在进入桌面环境时遭遇闪退、花屏等异常情况，建议尝试安装相应的显卡驱动。这里我就不提了，感兴趣的同学可以自行查找相关资料进行了解。
 
-之后，可以做一些很好的操作，例如使用\texttt{Ctrl+Alt+T}打开Konsole（不是Console，这个是一个终端模拟器）。连接一下网络，然后安装一些基础功能包：
+之后，可以做一些很好的操作，例如使用 \texttt{Ctrl+Alt+T} 打开Konsole（不是Console，这个是一个终端模拟器）。连接一下网络，然后安装一些基础功能包：
 \begin{lstlisting}
 sudo pacman -S sof-firmware alsa-firmware alsa-ucm-conf # 声音固件
 sudo pacman -S ntfs-3g # 使系统可以识别 NTFS 格式的硬盘
@@ -885,7 +885,7 @@ sudo pacman -S yay # yay 命令可以让用户安装 AUR 中的软件（yay 在 
 
 \subsubsection{配置中文环境}
 
-首先应当配置系统为中文。打开\texttt{System Settings > Language and Regional Settings > Language > Add languages}，找到并加入简体中文，然后拖拽到最上面一位，保存并退出设置。重启电脑就可以生效了。
+首先应当配置系统为中文。打开 \texttt{System Settings > Language and Regional Settings > Language > Add languages} ，找到并加入简体中文，然后拖拽到最上面一位，保存并退出设置。重启电脑就可以生效了。
 
 现在该配置汉语输入法了：
 \begin{lstlisting}
@@ -918,7 +918,7 @@ GLFW_IM_MODULE=ibus
 \begin{enumerate}
   \item 准备工作：准备好安装介质（这里是U盘）、改BIOS设置、联网等。
   \item U盘根阶段：从U盘启动，进入Linux的安装环境；准备硬盘（分区、格式化、挂载等）；安装基础系统。
-  \item 机器根阶段：从U盘\texttt{chroot}到新的系统，安装剩余的软件包，配置系统（主机名、时区、locale等）；做启动引导。
+  \item 机器根阶段：从U盘 \texttt{chroot} 到新的系统，安装剩余的软件包，配置系统（主机名、时区、locale等）；做启动引导。
   \item 后续的各种配置。
 \end{enumerate}
 实际上几乎所有的系统安装过程都可以大致分为这四个部分。只不过不同的系统在细节上有不同，而且许多系统会把这些步骤都封装好，用户只需要简单地点击几下就可以完成安装。
@@ -927,7 +927,7 @@ GLFW_IM_MODULE=ibus
 
 一般说来，能独立的安装好Arch Linux并能进行日常维护、找到性能瓶颈（例如谁在偷吃CPU）并解决问题、熟练使用各种命令行工具，就可以算是一个合格的Linux中级用户了。当然，如果你想更进一步，以下这些题目可以作为你的思考和实践方向：
 \begin{enumerate}
-  \item 一些常用命令背后是什么？查看诸如\texttt{ls}、\texttt{cp}、\texttt{mv}等的源代码，尝试修改它们以添加新功能，或仅让它们的输出更美观。
+  \item 一些常用命令背后是什么？查看诸如 \texttt{ls} 、 \texttt{cp} 、 \texttt{mv} 等的源代码，尝试修改它们以添加新功能，或仅让它们的输出更美观。
   \item Linux内核的基本结构和工作原理，例如进程管理、内存管理、文件系统等。
   \item Linux的部署，例如用ansible等工具实现自动化安装和配置，理解声明式系统（如NixOS、Guix等）的原理和优势，并尝试使用它们。
   \item Linux的安全机制，例如SELinux、AppArmor等。
@@ -982,12 +982,12 @@ WSL，或Windows Subsystem for Linux，是微软为Windows 10及更高版本用�
 
 WSL和Windows可以互相随意地访问文件系统，这是WSL往往比虚拟机或双系统好用的一个重要原因。
 
-在WSL的Linux环境中，Windows的文件系统挂载在\texttt{/mnt/c}（C盘）、\texttt{/mnt/d}（D盘）等目录下。你可以通过这些目录访问Windows的文件。例如：
+在WSL的Linux环境中，Windows的文件系统挂载在 \texttt{/mnt/c} （C盘）、 \texttt{/mnt/d} （D盘）等目录下。你可以通过这些目录访问Windows的文件。例如：
 \begin{lstlisting}
   cd /mnt/c/Users/YourUsername/Documents
 \end{lstlisting}
 
-而从Windows访问WSL的文件系统，则可以通过路径\texttt{\textbackslash \textbackslash wsl\$\textbackslash\$<distro-name>}来访问，上述目录是WSL的根目录，可以直接拖拽文件出入，或用VS Code等编辑器打开。
+而从Windows访问WSL的文件系统，则可以通过路径 \texttt{\textbackslash \textbackslash wsl\$\textbackslash\$<distro-name>} 来访问，上述目录是WSL的根目录，可以直接拖拽文件出入，或用VS Code等编辑器打开。
 
 \subsection{一口气配好开发环境}
 
@@ -1000,13 +1000,13 @@ sudo apt update && sudo apt upgrade -y
 # C/C++开发必装三件套
 sudo apt install build-essential gdb cmake ninja-build
 \end{lstlisting}
-关于上述那个\texttt{sed}命令，具体的URL可以参考清华大学开源软件镜像站的\href{https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/}{帮助页面}。
+关于上述那个 \texttt{sed} 命令，具体的URL可以参考清华大学开源软件镜像站的\href{https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/}{帮助页面}。
 
-对于VS Code，怎么让它调用WSL以及里面的工具呢？只需要在Windows端下安装VS Code的WSL扩展，然后\texttt{Ctrl+Shift+P}，连接到WSL，下面的内容就和Linux主机或者在docker里开发一模一样。Python、Rust、Golang这堆也同理，包管理器一条就装好，清清爽爽，比先前我们在Windows里折腾环境简单多了！（实际上我们提到过的MSYS2，也是在Windows里模拟Linux环境，但WSL更彻底一些，且更贴近实际Linux使用体验。）
+对于VS Code，怎么让它调用WSL以及里面的工具呢？只需要在Windows端下安装VS Code的WSL扩展，然后 \texttt{Ctrl+Shift+P} ，连接到WSL，下面的内容就和Linux主机或者在docker里开发一模一样。Python、Rust、Golang这堆也同理，包管理器一条就装好，清清爽爽，比先前我们在Windows里折腾环境简单多了！（实际上我们提到过的MSYS2，也是在Windows里模拟Linux环境，但WSL更彻底一些，且更贴近实际Linux使用体验。）
 
 \subsection{图形界面应用}
 
-WSL2的另一个优势是图形界面随便用。这个是基于WSLg的，在Windows的较新版本已经内置。比方说经典Linux记事本\texttt{gedit}，直接在WSL里安装并运行：
+WSL2的另一个优势是图形界面随便用。这个是基于WSLg的，在Windows的较新版本已经内置。比方说经典Linux记事本 \texttt{gedit} ，直接在WSL里安装并运行：
 \begin{lstlisting}
 sudo apt install gedit
 gedit test.txt
@@ -1017,15 +1017,15 @@ gedit test.txt
 
 一般可能遇到以下问题：
 \begin{itemize}
-  \item apt龟速：换源，见上文。当然也可能是没有\texttt{sudo apt update}导致的。
-  \item 内存\footnote{指的是RAM！}爆炸：WSL默认分配给Linux的内存是无限制的，会根据需要动态增长，但不会自动释放。对此，你需要建立一个文件：\texttt{\~/.wslconfig}，内容如下：
+  \item apt龟速：换源，见上文。当然也可能是没有 \texttt{sudo apt update} 导致的。
+  \item 内存\footnote{指的是RAM！}爆炸：WSL默认分配给Linux的内存是无限制的，会根据需要动态增长，但不会自动释放。对此，你需要建立一个文件： \texttt{\~/.wslconfig} ，内容如下：
 \begin{lstlisting}
 [wsl2]
 memory=4GB # 限制最大内存为4GB，当然一般会更大一些
 processors=2 # 限制使用2个CPU核心
 swap=2GB # 限制交换分区为2GB
 \end{lstlisting}
-保存后，\texttt{wsl --shutdown}重启子系统解决问题。
+保存后， \texttt{wsl --shutdown} 重启子系统解决问题。
   \item C盘爆红：如果你能确定你的C盘因WSL而爆红，可以执行：
 \begin{lstlisting}
   wsl --export <distro-name> distro.tar
@@ -1037,7 +1037,7 @@ swap=2GB # 限制交换分区为2GB
 \begin{lstlisting}
   netsh interface portproxy add v4tov4 listenport=3000 listenaddress=0.0.0.0 connectport=3000 connectaddress=<WSL_IP_Address>
 \end{lstlisting}
-  其中\texttt{<WSL\_IP\_Address>}可以通过\texttt{ip addr}命令查看。倘若网络完全异常，可以尝试重置WSL网络：
+  其中 \texttt{<WSL\_IP\_Address>} 可以通过 \texttt{ip addr} 命令查看。倘若网络完全异常，可以尝试重置WSL网络：
 \begin{lstlisting}
   netsh winsock reset
   netsh int ip reset all
@@ -1118,17 +1118,17 @@ WSL还支持systemd服务，2025年微软终于正式支持了这个功能：
 
 下一步，打开你的VS Code，在欢迎页上选择“连接到”，在弹出的菜单里选择WSL，此时如果没有安装过WSL插件则会自动安装。连接成功后，VS Code会自动打开一个新的窗口，左下角会显示你当前连接的WSL发行版名称。
 
-然后你就需要在该窗口里安装一个C++插件，以便于代码高亮、补全等。按下\texttt{Ctrl+Shift+X}打开扩展商店，搜索“C++”，找到由微软官方发布的那个，点击安装即可。
+然后你就需要在该窗口里安装一个C++插件，以便于代码高亮、补全等。按下 \texttt{Ctrl+Shift+X} 打开扩展商店，搜索“C++”，找到由微软官方发布的那个，点击安装即可。
 
 现在，你就可以愉快地在WSL里编写C/C++代码了！（当然你依然需要创建一个工作目录，并在里面创建源代码文件，否则扩展不起作用。）
 
 \begin{thinking}
   \begin{enumerate}
-    \item \texttt{sl}这个玩具软件仅有200行源代码，却能让你在终端里看到一列火车呼啸而过。请你阅读它的源代码，并简要描述它的实现原理；如果希望把该软件改成系统服务，开机就自动跑一列火车，你需要解决哪些问题？试着实践一下。
-    \item 对比\texttt{apt}、\texttt{pacman}的实现。为什么后者更容易实现滚动更新和回滚？怎么验证？
-    \item \texttt{bin}、\texttt{sbin}、\texttt{usr/bin}这三个东西都是什么？为什么会有这么多类似的目录？它们之间有什么区别？为什么直到2020年仍然有发行版保持着\texttt{/bin}和\texttt{/usr/bin}的分离？能否把它们合并？如果可以，怎么做？
-    \item \texttt{chmod 777 /}到底给敌人开了多少额外的后门？试着统计一个正常的系统中所有777文件分别被多少个不同的进程打开过。
-    \item 管道和\texttt{Here-String}的内存和延迟有多少？为什么后者会OOM,而管道不会？\texttt{Here-String}的实现原理是什么？如果要改进它，你会怎么做？
-    \item 试着在虚拟机里安装Arch Linux和NixOS；然后，试着将Arch的安装步骤翻译成\texttt{configuration.nix}，并试着生成ISO。对比两者的异同，然后说明声明式系统在可维护性上的优势。但是为什么即使这样，Arch用户仍然比NixOS用户多？
+    \item  \texttt{sl} 这个玩具软件仅有200行源代码，却能让你在终端里看到一列火车呼啸而过。请你阅读它的源代码，并简要描述它的实现原理；如果希望把该软件改成系统服务，开机就自动跑一列火车，你需要解决哪些问题？试着实践一下。
+    \item 对比 \texttt{apt} 、 \texttt{pacman} 的实现。为什么后者更容易实现滚动更新和回滚？怎么验证？
+    \item  \texttt{bin} 、 \texttt{sbin} 、 \texttt{usr/bin} 这三个东西都是什么？为什么会有这么多类似的目录？它们之间有什么区别？为什么直到2020年仍然有发行版保持着 \texttt{/bin} 和 \texttt{/usr/bin} 的分离？能否把它们合并？如果可以，怎么做？
+    \item  \texttt{chmod 777 /} 到底给敌人开了多少额外的后门？试着统计一个正常的系统中所有777文件分别被多少个不同的进程打开过。
+    \item 管道和 \texttt{Here-String} 的内存和延迟有多少？为什么后者会OOM,而管道不会？ \texttt{Here-String} 的实现原理是什么？如果要改进它，你会怎么做？
+    \item 试着在虚拟机里安装Arch Linux和NixOS；然后，试着将Arch的安装步骤翻译成 \texttt{configuration.nix} ，并试着生成ISO。对比两者的异同，然后说明声明式系统在可维护性上的优势。但是为什么即使这样，Arch用户仍然比NixOS用户多？
   \end{enumerate}
 \end{thinking}
