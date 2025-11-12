@@ -20,6 +20,7 @@
 \tcbuselibrary{skins,xparse,most,breakable}
 \usepackage{manyfoot,perpage}
 \usepackage{url}
+\usepackage{metalogo}
 \usepackage{hyperref}
 \usepackage{fontawesome5}
 \usepackage{authblk}
@@ -65,8 +66,67 @@
 \newtcolorbox{note}{enhanced,colback=teal!3!white,colframe=teal!60!black,coltitle=white,fonttitle=\bfseries,title=说明,top=2mm,bottom=2mm,left=2.5mm,right=2.5mm,boxrule=0.6pt,breakable,fontupper=\small,before upper={\setlength{\parindent}{2em}}}
 \newtcolorbox{example}[1][]{enhanced,colback=blue!3!white,colframe=blue!70!black,coltitle=white,fonttitle=\bfseries,title={\IfBlankTF{#1}{例题}{例题 (#1)}},top=2mm,bottom=2mm,left=2.5mm,right=2.5mm,boxrule=0.6pt,breakable,fontupper=\small,before upper={\setlength{\parindent}{2em}}}
 \newtcolorbox{answer}{enhanced,colback=green!4!white,colframe=green!65!black,coltitle=white,fonttitle=\bfseries,title=答案,top=2mm,bottom=2mm,left=2.5mm,right=2.5mm,boxrule=0.6pt,breakable,fontupper=\small,before upper={\setlength{\parindent}{2em}}}
-\newtcolorbox{exercise}{enhanced,colback=violet!4!white,colframe=violet!70!black,coltitle=white,fonttitle=\bfseries,title=练习,top=2mm,bottom=2mm,left=2.5mm,right=2.5mm,boxrule=0.6pt,breakable,fontupper=\small,before upper={\setlength{\parindent}{2em}}}
+\newtcolorbox{exercise}[1][]{enhanced,colback=violet!4!white,colframe=violet!70!black,coltitle=white,fonttitle=\bfseries,title={\IfBlankTF{#1}{练习}{练习：#1}},top=2mm,bottom=2mm,left=2.5mm,right=2.5mm,boxrule=0.6pt,breakable,fontupper=\small,before upper={\setlength{\parindent}{2em}}}
 \newtcolorbox{thinking}{enhanced,colback=yellow!4!white,colframe=yellow!70!black,coltitle=white,fonttitle=\bfseries,title=开放性思考和探索,top=2mm,bottom=2mm,left=2.5mm,right=2.5mm,boxrule=0.6pt,breakable,fontupper=\small,before upper={\setlength{\parindent}{2em}}}
+
+%--------------------------------------------------
+% 1. 阅读材料（可放笑话、历史、吐槽、拓展故事等）
+%--------------------------------------------------
+\newtcolorbox{reading}[1][]{enhanced,
+  colback      = purple!4!white,
+  colframe     = purple!65!black,
+  coltitle     = white,
+  fonttitle    = \bfseries,
+  title        = {\IfBlankTF{#1}{阅读材料}{阅读材料：#1}},
+  top          = 2mm,
+  bottom       = 2mm,
+  left         = 2.5mm,
+  right        = 2.5mm,
+  boxrule      = 0.6pt,
+  breakable,
+  fontupper    = \small,
+  before upper = {\setlength{\parindent}{2em}}%
+}
+
+%--------------------------------------------------
+% 2. 本章概要（章节鸟瞰、知识地图、学习路线）
+%--------------------------------------------------
+\newtcolorbox{outline}{%
+  enhanced,
+  colback      = gray!4!white,
+  colframe     = gray!60!black,
+  coltitle     = white,
+  fonttitle    = \bfseries,
+  title        = 本章概要,
+  top          = 2mm,
+  bottom       = 2mm,
+  left         = 2.5mm,
+  right        = 2.5mm,
+  boxrule      = 0.6pt,
+  breakable,
+  fontupper    = \small,
+  before upper = {\setlength{\parindent}{2em}}%
+}
+
+%--------------------------------------------------
+% 3. 本章前置知识（预备知识、温故提示）
+%--------------------------------------------------
+\newtcolorbox{prerequisite}{%
+  enhanced,
+  colback      = brown!4!white,
+  colframe     = brown!65!black,
+  coltitle     = white,
+  fonttitle    = \bfseries,
+  title        = 本章前置知识,
+  top          = 2mm,
+  bottom       = 2mm,
+  left         = 2.5mm,
+  right        = 2.5mm,
+  boxrule      = 0.6pt,
+  breakable,
+  fontupper    = \small,
+  before upper = {\setlength{\parindent}{2em}}%
+}
 
 %---------- 标题信息 ----------
 \title{\Huge\textbf{北京大学计算机基础能力手册}}

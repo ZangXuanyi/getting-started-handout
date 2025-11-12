@@ -1,5 +1,18 @@
 \chapter{现代高性能并发编程：异步、多进程和多线程}
 
+\begin{outline}
+  本章介绍了现代高性能并发编程的基本概念和技术，涵盖了异步编程、多进程编程和多线程编程的原理和实践。通过学习本章内容，读者将能够理解并应用这些技术来提升程序的性能和响应能力。
+\end{outline}
+
+\begin{prerequisite}
+  \begin{itemize}
+    \item 熟练掌握C/C++和Python编程
+    \item 计算机系统的基本原理（如进程、线程、内存等）
+    \item 熟练掌握使用CMake等构建工具构建项目的始末流程
+    \item 熟练掌握Linux的基本使用（几乎必须）
+  \end{itemize}
+\end{prerequisite}
+
 我们刚学编程的时候，代码大多数是“把所有的东西一口气做完”，代码一行接一行，像火车过隧道，即使漆黑一片也得走完。后来，我们发现，CPU核心越来越多，但硬盘、网络等数据来源的速度根本跟不上。我们发现，试图一口气把所有东西搬进内存时，CPU在睡觉；在等用户输入内容的时候，CPU就阻塞住，啥也不做。而这显然和实际生活中的情况不符：工人砌砖的时候，难道要等所有水泥全都送到才开始砌墙吗？显然不是的。
 
 那为了让CPU不睡觉，我们就有这两个类似的思路：
@@ -370,205 +383,193 @@ asyncio.run(main())
 demo/
     CMakeLists.txt
     include/
-        word_count.h
+        wc.hpp
     src/
+        wc.cpp
         main.cpp
 \end{lstlisting}
 
-头文件：
+wc.hpp
 \begin{lstlisting}[language=C++]
-#ifndef WORD_COUNT_H_
-#define WORD_COUNT_H_
-
-#include <cstddef>
-#include <cstdint>
+#pragma once
 #include <string>
 #include <unordered_map>
-#include <vector>
 
-namespace wc {
+using Freq = std::unordered_map<std::string, std::size_t>;
 
-using CountMap = std::unordered_map<std::string, std::uint64_t>;
-
-struct Range {
-    std::size_t beg;   // 文件偏移，指向单词首字符
-    std::size_t end;   // 文件偏移，指向单词尾后一个非单词字符
-};
-
-// 1. 扫描文件，生成合法分割区间
-std::vector<Range> split(const std::string& file, std::size_t chunks);
-
-// 2. 统计一个区间
-CountMap count_range(const std::string& file, const Range& r);
-
-// 3. 合并
-CountMap merge(const std::vector<CountMap>& maps);
-
-// 4. Top-K
-struct TopK { std::string word; std::uint64_t freq; };
-std::vector<TopK> top_k(const CountMap& map, std::size_t k);
-
-} // namespace wc
-#endif
+/* 统计文件，返回全局频次表 */
+Freq count_file(const std::string& path);          // 可能抛 std::system_error
 \end{lstlisting}
 
-源文件：
+源文件wc.cpp
 \begin{lstlisting}[language=C++]
-#include "word_count.h"
+#include "wc.hpp"
 #include <algorithm>
-#include <chrono>
-#include <fstream>
+#include <cctype>
+#include <cstring>
+#include <filesystem>
 #include <future>
-#include <iomanip>
-#include <iostream>
-#include <thread>
+#include <iterator>
+#include <stdexcept>
+#include <system_error>
 #include <vector>
+#include <thread>
+#include <fcntl.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
-namespace {
+// ---------- 低层 OS 封装 ----------
+namespace os {
 
-bool is_word_char(unsigned char c) {
-    return std::isalnum(c) || c == '_';
+// RAII 包装 mmap
+class mapped_region {
+public:
+    mapped_region(const std::filesystem::path& p)
+        : size_(std::filesystem::file_size(p)),
+          data_(do_map(p.c_str(), size_)) {}
+
+    ~mapped_region() { ::munmap(data_, size_); }
+
+    mapped_region(const mapped_region&)            = delete;
+    mapped_region& operator=(const mapped_region&) = delete;
+
+    const char* data() const noexcept { return static_cast<const char*>(data_); }
+    std::size_t size() const noexcept { return size_; }
+
+private:
+    static void* do_map(const char* path, std::size_t sz) {
+        int fd = ::open(path, O_RDONLY);
+        if (fd < 0) throw std::system_error(errno, std::system_category(),
+                                           "open: " + std::string(path));
+        void* p = ::mmap(nullptr, sz, PROT_READ, MAP_PRIVATE, fd, 0);
+        ::close(fd);
+        if (p == MAP_FAILED)
+            throw std::system_error(errno, std::system_category(), "mmap");
+        return p;
+    }
+    std::size_t size_;
+    void*       data_;
+};
+
+} // namespace os
+
+// ---------- 单词扫描 ----------
+static bool isword(char c) noexcept {
+    return std::isalnum(static_cast<unsigned char>(c)) || c == '_';
 }
 
-std::size_t hardware_threads() {
-    auto n = std::thread::hardware_concurrency();
-    return n ? n : 4;
-}
-
-} // namespace
-
-std::vector<wc::Range> wc::split(const std::string& file, std::size_t chunks) {
-    std::ifstream in(file, std::ios::binary | std::ios::ate);
-    if (!in) throw std::runtime_error("cannot open file");
-    std::size_t file_size = in.tellg();
-    in.seekg(0);
-
-    // 先收集所有单词边界
-    std::vector<std::size_t> boundaries{0};          // 首边界
-    bool in_word = false;
-    char buf[8192];
-    std::size_t off = 0;
-    while (in) {
-        in.read(buf, sizeof(buf));
-        std::size_t n = in.gcount();
-        for (std::size_t i = 0; i < n; ++i, ++off) {
-            bool w = is_word_char(static_cast<unsigned char>(buf[i]));
-            if (!in_word && w) boundaries.push_back(off); // 单词开始
-            else if (in_word && !w) boundaries.push_back(off); // 单词结束
-            in_word = w;
+// 扫描一段连续内存，返回局部表
+static Freq scan_block(const char* first, const char* last) {
+    Freq  local;
+    std::string w;
+    w.reserve(64);
+    for (auto it = first; it != last; ++it) {
+        char c = *it;
+        if (isword(c)) {
+            w.push_back(static_cast<char>(std::tolower(
+                            static_cast<unsigned char>(c))));
+        } else if (!w.empty()) {
+            ++local[w];
+            w.clear();
         }
     }
-    if (in_word) boundaries.push_back(file_size);   // 文件结尾
-    boundaries.push_back(file_size);                // 保证最后一个区间闭合
-
-    // 平均分配单词数
-    std::size_t total_words = boundaries.size() / 2;
-    std::size_t words_per_chunk = (total_words + chunks - 1) / chunks;
-    std::vector<Range> ranges;
-    for (std::size_t i = 0; i < total_words; i += words_per_chunk) {
-        std::size_t b = boundaries[i * 2];
-        std::size_t e = (i + words_per_chunk < total_words)
-                            ? boundaries[(i + words_per_chunk) * 2]
-                            : file_size;
-        ranges.push_back({b, e});
-    }
-    return ranges;
-}
-
-wc::CountMap wc::count_range(const std::string& file, const Range& r) {
-    std::ifstream in(file, std::ios::binary);
-    if (!in) throw std::runtime_error("cannot open file");
-    in.seekg(static_cast<std::streamoff>(r.beg));
-    std::size_t len = r.end - r.beg;
-    std::string content(len, '\0');
-    in.read(&content[0], static_cast<std::streamsize>(len));
-
-    CountMap local;
-    for (std::size_t i = 0; i < content.size(); ) {
-        if (!is_word_char(static_cast<unsigned char>(content[i]))) {
-            ++i; continue;
-        }
-        std::size_t j = i;
-        while (j < content.size() &&
-               is_word_char(static_cast<unsigned char>(content[j]))) ++j;
-        std::string word(content, i, j - i);
-        std::transform(word.begin(), word.end(), word.begin(),
-                       [](unsigned char c){ return std::tolower(c); });
-        ++local[word];
-        i = j;
-    }
+    if (!w.empty()) ++local[w];
     return local;
 }
 
-wc::CountMap wc::merge(const std::vector<CountMap>& maps) {
-    CountMap total;
-    for (const auto& m : maps)
-        for (const auto& [w, c] : m) total[w] += c;
-    return total;
+// ---------- 并行框架 ----------
+static Freq count_region(const char* first, const char* last,
+                         unsigned threads) {
+    if (threads == 0) threads = 1;
+    const std::size_t chunk = (last - first) / threads;
+    std::vector<std::future<Freq>> futures;
+    futures.reserve(threads);
+
+    for (unsigned i = 0; i < threads; ++i) {
+        const char* beg = first + i * chunk;
+        const char* end = (i + 1 == threads) ? last : beg + chunk;
+
+        // 调整 beg 到单词边界
+        if (i && beg < last && isword(beg[-1]) && isword(beg[0]))
+            while (beg != end && isword(*beg)) ++beg;
+
+        futures.push_back(std::async(std::launch::async,
+                                    [beg, end] { return scan_block(beg, end); }));
+    }
+
+    // 归并所有局部表
+    Freq global;
+    for (auto& f : futures)
+        for (auto& [w, c] : f.get())
+            global[w] += c;
+    return global;
 }
 
-std::vector<wc::TopK> wc::top_k(const CountMap& map, std::size_t k) {
-    std::vector<TopK> tmp;
-    tmp.reserve(map.size());
-    for (const auto& [w, c] : map) tmp.push_back({w, c});
-    std::partial_sort(tmp.begin(),
-                      tmp.begin() + std::min(k, tmp.size()),
-                      tmp.end(),
-                      [](const auto& a, const auto& b){ return a.freq > b.freq; });
-    if (tmp.size() > k) tmp.resize(k);
-    return tmp;
+// ---------- 对外接口 ----------
+Freq count_file(const std::string& path) {
+    os::mapped_region file(path);
+    unsigned cores = std::thread::hardware_concurrency();
+    return count_region(file.data(), file.data() + file.size(), cores);
 }
+\end{lstlisting}
+
+主程序main.cpp
+\begin{lstlisting}[language=C++]
+#include "wc.hpp"
+#include <algorithm>
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <vector>
 
 int main(int argc, char* argv[]) {
     if (argc != 2) {
-        std::cerr << "Usage: " << argv[0] << " <text-file>\n";
+        std::cerr << "Usage: " << argv[0] << " <utf8-en.txt>\n";
         return 1;
     }
-    const std::string file = argv[1];
 
-    auto t0 = std::chrono::steady_clock::now();
+    // 1. 统计
+    const auto freq = count_file(argv[1]);
 
-    /* 1. 分割 */
-    auto ranges = wc::split(file, hardware_threads());
+    // 2. 直接把 map 转成 vector<string_view> 避免拷贝 key
+    using entry = std::pair<std::size_t, std::string_view>;
+    std::vector<entry> top;
+    top.reserve(freq.size());
+    for (const auto& [w, c] : freq) top.emplace_back(c, w);
 
-    /* 2. 并行计数 */
-    std::vector<std::future<wc::CountMap>> futures;
-    for (const auto& r : ranges)
-        futures.push_back(std::async(std::launch::async,
-                                     wc::count_range,
-                                     file, r));
-    std::vector<wc::CountMap> partial;
-    for (auto& f : futures) partial.push_back(f.get());
+    // 3. 取 Top-10（nth_element + sort 前 10 更快）
+    const std::size_t k = 10;
+    if (top.size() > k) {
+        std::nth_element(top.begin(), top.begin() + k, top.end(),
+                         std::greater<>{});
+        top.resize(k);
+    }
+    std::sort(top.begin(), top.end(), std::greater<>{});
 
-    /* 3. 合并 */
-    auto total = wc::merge(partial);
-
-    /* 4. 输出 */
-    auto top = wc::top_k(total, 10);
-    auto t1 = std::chrono::steady_clock::now();
-    auto ms = std::chrono::duration<double, std::milli>(t1 - t0).count();
-
-    for (const auto& [w, c] : top)
-        std::cout << std::left << std::setw(15) << w << ' ' << c << '\n';
-    std::cout << "Total distinct: " << total.size() << '\n';
-    std::cout << "Ranges: " << ranges.size() << '\n';
-    std::cout << "Time  : " << std::fixed << std::setprecision(2) << ms << " ms\n";
+    // 4. 输出
+    for (const auto& [c, w] : top)
+        std::cout << std::setw(10) << w << "  " << c << '\n';
 }
 \end{lstlisting}
 
 CMake：
 \begin{lstlisting}
-cmake_minimum_required(VERSION 3.14)
-project(word_count CXX)
+cmake_minimum_required(VERSION 3.10)
+project(wordcount LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-add_executable(word_count
+add_executable(wordcount
     src/main.cpp
+    src/wc.cpp
 )
-target_include_directories(word_count PRIVATE include)
+target_include_directories(wordcount PRIVATE include)
+# 需要 pthread
+find_package(Threads REQUIRED)
+target_link_libraries(wordcount PRIVATE Threads::Threads)
 \end{lstlisting}
 
 编译运行：
@@ -680,7 +681,7 @@ for (const auto& r : ranges)
 
 上述任务中，如果我们确实能一口气把所有文件读入内存，那它就是一个典型的CPU密集型任务，多线程能显著提升性能；但如果使用的是机械硬盘，那还不如单线程。关于上述问题，机械硬盘选择单线程，SATA可以“轻量多线程”（也就是说线程数在2到4之间），NVMe和内存盘则可以使用“重度多线程”（线程数等于CPU物理核心数）。而现在已经2025年，NVMe硬盘随处可见，大家大可放心大胆地使用多线程。
 
-另外，上述代码其实相当朴素，仅奔着“实现”去，没有经过严格的性能调优。实际上，在NVMe或内存场景下，用 \texttt{mmap} 把文件映射到虚拟地址空间就能再节省一次系统调用；用更高效的并行归并算法也能提升合并性能；用更高效的哈希表实现（例如Google的 \texttt{dense\_hash\_map} ）也能提升性能；用线程池也能减少线程创建销毁的开销；用更低级的内存顺序模型也能提升原子操作的性能……这些都是可以考虑的优化方向。
+另外，上述代码其实相当朴素，仅奔着“实现”去，没有经过严格的性能调优。实际上，在NVMe或内存场景下，用更高效的并行归并算法也能提升合并性能；用更高效的哈希表实现（例如Google的 \texttt{dense\_hash\_map} ）也能提升性能；用线程池也能减少线程创建销毁的开销；用更低级的内存顺序模型也能提升原子操作的性能……这些都是可以考虑的优化方向。
 
 需要注意的是CPU物理核心数和逻辑核心数是不一样的：物理核心数是CPU实际拥有的核心数量，而逻辑核心数则是通过超线程技术（Hyper-Threading）实现的、操作系统看到的核心数量。一般来说，逻辑核心数是物理核心数的两倍。例如，一个四核八线程的CPU，其物理核心数为4，逻辑核心数为8。
 

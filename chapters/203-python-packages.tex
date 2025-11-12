@@ -1,4 +1,16 @@
 \chapter{Python常用包}\label{chap:python-advanced}
+
+\begin{outline}
+  本章介绍了一些Python中常用的包，涵盖了数据分析、自然语言处理、机器学习、科学计算和数据可视化等领域。通过学习本章内容，读者将能够更好地利用Python进行各种任务，提高编程效率和数据处理能力。
+\end{outline}
+
+\begin{prerequisite}
+  \begin{itemize}
+    \item 熟悉Python的基本语法和编程概念
+    \item 了解基本的数据结构（如列表、字典等）
+  \end{itemize}
+\end{prerequisite}
+
 \begin{flushright}
 这里默认你已经会Python的基本语法了，如果不会，请先阅读《Python高速入门》一节！
 \end{flushright}
@@ -510,7 +522,7 @@ Matplotlib支持多种风格，可以通过 \texttt{plt.style.use} 函数来设�
 \begin{lstlisting}[language=python]
 plt.style.use(['science', 'ieee'])  # 需安装 SciencePlots
 \end{lstlisting}
-当然，如使用该风格，则默认需要LaTeX来渲染文本，而这是非常缓慢的。因此可以在该列表中添加 \texttt{no-latex} 选项，以禁用LaTeX渲染：
+当然，如使用该风格，则默认需要 \LaTeX 来渲染文本，而这是非常缓慢的。因此可以在该列表中添加 \texttt{no-latex} 选项，以禁用 \LaTeX 渲染：
 \begin{lstlisting}[language=python]
 plt.style.use(['science', 'ieee', 'no-latex'])  # 需安装 SciencePlots
 \end{lstlisting}
@@ -680,7 +692,7 @@ with client.chat.completions.create(
 
 
 \begin{thinking}
-  以下内容是一些简单的实践选题，供同学们参考。可以使用LaTeX来形成实验报告！
+  以下内容是一些简单的实践选题，供同学们参考。可以使用 \LaTeX 来形成实验报告！
   \begin{enumerate}
     \item 用《红楼梦》文本做词-人共现网络：试着读入一段红楼梦文本，统计人物和词语的共现关系，并使用SnowNLP等库为人物的情绪打分，最终观察人物的情绪走势。
     \item 用PyTorch试着复现线性回归的解析解：试着生成一百万个三维点，使用PyTorch实现线性回归，并与解析解进行对比。提示：解析解可以使用Numpy求得，公式是$w^* = (X^TX)^{-1}X^Ty$。
