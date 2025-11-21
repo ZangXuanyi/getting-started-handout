@@ -1,37 +1,75 @@
 \documentclass[openany,fontset=none]{ctexbook}
 \input{preamble}
 
-% \includeonly{chapters/200-cpp-guidance}
+% \includeonly{book5/03-pragmatic-coding}
+% \includeonly{advanced/nn}
 
 \begin{document}
 \maketitle
 \frontmatter
-\include{chapters/000-introduction}
-\include{chapters/001-quick-check}
+\include{introduction}
+\include{quick-check}
 
 \mainmatter
-\tableofcontents
+{
+  \hypersetup{linkcolor=black}
+  \tableofcontents
+}
 
-\part{打好基础}
-\include{chapters/100-encounter}
-\include{chapters/101-knowledge-acquirement}
-\include{chapters/102-buy}
-\include{chapters/103-coding}
-\include{chapters/104-text-processing}
-\include{chapters/105-play-with-linux}
-\include{chapters/106-mini-ics}
+\part{导航和方法}
 
-\part{走向开发}
-\include{chapters/200-cpp-guidance}
-\include{chapters/201-cpp-project}
-\include{chapters/202-python-guidance}
-\include{chapters/203-python-packages}
-\include{chapters/204-pragmatic-coding}
-\include{chapters/205-debugging}
-\include{chapters/206-multitask}
-\include{chapters/207-data-exchange}
+\include{book1/knowledge-acquirement}
+
+\part{基础使用：让计算机先跑起来}
+
+\include{book2/01-buy-and-check}
+\include{book2/02-install-software}
+\include{book2/03-usage}
+
+\part{终端和Linux基础：为开发铺垫语境}
+
+\include{book3/01-shell-101}
+\include{book3/02-linux}
+
+\part{开发环境：让代码能编译能跑}
+
+\include{book4/01-coding}
+\include{book4/02-c-guidance}
+\include{book4/03-cpp-guidance-1}
+\include{book4/03-cpp-guidance-2}
+\include{book4/03-cpp-guidance-3}
+\include{book4/04-cpp-project}
+\include{book4/05-python-guidance}
+\include{book4/06-python-packages}
+
+\part{实用主义编程：写出更好的代码}
+
+\include{book5/01-git-github}
+\include{book5/02-secret-key}
+\include{book5/03-pragmatic-coding}
+\include{book5/04-debugging}
+\include{book5/05-data-exchange}
+
+\part{原理速览：知其然，更知其所以然}
+
+\include{book6/01-binary}
+\include{book6/02-memory}
+\include{book6/03-boot-io-network}
+\include{book6/04-data-structure}
+
+\part{工具箱}
+
+\include{tools/01-text-processing}
+\include{tools/02-latex}
+\include{tools/03-latex-advanced}
+
+
+\part{延伸进阶阅读}
+
+\include{advanced/multitask}
+\include{advanced/nn}
 
 \backmatter
-\part{附录}
-\include{chapters/901-postscript}
+\include{postscript}
+
 \end{document}

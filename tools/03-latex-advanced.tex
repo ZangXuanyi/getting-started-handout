@@ -1,0 +1,412 @@
+\chapter{\LaTeX 进阶}\label{sec:latex-advanced}
+
+本章将介绍一些更高级的 \LaTeX 技巧和概念，帮助你更好地利用 \LaTeX 的强大功能来创建专业的文档，例如数学公式、插入图表、自定义命令和环境等内容。
+
+\section[利用 \LaTeX 排版数学公式]{利用 \LaTeX 排版数学公式%
+  \protect\footnote{本章作者张庭瑄。}}
+在 \LaTeX 中，数学公式都需要进入一个特殊的模式：数学模式（math mode）。有两种主要的数学模式：行内数学模式和行间数学模式。
+
+为了更好地排版数学公式，建议加载 \texttt{amsmath} 宏包，它提供了许多增强的数学排版功能和环境。可以在导言区添加以下代码来加载该宏包：
+\begin{lstlisting}[language=TeX]
+\usepackage{amsmath}
+\end{lstlisting}
+
+\paragraph{行内公式}
+
+在 \LaTeX 中，行内数学模式使用美元符号（\$）包围数学内容，例如：\verb|$E=mc^2$|。 这将在文本中显示为 \(E=mc^2\)。另一种方式是使用反斜杠加括号：\verb|\(E=mc^2\)|。
+
+\verb|\ensuremath{}|可以确保参数始终处于数学模式，无论该命令在文本模式还是数学模式中使用。例如，定义一个命令来表示向量：
+\begin{lstlisting}[language=TeX]
+\newcommand{\vect}[1]{\ensuremath{\mathbf{#1}}}
+\end{lstlisting}
+这样，无论在文本中还是数学公式中使用 \verb|\vect{v}|，都能正确显示为 \(\mathbf{v}\)。但是，普通公式非常不建议用这个，仅建议在定义命令时使用。
+
+\paragraph{行间公式}
+行间公式则是较大的、被单独展示的数学表达式。可以使用反斜杠加中括号：\verb|\[E=mc^2\]|，这样会将公式居中显示在单独的一行上：
+\[E=mc^2\]
+
+上述方法不会带行号，如果需要行号，可以使用 \texttt{amsmath} 宏包提供的 \texttt{equation} 环境：
+\begin{lstlisting}[language=TeX]
+\begin{equation}
+E=mc^2
+\end{equation}
+\end{lstlisting}
+
+在数学模式中输入的空格会被忽略，间距由 \TeX 自动控制，也就是说\verb|$a + b$| 和 \verb|$a+b$| 效果是一样的，都会显示为 \(a+b\)。
+
+数学模式中禁用分段、汉字和中文标点。在行间公式中不允许换行。
+
+\paragraph{什么时候使用数学模式}
+在数学模式中，\LaTeX 会对输入的内容进行特殊处理，以确保数学符号和表达式的正确显示。因此，即使是最简单的数学表达式都要放在数学模式中，例如变量、运算符和函数等。 例如，变量 \(x\) 和 \(y\) 应该写成 \verb|$x$| 和 \verb|$y$|，而不是直接写成 \verb|x| 和 \verb|y|；\verb|1+1=2| 应该写成 \verb|$1+1=2$|。
+
+由于数学符号之间的间距与文本中产生的间距有所不同、数学和文本的断行也不同，因此在罗列许多变量的时候要把每一个变量单独放在数学模式中，例如：\verb|$a$, $b$, $c$|，而不是 \verb|a, b, c|。另，如使用半角逗号分隔变量，则应该加空格。例如：\verb|$a$, $b$, $c$|，而不是 \verb|$a$,$b$,$c$|。全角的逗号则不需要加空格。
+
+\subsection{普通的数学符号}
+\paragraph{基本数学符号}
+在数学模式中，可以使用各种简单的数学符号。希腊字母使用反斜杠加字母的英文名称表示，第一个字母大写表示大写希腊字母，第一个字母小写表示小写希腊字母。例如：\verb|\alpha| 显示为 \(\alpha\)，\verb|\beta| 显示为 \(\beta\)，\verb|\Gamma| 显示为 \(\Gamma\)，\verb|\Delta| 显示为 \(\Delta\)。部分大写字母没有被定义，例如大写的 $A$ 和 $B$ 没有对应的命令，这两个分别是大写的\(\alpha\)和\(\beta\)，我们完全可以用普通的字母 A 和 B 来表示它们。
+
+也有小写希腊字母的变体，例如：\verb|\epsilon| 显示为 \(\epsilon\)，\verb|\varepsilon| 显示为 \(\varepsilon\)。
+
+\paragraph{上下标}
+上下标分别使用 \verb|^| 和 \verb|_|，例如：\verb|$x^2$| 显示为 \(x^2\)，\verb|$a_i$| 显示为 \(a_i\)；一个数学符号可以同时带一个上标和一个下标，例如：\verb|$x_i^2$| 显示为 \(x_i^2\)，反过来写成 \verb|$x^2_i$| 也是一样。如果上下标包含多个字符，则需要使用大括号将它们括起来，例如：\verb|$x^{n+1}$| 显示为 \(x^{n+1}\)，\verb|$a_{i,j}$| 显示为 \(a_{i,j}\)。
+
+一个数学符号后面最多只能带一个上标或下标，如果需要多个上标或下标，可以使用大括号将它们括起来，例如：\verb|$x^{x^x}$| 显示为 \(x^{x^x}\)。
+
+要是想写前标，可以这么写： \verb|$^nP_r$| 显示为 \({}^nP_r\)。为了避免可能出现的间距问题，建议将数学符号连同前后上下标一起放进大括号中，例如：\verb|${^nP_r}$| 显示为 \({^nP_r}\)。更好的实践是引入mathtools宏包，然后使用\verb|\prescript|命令，例如：\verb|\prescript{n}{}{P_r}|。
+
+\paragraph{撇号} 撇号可以直接利用ASCII撇号（'）输入，例如：\verb|$f'(x)$| 显示为 \(f'(x)\)，\verb|$x''$| 显示为 \(x''\)。如果需要多个撇号，可以连续输入多个撇号，例如：\verb|$f'''(x)$| 显示为 \(f'''(x)\)。
+
+\paragraph{角度符号} 角度符号可以使用 \verb|\circ| 输入，例如：\verb|$90^\circ$| 显示为 \(90^\circ\)。
+
+\paragraph{分式} 分数和分式使用 \verb|\frac{分子}{分母}| 输入，例如：\verb|$\frac{a+b}{c+d}$| 显示为 \(\frac{a+b}{c+d}\)。简单的行内公式也可以用斜杠表示分式，例如：\verb|$a/b$| 显示为 \(a/b\)，但要注意此种方式的表示不要产生歧义，要在适当的位置加上括号，例如：\verb|$(a+b)/(c+d)$|。
+
+\paragraph{二项式系数} 二项式系数可以使用 \verb|\binom{n}{k}| 输入，例如：\verb|$\binom{n}{k}$| 显示为 \(\binom{n}{k}\)。
+
+\paragraph{根号} 根号使用 \verb|\sqrt{被开方数}| 输入，例如：\verb|$\sqrt{x+1}$| 显示为 \(\sqrt{x+1}\)。如果需要指定根指数，可以使用 \verb|\sqrt[指数]{被开方数}|，例如：\verb|$\sqrt[3]{x}$| 显示为 \(\sqrt[3]{x}\)。
+
+\paragraph{上下划线} 上划线和下划线分别使用 \verb|\overline{内容}| 和 \verb|\underline{内容}| 输入，例如：\verb|$\overline{AB}$| 显示为 \(\overline{AB}\)，\verb|$\underline{xy}$| 显示为 \(\underline{xy}\)。amsmath也提供了一组在符号上下加划线的命令，例如：\verb|\overleftarrow{内容}|、\verb|\overrightarrow{内容}|、\verb|\underleftarrow{内容}| 和 \verb|\underrightarrow{内容}|。\verb|overrightarrow| 常用于表示向量，和\verb|\vec| 效果类似；但\verb|\vec| 适合单个字符的向量表示，而 \verb|\overrightarrow| 则适合多个字符的向量表示。
+
+\paragraph{文本} 在数学模式中插入文本时，可以使用 \verb|\text{文本}| 命令，例如：\verb|$\text{速度}$|。该命令会确保文本以正常的字体和大小显示，而不是数学字体。
+
+\subsection{巨算符}
+
+巨算符（large operators）是指那些在数学公式中用于表示求和、积分、极限等操作的符号。这些符号通常比普通的运算符更大，并且在行间公式中会自动调整大小以适应上下文。最常见的巨算符包括：$\sum$, $\prod$, $\int$, $\oint$, $\lim$, $\bigcup$, $\bigcap$, $\bigvee$, $\bigwedge$等。
+
+在行内数学模式中，巨算符的上下限会显示为普通的上下标形式，例如\(\sum_{i=1}^{n} a_i\)。而在行间数学模式中，巨算符的上下限会显示在符号的上下方，例如：\verb|\[\sum_{i=1}^{n} a_i\]| 显示为
+\[\sum_{i=1}^{n} a_i \]只有积分符号的上下限始终显示在符号的旁边，无论是在行内还是行间数学模式中。
+
+amsmath提供了更多的巨算符，例如：\verb|\iint|（二重积分）、\verb|\iiint|（三重积分）、\verb|\iiiint|（四重积分）和\verb|\idotsint|（多重积分）。例如：\verb|\[\iint_D f(x,y) \,dx\,dy\]| 显示为
+\[\iint_D f(x,y) \,dx\,dy\]
+
+\subsection{数学模式的字体调整}
+在数学模式中，可以使用不同的命令来调整字体样式，以突出显示特定的数学符号或表达式。以下是一些常用的字体调整命令：
+\begin{itemize}
+  \item \verb|\mathrm{文本}|：将文本设置为直立体，例如\verb|$\mathrm{sin}(x)$| 显示为 \(\mathrm{sin}(x)\)。
+  \item \verb|\mathbf{文本}|：将文本设置为粗体，适用于表示向量或矩阵，例如\verb|$\mathbf{v}$| 显示为 \(\mathbf{v}\)。
+  \item \verb|\mathit{文本}|：将文本设置为斜体字体，适用于变量名，例如 \verb|$\mathit{x}$| 显示为 \(\mathit{x}\)。
+  \item \verb|\mathcal{文本}|：将文本设置为花体字体，适用于表示集合，例如\verb|$\mathcal{A}$| 显示为 \(\mathcal{A}\)。
+  \item \verb|\mathbb{文本}|：将文本设置为黑板粗体字体，适用于表示数集，例如\verb|$\mathbb{R}$| 显示为 \(\mathbb{R}\)。
+\end{itemize}
+
+\section{图、表、浮动体}
+
+在 \LaTeX 中，图表和其他浮动体（如表等）是通过浮动体来管理的。浮动体允许 \LaTeX 根据页面布局自动调整图表的位置，以确保文档的美观和可读性。
+
+浮动体之所以“浮动”，是因为它们并不固定在文档中的某个位置，而是可以根据页面布局和排版需求自动调整位置。这样可以避免图表被拆分到不同的页面上，或者与文本内容重叠，从而提高文档的整体质量。但这样会导致图表的位置不一定和代码中出现的位置一致，例如
+\begin{lstlisting}
+文本1
+浮动体
+文本2
+\end{lstlisting}
+上述编译出的文档中，浮动体可能会出现在“文本1”之前、“文本1”和“文本2”之间，或者“文本2”之后，具体位置取决于页面布局。但多个浮动体在文本中的相对顺序是不会改变的。
+
+\subsection{插入图片}
+
+\paragraph{单一图片}
+在 \LaTeX 中插入图片通常使用 \texttt{graphicx} 宏包。首先，在导言区添加以下代码来加载该宏包：
+\begin{lstlisting}[language=TeX]
+\usepackage{graphicx}
+\end{lstlisting}
+
+然后，可以使用 \texttt{figure} 环境来插入图片。例如：
+\begin{lstlisting}[language=TeX]
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.5\textwidth]{example-image}
+  \caption{示例图片}
+  \label{fig:example}
+\end{figure}
+\end{lstlisting}
+上述代码中，\verb|[htbp]| 是浮动体的位置参数，表示允许 \LaTeX 将图片放置在此处（here）、顶部（top）、底部（bottom）或单独一页（page）。\verb|\centering| 用于将图片居中显示，\verb|\includegraphics| 用于插入图片文件，\verb|width=0.5\textwidth| 指定图片的宽度为文本宽度的一半。 \verb|\caption| 用于添加图片标题，\verb|\label| 用于为图片设置标签，以便在文档中引用。
+
+上述浮动体的位置参数如不写，则默认为 \verb|[tbp]|（对，这里非常坑人，默认不包含 h 选项）。建议总是显式指定位置参数，以确保图片能够尽可能地出现在期望的位置。
+
+如希望强制图片出现在代码中的位置，可以使用 \verb|[H]| 位置参数，但需要加载 \texttt{float} 宏包：
+\begin{lstlisting}[language=TeX]
+\usepackage{float}
+
+\begin{figure}[H]
+  ...
+\end{figure}
+\end{lstlisting}
+需要注意的是，强制图片出现在指定位置可能会影响页面布局和排版效果，因此应谨慎使用。
+
+\verb|includegraphics| 命令支持多种图片格式，包括 PNG、JPEG、PDF 和 EPS 等。建议使用矢量图格式（如 PDF 或 EPS）以获得更好的缩放效果，尤其是在打印时。该命令有一些常用选项，例如：
+\begin{itemize}
+  \item \verb|width=宽度|：指定图片的宽度，例如 \verb|width=0.5\textwidth|。
+  \item \verb|height=高度|：指定图片的高度，例如 \verb|height=3cm|。
+  \item \verb|scale=比例|：按比例缩放图片，例如 \verb|scale=0.8|。
+  \item \verb|angle=角度|：旋转图片，例如 \verb|angle=90|。
+\end{itemize}
+最常用的莫过于设置宽度和高度，可以单独设置其中一个，另一个会按比例自动调整；也可以同时设置宽度和高度，但可能会导致图片变形。
+
+\verb|caption| 命令用于为图片添加标题，标题会自动编号，并且可以通过 \verb|\label| 命令设置标签，以便在文档中引用。例如，可以使用 \verb|\ref{fig:example}| 来引用图片。
+
+\paragraph{子图}
+如果需要在同一个浮动体中插入多个子图，可以使用 \texttt{subfigure} 宏包。首先，在导言区添加以下代码来加载该宏包：
+\begin{lstlisting}[language=TeX]
+\usepackage{subfigure}
+\end{lstlisting}
+
+然后，可以使用 \texttt{subfigure} 环境来插入子图。例如：
+\begin{lstlisting}[language=TeX]
+\begin{figure}[htbp]
+  \centering
+  \subfigure[子图1标题]{
+    \includegraphics[width=0.4\textwidth]{example-image-a}
+    \label{fig:sub1}
+  }
+  \subfigure[子图2标题]{
+    \includegraphics[width=0.4\textwidth]{example-image-b}
+    \label{fig:sub2}
+  }
+  \caption{整体图片标题}
+  \label{fig:overall}
+\end{figure}
+\end{lstlisting}
+上述代码中，\verb|\subfigure| 用于插入子图，并且可以为每个子图添加标题和标签。整体图片的标题和标签仍然使用 \verb|\caption| 和 \verb|\label| 命令。
+
+\subsection{插入表格}
+在 \LaTeX 中插入表格通常使用 \texttt{table} 环境和 \texttt{tabular} 环境。
+
+\paragraph{朴素的表格} 最朴素的表格利用 \texttt{tabular} 环境实现，例如：
+\begin{lstlisting}[language=TeX]
+\begin{tabular}{|c|c|c|}
+  \hline
+  列1 & 列2 & 列3 \\
+  \hline
+  数据1 & 数据2 & 数据3 \\
+  数据4 & 数据5 & 数据6 \\
+  \hline
+\end{tabular}
+\end{lstlisting}
+
+tabular不是浮动体环境，表格会出现在代码中的位置。大括号中的参数指定了表格的列格式，有几个字母就有几列，常用的字母包括c、l、r，分别表示居中、左对齐和右对齐。竖线（|）表示列之间的竖线。
+
+而表格中的每一行以双反斜杠（\verb|\\|）结束，列与列之间使用 \& 符号分隔，用于制表。例如，上述代码中的第一行表示表头，包含三列，分别是“列1”、“列2”和“列3”。第二行和第三行分别表示两行数据。 \verb|\hline| 命令用于添加水平线。
+
+也可以引用\verb|booktabs|宏包来美化表格，例如使用\verb|\toprule|、\verb|\midrule|和\verb|\bottomrule|命令来替代\verb|\hline|，从而获得更专业的表格外观，得到基础的“三线表”效果。
+
+但是该朴素的表格不能添加标题和标签，也不能自动调整位置，更不能跨页显示。
+
+\paragraph{带标题和标签的表格} 可以使用 \texttt{table} 环境来插入带标题和标签的表格。例如：
+\begin{lstlisting}[language=TeX]
+\begin{table}[htbp]
+  \centering
+  \begin{tabular}{|c|c|c|}
+    ...
+  \end{tabular}
+  \caption{示例表格}
+\end{table}
+\end{lstlisting}
+上述代码中的table是浮动体环境，允许 \LaTeX 根据页面布局自动调整表格的位置。其余部分与前面介绍的 \texttt{tabular} 环境相同。但该表格依然不能跨页显示。
+
+\paragraph{跨页表格} 如果表格内容较多，可能会跨越多个页面。可以使用 \texttt{longtable} 宏包来创建跨页表格。首先，在导言区添加以下代码来加载该宏包：
+\begin{lstlisting}[language=TeX]
+\usepackage{longtable}
+\end{lstlisting}
+
+然后，可以使用 \texttt{longtable} 环境来插入跨页表格。例如：
+\begin{lstlisting}[language=TeX]
+\begin{longtable}{|c|c|c|}
+    \caption{跨页表格示例} \\
+    \hline
+    列1 & 列2 & 列3 \\
+    \hline
+    \endfirsthead
+    \hline
+    列1 & 列2 & 列3 \\
+    \hline
+    \endhead
+    数据1 & 数据2 & 数据3 \\
+    数据4 & 数据5 & 数据6 \\
+    ... 
+\end{longtable}
+\end{lstlisting}
+上述代码中，\verb|\endfirsthead| 和 \verb|\endhead| 命令用于定义表格在每一页的表头。其余部分与前面介绍的 \texttt{tabular} 环境基本相同，但该环境能自动处理跨页问题，也能够添加标题、标签等功能。
+
+\section{自定义命令和自定义环境}
+
+在 \LaTeX 中，自定义命令和自定义环境可以帮助你简化文档的编写过程，提高代码的可读性和可维护性，类似于编程语言中的函数和类。
+
+\subsection{自定义命令}
+可以使用 \verb|\newcommand| 命令来定义新的命令。其基本语法如下：
+\begin{lstlisting}[language=TeX]
+\newcommand{\命令名}[参数个数]{命令定义}
+\end{lstlisting}
+其中，\verb|\命令名| 是你想要定义的命令名称， \verb|参数个数| 是该命令接受的参数个数（可选，默认为0）， \verb|命令定义| 是该命令的具体实现。 例如，定义一个命令来表示向量：
+\begin{lstlisting}[language=TeX]
+\newcommand{\vect}[1]{\mathbf{#1}}
+\end{lstlisting}
+上述代码定义了一个名为 \verb|\vect| 的命令，它接受一个参数，并将该参数以粗体形式显示。可以在文档中使用该命令，例如：
+\begin{lstlisting}[language=TeX]
+这是一个向量：$\vect{v}$。
+\end{lstlisting}
+上述代码将在文档中显示为“这是一个向量：\(\mathbf{v}\)”。
+
+也可以更改现有的命令，例如：
+\begin{lstlisting}[language=TeX]
+\renewcommand{\emph}[1]{\textbf{#1}}
+\end{lstlisting}
+上述代码将 \verb|\emph| 命令重新定义为粗体显示，而不是斜体显示。
+
+我们发现这些命令定义中使用了\#1这类的符号，这是因为在自定义命令中，参数是通过 \verb|#1|、\verb|#2| 等符号来引用的，分别对应第一个、第二个参数，以此类推。
+
+也有一些较为特殊的用法，例如我“想重定义某命令，但还要保留其原有功能”，这时可以使用 \verb|\let| 命令来实现。例如：
+\begin{lstlisting}[language=TeX]
+\let\oldemph\emph
+\renewcommand{\emph}[1]{\textbf{\oldemph{#1}}}
+\end{lstlisting}
+上述代码首先使用 \verb|\let| 命令将原有的 \verb|\emph| 命令保存为 \verb|\oldemph|，然后重新定义 \verb|\emph| 命令，使其在显示为粗体的同时，仍然保留原有的斜体功能。
+
+\subsection{自定义环境}
+可以使用 \verb|\newenvironment| 命令来定义新的环境。其基本语法如下：
+\begin{lstlisting}[language=TeX]
+\newenvironment{环境名}[参数个数]{环境开始代码}{环境结束代码}
+\end{lstlisting}
+其中，\verb|环境名| 是你想要定义的环境名称， \verb|参数个数| 是该环境接受的参数个数（可选，默认为0）， \verb|环境开始代码| 是该环境开始时执行的代码， \verb|环境结束代码| 是该环境结束时执行的代码。 例如，定义一个名为 \verb|highlight| 的环境，用于高亮显示文本：
+\begin{lstlisting}[language=TeX]
+\newenvironment{highlight}{\begin{quote}\color{red}}{\end{quote}}
+\end{lstlisting}
+上述代码定义了一个名为 \verb|highlight| 的环境，它将在红色引用块中显示文本。可以在文档中使用该环境，例如：
+\begin{lstlisting}[language=TeX]
+\begin{highlight}
+这是高亮显示的文本。
+\end{highlight}
+\end{lstlisting}
+上述代码将在文档中显示为红色引用块中的“这是高亮显示的文本”。
+
+同样的，环境也支持重新定义，例如：
+\begin{lstlisting}[language=TeX]
+\renewenvironment{quote}{\begin{itshape}}{\end{itshape}}
+\end{lstlisting}
+上述代码将 \verb|quote| 环境重新定义为斜体显示。
+
+\section{使用Beamer类制作幻灯片}
+
+LaTeX除了可以用来排版文章、书籍等文档外，还可以制作幻灯片。Beamer就是用于制作幻灯片的一个文档类。以下会简单介绍如何使用Beamer类制作幻灯片。
+
+\subsection{Beamer文档的基本结构}
+
+Beamer类文档的基本结构和普通的 \LaTeX 文档类似。然而，在正文部分，其内容并不是简单的段落，而是由多个幻灯片（frame）组成的。每个frame对应PowerPoint中的一页内容。
+
+一个简单的Beamer文档示例如下：
+\begin{lstlisting}[language={[LaTeX]TeX}]
+  \documentclass{beamer}
+  \usepackage{amsmath}
+  \title{我的第一篇 Beamer 幻灯片}
+  \author{张三}
+  \date{\today}
+  \begin{document}
+  \frame{\titlepage} % 生成标题页
+  \begin{frame}
+    \frametitle{引言} % 设置帧标题
+    这是我的第一篇 Beamer 幻灯片。
+    我们可以在这里写一些数学公式：
+    \begin{equation}
+      E=mc^2
+    \end{equation}
+  \end{frame}
+  \end{document}
+\end{lstlisting}
+
+如上述代码所示，创建帧有两种方式：一种是使用  \texttt{\textbackslash frame\{\} } 命令，另一种是使用  \texttt{frame}  环境。前者适合内容较少的帧，后者适合内容较多的帧。在帧中添加标题可以使用  \texttt{\textbackslash frametitle\{标题\} } 命令，如希望添加简单文字、图片、公式等内容，可以直接在帧中编写，方法和普通的  \LaTeX  文档几乎完全相同。然而，如果希望添加表格、代码等浮动内容，则需要在该帧加上  \texttt{[fragile]}  选项，也就是：
+\begin{lstlisting}[language={[LaTeX]TeX}]
+  \begin{frame}[fragile]
+\end{lstlisting}
+
+\subsection{Beamer的常用强调}
+
+经常做幻灯片的同学们都知道，在幻灯片中希望强调某些内容的时候，最好不要仅使用字体的简单变化，而是结合显隐、颜色等手段来突出重点。对于部分颜色的文字，可以使用  \texttt{\textbackslash textcolor\{颜色名\} \{文本\}} 命令来实现。例如：
+\begin{lstlisting}[language={[LaTeX]TeX}]
+  \textcolor{red}{这是红色的文本}
+  \textcolor{blue}{这是蓝色的文本}
+\end{lstlisting}
+
+另外，它也提供了一些“块”命令来强调内容，例如  \texttt{block} 、 \texttt{alertblock}  和  \texttt{exampleblock}  等环境。例如：
+\begin{lstlisting}[language={[LaTeX]TeX}]
+  \begin{block}{普通块}
+    这是一个普通块。
+  \end{block}
+  \begin{alertblock}{警告块}
+    这是一个警告块。
+  \end{alertblock}
+  \begin{exampleblock}{示例块}
+    这是一个示例块。
+  \end{exampleblock}
+\end{lstlisting}
+
+最后，Beamer还支持显隐效果，这种显隐效果在列表的逐步显示中非常有用。一个最简单的逐步显示的例子如下：
+\begin{lstlisting}[language={[LaTeX]TeX}]
+  \begin{itemize}
+    \item<1-> 第一项
+    \item<2-> 第二项
+    \item<3-> 第三项
+  \end{itemize}
+\end{lstlisting}
+上述代码中， \texttt{<1->}  表示从这页的第一帧开始显示这一项，以此类推。如果只想在某一帧显示某一项，可以使用  \texttt{<n>}  的形式，例如  \texttt{<2>}  表示只在第二帧显示这一项。上述代码也可以用在其他环境中，例如段落、公式等。
+
+除了这种简单的显隐效果外，还可以使用  \texttt{\textbackslash pause}  命令来实现逐步显示的效果。例如：
+\begin{lstlisting}[language={[LaTeX]TeX}]
+  这是第一部分内容。
+  \pause
+  这是第二部分内容。
+\end{lstlisting}
+
+Beamer 还支持更复杂的显隐效果，感兴趣的同学可以查阅 Beamer 的文档。
+
+\subsection{Beamer的主题}
+
+结构主题决定了幻灯片的整体风格。Beamer 提供了多种内置主题，用户可以根据需要选择合适的主题。可以使用  \texttt{\textbackslash usetheme\{主题名\} } 命令来设置主题。内置的主题有许多，我们可以通过查阅 Beamer 的文档来了解这些主题的具体名称和效果。我个人比较喜欢使用 \texttt{Berlin} 主题，该主题简洁大方，适合大多数场合。
+
+配色主题决定了幻灯片的配色方案。可以使用  \texttt{\textbackslash usecolortheme\{配色主题名\} } 命令来设置配色主题。内置的配色主题也有许多，例如  \texttt{dolphin} 、 \texttt{seahorse} 、 \texttt{beetle}  等。
+
+字体主题决定了幻灯片中使用的字体样式。可以使用  \texttt{\textbackslash usefonttheme\{字体主题名\} } 命令来设置字体主题。一般情况下，Beamer使用的字体系列和常规文档（serif）不同，我们可以使用 \texttt{\textbackslash usefonttheme\{serif\} }来强制使用衬线字体。如果仅希望更改公式部分的字体，可以使用 \texttt{\textbackslash usefonttheme[onlymath]\{serif\} }。
+
+另外，Beamer 允许用户创建自己的主题，或者使用第三方提供的主题包。创建自定义主题需要一定的  \LaTeX  和 Beamer 知识，建议有一定经验的用户尝试。
+
+\subsection{ctexbeamer}
+
+ctexbeamer是类似ctexart、ctexbook等ctex系列文档类的Beamer版本，专门用于处理中文幻灯片。使用ctexbeamer可以方便地在幻灯片中输入和排版中文内容，而无需额外配置中文支持。 使用ctexbeamer的基本方法与使用Beamer类类似，只需将文档类更改为ctexbeamer即可。例如：
+\begin{lstlisting}[language={[LaTeX]TeX}]
+  \documentclass{ctexbeamer}
+  ...
+\end{lstlisting}
+
+ctexbeamer默认使用xeCJK宏包处理中文，因此可以直接在幻灯片中输入中文内容，而无需额外配置中文支持。除此之外，ctexbeamer还提供了一些特定于中文幻灯片的功能和选项，例如自动调整字体大小、处理中文标点等。
+
+
+
+
+\section{使用ModernCV类制作简历}
+
+ModernCV 是一个用于制作简历的  \LaTeX  文档类。它提供了多种简洁、美观的简历模板，用户可以根据需要选择合适的模板来制作自己的简历。当然，这类简历极为简洁，然而对于技术类岗位也已经绰绰有余；如希望更花哨、更复杂的简历，这个则略显平淡，可以去淘宝花几块钱买个模板（或者转行当UI设计师）。
+
+以下是一个使用 ModernCV 类制作简历的简单示例：
+\begin{lstlisting}[language={[LaTeX]TeX}]
+\documentclass{moderncv}
+\usepackage[UTF8]{ctex}
+
+\moderncvtheme[blue]{casual}        % 主题选casual，颜色选忧郁蓝
+\name{王小明}{摸鱼学硕士}             % 名字和头衔分开写，防止过于嚣张
+\email{run@fast.com}                % 建议别用“ilovexxx@qq.com”
+\social[github]{github.com/xxx}
+\social[linkedin]{xxx}              % 假装有国际化人脉
+\quote{Stay hungry，stay foolish}   % 乔布斯名言，HR已免疫
+
+\begin{document}
+\maketitle  % 生成个人信息区块
+
+\section{教育背景}
+\cventry{2021--2025}{专业：理论与实操}{某大学}{寄点3.0/4.0}{}{核心课程：《咖啡因代谢学》《早八生存指南》}
+
+\section{实习经历}
+\cventry{2023.06--2023.09}{首席工位守护者}{某厂}{}{}{主要成就：带薪拉屎时长部门TOP1}
+\end{document}
+\end{lstlisting}
+
+如你所见，ModernCV 的使用非常简单。我们只需在导言区加载  \texttt{moderncv}  宏包，并设置主题和颜色，然后使用  \texttt{\textbackslash name} 、 \texttt{\textbackslash email}  和  \texttt{\textbackslash social}  等命令来添加个人信息。正文部分则使用  \texttt{\textbackslash section}  和  \texttt{\textbackslash cventry}  等命令来添加简历内容。这样就可以快速地生成一份简洁、美观的简历，免除了使用Word等工具排版的烦恼。
+
+该包的另一个极为良好的特性是可以自动压缩空白区域，可以有效地避免“半页纸尴尬”。但是与其这样，感觉确实不如多整点活填满这页纸（大嘘）。所以欢迎来LCPU玩混项目（不是）。
+
+以上就是 \LaTeX 的相当多内容了。掌握这些内容后，你已经可以使用 \LaTeX 来排版大部分常见的文档类型了。当然，\LaTeX 的功能远不止于此，还有许多高级技巧和宏包可以进一步扩展其功能。希望你能继续探索 \LaTeX 的世界，发现更多有趣的用法！

@@ -1,0 +1,1029 @@
+\chapter{C++进阶}\label{chap:cpp-2}
+
+在上一章中，我们初步认识了C++和C的重要区别：命名空间、用流代替C的标准输入输出等。我们也知道了C++引入了很多有趣的标准特性，例如引用、函数重载、默认参数值、Lambda表达式等。本章将进一步介绍C++的高级特性和最佳实践，帮助读者更好地利用C++的强大功能进行高效编程。
+
+C++最重要的高级特性是面向对象编程和泛型编程，它们使得C++在处理复杂系统和数据结构时具有显著优势。
+
+\section{面向对象编程}
+
+面向对象编程是C++的最重要特性之一。它允许我们将数据和操作数据的函数封装在一起，形成一个对象。对象是一个包含数据和方法的实体，它可以表示现实世界中的事物。同时，面向对象编程还提供了继承、多态等特性，可以帮助我们更好地组织代码和数据。
+
+\subsection{类和属性}
+
+类是面向对象编程的基本操作单位。如果不熟悉类，可以把类当成“超级struct”来理解，这里面除了存储数据（C++叫“属性”）以外，还可以顺便把函数（C++叫“方法”）也打包进去。
+\begin{lstlisting}[language=C++]
+class Point2D{
+public:
+    static const int DIMENSION = 2;  // 类的常量属性
+    static int count;  // 类的静态属性
+    int x, y;
+    void move(int dx, int dy) {
+        x += dx;
+        y += dy;
+    }
+    Point2D(int x = 0, int y = 0) : x(x), y(y)
+    {
+        count++;
+    }  // 构造函数
+    ~Point2D() { count--; }  // 析构函数
+}
+\end{lstlisting}
+于是，这下变量和函数成了一家人：
+\begin{lstlisting}[language=C++]
+Point2D p(1, 2);  // 创建一个Point2D对象p，x=1, y=2
+p.move(5, -3);  // 移动点p，它自己知道怎么动！
+cout << Point2D::count << endl;  // 输出类的静态属性
+\end{lstlisting}
+这就是“把数据和对数据的操作绑在一起”——面向对象的核心思想。
+
+在类中，你可以看到我打了一个 \texttt{public} ，这说明以下属性和方法是公开的，其他所有类或者类外的东西都可以访问它。如果你不打 \texttt{public} ，那么默认是私有的（private），只有这个类内部可以访问；另一种访问权限是 \texttt{protected} ，它允许子类访问，但不允许类外的东西访问。（至于什么是子类，请先收起疑问，往下看就懂了）
+
+部分属性前面，你可以发现打了 \texttt{static} 符号。这说明这个属性是静态的，属于 \texttt{类本身} ，而不是类的实例（实例指的就是可操作的对象，例如上面的p）。静态属性可以通过类名直接访问，例如 \texttt{Point2D::count} 。静态属性在所有实例之间共享，因此它们的值是全局的。
+
+\subsection{自指}
+
+类可以包含指向自身的指针或引用，这种特性称为自指，用 \texttt{this} 可以访问当前对象的指针。自指允许我们在类中定义链表、树等数据结构。自指的基本格式如下：
+\begin{lstlisting}[language=C++]
+class Node {
+public:
+    int data;  // 节点数据
+    Node* next;  // 指向下一个节点的指针
+    Node(int value) : data(value), next(nullptr) {}
+    Node& GetThis() const {
+        return *this;  // 返回当前对象的引用
+    }
+};
+\end{lstlisting}
+
+\subsection{构造、析构、拷贝和赋值}
+
+类的构造函数和析构函数是特殊的方法，用于对象的初始化和清理。构造函数在创建对象（也叫实例化）时自动调用，而析构函数在对象销毁时自动调用。构造函数的名称与类名相同，并且既没有返回值也没有返回类型；析构函数的名称是波浪号（\textasciitilde）加上类名，同样既没有返回值也没有返回类型。
+
+构造函数用于初始化对象的属性，析构函数通常用于释放对象占用的资源。\textbf{这是C++的一个重要特性RAII（Resource Acquisition Is Initialization）：资源获取在初始化中获取、在析构中释放。}我们在C++中不需要（也尽可能不要）像C一样手动malloc和free内存，而是通过构造函数和析构函数来自动管理资源，代码更简洁也更安全。
+
+一般情况下，类有着默认的构造和析构函数，它们不含有任何参数，且不执行任何操作。默认的构造函数只会将所有属性初始化为默认值（例如整数为0，布尔值为false等），默认析构函数则按成员逆序调用成员的析构函数。满足这种条件的类也叫做\textbf{平凡且标准布局类}，在旧的实现中也叫POD类型：这种类型没有自定义构造函数、析构函数和拷贝构造函数，它们的行为类似于C语言中的结构体。相应的，在构造函数、析构函数中执行一些其他操作的类则叫做\textbf{非POD类型}，也往往叫做\textbf{复杂类}。一个类可以有多个构造函数（本质上是函数重载），但是只能有一个析构函数。
+
+比如说：
+\begin{lstlisting}[language=C++]
+class Point2D{
+    public:
+        int x, y;
+        Point2D() {} // 默认构造函数，防止覆盖
+        Point2D(int _x, int _y){ // 自己写的构造函数
+            x = _x;
+            y = _y;
+        }
+        ~Point2D() {} // 自己写的析构函数
+};
+\end{lstlisting}
+
+如果我们写了自己的构造和析构函数，那么编译器就不会再隐式地生成任何默认构造函数和析构函数。比方说，上文 \texttt{Point2D} 类中，我们定义了一个带参数的构造函数和一个析构函数。这样，当我们创建一个 \texttt{Point2D} 对象时，就会调用这个构造函数来初始化对象的属性（将全局点数量增加1）；当对象被销毁时，就会调用析构函数来干点别的（将全局点数量减1），然后清理资源。
+
+在较新版本的C++标准中，构造函数的属性初始化部分可以使用初始化列表来简单地编写。例如：
+\begin{lstlisting}[language=C++]
+Point2D(int _x, int _y) : x(_x), y(_y) { ... }
+\end{lstlisting}
+
+\begin{note}
+  需要注意的一点是：在C++中对象的资源管理由构造函数和析构函数自动完成，因此我们不要在构造函数中 \texttt{malloc} ，也不要在析构函数中 \texttt{free} 或者 \texttt{delete this} 。当 \texttt{malloc/free} 未配对时几乎必然导致内存出毛病，而随便 \texttt{delete this} 导致的双重释放也是非常危险的。如果一定要用构造函数和析构函数管理资源，应使用 RAII 资源句柄（如  \texttt{std::unique\_ptr} ）而非裸指针。
+\end{note}
+
+拷贝构造函数\footnote{没有“拷贝函数”这种东西。}是一个特殊的构造函数，它用来复制对象。一般情况下，C++会自动生成一个拷贝构造函数，它会逐个复制对象的属性。但是，如果类中有指针或动态分配的资源，我们需要自定义拷贝构造函数来正确地复制对象。拷贝构造函数的参数是类本身的常量引用，而对方法本身没有什么要求。
+
+一般拷贝分为浅拷贝和深拷贝。浅拷贝只是复制指针的值，而深拷贝则会复制指针指向的内容。对于包含指针的类，我们通常需要实现深拷贝，以避免多个对象的指针指向同一块内存空间，导致资源管理混乱。默认拷贝操作对数据成员逐个复制；如果成员是指针，则仅复制指针值（即所谓“浅拷贝”）。当类拥有动态资源时，通常需要自定义深拷贝逻辑。
+
+拷贝赋值运算符是一个特殊的运算符，用于将一个对象的值赋给另一个对象。它的基本格式如下，而下面这一段代码也展示了深拷贝操作中常见的“先复制、后交换”写法：
+\begin{lstlisting}[language=C++]
+class Foo {
+    int* data;
+public:
+    Foo(const Foo& rhs) : data(new int[*rhs.data]) {} // 构造函数，深拷贝
+    Foo& operator=(Foo rhs) {      // 按值接收，已拷贝/移动
+        swap(*this, rhs);          // 交换资源
+        return *this;
+    }
+    friend void swap(Foo& a, Foo& b) noexcept { std::swap(a.data, b.data); }
+    // noexcept表示这个函数不会抛出异常
+};
+\end{lstlisting}
+由此，我们看到了我们对 \texttt{=} 进行了重载。这实际上是定义了一个赋值函数，因此也被叫做类的赋值。
+
+\subsection{封装}
+
+封装是面向对象编程的一个重要特性，它允许我们将数据和方法封装在一起，形成一个对象。封装的目的是隐藏实现细节，只暴露必要的接口给外部使用。这样可以提高代码的可维护性和可重用性。
+
+比方说：
+\begin{lstlisting}[language=C++]
+class BankAccount {
+private:
+    int balance;  // 私有属性，外部无法直接访问
+public:
+    BankAccount(int initialBalance) : balance(initialBalance) {}
+    void deposit(int amount) {  // 公共方法，允许外部调用
+        if (amount > 0) {
+            balance += amount;  // 增加余额
+        }
+    }
+    void withdraw(int amount) {  // 公共方法，允许外部调用
+        if (amount > 0 && amount <= balance) {
+            balance -= amount;  // 减少余额
+        }
+    }
+    int getBalance() const {  // 公共方法，允许外部查询余额
+        return balance;  // 返回余额
+    }
+};
+\end{lstlisting}
+这样可以阻止外部直接修改余额，只能通过存款和取款方法来操作余额。问我为什么余额用int而不是double或者float的，建议重读Mini ICS。
+
+\begin{tip}
+  在C\#中，封装有一对非常优雅的名词：Getter和Setter。Getter是获取属性值的方法，Setter是设置属性值的方法，同样是上述的代码我们在C\#中可以写成 \texttt{public int Balance \{ get; private set; \} }，意思是只有类内可以设置这个属性的值，而类内外可以获取这个属性的值。这样就实现了封装，同时又不失优雅。C++中没有这个优雅的语法，因此我们只能像上述代码中手动实现getter。
+\end{tip}
+
+\subsection{继承}
+
+继承是面向对象编程的一个重要特性，它允许我们创建一个新的类（子类），它继承了另一个类（父类）的属性和方法。子类可以添加自己的属性和方法，也可以重写父类的方法。基类中被重写的方法应被声明为 virtual，也就是\textbf{虚函数}。重写方法时建议加 override 关键字。
+
+继承的基本格式如下：
+\begin{lstlisting}[language=C++]
+class Shape { public: virtual double area() = 0; };
+class Circle : public Shape { ... };
+\end{lstlisting}
+以上代码的意思是：声明一个名为Shape的类，它有一个纯虚函数area()，表示这个类是一个抽象类。然后声明一个名为Circle的类，它继承了Shape类，并实现了area()方法。
+
+除了重写父类已有的方法，我们也可以在子类中新增一些父类没有的属性和方法。例如：
+\begin{lstlisting}[language=C++]
+class Circle : public Shape {
+private:
+    double radius;  // 圆的半径
+public:
+    Circle(double r) : radius(r) {}  // 构造函数
+    double area() override {  // 重写父类的area()方法
+        return M_PI * radius * radius;  // 计算圆的面积
+    }
+    double circumference() {  // 新增方法，计算圆的周长
+        return 2 * M_PI * radius;  // 计算圆的周长
+    }
+};
+\end{lstlisting}
+
+现在只剩下“子类的构造函数怎么写”这个问题了。在C++的继承中，子类的构造函数需要调用父类的构造函数来初始化父类的属性。当\textbf{父类有公共的默认构造函数（无参）}，且\textbf{子类没有需要手动初始化的属性}时，子类的构造函数可以不写，编译器会自动生成一个公共且无参的默认构造函数，并调用父类的默认构造函数来初始化父类的属性。只要不满足以上情况，就必须要显式的提供子类的至少一个构造函数。
+\begin{lstlisting}[language=C++]
+class Base {
+public:
+    Base(int value) {
+        cout << "Base constructor with value: " << value << endl;
+    }  // 带参数的构造函数
+    Base(int v1, int v2) {
+        cout << "Base constructor with values: " << v1 << ", " << v2 << endl;
+    }  // 另一个带参数的构造函数
+    Base() {
+        cout << "Base default constructor" << endl;
+    }  // 默认构造函数
+};
+class Derived : public Base {
+public:
+    Derived(int value) : Base(value) {
+        cout << "Derived constructor with data: " << value << endl;
+    }  // 子类的构造函数，调用父类的带参数构造函数
+    Derived(int v1, int v2) : Base(v1, v2) {
+        cout << "Derived constructor with data: " << value << endl;
+    }  // 另一个子类的构造函数，调用父类的另一个带参数构造函数
+    Derived() : Base() {
+        cout << "Derived default constructor" << endl;
+    }  // 子类的默认构造函数，调用父类的默认构造函数
+};
+\end{lstlisting}
+
+C++11以上的标准中，如果子类只是想照抄父类的所有构造函数而不需要写自己的，可以使用 \texttt{using} 关键字来简化代码：
+\begin{lstlisting}[language=C++]
+class Derived : public Base {
+public:
+    using Base::Base;  // 直接继承父类的所有构造函数
+};
+\end{lstlisting}
+
+需要注意的是，以下两种代码是不过编译的：
+\begin{lstlisting}[language=C++]
+    class Base;
+    class Derived : public Base { ... };  // 错误，Base类未定义
+\end{lstlisting}
+\begin{lstlisting}[language=C++]
+    class Base { ... };
+    class Derived : public Base; // 错误，子类的定义必须紧跟类体
+\end{lstlisting}
+在上述代码中，一开始我们声明出了一个类 \texttt{Base} ，但是并未定义它。这样的类是“不完整的”，C++规定不能继承一个不完整的类。另一方面，即使预先定义了基类，但是在继承的时候没有跟出定义也是不允许的。
+
+在实际操作中，子类一般属于父类的一个特例，或者更简单地说\textbf{子类是父类}。例如，我们要创建一个“大舅”类和一个“二舅”类，一个非常差的设计是让“二舅”继承自“大舅”，因为二舅并不是大舅的一个特例（或者说二舅不是大舅），反过来也一样。一个好的设计是让这两个类都继承自一个“舅舅”类（他大舅他二舅都是他舅），这样就可以避免这种问题。
+
+\subsection{多态}
+
+多态指的是同一个方法在不同的对象上有不同的表现。多态是通过继承和虚函数实现的。当我们调用一个虚函数时，实际调用的是子类中重写的方法，而不是父类中的方法。这种特性使得我们可以使用父类指针或引用来调用子类的方法。
+
+以继承中涉及到的Shape和Circle类为例：
+\begin{lstlisting}[language=C++]
+Shape* shape = new Circle();  // 创建一个Circle对象，并将其赋值给Shape指针
+shape->area();  // 调用Circle类的area()方法
+\end{lstlisting}
+上述代码中会自动调用Circle类的area()方法，而不是Shape类的area()方法。这就是多态的体现：不用去关心具体的对象类型，省去了switch语句的麻烦。
+
+\subsection{友元函数}
+
+我们已经知道，对于一个类的属性和方法，有的是私有的、有的是公共的；从类外无法访问类的私有属性和方法。但是友元函数是一个例外，它可以访问类的私有属性和方法。友元函数的声明方式非常简单，只需要在函数前面加上 \texttt{friend} 关键字即可。友元函数可以是类的成员函数，也可以是全局函数。但是，友元函数的定义必须在类的外部，而非在类的内部。
+\begin{lstlisting}[language=C++]
+class MyClass {
+private:
+    int secret;  // 私有属性
+public:
+    MyClass(int value) : secret(value) {}  // 构造函数
+    friend void revealSecret(const MyClass& obj);  // 声明友元函数
+};
+void revealSecret(const MyClass& obj) {
+    cout << "The secret is: " << obj.secret << endl;  // 访问私有属性
+}
+\end{lstlisting}
+
+一般情况下我们很少用到友元函数，因为它破坏了类的封装性。然而，在某些情况下，友元函数可以提供更高效的访问方式，尤其是在需要频繁访问类的私有属性时。
+
+\section{泛型编程}
+
+泛型编程的意思是：编写与类型无关的代码，从而实现代码的重用。
+
+在C++中，泛型编程的核心机制是模板（Templates）。模板允许我们编写通用的代码，可以处理不同类型的数据。除此之外，C++11引入了类型推断（Type Inference）和类型别名（Type Aliases），进一步增强了泛型编程的能力。
+
+\subsection{函数模板}
+
+比方说我们想写一个加法：
+\begin{lstlisting}[language=C++]
+template <typename T>
+T add(T a, T b) {
+    return a + b;  // 返回a和b的和
+}
+int main() {
+    int x = 5, y = 10;
+    cout << add(x, y) << endl;  // 调用add函数，输出15
+    double a = 3.14, b = 2.71;
+    cout << add(a, b) << endl;  // 调用add函数，输出5.85
+
+    return 0;
+}
+\end{lstlisting}
+这个函数就可以对任何类型的数据进行加法操作，只要这个类型支持加法运算符。对于不支持加法运算符的类型，编译器会报错（但是我们可以为这些类型重载加法运算符）。编译器会自动根据调用推导其类型参数，当然也不是不可以手动指定类型参数，例如 \texttt{add<int>(x, y)} 。
+
+\begin{tip}
+在试着调用一个函数的时候，编译器会按以下方式查找合适的函数：
+\begin{enumerate}
+    \item 首先查找是否有与调用参数类型完全匹配的非模板函数。
+    \begin{lstlisting}[language=C++]
+void add(int a, int b) { cout<<"non-template function called"<<endl; }  // 非模板函数
+template <typename T>
+T add(T a, T b) { cout<<"template function called"<<endl; }  // 模板函数
+add(5, 10);  // 调用非模板函数
+    \end{lstlisting}
+    \item 如果没有找到，则查找是否有与调用参数类型匹配的模板函数，并进行模板实例化。
+    \begin{lstlisting}[language=C++]
+template <typename T>
+T add(T a, T b) { cout<<"template function called"<<endl; }
+add(5, 10);  // 调用模板函数
+    \end{lstlisting}
+    \item 如果找到多个匹配的模板函数，编译器会尝试进行模板参数推导，以确定最合适的模板实例。
+    \begin{lstlisting}[language=C++]
+template <typename T>
+T add(T a, T b) { cout<<"template function 1 called"<<endl; }
+template <typename T>
+T add(T a, double b) { cout<<"template function 2 called"<<endl; }
+add(5, 3.14);  // 调用模板函数2
+    \end{lstlisting}
+    \item 如果仍然无法确定唯一的匹配，编译器会报错，提示存在二义性。
+    \begin{lstlisting}[language=C++]
+template <typename T>
+T add(T a, T b) { cout<<"template function 1 called"<<endl; }
+template <typename T>
+T add(T a, T* b) { cout<<"template function 2 called"<<endl; }
+int x = 5;
+int* p = &x;
+add(x, p);  // 二义性错误，无法确定调用哪个模板函数
+    \end{lstlisting}
+    \item 如果没有找到任何匹配的函数，编译器会报错，提示找不到合适的函数。
+\end{enumerate}
+
+上述规则虽在实际工程中意义有限，但了解其工作原理有助于理解模板函数的行为。
+\end{tip}
+
+\subsection{类模板}
+
+类模板的语法类似，只不过是定义一个类而不是一个函数：
+\begin{lstlisting}[language=C++]
+template <typename T>
+class Box {
+public:
+    T value;  // 存储一个值
+    Box(T v) : value(v) {}  // 构造函数
+    T getValue() const { return value; }  // 获取值的方法
+};
+Box<int> intBox(42);  // 创建一个存储整数的Box对象
+Box<double> doubleBox(3.14);  // 创建一个存储双精度浮点数的Box对象
+\end{lstlisting}
+使用模板可以显著降低代码量，提高代码的可重用性。
+
+\subsection{模板特化}
+
+模板特化指的是为特定类型提供专门的实现。模板特化可以分为完全特化和部分特化。完全特化是为某个具体类型提供一个完整的实现，而部分特化则是为一组类型提供一个通用的实现。
+
+语法如下：
+\begin{lstlisting}[language=C++]
+// 这里需提前定义通用模板
+template <typename T>
+class Box {
+public:
+    T value;
+    Box(T v) : value(v) {}
+    T getValue() const { return value; }
+};
+
+template <>
+class Box<bool> {  // 为bool类型提供特化实现，完全特化
+public:
+    bool value;
+    Box(bool v) : value(v) {}
+    void toggle() { value = !value; }  // 特有的方法，切换布尔值
+};
+
+template <typename T>
+class Box<T*> {  // 为指针类型提供部分特化实现，部分特化
+public:
+    T* value;
+    Box(T* v) : value(v) {}
+    T getValue() const { return *value; }  // 解引用指针获取值
+};
+\end{lstlisting}
+
+\subsection{非类型模板参数}
+
+非类型模板参数是指模板参数不仅可以是类型，还可以是常量值（如整数、枚举等）。这种特性允许我们在编译时传递一些固定的值，从而实现更灵活的模板设计。
+\begin{lstlisting}[language=C++]
+template <int N>
+void printTimes(const std::string& str) {
+    for (int i = 0; i < N; ++i) {
+        std::cout << str << std::endl;  // 输出字符串N次
+    }
+}
+printTimes<3>("Hello");  // 输出"Hello"三次
+\end{lstlisting}
+在上述代码中，模板参数 \texttt{N} 是一个整数常量，它决定了函数 \texttt{printTimes} 输出字符串的次数。
+
+但是这玩意儿用得并不多，毕竟大多数情况下我们并不需要在编译时传递常量值。
+
+\subsection{变参模板}
+
+变参模板允许我们定义接受可变数量模板参数的模板。这样，我们可以编写更加通用和灵活的代码。变参模板使用省略号（ \texttt{...} ）来表示可变数量的参数。
+\begin{lstlisting}[language=C++]
+template <typename... Args>
+void printAll(const Args&... args) {
+    ((std::cout << ... << args), ...); // 折叠表达式，输出所有参数
+    std::cout << std::endl;  // 最终的输出
+}
+printAll(1, 2.5, "Hello", 'A');  // 输出
+\end{lstlisting}
+
+这个倒是挺有用的，例如计算一组数的均值：
+\begin{lstlisting}[language=C++]
+template <typename... Args>
+double mean(Args... args) {
+    return (static_cast<double>(args) + ...) / sizeof...(args); // 计算均值
+}
+double result = mean(1, 2, 3, 4, 5);  // result = 3.0
+\end{lstlisting}
+
+\subsection{进阶：模板元编程}
+
+模板元编程是一种利用模板机制在编译时进行计算的编程技术。通过模板元编程，我们可以在编译阶段执行一些复杂的计算，从而生成高效的代码。模板元编程通常用于实现类型特性检测、类型转换等功能。这是一种高级技巧，不是初学者必需掌握的内容，但是C++模板系统的极限玩法，了解一下也无妨。
+
+例如，我们想编译期就把阶乘算了：
+\begin{lstlisting}[language=C++]
+template <int N>
+struct Factorial {
+    static const int value = N * Factorial<N - 1>::value;  // 递归计算阶乘
+};
+
+template <>
+struct Factorial<0> {
+    static const int value = 1;  // 阶乘的基例
+}; // 0的完全特化
+
+int main() {
+    std::cout << "Factorial of 5: " << Factorial<5>::value << std::endl;  // 输出120
+    return 0;
+}
+\end{lstlisting}
+
+这个不是打表！仅是在编译期计算而已。用constexpr和consteval也能做到类似的效果。
+
+\subsection{进阶：概念（C++20）}
+
+“概念”是C++20引入的一个新特性，它允许我们为模板参数定义约束条件，从而提高代码的可读性和可维护性。概念可以看作是一种类型特性检测机制，它可以帮助我们确保模板参数满足特定的要求。
+\begin{lstlisting}[language=C++]
+#include <concepts>
+
+template <std::integral T>  // 约束模板参数为整型
+T add(T a, T b) {
+    return a + b;  // 返回a和b的和
+}
+
+int main() {
+    int x = 5, y = 10;
+    std::cout << add(x, y) << std::endl;  // 调用add函数，输出15
+    // double a = 3.14, b = 2.71;
+    // std::cout << add(a, b) << std::endl;  // 错误，double不满足integral概念
+    return 0;
+}
+\end{lstlisting}
+
+\section{STL和其他标准库}
+
+STL（Standard Template Library）是C++的最重要特性，它提供了一组通用的模板类和函数，可以帮助我们更高效地处理数据结构和算法。STL包含了许多常用的数据结构和算法，例如向量（vector）、链表（list）、集合（set）、映射（map）等。
+
+简单地说，STL可以看作是：容器+迭代器+算法。容器把数据结构当变量类型用，迭代器把指针当普通函数用，算法把现成高复杂的轮子当函数用，这玩意能让你用三行代码完成 C 里三十行甚至三百行的工作，还自带内存管理和类型安全。
+
+于是，C++开发就变成了：打开编辑器，敲下头文件，剩下的一律交给STL。
+
+\begin{warning}
+  严格禁止自己对STL进行重新实现！STL的实现经过了大量的优化和测试，自己重新实现容易出错且效率低下、维护困难，也不安全。STL确实存在时间复杂度常数项大的问题，但是这永远不应该成为你重新实现的理由，你自己实现的东西几乎必然会比STL更慢、更不安全、更难用；就算是比STL快，也基本上会被 \texttt{-O2} 抹平一切差距（工程上哪有不开优化的）。除非你的实现确实全方位吊打STL，但是那样的话你也不需要STL了，你可以直接去为ISO C++标准委员会做贡献了！
+\end{warning}
+
+\subsection{容器}
+
+举个最常见的例子：
+\begin{lstlisting}[language=C++]
+std::vector<int> v = {3,1,4};   // 自动扩容的数组
+std::set<int> s = {3,1,4};      // 自动排序的红黑树
+std::unordered_map<std::string,int> m;  // 哈希表
+\end{lstlisting}
+以上代码中，我们使用了STL提供的向量（vector）、集合（set）和映射（unordered\_map）容器。它们都是模板类，可以存储任意类型的数据。使用它们非常容易：头文件即声明、自动管理内存、接口几乎全STL统一。
+
+常见的容器有以下几种：（如果我没记错的话，C++正课会要求全部掌握这些容器，我只能说：祝你好运！）
+\begin{itemize}
+  \item  \texttt{vector} ：动态数组（向量），可以自动扩容，支持随机访问。实际上是单一内存连续块。
+  \item  \texttt{list} ：双向链表，支持高效的插入和删除操作，但不支持随机访问。
+  \item  \texttt{deque} ：双端队列，支持在两端高效地插入和删除操作。实际上是分段连续的内存块。
+  \item  \texttt{set} ：集合，存储唯一元素，并自动排序。
+  \item  \texttt{map} ：映射，存储键值对，并根据键自动排序。
+  \item  \texttt{unordered\_set} ：无序集合，存储唯一元素，不自动排序，查询效率高。
+  \item  \texttt{unordered\_map} ：无序映射，存储键值对，不自动排序，查询效率高。
+  \item  \texttt{stack} ：栈，后进先出（LIFO）。
+  \item  \texttt{queue} ：队列，先进先出（FIFO）。
+  \item  \texttt{priority\_queue} ：优先队列，支持按优先级访问元素。
+  \item  \texttt{array} ：固定大小的数组，类似于C风格的数组，但提供了更多的功能。
+  \item  \texttt{bitset} ：位集合，支持高效的位操作。
+  \item  \texttt{tuple} ：元组，可以存储不同类型的多个值。
+  \item  \texttt{forward\_list} ：单向链表，类似于list，但只支持单向遍历。
+  \item  \texttt{unordered\_multiset} ：无序多重集合，存储可以重复的元素，不自动排序。
+  \item  \texttt{unordered\_multimap} ：无序多重映射，存储可以重复的键值对，不自动排序。
+\end{itemize}
+其实遇事不决的情况下，我们可以按照需求选择容器：
+\begin{itemize}
+  \item 速查：如果需要快速查找元素（建哈希表），使用 \texttt{unordered\_set} 或 \texttt{unordered\_map} 。
+  \item 排序：如果需要自动排序， \texttt{set} 和 \texttt{map} 是最好的选择。
+  \item 只要最大最小：如果只关心最大值或最小值，使用 \texttt{priority\_queue} 。
+  \item 频繁在中间插入删除：如果需要频繁插入和删除元素，使用 \texttt{list} 。
+  \item 频繁需要两头插入删除：如果只关心两端（尤其是头部）的插入和删除，使用 \texttt{deque} 。如果能确定用的是栈或队列，使用 \texttt{stack} 或 \texttt{queue} 。
+  \item 遇事不决：如果不确定用什么容器，使用 \texttt{vector} 和 \texttt{array} 。它们是最通用的容器，适用于大多数场景。如果只关心尾部的频繁增删，也可以不用 \texttt{deque} ，直接用 \texttt{vector} 。
+\end{itemize}
+
+\begin{tip}
+    \texttt{array} 和 C 风格数组的区别在于：前者是一个类，提供了更多的功能和安全性，例如边界检查、迭代器支持等；而后者只是一个简单的内存块，没有任何附加功能。建议尽量使用 \texttt{std::array} ，除非有特殊需求必须使用C风格数组。
+
+    \texttt{array} 比 \texttt{vector} 在大多数情况下更高效，尤其是在小规模数据时，因为它避免了动态内存分配的开销。但是 \texttt{array} 的大小是固定的，不能动态调整；而 \texttt{vector} 可以根据需要动态扩展。但问题上是，\texttt{array} 是栈分配的，而 \texttt{vector} 是堆分配的，栈空间有限，如果开的数组太大会导致栈溢出。因此在开大数组时，建议使用 \texttt{vector} 。
+\end{tip}
+
+\begin{note}
+  虽然我把stack和queue也当成容器、实际上在工程上也不怎么区分这东西，但是这里我有必要提及：这两个玩意实际上是容器适配器（container adapter），它们是基于其他容器实现的，提供了栈和队列的接口。一般情况下，默认参数是vector或者deque（因此不必指明），但是你也可以指定其他容器作为底层容器。
+\end{note}
+
+\begin{note}
+  在大多数情况下， \texttt{std::vector<bool>} 和 \texttt{std::vector<T>} 实现有区别。前者是一个极为特殊的实现，使用位压缩来存储布尔值，因此它不是一个真正的向量，而是一个位集合（bitset）。这使得 \texttt{std::vector<bool>} 在某些情况下效率更高，但也导致了一些不兼容的问题。例如， \texttt{v[i]} 返回的是一个代理对象而不是一个引用； \texttt{auto x = v[i]} 返回的是值拷贝而不是常规的数据类型。
+
+  这是因为，在 \texttt{std::vector<bool>} 中，每个布尔值只占用一个位（bit），而不是一个字节（byte）。因此，无法直接返回一个引用，因为引用必须指向一个完整的字节。为了实现对单个位的访问，STL使用了一个代理对象来封装对位的操作，这个代理对象提供了类似引用的行为，但实际上并不是引用。
+
+  我们使用者不关心 \texttt{std::vector<bool>} 的实现细节，只需要记住以下五件事就行了：
+  \begin{enumerate}
+    \item 不能使用 \texttt{auto\& x = v[i]} 来获取元素的引用，因为代理对象不能绑定到非常引用；
+    \item 不能使用 \texttt{\&v[i]} ，因为单个位没有地址；
+    \item  \texttt{std::vector<bool>} 的迭代器不是常规迭代器的实现，不是指针；
+    \item  \texttt{std::vector<bool>} 线程不安全（位压缩导致读写冲突，完全无法保证原子性）；
+    \item 排序、查找等算法能用但是缓慢。
+  \end{enumerate}
+\end{note}
+
+\subsection{迭代器}
+
+迭代器可以认为是指针的语法糖。一个示例：
+\begin{lstlisting}[language=C++]
+for(auto it=v.begin(); it!=v.end(); ++it) cout<<*it<<' ';
+// 或者直接：
+for(auto x : v) cout<<x<<' '; // auto最应该这么用！
+\end{lstlisting}
+
+所有容器风格完全一致，完全不必关心装的是什么玩意。一些常见的迭代器和方法：
+\begin{itemize}
+  \item  \texttt{begin()} ：返回容器的起始迭代器。
+  \item  \texttt{end()} ：返回容器的结束迭代器。
+  \item  \texttt{rbegin()} ：返回容器的反向起始迭代器。
+  \item  \texttt{rend()} ：返回容器的反向结束迭代器。
+  \item  \texttt{cbegin()} ：返回容器的常量起始迭代器。
+  \item  \texttt{cend()} ：返回容器的常量结束迭代器。
+  \item  \texttt{next(it)} ：返回迭代器it的下一个位置。
+  \item  \texttt{prev(it)} ：返回迭代器it的上一个位置。
+  \item  \texttt{distance(it1, it2)} ：返回迭代器it1和it2之间的距离。
+\end{itemize}
+
+迭代器也可以加减，例如 \texttt{it+1} 表示下一个元素， \texttt{it-1} 表示上一个元素。
+
+\subsection{算法}
+STL提供了许多常用的算法，可以帮助我们更高效地处理数据，直接拿出来用就行：
+\begin{lstlisting}
+std::sort(v.begin(), v.end()); // 混合高速排序，结合快排、堆排等算法
+std::binary_search(v.begin(), v.end(), 4);  // 二分
+std::reverse(v.begin(), v.end());        // 原地翻转
+\end{lstlisting}
+
+以上代码中，我们使用了STL提供的排序（sort）、二分查找（binary\_search）和翻转（reverse）算法。STL的算法通常是模板函数，可以处理任意类型的数据。
+
+除此之外，还有一些常用的算法：
+\begin{itemize}
+  \item  \texttt{std::find} ：查找元素。
+  \item  \texttt{std::count} ：统计元素出现的次数。
+  \item  \texttt{std::accumulate} ：计算元素的累加和。
+  \item  \texttt{std::max\_element} ：找到最大元素。
+  \item  \texttt{std::min\_element} ：找到最小元素。
+  \item  \texttt{std::shuffle} ：随机打乱元素顺序。
+  \item  \texttt{std::unique} ：去除重复元素。
+  \item  \texttt{std::merge} ：合并两个已排序的范围。
+  \item  \texttt{std::partition} ：对元素进行分区。
+  \item  \texttt{std::transform} ：对元素进行转换。
+  \item  \texttt{std::for\_each} ：对每个元素执行操作。
+  \item  \texttt{std::set\_union} ：计算两个集合的并集。
+  \item  \texttt{std::set\_intersection} ：计算两个集合的交集。
+  \item  \texttt{std::set\_difference} ：计算两个集合的差集。
+  \item  \texttt{std::set\_symmetric\_difference} ：计算两个集合的对称差集。
+  \item  \texttt{std::nth\_element} ：找到第n小的元素。
+  \item  \texttt{std::lower\_bound} ：找到第一个不小于给定值的元素。
+  \item  \texttt{std::upper\_bound} ：找到第一个大于给定值的元素。
+\end{itemize}
+
+利用头文件 \texttt{<algorithm>} 可以使用这些算法。STL的算法通常是模板函数，可以处理任意类型的数据；配合迭代器，算法和容器原地解耦。
+
+\subsection{字符串、流和字符串流}
+
+字符串和字符串流是C++中处理文本数据的重要工具。C++提供了两种主要的字符串类型：C风格字符串（以 \texttt{char} 数组表示）和C++字符串（使用 \texttt{std::string} 类）。C++字符串更安全、更易用，推荐优先使用。
+
+C风格字符串（ \texttt{char*} ）在C++中有头文件库 \texttt{<cstring>} ，提供了一些常用的字符串操作函数，例如：
+\begin{itemize}
+  \item  \texttt{strlen} ：计算字符串长度。
+  \item  \texttt{strcpy} ：复制字符串。
+  \item  \texttt{strcat} ：连接字符串。
+  \item  \texttt{strcmp} ：比较字符串。
+  \item  \texttt{strchr} ：查找字符在字符串中的位置。
+  \item  \texttt{strstr} ：查找子字符串在字符串中的位置。
+\end{itemize}
+
+而C++字符串（ \texttt{std::string} ）在头文件库 \texttt{<string>} 中定义，每一个字符串是一个\textbf{对象}，而不是数组。该类提供了许多方便的方法来操作字符串，例如：
+\begin{itemize}
+  \item  \texttt{size()} 或 \texttt{length()} ：获取字符串长度。
+  \item  \texttt{substr(pos, len)} ：获取子字符串。
+  \item  \texttt{find(str)} ：查找子字符串的位置。
+  \item  \texttt{replace(pos, len, str)} ：替换子字符串。
+  \item  \texttt{append(str)} ：追加字符串。
+  \item  \texttt{insert(pos, str)} ：插入字符串。
+  \item  \texttt{erase(pos, len)} ：删除子字符串。
+  \item  \texttt{c\_str()} ：获取C风格字符串。
+\end{itemize}
+
+流是C++中处理输入输出的重要工具。C++提供了两种主要的流类型：输入流（ \texttt{istream} ）和输出流（ \texttt{ostream} ）。输入流用于从标准输入或文件中读取数据，输出流用于向标准输出或文件中写入数据。我们不关心流是怎么实现的，但是应当理解其工作原理：
+
+流有一个内部维护的缓冲区，输入流维护一个读指针（读取位置），输出流维护一个写指针（写入位置）。当我们从输入流中读取数据时，流会从缓冲区中读取数据，读取部分从读指针开始并向后移动，直到读完或者读取被换行符、空格等掐断，此时缓冲区内被读取的这一部分会被输入流吃掉，读指针会移动到读取位置的下一个位置（\textbf{然后缓冲区内就没有被读进去的这部分内容了}）；当我们向输出流中写入数据时，流会将数据写入缓冲区，写入部分从写指针开始并向后移动，直到写完或者缓冲区满，然后把写指针移动到写入位置的下一个位置；至于什么时候把缓冲区内的数据真正写入输出设备（例如屏幕、文件等），这取决于缓冲区什么时候刷新，包括缓冲区满、手动刷新、 \texttt{endl} 、程序结束、关联流（通常是 \texttt{cin} ）请求刷新五种情况。
+
+做题的时候，部分居心叵测（无端）的出题人会在输入输出上做文章。这时，只需要记得在做题的时候少用 \texttt{endl} ，多用 \texttt{\textbackslash n} 就能解决大多数问题了。在极为特殊的情况下，我们可以直接切断 \texttt{cin} 和 \texttt{cout} 的关联，来提升输入输出效率（仅限于极少量的竞赛场景）。切断关联的方法是：
+\begin{lstlisting}[language=C++]
+std::ios::sync_with_stdio(false); // 关闭C和C++的同步
+std::cin.tie(nullptr); // 取消cin和cout的绑定
+\end{lstlisting}
+当然，使用C风格的输入输出（ \texttt{scanf} 和 \texttt{printf} ）通常会更快一些。
+
+字符串流（ \texttt{std::stringstream} ）在头文件库 \texttt{<sstream>} 中定义，它允许我们将字符串作为输入输出流进行处理。字符串流提供了类似于标准输入输出流的接口，可以方便地进行格式化输入输出操作。例如：
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <sstream>
+using namespace std;
+
+int main() {
+    string str = "123 456 789";
+    stringstream ss(str);  // 创建字符串流对象
+    int a, b, c;
+    ss >> a >> b >> c;  // 从字符串流中读取整数
+    cout << "a: " << a << ", b: " << b << ", c: " << c << endl;  // 输出结果
+    return 0;
+}
+\end{lstlisting}
+以上代码中，我们使用字符串流将字符串中的整数提取出来，并输出结果。字符串流还提供了其他常用的方法，例如：
+\begin{itemize}
+  \item  \texttt{str()} ：获取字符串流中的字符串。
+  \item  \texttt{clear()} ：清空字符串流的状态。
+  \item  \texttt{seekg(pos)} ：设置读取位置。
+  \item  \texttt{seekp(pos)} ：设置写入位置。
+  \item  \texttt{tellg()} ：获取当前读取位置。
+  \item  \texttt{tellp()} ：获取当前写入位置。
+\end{itemize}
+当然，我们很少对流进行直接操作，更多的还是用它配合 \texttt{std::getline} 等函数来处理输入输出。 \texttt{getline} 函数能够接受三个参数：输入流、输出字符串、分隔符（默认为换行符）。它会从输入流中读取一行数据，直到遇到分隔符为止，并将读取的数据存储到输出字符串中，以便于我们进行后续处理。
+\begin{lstlisting}
+#include <iostream>
+#include <sstream>
+#include <string>
+using namespace std;
+
+int main() {
+    string line; // 一堆逗号分隔的单词
+    while (getline(cin, line)) {  // 从标准输入中读取一行数据
+        stringstream ss(line);  // 创建字符串流对象
+        string word;
+        while (getline(ss, word, ',')) {  // 从字符串流中读取单词
+            cout << word << endl;  // 输出单词
+        }
+    }
+    return 0;
+}
+\end{lstlisting}
+
+\subsection{定长整数}
+
+在C++中，有时候我们需要精确地控制整数和浮点数的长度，以满足各种各样奇奇怪怪的要求（例如缓存优化、文件格式、网络协议等）。C++11引入了头文件 \texttt{<cstdint>} ，提供了一组定长整数类型，例如：
+\begin{itemize}
+  \item  \texttt{int8\_t} ：8位有符号整数。
+  \item  \texttt{uint8\_t} ：8位无符号整数。
+  \item  \texttt{int16\_t} ：16位有符号整数。
+  \item  \texttt{uint16\_t} ：16位无符号整数。
+  \item  \texttt{int32\_t} ：32位有符号整数。
+  \item  \texttt{uint32\_t} ：32位无符号整数。
+  \item  \texttt{int64\_t} ：64位有符号整数。
+  \item  \texttt{uint64\_t} ：64位无符号整数。
+\end{itemize}
+该头文件还提供了一系列宏，分别用于定义定长整数的最大值和最小值，例如：
+\begin{itemize}
+  \item  \texttt{INT8\_MIN} ：8位有符号整数的最小值。
+  \item  \texttt{INT8\_MAX} ：8位有符号整数的最大值。
+\end{itemize}
+
+至于定长的浮点数，C++标准库并没有直接提供这样的类型。
+
+\subsection{位运算}
+
+位运算是对整数的二进制位进行操作的运算。常见的位运算符有以下几种：
+\begin{itemize}
+  \item 按位与（AND）： \texttt{\&} ，对两个整数的每一位进行与运算，只有两个位都为1时结果才为1，否则为0。
+  \item 按位或（OR）： \texttt{|} ，对两个整数的每一位进行或运算，只要有一个位为1时结果就为1，否则为0。
+  \item 按位异或（XOR）： \texttt{\textasciicircum} ，对两个整数的每一位进行异或运算，当两个位不同时结果为1，否则为0。
+  \item 按位取反（NOT）： \texttt{\textasciitilde} ，对一个整数的每一位进行取反运算，0变为1，1变为0。
+  \item 左移（Left Shift）： \texttt{<<} ，将一个整数的二进制表示整体向左移动指定的位数，右边补0。
+  \item 右移（Right Shift）： \texttt{>>} ，将一个整数的二进制表示整体向右移动指定的位数，左边补0（对于无符号整数）或补符号位（对于有符号整数）。
+\end{itemize}
+位运算通常用于相当底层的编程，例如操作硬件寄存器、加密算法、图像处理、乘除法加速等，其效率非常高。有时候，在不太底层的地方，位运算往往也有奇效。
+\begin{example}
+  有一串整数，其中只有一个数出现了奇数次，其他数都出现了偶数次。请编写一个C++程序，找出这个出现奇数次的数。要求时间复杂度为O(n)，空间复杂度为O(1)。
+
+  \textbf{输入}：一串整数，整数之间用空格隔开，输入以-1结束。保证 \texttt{int} 能够存储所有整数。
+  \textbf{输出}：出现奇数次的整数。
+\end{example}
+
+\begin{answer}
+  这道题可以使用按位异或运算来解决。我们知道，按位异或运算有以下性质：
+  \begin{itemize}
+    \item $a \oplus a = 0$，即一个数和自己异或结果为0。
+    \item $a \oplus 0 = a$，即一个数和0异或结果为自己。
+    \item 异或运算满足交换律和结合律。
+  \end{itemize}
+  因此，如果我们将所有整数进行异或运算，那么出现偶数次的数会被抵消掉，最终只剩下出现奇数次的数。
+
+  我们可以用一个变量 \texttt{result} 来存储异或的结果，初始值为0。然后，我们不断读取输入的整数，并将其与 \texttt{result} 进行异或运算，直到遇到-1为止。最后， \texttt{result} 中存储的就是出现奇数次的数。
+
+  下面是关键处的代码实现：
+\begin{lstlisting}[language=C++]
+while (cin >> num && num != -1)
+    result ^= num;  // 使用按位异或运算
+\end{lstlisting}
+  结合输入输出，我们可以写出完整的程序。该程序留作练习。
+\end{answer}
+
+\begin{exercise}
+  \begin{enumerate}
+    \item 请完成上述程序。
+    \item 与、或、非有没有类似的性质？请写下来。
+  \end{enumerate}
+\end{exercise}
+
+在STL中，有一个专门处理位集合的容器： \texttt{std::bitset} 。它可以看作是一个定长的位数组，支持高效的位操作。我们可以使用它来存储和操作大量的布尔值，例如：
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <bitset> // 包含bitset的头文件
+using namespace std;
+int main() {
+    bitset<8> b;  // 创建一个8位的位集合，初始值为00000000
+    b.set(3);    // 将第3位（从0开始计数）设置为1，变为00001000
+    b.flip(1);   // 将第1位取反，变为00001010
+    b.reset(3);  // 将第3位重置为0，变为00000010
+    cout << b << endl;  // 输出位集合的值
+    cout << "Number of set bits: " << b.count() << endl;  // 计算并输出1的个数
+    return 0;
+}
+\end{lstlisting}
+以上代码中，我们创建了一个8位的位集合，并对其进行了设置、取反和重置操作。最后，我们输出了位集合的值和其中1的个数。位集合还提供了其他常用的方法，例如：
+\begin{itemize}
+  \item  \texttt{all()} ：检查所有位是否都为1。
+  \item  \texttt{any()} ：检查是否有任意一位为1。
+  \item  \texttt{none()} ：检查是否所有位都为0。
+  \item  \texttt{size()} ：获取位集合的大小。
+  \item  \texttt{to\_string()} ：将位集合转换为字符串。
+\end{itemize}
+
+\subsection{正则表达式}
+
+在\ref{sec:regex}中，我们已经介绍了正则表达式的基本概念和语法。C++11引入了头文件 \texttt{<regex>} ，提供了一组类和函数来处理正则表达式。
+
+主要的类有以下几种：
+\begin{itemize}
+  \item  \texttt{std::regex} ：表示一个正则表达式对象。
+  \item  \texttt{std::smatch} ：表示一个字符串匹配结果容器，需要搭配 \texttt{std::string} 使用。
+  \item  \texttt{std::cmatch} ：也是一个字符串匹配结果容器，但需要搭配 \texttt{const char[]} 使用。
+\end{itemize}
+“字符串匹配结果容器”指的是这是一个容器，能够存储匹配的详细结果。其存储的对象是 \texttt{std::sub\_match} 对象。特别的，其 \texttt{0} 索引存储的是整个字符串匹配的结果，而其余的索引存储各个捕获组\footnote{捕获组指的是把正则表达式里面的一部分模式用圆括号标出来，并告诉引擎这段子串一旦匹配成功就单独记下来方便以后反复使用。}匹配的字符串。
+
+主要的函数有以下几种：
+\begin{itemize}
+  \item  \texttt{std::regex\_match} ：检查整个字符串是否匹配正则表达式。
+  \item  \texttt{std::regex\_search} ：检查字符串中是否包含匹配正则表达式的子串。
+  \item  \texttt{std::regex\_replace} ：将字符串中匹配正则表达式的部分替换为指定的字符串。在这里，允许使用诸如 \texttt{\$\&} （整个匹配）、 \texttt{\$ <number>} （ \texttt{<number>} 是捕获组的index，0是整个匹配）
+    等占位符。
+\end{itemize}
+
+代码举例：
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <regex>
+#include <string>
+
+int main() {
+    /*========  1. 正则与待测字符串  ========*/
+    // 匹配中国大陆常见手机号格式：XXX-XXX-XXXXX（3-3-5）
+    std::regex  pattern(R"((\d{3})-(\d{3})-(\d{5}))");
+    std::string good = "123-456-78910";   // 完全匹配
+    std::string bad  = "123-456-789ab";   // 最后一段不是数字
+    std::string text = "Call me at 123-456-78910 or 987-654-32100.";
+
+    /*========  2. std::regex_match：整串必须完全匹配 ========*/
+    bool is_good = std::regex_match(good, pattern);
+    bool is_bad  = std::regex_match(bad,  pattern);
+    std::cout << std::boolalpha;
+    std::cout << "good match : " << is_good << '\n';   // true
+    std::cout << "bad  match : " << is_bad  << '\n';   // false
+
+    /*========  3. 取出捕获组 ========*/
+    std::smatch m;
+    if (std::regex_match(good, m, pattern)) {
+        std::cout << "\n捕获组演示：\n";
+        std::cout << "整 match : " << m[0] << '\n';     // 123-456-78910
+        std::cout << "第1组    : " << m[1] << '\n';     // 123
+        std::cout << "第2组    : " << m[2] << '\n';     // 456
+        std::cout << "第3组    : " << m[3] << '\n';     // 78910
+    }
+
+    /*========  4. std::regex_search：只要子串匹配即可 ========*/
+    if (std::regex_search(text, m, pattern)) {
+        std::cout << "\nsearch 找到： " << m[0] << '\n'; // 123-456-78910
+    }
+
+    /*========  5. std::regex_replace：替换 + 占位符 ========*/
+    // 把电话号码换成“区号$1-局号$2-号码$3”的形式
+    std::string repl = std::regex_replace(text, pattern,
+                                          "区号$1-局号$2-号码$3");
+    std::cout << "\nreplace 结果：\n" << repl << '\n';
+    // -> Call me at 区号123-局号456-号码78910 or 区号987-局号654-号码32100.
+
+    /*========  6. 常用占位符小结 ========*/
+    // $&   整个匹配
+    // $n   第 n 个捕获组，n=0 等价于 $&
+    // $$   字面量 '$'
+    std::string demo = "Price: 199USD";
+    std::regex  pr(R"((\d+)(USD))");
+    std::cout << "\n占位符演示：\n"
+              << std::regex_replace(demo, pr, "$1 $$100") // 199 $100
+              << '\n';
+
+    return 0;
+}
+\end{lstlisting}
+
+\subsection{小练}
+
+\begin{example}
+  假设现在有许多武士要角斗。每个武士都有一个名字和一个体力值，当两个武士相互角斗的时候，体力值较高的武士将会获胜，而体力值较低的武士会耗尽体力，并被淘汰。然而，角斗会消耗武士的体力值，因此每一次角斗后，胜者的体力值会减少等同于败者当前体力值的数值。如果有两个武士体力相等，则他们都会耗尽体力被淘汰。为了保证公平，武士们决定按照体力值从高到低的顺序进行角斗；如果有多个体力值最高的武士，那么他们会在这些武士中选择姓名字典序最靠前的两个武士进行角斗（例如有abc三个武士，则a的姓名字典序最靠前，b次之，c最靠后）。每次角斗后，胜者会继续参与角斗，直到只剩下一个武士或者没有武士剩下为止。
+
+  请编写一个程序，模拟武士们的角斗过程，并输出角斗的结果。
+
+  输入格式：共n+1行。你会接收到一个数字n，表示武士的数量。接下来n行，每行包含一个武士的名字和体力值（用空格分隔）。保证n不大于一百万，且保证没有两个武士的名字相同。
+
+  输出格式：输出最后剩下的武士的名字和体力值。如果没有武士剩下，则输出“None Left”。
+\end{example}
+
+\begin{answer}
+  上述题目看起来难度颇高。这也会是在类似于OJ上出现的常见题目类型之一：不会像前两个题目一样，给你明显的提示和思路（例如“使用筛法”），而是需要你自己思考解决问题的思路。对于这种题目，我们除了需要会语言以外，还要有一定的算法知识。好在这个题目比较简单，算法很直接，重点是怎么实现。
+
+  \subsubsection{思路}
+  我们看到， \texttt{武士们按照体力值从高到低的顺序角斗} ，这说明我们非常需要一个数据结构来存储武士们的信息，并且能够不停地获取体力最高的武士（对于体力值次高的武士，我们取两次就行），这让我们想到STL的一个重要成员：优先队列。另一方面，我们发现n的数量级在一百万，这对算法的时间要求较高，而优先队列能够很好地满足这个要求。
+
+  我们用C++17的语法来做题。
+
+  我们定义一下武士这个数据类型和优先队列：
+\begin{lstlisting}[language=C++]
+class Warrior {
+private:
+    std::string name_;  // 武士的名字
+    int health_;        // 武士的体力值
+public:
+    Warrior() = default; // 默认构造函数
+    Warrior(std::string name, int health)
+        : name_(std::move(name)), health_(health) {} // 构造函数
+
+    // Getters
+    const std::string& name() const { return name_; }
+    int health() const { return health_; }
+
+    // utils
+    void reduce(int amount) { health_ -= amount; } // 减少体力值
+};
+
+struct Cmp { // 比较器，用于优先队列排序
+    bool operator()(const Warrior& a, const Warrior& b) const {
+        return std::tie(b.health(), a.name()) <
+                std::tie(a.health(), b.name());
+        // 体力值高的优先级高，体力值相等时名字字典序靠前的优先级高
+    }
+}
+
+using Queue = std::priority_queue<Warrior,
+                        std::vector<Warrior>,
+                        Cmp>;
+
+Queue warriors; // 定义一个优先队列，存储武士
+\end{lstlisting}
+
+  再下一步就是处理角斗的逻辑了。由于优先队列会自动处理上述武士的排序问题，我们只需要不断地从优先队列中取出两个武士进行角斗即可：
+\begin{lstlisting}[language=C++]
+std::optional<Warrior> run(Queue& q) {
+    while (q.size() > 1) { // 当队列中有两个或以上武士时
+        Warrior first = q.top(); q.pop();  // 取出体力最高的武士
+        Warrior second = q.top(); q.pop(); // 取出体力次高的武士
+
+        if (first.health() == second.health()) {
+            // 如果体力相等，则两人都被淘汰
+            continue;
+        } else {
+            // 否则，胜者体力减少败者体力值，且a肯定是胜者
+            first.reduce(second.health());
+            q.push(std::move(first)); // 将胜者重新加入队列，这里用std::move避免拷贝
+        }
+    }
+    return q.empty() ? 
+        std::nullopt : 
+        std::make_optional(q.top()); // 返回最后剩下的武士
+}
+\end{lstlisting}
+
+
+  接下来，处理读取逻辑：
+\begin{lstlisting}[language=C++]
+int n;
+cin >> n;  // 读取武士数量
+for (int i = 0; i < n; ++i) {
+    std::string name;
+    int health;
+    std::cin >> name >> health;  // 读取武士的名字和体力值
+    q.emplace(std::move(name), health); // 将武士加入优先队列
+    // emplace 直接在队列内构造对象，避免不必要的拷贝
+}
+\end{lstlisting}
+
+  最后，处理输出：
+\begin{lstlisting}[language=C++]
+if (auto result = run(std::move(warriors)); result.has_value()) // 这里使用if初始化语句
+    std::cout << result->name() << " " << result->health() << "\n";
+else 
+    // 如果没有武士剩下
+    std::cout << "None Left\n";
+return 0;
+\end{lstlisting}
+
+  当然，我们肯定不能把这些代码直接交上去，我们需要把它们拼接在一起，成为一个可以执行的程序。
+\end{answer}
+
+\begin{exercise}
+  \begin{enumerate}
+    \item 请将上述代码拼接在一起，完成一个完整的C++程序，并在本地编译运行。
+    \item 试着使用set、map、vector等其他容器来重新实现上述题目，比较数据量较大时的性能差异。
+  \end{enumerate}
+\end{exercise}
+
+\begin{note}
+  部分同学可能会想：为什么我要用优先队列，而不是用set、map、vector等其他容器？这个问题问得很好。
+
+  我们先来解释“优先队列为什么行”的问题。优先队列是一个特殊的容器，它使用二叉堆实现，速度很快，且我们仅考虑“每次只关心全局最大值”的问题。在上述题目中，我们实际上只将两件事反复循环：把人放进去，把最该打架的两个人拿出来，这两件事恰好符合优先队列的特性。优先队列插入弹出的时间复杂度是$O(\log n)$\footnote{对于不熟悉算法分析的同学们，以上表示可以通俗地理解为：问题规模是n与问题规模是1的时候相比，执行时间最坏情况下大概变为大O里面的函数倍。}，且获取最大值的时间复杂度是$O(1)$，因此上述问题使用优先队列的时间复杂度是$O(n \log n)$，空间复杂度是$O(n)$，非常高效。
+
+  而对于set、map等容器，它们是用红黑树实现的，天然有序：简单地说，无论如何它们都会把所有元素排好（而优先队列并不会把所有元素排好，它只会把最大值放在最前面！）。上述问题中，每一次打架都会改变武士的体力值，这就意味着每次打架后都需要重新排序；为了保持有序，必须先删除、再插入，这个操作本身是两个$O(\log n)$的操作。而在更极端的情况下，加入胜者的体力值极低，它可能从队列首一直沉到队列尾，而set们仍然保留这个没什么竞争力的数据——这意味着后面每一次取“当前最大值”时，都会把这条记录再比较一遍，白白浪费$n log n $的时间！上述问题中，我们知道n是百万级别的，这种反复比较的额外开销总归是需要让复杂度爆炸的，或者说$O(n^2 \log n)$的复杂度，慢了一百万倍。
+
+  而对于vector而言，每次重新排序则更加直观：一次排序就得$O(n \log n)$，而每次打架后都需要重新排序，这就意味着每次打架后都需要$O(n \log n)$的时间复杂度。这样一来，整个问题的时间复杂度就变成了$O(n^2 \log n)$，显然超时。综上所述，只有保留全局极值但是不必保留元素具体顺序的数据结构才能较好地完成了这个问题，而优先队列正是这样一个数据结构\footnote{这个题其实有更快的手段，例如胜者树、败者树等，它们本质上是二叉堆的工业级优化，时间复杂度都是$O(n \log n)$，但是常数应该会更小。但是它们写起来非常困难，要考虑各种诸如淘汰等的边界情况，且需要相当的算法基础。胜者树/败者树在竞赛或工程里通常服务于多路归并这类需要“反复取最小/最大并立刻替换”的场景；而本题只需要“全局最大”，STL 的堆已经够用而且很简洁，杀鸡焉用牛刀。我们这里就不讲了。}。
+\end{note}
+
+以上，就是C++的全部内容了（也不是全部内容，毕竟C++20、C++23等版本有越来越多的新特性，但是能掌握C++17的全部特性就已经不得了了）。C++的语法和特性非常丰富，学习曲线较陡，但一旦掌握，就可以编写高效、可维护的代码。
+
+\begin{exercise}[改错题]
+以下代码试图使用C++的OOP、泛型、STL等特性实现一些功能，但存在未定义行为、逻辑错误、巨大的性能问题或输出违背预期等问题。请找出原因并修正这些问题。
+\begin{lstlisting}[language=C++]
+#include <vector>
+int main(){
+    std::vector<int> v = {1,2,3,4,5};
+    auto it = v.begin();   // 这是什么类型？
+    it += 3;               // 想跳到v[3]
+    int *p = it;           // 这是什么？
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=C++]
+#include <set>
+int main(){
+    std::set<int> s = {1,2,3,4,5};
+    for (auto x : s)
+        if (x % 2 == 0) s.erase(x);   // 想删偶数，但会出问题
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=C++]
+// foo.hpp
+template<class T>
+T pi() { return T(3.14); }
+
+// foo.cpp
+template<>
+double pi<double>() { return 3.1415926; }   // 没法编译
+\end{lstlisting}
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+class Base{
+    Base() { foo(); }           // 想调到派生类实现
+    virtual void foo() { std::cout << "base\n"; }
+};
+class Der : Base{
+    void foo() override { std::cout << "der\n"; }
+};
+int main(){ Der d; }    // 但是还是输出base？
+\end{lstlisting}
+
+\begin{lstlisting}[language=C++]
+#include <memory>
+class Base{ ~Base() { /*非虚*/ } };
+class Der : Base{ int* p = new int; ~Der(){ delete p; } };
+int main(){
+    std::unique_ptr<Base> pb = std::make_unique<Der>();
+}   // 电脑卡爆，一看任务管理器内存占用飙升？
+\end{lstlisting}
+
+\begin{lstlisting}[language=C++]
+#include <algorithm>
+#include <vector>
+int main(){
+    std::vector<int> v = {1,2,3,2,4};
+    std::remove(v.begin(), v.end(), 2);   // 想删掉所有 2
+    for (int x : v) std::cout << x;       // 但是怎么还打印5个数？
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=C++]
+#include <vector>
+void toggle(bool& r){ r = !r; }
+int main(){
+    std::vector<bool> vb = {true, false};
+    toggle(vb[0]);          // 想把 vb[0] 取反
+}// 为什么我编译不过？
+\end{lstlisting}
+\end{exercise}
+
+\begin{answer}
+    以下是各代码段的问题和修正方法：
+    \begin{enumerate}
+        \item 迭代器的加减应该用\lstinline[language=C++]|std::advance(it, 3);|。另外，迭代器不能直接转换为指针，应该使用\lstinline[language=C++]|&(*it);|来获取指向元素的指针。
+        \item 在遍历集合（其他容器也一样）时，不能添加或删除元素，因为这会使迭代器失效。因此要用STL提供的\lstinline[language=C++]|remove_if|函数，或者先收集要删除的元素，再统一删除。
+        \item 模板的显式实例化应该放在头文件中，或者在使用模板的文件中进行实例化。
+        \item 在构造函数中调用虚函数会调用基类的版本，而不是派生类的版本。可以将虚函数调用移到构造函数之外，例如在派生类的构造函数中调用。
+        \item 基类的析构函数应该是虚的，以确保派生类的析构函数被正确调用，从而避免内存泄漏。
+        \item std::remove并不会改变容器的大小，它只是将要删除的元素移动到容器的末尾。需要使用\lstinline[language=C++]|v.erase(std::remove(v.begin(), v.end(), 2), v.end());|来真正删除这些元素。
+        \item std::vector<bool>是一个特殊的容器，它并不存储实际的bool值，而是使用位来表示布尔值。因此，不能直接获取对bool值的引用。可以使用std::vector<char>或std::vector<int>来代替。
+    \end{enumerate}
+\end{answer}
