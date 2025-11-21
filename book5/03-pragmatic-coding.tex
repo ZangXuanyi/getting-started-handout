@@ -1,18 +1,4 @@
-\chapter{实用主义编程}
-
-\begin{outline}
-  本章介绍了实用主义编程的基本原则和实践方法，涵盖了代码风格、注释、异常处理、日志记录、代码架构等内容。通过学习本章内容，读者将能够编写出更易于维护和扩展的代码，提高开发效率和代码质量。
-\end{outline}
-
-\begin{prerequisite}
-  \begin{itemize}
-    \item 熟悉至少一种编程语言的基本语法和编程概念
-    \item 了解基本的数据结构和算法
-    \item 熟悉终端，熟悉版本控制系统（如Git）的基本操作
-  \end{itemize}
-\end{prerequisite}
-
-现在同学们的前置知识已经充分，是时候开始正式走向开发了。
+\chapter{实用主义编程}\label{chap:pragmatic-coding}
 
 对于一些同学而言，即使他们走向工作岗位或者科研岗位之后，他们写出的代码依然难以阅读，更难以进行长期维护。从某种程度上说，\textbf{代码是写给人看的}，机器只是顺便运行，按理说写成什么样子都可以；但是如果可读性太差的话，估计未来的自己都会抽自己几巴掌——完全看不懂。因此，我们将在这里介绍一下怎么才能真正写出来一些\textbf{真正可以交付}的代码。
 
@@ -86,7 +72,7 @@ def calculate_total_price(items):
         }
     }
 \end{lstlisting}
-  这也是笔者个人比较习惯的一种风格，主要是不需要频繁移动光标和不需要频繁敲击回车键。
+    这也是笔者个人比较习惯的一种风格，主要是不需要频繁移动光标和不需要频繁敲击回车键。
   \item \textbf{Allman风格}：这种风格要求左大括号单独成行，并与相应的控制语句对齐。例如：
 \begin{lstlisting}
     int main()
@@ -101,7 +87,7 @@ def calculate_total_price(items):
         }
     }
 \end{lstlisting}
-  这种风格的优点是代码结构清晰，易于阅读和维护，尤其适合嵌套较深的代码块，很多学校代码课程都会推荐这种风格。VS Code的C++插件自动整理默认也是这种风格。但缺点是代码块可能会过于细长，且输入时需频繁地移动光标，如果有辅助的输入插件会好很多。
+    这种风格的优点是代码结构清晰，易于阅读和维护，尤其适合嵌套较深的代码块，很多学校代码课程都会推荐这种风格。VS Code的C++插件自动整理默认也是这种风格。但缺点是代码块可能会过于细长，且输入时需频繁地移动光标，如果有辅助的输入插件会好很多。
   \item \textbf{GNU风格}：由\href{https://www.gnu.org/prep/standards/standards.html}{GNU项目}推广。它对代码的布局和注释有非常详细的规定。其括号风格很独特，大括号需要单独成行并缩进。这个风格在GNU项目中被广泛采用，但在其他项目中较少见。例如：
 \begin{lstlisting}
     int main ()
@@ -240,7 +226,7 @@ def divide(a, b):
         raise ValueError("除数不能为零！")
     return a / b
 \end{lstlisting}
- \texttt{raise} 是Python中手动抛出异常的语句，和C\#的 \texttt{throw} 很像。上述代码和使用断言的区别有两点：一个是代码量变大了（多了一行，不够优雅），另一个是这个异常抛出的是“值错误”而不是“断言错误”。不过在实际操作中，这两个区别不大，且在查询等需要更多信息的场景中，使用 \texttt{raise} 会更好一些（生产环境中往往禁用断言，优雅不能当饭吃）。
+\texttt{raise} 是Python中手动抛出异常的语句，和C\#的 \texttt{throw} 很像。上述代码和使用断言的区别有两点：一个是代码量变大了（多了一行，不够优雅），另一个是这个异常抛出的是“值错误”而不是“断言错误”。不过在实际操作中，这两个区别不大，且在查询等需要更多信息的场景中，使用 \texttt{raise} 会更好一些（生产环境中往往禁用断言，优雅不能当饭吃）。
 
 在C系中，也有这样的断言，包括运行时断言和编译时断言。运行时断言指的是在运行时会检查某些条件是否成立，对编译进程没有影响；编译时断言则是在编译阶段就检查某些条件是否成立，如果不成立直接掐断编译。
 
@@ -372,6 +358,13 @@ Vibe Coding（氛围编程）是一种利用AI Agent来辅助编程的方式。�
 
 现在的LLM大多集成了“项目”功能，使得我们可以把代码文件直接上传到LLM中，然后让它帮我们分析和修改代码，这样就更方便了。对于不支持项目功能的LLM，也可以使用一些现成的Agent，例如VS Code的插件 \texttt{CLine} 等，来实现类似的功能。只不过该类Agent是需要持有者的API Key的。
 
+另一方面，一定要监督AI Agent的工作过程，确保它按照预期的方式完成任务。否则，AI Agent可能会做出一些出乎意料的操作：
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.8\textwidth]{bad-vibe.png}
+  \caption{AI Agent的意外操作示例}
+\end{figure}
+
 \subsection{代码审查}
 
 代码审查（Code Review）是指在代码提交到版本控制系统之前，由其他开发人员对代码进行检查和评审的过程。代码审查的目的是提高代码质量，发现和修复潜在的问题，确保代码符合项目的编码规范和最佳实践。代码审查通常包括以下几个方面：
@@ -455,3 +448,561 @@ def add(a: int, b: int) -> int:
 如使用FastAPI等库，也可以使用这个库自带的文档生成功能，FastAPI会根据代码中的注释和类型提示自动生成API文档，方便我们查看和测试API接口。
 
 另外，C++项目也有类似的文档自动化工具，例如 \texttt{Doxygen} 等。它们可以根据代码中的注释和文档字符串自动生成文档，具体使用方法可以参考相关工具的官方文档。
+
+\section{实例：帮某位大一同学修改代码}
+
+下文是某位大一同学写的一段程序，用于进行“亚马逊棋”的游玩。虽然初学者能够把这么冗长的一大段代码写对已经是非常值得肯定的事情了，但是从工程眼光看来，这段代码依然存在巨大的问题。\footnote{我没有检查该实现的正确性，这位同学也没有提供跳出最后循环（游戏结束）的条件，因此我假设该实现是正确的。}下面我将对这段代码进行修改和优化，展示如何将一段初学者代码改造成更优雅、更易维护的代码。
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <utility>
+#include <math.h>
+
+class Map
+{
+private:
+    static constexpr int WIDTH = 8;
+    static constexpr int HEIGHT = 8;
+    int map[WIDTH][HEIGHT];
+
+public:
+    void init()
+    {
+        for (auto i = 0; i < WIDTH; i++)
+        {
+            for (auto j = 0; j < HEIGHT; j++)
+            {
+                Map::map[i][j] = 0;
+            }
+        }
+        // 初始化棋盘
+        // 这里用1代表白方棋子，2代表黑方棋子
+        // 使用-1代表障碍物
+        // map[i][j]代表第i行第j列，注意此处下标从0开始
+        map[0][2] = 2;
+        map[0][5] = 2;
+        map[2][0] = 2;
+        map[2][7] = 2;
+        map[5][0] = 1;
+        map[5][7] = 1;
+        map[7][2] = 1;
+        map[7][5] = 1;
+        // 上文进行了黑白方棋子的初始化。
+    }
+    void move_chess(std::pair<int, int> start_pos, std::pair<int, int> end_pos)
+    {
+        auto temp = Map::map[start_pos.first][start_pos.second];
+        Map::map[start_pos.first][start_pos.second] = 0;
+        Map::map[end_pos.first][end_pos.second] = temp;
+    }
+    void place_obstacle(std::pair<int, int> obstacle_pos)
+    {
+        Map::map[obstacle_pos.first][obstacle_pos.second] = -1;
+    }
+    // 这里我们引用了一个参数player，来表示当前是哪个玩家在操作
+    // true代表白方，false代表黑方
+    // 这里黑方先行，在初始参数应为false
+    void move(std::pair<int, int> start_pos, std::pair<int, int> end_pos, std::pair<int, int> obstacle_pos, bool &player)
+    {
+        if (player == false && Map::map[start_pos.first][start_pos.second] != 2)
+        {
+            std::cout << "now is black's turn , please move black" << std::endl;
+            return;
+        }
+        else if (player == true && Map::map[start_pos.first][start_pos.second] != 1)
+        {
+            std::cout << "now is white's turn , please move white" << std::endl;
+            return;
+        }
+        // 首先判断是否合法移动
+        if (start_pos.first == end_pos.first) // 横向移动
+        {
+            for (auto i = std::min(start_pos.second, end_pos.second); i <= std::max(start_pos.second, end_pos.second); i++)
+            {
+                if (Map::map[start_pos.first][i] != 0 && i != start_pos.second)
+                {
+                    std::cout << "there is a obstacle in your move way" << std::endl;
+                    return;
+                }
+            }
+        }
+        else if (start_pos.second == end_pos.second) // 纵向移动
+        {
+            for (auto i = std::min(start_pos.first, end_pos.first); i <= std::max(start_pos.first, end_pos.first); i++)
+            {
+                if (Map::map[i][start_pos.second] != 0 && i != start_pos.first)
+                {
+                    std::cout << "there is a obstacle in your move way" << std::endl;
+                    return;
+                }
+            }
+        }
+        else if (std::abs(start_pos.first - end_pos.first) == std::abs(start_pos.second - end_pos.second)) // 斜向移动
+        {
+            for (auto i = 1; i <= std::abs(start_pos.first - end_pos.first); i++)
+            {
+                int check_x = start_pos.first < end_pos.first ? start_pos.first + i : start_pos.first - i;
+                int check_y = start_pos.second < end_pos.second ? start_pos.second + i : start_pos.second - i;
+                if (Map::map[check_x][check_y] != 0)
+                {
+                    std::cout << "there is a obstacle in your move way" << std::endl;
+                    return;
+                }
+            }
+        }
+        else
+        {
+            std::cout << "unavailable move" << std::endl;
+            return;
+        }
+        move_chess(start_pos, end_pos);
+        // 其次检查是否有障碍物
+        if (end_pos.first == obstacle_pos.first) // 横向移动
+        {
+            for (auto i = std::min(end_pos.second, obstacle_pos.second); i <= std::max(end_pos.second, obstacle_pos.second); i++)
+            {
+                if (Map::map[end_pos.first][i] != 0 && i != end_pos.second)
+                {
+                    std::cout << "there is a obstacle in your obstacle way" << std::endl;
+                    move_chess(end_pos, start_pos);
+                    return;
+                }
+            }
+        }
+        else if (end_pos.second == obstacle_pos.second) // 纵向移动
+        {
+            for (auto i = std::min(end_pos.first, obstacle_pos.first); i <= std::max(end_pos.first, obstacle_pos.first); i++)
+            {
+                if (Map::map[i][end_pos.second] != 0 && i != end_pos.first)
+                {
+                    std::cout << "there is a obstacle in your obstacle way" << std::endl;
+                    move_chess(end_pos, start_pos);
+                    return;
+                }
+            }
+        }
+        else if (std::abs(end_pos.first - obstacle_pos.first) == std::abs(end_pos.second - obstacle_pos.second)) // 斜向移动
+        {
+            for (auto i = 1; i <= std::abs(end_pos.first - obstacle_pos.first); i++)
+            {
+                int check_x = end_pos.first < obstacle_pos.first ? end_pos.first + i : end_pos.first - i;
+                int check_y = end_pos.second < obstacle_pos.second ? obstacle_pos.second + i : obstacle_pos.second - i;
+                if (Map::map[check_x][check_y] != 0)
+                {
+                    std::cout << "there is a obstacle in your obstacle way" << std::endl;
+                    move_chess(end_pos, start_pos);
+                    return;
+                }
+            }
+        }
+        else
+        {
+            std::cout << "unavailable move" << std::endl;
+            move_chess(end_pos, start_pos);
+            return;
+        }
+
+        // 最后进行移动
+        player = player ? false : true;
+        place_obstacle(obstacle_pos); // 先放置障碍物
+    }
+    void print()
+    {
+        for (auto i = 0; i < WIDTH; i++)
+        {
+            for (auto j = 0; j < HEIGHT; j++)
+            {
+                std::cout << Map::map[i][j] << " ";
+            }
+            std::cout << std::endl;
+        }
+    }
+};
+int main()
+{
+    Map gamemap;
+    gamemap.init();
+    bool player = false; // 黑方先行
+    int x, y, end_x, end_y, obstacle_x, obstacle_y;
+    while (true)
+    {
+        gamemap.print();
+        std::cin >> x >> y >> end_x >> end_y >> obstacle_x >> obstacle_y;
+        gamemap.move(std::make_pair(x, y), std::make_pair(end_x, end_y), std::make_pair(obstacle_x, obstacle_y), player);
+    }
+    return 0;
+}
+\end{lstlisting}
+
+我们逐段来看。首先这位同学能够利用“面向对象”的思想来封装棋盘相关的操作，这一点非常值得肯定。下面我们来看一看这个代码到底哪里不好。
+
+\subsection{先把代码变得更C++一点}
+
+首先，映入眼帘的是\lstinline[language=C++]|#include <math.h>|。这可以看出这位同学以前可能有OI相关经验，习惯性地使用C风格的头文件了。在C++中，应该使用\lstinline[language=C++]|#include <cmath>|来替代上述头文件。
+
+然后是这段代码的第10行：
+\begin{lstlisting}[language=C++]
+    int map[WIDTH][HEIGHT];
+\end{lstlisting}
+这里使用了C风格的二维数组来存储棋盘数据，这种方式虽然简单，但失去了安全性。我们知道该数组的大小是固定的，因此可以使用C++的标准库容器 \texttt{std::array} 来替代它，从而提高代码的安全性和可读性。改成下面这样：
+\begin{lstlisting}[language=C++]
+    std::array<std::array<int, HEIGHT>, WIDTH> map;
+\end{lstlisting}
+当然需要引用的头文件又多了一个，即 \lstinline[language=C++]|#include <array>| 。
+
+继续看，然后我们发现这个初始化竟然是写在一个\lstinline[language=C++]|void init()|函数里面的。虽然这样做没有错，但是更好的方式是把初始化写在构造函数里面，这样可以确保每次创建对象时都会进行初始化，避免忘记调用初始化函数的问题。而另一条则是，这个类竟然没有构造函数！那么我们就帮他写一个构造函数，替代\lstinline[language=C++]|void init()|函数。
+
+但是，看他的注释，“使用1来代表白方棋子，2代表黑方棋子，-1代表障碍物”，这不就是“魔法数字”吗？我们应该使用枚举类型来替代这些魔法数字，从而提高代码的可读性和可维护性。
+
+于是这一大段都要大改特改了。先写一个强枚举\footnote{我这里为了美观压行了，实际上应当拆成多行，后同。}
+\begin{lstlisting}[language=C++]
+enum class CellType{ EMPTY, WHITE, BLACK, OBSTACLE };
+\end{lstlisting}
+
+然后把array的类型改成 \lstinline[language=C++]|std::array<std::array<CellType, SIZE>, SIZE>| \footnote{由于棋盘是正方形的，因此这里用一个SIZE就够了，节省一个常量的定义。}，并且把初始化函数改成构造函数，代码如下：
+\begin{lstlisting}[language=C++]
+// 辅助的Pattern结构体
+struct Pattern{ int row; int col; CellType type; };
+// class Map 改名为 Board 更合适，防止和 std::map 冲突
+static constexpr int INIT_NUM = 8;
+static constexpr std::array<Pattern, INIT_NUM> initial_patterns{
+        Pattern{0, 2, CellType::BLACK},
+        Pattern{0, 5, CellType::BLACK},
+        Pattern{2, 0, CellType::BLACK},
+        Pattern{2, 7, CellType::BLACK},
+        Pattern{5, 0, CellType::WHITE},
+        Pattern{5, 7, CellType::WHITE},
+        Pattern{7, 2, CellType::WHITE},
+        Pattern{7, 5, CellType::WHITE}};
+Board()
+{
+    for (auto &row : board)
+        row.fill(CellType::EMPTY);
+    for (const auto &pattern : initial_patterns)
+        board.at(pattern.row).at(pattern.col) = pattern.type;
+}
+\end{lstlisting}
+这样代码就自解释了，避免了魔法数字、无构造函数等多个问题。当然，在改动到这里的时候，肯定要把剩下的代码里面所有对\lstinline[language=C++]|map|的访问都改成使用\lstinline[language=C++]|CellType|类型。另外，\lstinline[language=C++]|map|这个名字太差了，要是将来用到了STL的\lstinline[language=C++]|std::map|容器就冲突了。我们可以把它改成\lstinline[language=C++]|board|，更符合语境。
+
+然后我们竟然发现这位同学在用成员函数来访问\lstinline[language=C++]|map|的时候，竟然都是直接使用\lstinline[language=C++]|Map::map|这种形式来调用的！这说明他并没有理解“面向对象”中的“封装”思想。成员函数应该直接访问成员变量，而不是通过类名来访问成员变量。我们应该把所有的\lstinline[language=C++]|Map::map|都改成\lstinline[language=C++]|this->board|或者直接\lstinline[language=C++]|board|。
+
+然后还有很多输出语句，这里也得改，从以前的输出魔法数字到输出枚举类型对应的字符串。我们可以试着对该枚举类型重载\lstinline[language=C++]|operator<<|运算符，从而实现枚举类型到字符串的转换。代码如下：
+\begin{lstlisting}[language=C++]
+std::ostream &operator<<(std::ostream &os, const CellType &cell)
+{
+    switch (cell)
+    {
+    case CellType::EMPTY:
+        os << ".";
+        break;
+    case CellType::WHITE:
+        os << "W";
+        break;
+    case CellType::BLACK:
+        os << "B";
+        break;
+    case CellType::OBSTACLE:
+        os << "X";
+        break;
+    default:
+        break;
+    }
+    return os;
+}
+\end{lstlisting}
+这样我们就可以直接输出枚举类型了。
+
+\subsection{重构代码结构：更加OOP、更加模块化}
+
+现在，这个代码总算有一点人的样子了。下一步，我们发现这个代码没有任何的命名空间，而且所有逻辑全都塞进了一个类里面，导致这个类变得臃肿不堪。我们可以把这个类拆成几个小的类，从而提高代码的可维护性和可读性。
+
+面向对象编程的一个宗旨就是“小而美”原则：一个class不应是一大堆功能的耦合，而是应该能够很好地完成一些简单而基本的工作，成为一块合格的“积木”，从而可以和其他“积木”更好地协作，完成更复杂的任务。而这“积木”应该尽可能地小，职责单一，避免“上帝类”的出现。上述代码中的Board就显然是一个“上帝类”，它包含了棋盘的表示、游戏规则的判断、输入输出等多个职责，这实际上是并不合适的。
+
+那么，我们思考有哪些类是可以拆出来的呢？我提供一个思路：
+\begin{description}
+  \item[Board类]：表示棋盘，包含一个二维数组来存储格子的信息，提供初始化棋盘、打印棋盘、移动棋子、放置障碍物等方法。
+  \item[Rule类]：包含游戏的规则，例如判断是否合法移动、判断游戏是否结束等方法。
+  \item[IO类]：负责处理输入输出操作，例如读取玩家的输入、打印游戏状态等。
+\end{description}
+当然，我们发现后面两个“类”不需要任何属性，所以完全可以用命名空间来代替它们，从而避免不必要的类实例化。
+
+为了防止魔法数字，我们再写一个枚举和几个辅助用的结构体：
+\begin{lstlisting}[language=C++]
+enum class PlayerType{ WHITE, BLACK };
+struct Pos // 这个结构体用来表示位置，替代先前所说的 using Pos = std::pair<int, int>;
+{
+    int x;
+    int y;
+    constexpr bool operator==(const Pos &other) const
+    {
+        return x == other.x && y == other.y;
+    }
+};
+\end{lstlisting}
+
+然后实现Board class：
+\begin{lstlisting}[language=C++]
+class Board // This class represents the game board with necessary methods like moving pieces, placing obstacles and getting cell states
+{
+private:
+    static constexpr int SIZE = 8;
+    std::array<std::array<CellType, SIZE>, SIZE> board;
+    static constexpr std::array<Pattern, 8> initial_patterns{
+        Pattern{0, 2, CellType::BLACK},
+        Pattern{0, 5, CellType::BLACK},
+        Pattern{2, 0, CellType::BLACK},
+        Pattern{2, 7, CellType::BLACK},
+        Pattern{5, 0, CellType::WHITE},
+        Pattern{5, 7, CellType::WHITE},
+        Pattern{7, 2, CellType::WHITE},
+        Pattern{7, 5, CellType::WHITE}};
+
+public:
+    Board()
+    {
+        for (auto &row : board)
+            row.fill(CellType::EMPTY);
+        for (const auto &pattern : initial_patterns)
+            board.at(pattern.row).at(pattern.col) = pattern.type;
+    }
+    // getter and setter for cell
+    const CellType at(const Pos &pos) const { return board.at(pos.x).at(pos.y); }
+    void set_cell(const Pos &pos, CellType type) { board.at(pos.x).at(pos.y) = type; }
+
+    // getter for the whole board, no setter to avoid external modification
+    const auto &get_board() const { return board; }
+
+    // getter for board size, static method, no need to instantiate Board
+    static const int get_size() { return SIZE; }
+
+    // method to move a piece
+    void move_piece(const Pos &start, const Pos &end, CellType type)
+    {
+        board.at(start.x).at(start.y) = CellType::EMPTY;
+        board.at(end.x).at(end.y) = type;
+    }
+
+    // method to place an obstacle
+    void place_obstacle(const Pos &pos) { board.at(pos.x).at(pos.y) = CellType::OBSTACLE; }
+};
+\end{lstlisting}
+
+Rule类：
+\begin{lstlisting}[language=C++]
+namespace Rules
+{
+    template <typename T>
+    int sgn(T val){ return (T(0) < val) - (val < T(0));}
+    // 这是一个工具函数，非常有用，可以用来判断一个数的正负，且不必担心类型问题
+
+    inline CellType side_to_cell(PlayerType player) { return player == PlayerType::WHITE ? CellType::WHITE : CellType::BLACK; }
+    void flip_player(PlayerType &player) { player = (player == PlayerType::WHITE) ? PlayerType::BLACK : PlayerType::WHITE; }
+
+    bool path_clean(const Board &board, const Pos &a, const Pos &b)
+    {
+        int dx = sgn(b.first - a.first);
+        int dy = sgn(b.second - a.second);
+        // These are the increments for each step along the path
+        int steps = std::max(std::abs(b.first - a.first), std::abs(b.second - a.second));
+        for (int step = 1; step < steps; ++step)
+        {
+            int x = a.first + step * dx;
+            int y = a.second + step * dy;
+            if (auto cell = board.get_cell({x, y}); cell != CellType::EMPTY)
+            {
+                return false; // Obstacle found
+            }
+        }
+        return true; // Path is clear
+    }
+    bool try_move(Board &board, const Pos &start, const Pos &end, const Pos &obstacle, PlayerType player)
+    {
+        CellType self = side_to_cell(player);
+        if (board.get_cell(start) != self)
+        {
+            std::cout << (player == PlayerType::WHITE
+                              ? "now is white's turn, please move white\n"
+                              : "now is black's turn, please move black\n");
+            return false;
+        }
+        if (!(path_clean(board, start, end)))
+        {
+            std::cout << "there is a obstacle in your move way\n";
+            return false;
+        }
+        if (!(path_clean(board, end, obstacle)))
+        {
+            std::cout << "there is a obstacle in your obstacle way\n";
+            return false;
+        }
+
+        /* 真正执行 */
+        board.move_piece(start, end, self);
+        board.place_obstacle(obstacle);
+        return true;
+    }
+};
+\end{lstlisting}
+
+最后是IO：
+\begin{lstlisting}[language=C++]
+namespace IO{
+    std::ostream std::ostream &operator<<(std::ostream &os, const CellType &cell) { ... } // 前面已经写过了
+
+    void print_board(const Board &board)
+    {
+        for (const auto &row : board.get_board())
+        {
+            for (const auto &cell : row)
+            {
+                std::cout << cell << " ";
+            }
+            std::cout << "\n";
+        }
+    }
+    
+    void read_move(Pos &start, Pos &end, Pos &obstacle)
+    {
+        std::cout << "Enter your move (start_x start_y end_x end_y obstacle_x obstacle_y): ";
+        int sx, sy, ex, ey, ox, oy;
+        std::cin >> sx >> sy >> ex >> ey >> ox >> oy;
+        start = {sx, sy};
+        end = {ex, ey};
+        obstacle = {ox, oy};
+    }
+};
+\end{lstlisting}
+
+最后是主函数：
+\begin{lstlisting}[language=C++]
+int main()
+{
+    Board game_map;
+    PlayerType current_player = PlayerType::BLACK; // Black starts first
+    Pos start, end, obstacle;
+    while (1)
+    {
+        IO::print_board(game_map);
+        IO::read_move(start, end, obstacle);
+        if (Rules::try_move(game_map, start, end, obstacle, current_player))
+        {
+            std::cout << "Move successful!\n";
+            Rules::flip_player(current_player);
+        }
+        else
+        {
+            std::cout << "Invalid move, try again.\n";
+        }
+    }
+}
+\end{lstlisting}
+
+这样，我们就把这段代码改得更加优雅、易维护了。通过拆分类，我们提高了代码的可读性和可维护性；通过使用枚举类型，我们避免了魔法数字的问题；通过重载运算符，我们简化了输出操作。总之，这样的代码更符合现代C++的编程风格，更容易被其他开发人员理解和维护。
+
+\subsection{下一步：让它更现代、更健壮}
+
+但是目前，这家伙依然是一个“原型机”，根本不够健壮，缺乏错误处理和边界检查等机制。如果要把它变成一个真正的产品级代码，还需要做很多工作。
+
+我们刚刚说过，一个class就是一个积木，那怎样才能让我们知道这个积木搭得对不对呢？答案是在代码中增加异常处理、方法修饰、边界检查等机制，让错误在编译时就爆掉，运行时错误也走到异常处理分支，而不是让程序直接崩溃。而这积木搭得“牢不牢”，直接的检测手段自然是测试，但我们最好尽可能的让这些积木搭上就牢，而不是等到测试阶段才发现问题。
+
+\paragraph{异常处理}
+目前，这段代码没有任何异常处理机制，如果输入无效数据，程序可能会崩溃。我们可以使用C++的异常处理机制来捕获和处理这些异常，从而提高程序的健壮性。例如，在读取玩家输入时，我们可以检查输入是否合法，如果不合法则抛出异常，并在主函数中捕获该异常并提示玩家重新输入。
+
+例如，\lstinline[language=C++]|Rules::try_move|函数：
+\begin{lstlisting}
+void try_move(Board &board, const Pos &start, const Pos &end, const Pos &obstacle, PlayerType player)
+{
+    CellType self = side_to_cell(player);
+    if (board.at(start) != self)
+        throw std::invalid_argument("You are trying to move a piece that is not yours or that does not exist.");
+    if (!(path_clean(board, start, end)))
+        throw std::invalid_argument("There is an obstacle in your moving way.");
+    if (!(path_clean(board, end, obstacle)))
+        throw std::invalid_argument("There is an obstacle in your shooting way.");
+
+    /* 真正执行 */
+    board.move_piece(start, end, self);
+    board.place_obstacle(obstacle);
+    return;
+}
+\end{lstlisting}
+然后在主函数中捕获异常：
+\begin{lstlisting}[language=C++]
+try
+{
+    IO::print_board(game_map);
+    IO::read_move(start, end, obstacle);
+    Rules::try_move(game_map, start, end, obstacle, current_player);
+    Rules::flip_player(current_player);
+}
+catch (const std::exception &e)
+{
+    std::cerr << e.what() << std::endl;
+    std::cout << "Please try again." << std::endl;
+}
+\end{lstlisting}
+当然，这样的抛出引用还是太简单了，在实际工程中，我们一般习惯于这样做：
+\begin{lstlisting}[language=C++]
+class MoveError : public std::runtime_error
+{
+    using std::runtime_error::runtime_error; // 继承构造函数
+    std::string_view type() const noexcept { return "MoveError"; } // 定义自己的异常类型
+};
+\end{lstlisting}
+然后抛出\lstinline[language=C++]|MoveError|异常，从而更好地区分不同类型的异常。但现在的小项目就不必这么复杂了。
+
+\paragraph{边界检查} 
+边界检查主要需要在读取玩家输入时进行。我们可以检查输入的位置是否在棋盘范围内，如果不在则抛出异常。例如，在\lstinline[language=C++]|IO::read_move|函数中：
+\begin{lstlisting}
+void read_move(Pos &start, Pos &end, Pos &obstacle)
+{
+    std::cout << "Enter your move (start_x start_y end_x end_y obstacle_x obstacle_y): ";
+    int sx, sy, ex, ey, ox, oy;
+    std::cin >> sx >> sy >> ex >> ey >> ox >> oy;
+    auto lambda = [](int val)
+    { return val >= 0 && val < Board::get_size(); };
+    if (std::cin.fail())
+    {
+        std::cin.clear();                                                   // clear the fail state
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // discard invalid input
+        throw std::invalid_argument("Invalid input format. Please enter integers only.");
+    }
+    else if (!(lambda(sx) && lambda(sy) && lambda(ex) && lambda(ey) && lambda(ox) && lambda(oy)))
+    {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        throw std::out_of_range("Input positions are out of board range.");
+    }
+    start = {sx, sy};
+    end = {ex, ey};
+    obstacle = {ox, oy};
+}
+\end{lstlisting}
+其实上述代码中读进引用也并不是特别好的设计，最好是返回一个结构体或者元组，避免引用带来的副作用。不过这里就不改了，再改就太复杂了。
+
+\paragraph{修饰函数}
+对于一些不修改成员变量的成员函数，应该加上\lstinline[language=C++]|const|修饰符，从而提高代码的可读性和安全性；对于肯定不抛出异常的函数，应该加上\lstinline[language=C++]|noexcept|修饰符，从而提高代码的性能和安全性。例如，在\lstinline[language=C++]|Rules::sgn|函数中：
+\begin{lstlisting}
+template <typename T>
+[[nodiscard]] constexpr int sgn(T val) noexcept
+{
+    static_assert(std::is_arithmetic_v<T>, "sgn requires an arithmetic type");
+    return (T(0) < val) - (val < T(0));
+}
+\end{lstlisting}
+在这里，我们使用了\lstinline[language=C++]|[[nodiscard]]|属性来提示调用者不要忽略返回值，使用了\lstinline[language=C++]|constexpr|来表示该函数可以在编译时求值，使用了\lstinline[language=C++]|noexcept|来表示该函数不会抛出异常，并且使用了\lstinline[language=C++]|static_assert|来确保模板参数是算术类型。这些修饰符大大提高了代码的可读性和安全性，符合现代C++编程“让错误在编译期暴露出来”的理念。
+
+\begin{tip}
+    有的同学可能会好奇：为什么上述静态断言能够确保模板参数是算术类型？这是因为\lstinline[language=C++]|std::is_arithmetic_v<T>|是一个类型特征（type trait），它在C++标准库的\texttt{<type\_traits>}头文件中定义。它会在编译时检查类型\texttt{T}是否是算术类型（包括整数类型和浮点类型），如果是则返回\texttt{true}，否则返回\texttt{false}。
+
+    那可能有的同学还有疑问：template不是泛型吗，为什么能在编译时就确定类型？这是因为C++的模板机制是在编译时进行实例化的，这一点和Python的“动态类型”完全不同；与之类似的还有\lstinline[language=C++]|auto|关键字，虽然看起来这家伙能接受任何类型的值，但实际上编译器会在编译时根据赋值语句推导出具体的类型，从而确保类型安全。也正因此，C++的模板和\lstinline[language=C++]|auto|关键字都能在编译时进行类型检查，从而避免了运行时的类型错误。
+
+    还有的同学可能会问：为什么断言能和noexcept一起用？这是因为静态断言是在编译时进行检查的，如果不满足该断言条件（例如在某次实例化中传入了非算术类型），编译器会报错并停止编译过程，无法实例化模板，编译也被掐断，从而避免了运行时的错误。而\lstinline[language=C++]|noexcept|是用来修饰函数的，它表示该方法（模板）\textbf{实例化后}的任何运行时调用都不会抛出异常。因此，这两者并不冲突，反而是相辅相成的。换句话说，如果把断言去掉，那这个noexcept就不成立了，因为传入非算术类型时，函数体内的比较操作会抛出异常，从而违反了noexcept的承诺；但仅把noexcept去掉，断言依然成立，只是编译器不会对这个函数调用进行优化罢了。
+\end{tip}
+
+\paragraph{多文件编程}
+上述代码全都塞进了一个文件，这是非常不好的做法。虽然现在这个代码量满打满算还不到两百行，但是如果将来植入GUI、AI等功能，代码量肯定会大幅增加。我们应该把代码拆成多个文件，从而提高代码的可维护性和可读性。上述几个类（命名空间）都可以拆成单独的头文件和源文件，从而实现模块化编程。
+
+实现多文件的编程还有一个好处，就是可以使用CMake等工具来精细的控制编译过程，从而提高编译效率和代码质量。当然，这相当复杂，我们还是暂时不要修改，别给大一的同学们吓坏了。
+
+\paragraph{测试}
+最后，我们应该为这些类编写测试用例，从而确保代码的正确性和可靠性。我们可以使用Google Test等测试框架来编写测试用例，从而提高测试的效率和质量。这里我也仅仅是提一嘴，真正的测试也需要同学们自己去学习和实践了——实在不行也可以直接翻到下一章。

@@ -20,6 +20,8 @@
 \tcbuselibrary{skins,xparse,most,breakable}
 \usepackage{manyfoot,perpage}
 \usepackage{url}
+\usepackage{nameref}
+\usepackage{xeCJKfntef}
 \usepackage{metalogo}
 \usepackage{hyperref}
 \usepackage{fontawesome5}
@@ -27,9 +29,9 @@
 
 %---------- 页面与字体 ----------
 \setmainfont{Source Serif Pro}
-\setsansfont{Source Sans Pro}
-\setmonofont{Source Code Pro}
-\setCJKmainfont[ItalicFont=Source Han Serif CN]{Source Han Serif CN}
+\setsansfont{Source Sans Pro}[Scale=MatchLowercase]
+\setmonofont{Source Code Pro}[Scale=MatchLowercase]
+\setCJKmainfont[ItalicFont = * ]{Source Han Serif CN}
 \setCJKsansfont{Source Han Sans CN}
 \setCJKmonofont{Source Han Sans CN}
 
@@ -45,6 +47,12 @@
   showspaces=false,showstringspaces=false,breaklines=true,frame=single
 }
 
+\let\oldnameref\nameref
+\renewcommand{\nameref}[1]{%
+  《 \oldnameref{#1}%
+  》% 
+}
+
 \DeclareNewFootnote{B}[roman]
 \renewcommand{\thefootnoteB}{}          % 无编号
 \makeatletter
@@ -52,12 +60,12 @@
 % 重新定义 \href：正文蓝色下划线 + 外部箭头 + 底部脚注
 \let\oldhref\href
 \renewcommand{\href}[2]{%
-  \oldhref{#1}{\color{blue}\underline{#2}\raisebox{0.2ex}{\tiny$\nearrow$}}%
+  \oldhref{#1}{#2}%
   \footnotetextB{\textbf{#2}: \url{#1}}%
 }
 \makeatother
 
-\hypersetup{colorlinks=false,pdfborder={0 0 0}}
+\hypersetup{hidelinks, colorlinks=true, linkcolor=blue, citecolor=red, urlcolor=blue}
 
 %---------- tcolorbox 环境 ----------
 \newtcolorbox{warning}{enhanced,colback=red!4!white,colframe=red!75!black,coltitle=white,fonttitle=\bfseries,title=警告,top=2mm,bottom=2mm,left=2.5mm,right=2.5mm,boxrule=0.6pt,breakable,fontupper=\small,before upper={\setlength{\parindent}{2em}}}
@@ -130,8 +138,8 @@
 
 %---------- 标题信息 ----------
 \title{\Huge\textbf{北京大学计算机基础能力手册}}
-\author[1]{臧炫懿}
-\affil[1]{北京大学学生Linux俱乐部}
+\author[ ]{臧炫懿}
+% \affil[1]{北京大学学生Linux俱乐部}
 \affil[ ]{\faGithub\  \texttt{ZangXuanyi/getting-started-handout} }
 \affil[ ]{\faEnvelope\  \texttt{zangxuanyi@stu.pku.edu.cn} }
 \renewcommand*{\Authsep}{, }

@@ -1,0 +1,104 @@
+\chapter{第二版前言}
+
+\begin{quote}
+  \textbf{我们更应该关注那些不敢被问出的问题}。
+\end{quote}
+
+上面这句话是我和同学们讨论的时候，同学们提出来的。我觉得这句话非常有道理。
+
+在过去的几个月里，我和一些同学们讨论了很多关于计算机基础教育的问题。我们发现，很多同学们在学习计算机基础知识时，往往会遇到一些“隐形的障碍”，这些障碍并不是因为他们不够聪明或者不够努力，而是因为他们缺乏一些基本的知识和技能，这些知识和技能并没有被明确地教授出来。于是我写了这么个东西。
+
+但是，很快，可能是我个人的能力有限，也有可能是我太过傲慢，《手册》很快变成我一个人的狂欢。我自己添加的内容：从C++的constexpr甚至consteval、到在《编程基础》出现的GPG密钥，再到我个人自作主张加上的多线程编程以及单纯为了方便自己写代码而加上的CMake，甚至是我个人觉得有趣的内容，比如说shell脚本编程、正则表达式、以及一些Linux下的高级操作等等，乃至Arch Linux传教，完全没有考虑到读者的接受能力和需求。结果就是，《手册》变得越来越厚重，越来越难以阅读，越来越难以理解。深度和广度上，我个人对《手册》有很大的满足感，但是对于读者来说，可能并不是这样。
+
+但你让我删掉这些内容，我又觉得很难受。因为这些内容都是我个人觉得非常有用的东西。我觉得如果我不把这些东西写出来，那么读者就会错过很多有用的知识和技能。另一方面，我费了许多心思写出来的东西，如果没有人看，那我也觉得很可惜。
+
+于是，在第二版手册中，我将会把整个手册劈成更多小节，这些小节不仅可以分开阅读，还可以放在一起从头到尾通读：
+\begin{enumerate}
+  \item 导航和方法——介绍在大学获取知识的方法和途径，帮助读者更好地利用手册和其他资源。\textbf{这一章是必须要读的}。
+  \item 基础使用：让计算机先跑起来——介绍计算机的基本使用方法，帮助读者快速上手计算机。
+  \item 终端和Linux基础：为开发铺垫语境——介绍Linux和终端的基础知识，帮助读者理解计算机的工作原理。
+  \item 开发环境：让代码能编译能跑——介绍编程环境的搭建和使用、C/C++、Python的语法、包、编译工具链等内容，帮助读者快速进入编程状态。
+  \item 实用主义编程：写出更好的代码——介绍实用主义编程的理念和方法以及相关工具，如git、密钥等，帮助读者提高编程效率和代码质量，促进更好的协作。
+  \item 原理速览：知其然，更知其所以然——介绍计算机的基本原理，帮助读者理解计算机的工作机制。
+  \item 工具箱——介绍一些实用的工具和技巧，帮助读者更好地使用计算机。
+  \item 延伸进阶阅读——介绍一些进阶的知识和技能，帮助读者进一步提升自己的能力。
+\end{enumerate}
+
+我想要的从来就不是名义上的“厚重”，而是实实在在的“有用”。我希望读者们能够从《手册》中获得真正有用的知识和技能，而不是被一些无关紧要的内容所淹没。我希望读者们是真的不会被“overwhelmed”。
+
+也正因此，本书有多种阅读方式，满足不同读者的需求。在读完第一节“导航与方法”之后，读者可以根据自己的需求选择不同的阅读路径。我希望读者能先阅读目录，再选择性的阅读想看的内容。\textcolor{red}{所有标注为“进阶阅读”的章节都是可选的，读者可以根据自己的兴趣和需求选择是否阅读。}
+
+我给出以下几个参考路径：
+\begin{itemize}
+  \item 之前完全没接触过计算机，希望能自己装个软件、写个Hello World：
+  \begin{enumerate}
+    \item 入门认知：\nameref{chap:usage}，学会怎么用键盘、怎么管理文件；
+    \item 系统和软件：\nameref{chap:install-software}，学会装个软件；
+    \item 编程入门：\nameref{chap:coding}，配好开发环境；
+    \item 写第一个程序：\nameref{chap:c-guidance}或\nameref{chap:python-guidance}，写出第一个Hello World。
+  \end{enumerate}
+  \item 希望能简单学点脚本，写点小程序，能用Git管理代码和论文，用LaTeX等工具写点东西：
+  \begin{enumerate}
+    \item 入门认知：\nameref{chap:install-software}和\nameref{chap:usage}，学会装个软件，学会怎么用键盘、怎么管理文件；
+    \item 写作工具：\nameref{sec:latex}和\nameref{sec:latex-advanced}，学会用LaTeX写论文
+    \item 脚本自动化：\nameref{chap:coding}、\nameref{chap:python-guidance}和\nameref{chap:python-advanced}，学会用Python写点小程序、脚本，能画出漂亮的数据分析图表；
+    \item 版本管理：\nameref{sec:git}，学会用Git管理代码和论文，防止写坏或丢失。
+  \end{enumerate}
+  \item 希望能写脚本、画图、跑模型，用Linux做实验，能用Git管理代码和论文：
+  \begin{enumerate}
+    \item 快速上手：\nameref{chap:usage}和\nameref{chap:coding}，学会VS Code写Python、虚拟环境装包跑脚本；
+    \item 写作工具：\nameref{sec:latex}和\nameref{sec:latex-advanced}，学会用LaTeX等工具写论文；
+    \item 数据处理：\nameref{chap:python-guidance}和\nameref{chap:python-advanced}，学会用Python写点小程序、脚本，能画出漂亮的数据分析图表；
+    \item Linux环境：\nameref{sec:terminal}和\nameref{chap:linux}，学会用Linux做实验，会用终端加速工作；
+    \item 进阶玩法：\nameref{sec:git}和\nameref{chap:debugging}，学会用Git管理代码和论文，防止写坏或丢失，也能把别人的代码拿下就跑起来。
+  \end{enumerate}
+  \item 计算机相关专业学生：\textbf{我认为应该通读大部分}：
+  \begin{enumerate}
+    \item 基础打底：\nameref{sec:terminal}和\nameref{chap:linux}，学会Linux、终端、WSL等基础知识，为后续开发打好基础；
+    \item 编程入门：\nameref{chap:coding}、\nameref{chap:c-guidance}、\nameref{chap:cpp-1}、\nameref{chap:cpp-2}、\nameref{chap:cpp-3}、\nameref{chap:python-guidance}和\nameref{chap:python-advanced}
+    ，学会配VS Code、调试、写C/C++和Python，能写出较高质量的代码；
+    \item 工程能力：\nameref{chap:cpp-project}、\nameref{sec:git}、\nameref{chap:pragmatic-coding}，学会写CMake，用Git，多人协作；
+    \item 系统原理：\nameref{chap:ics-1}、\nameref{chap:ics-2}和\nameref{chap:ics-3}，即使不学ICS，作为信科学生也应该了解计算机的基本原理；
+    \item 进阶玩法：\nameref{chap:secret-key}+\nameref{chap:debugging}，学会远程开发、签名、调试等进阶工程技能。
+  \end{enumerate}
+  \item OIer快速过渡到大学工程开发环境，避免“只会写算法不会写项目”：
+  \begin{enumerate}
+    \item 环境过渡：\nameref{chap:coding}、、\nameref{chap:c-guidance}、\nameref{chap:cpp-1}、\nameref{chap:cpp-2}、\nameref{chap:cpp-3}，学会用VS Code写现代的C++，学会用CMake管理项目，杜绝Fake C++（C with classes）；
+    \item 工程规范：\nameref{sec:git}、\nameref{chap:pragmatic-coding}，学会用Git管理代码，学会调试程序、规范代码，提升代码质量；
+    \item 走向Linux：\nameref{sec:terminal}和\nameref{chap:linux}，以及\nameref{chap:secret-key}，学会在Linux下开发，学会远程开发，适应大学的开发环境；
+    \item 进阶可选：：\nameref{chap:ics-1}、\nameref{chap:ics-2}和\nameref{chap:ics-3}，以及\nameref{chap:multitask}，了解计算机的基本原理和多线程编程。这前提是你想打底层、系统或科研，或者更先进的算法竞赛（如HPC竞赛）。
+  \end{enumerate}
+  \item 纯装机，想买台新电脑，希望一条龙搞好新机、配好开发环境：\nameref{chap:buy-and-check}、\nameref{chap:install-software}、\nameref{chap:coding}，下午拿到新电脑，晚上就搞好开发环境，第二天就能提着新电脑去上课。
+  \item 有篇论文想投稿，内容都想好了，但不会用LaTeX排版：\nameref{sec:latex}和\nameref{sec:latex-advanced}，学会用LaTeX写论文，搞定投稿格式，一周学完语法，顺便论文也排好。
+  \item “先跑AI再说”极速路线：\ref{sec:virtualenv} miniconda - \ref{sec:pytorch} PyTorch - \ref{sec:pandas} Pandas - \ref{sec:docker} Docker轻量化，搞定AI环境，直接跑模型。
+\end{itemize}
+
+希望第二版会比第一版对同学们更有帮助。
+
+如有疑问、意见或建议，欢迎来该项目的仓库\faGithub\href{https://github.com/ZangXuanyi/getting-started-handout}{ZangXuanyi/getting-started-handout}查看本手册的源代码，欢迎提出Issue与Pull Request。如不能访问，也可向我发送电子邮件咨询： \texttt{zangxuanyi@stu.pku.edu.cn} 。也可加入该手册的官方讨论群聊（QQ群号：1059423771）。
+
+
+\chapter{第一版前言}
+
+计算机基础科学教育是我国近些年一直努力推进的教育之一，北京大学的所有学生都应修习《计算概论》课程。然而，大学计算机基础教育的内容往往过于理论化，缺乏实用性，这使得同学们在学习过程中容易感到枯燥乏味，在学习之后也很难将所学知识灵活应用到实际生产与生活中，最终导致在校学生对计算机的使用和开发能力普遍较低，甚至出现了“念了四年本科却不会用Git”的现象。同时，我国初高中乃至小学阶段，计算机的教育水平参差不齐，同学们的基础也不尽相同，这导致部分基础较差的同学在学习《计算概论》时会遇到困难，遑论进阶课程。
+
+在本手册正式编写之前，已经有很多学长为了抹平基础知识的差距做出了相关的努力。几个广为人知的项目：北京大学为新生提供了《计算概论衔接课》，旨在帮助同学们快速入门计算机基础知识（这门课的前半部分由我所讲授）；北京大学学生Linux俱乐部（LCPU）启动了\href{missing.lcpu.dev}{Getting Started项目}，旨在帮助同学们快速入门Linux和计算机科学（该项目亦由我全权负责）；一位\faGithub\href{https://github.com/PKUFlyingPig}{学长}发起了\href{https://csdiy.wiki/}{CS自学指南}项目，受到了广泛的关注和认可，该项目迄今已有一百五十余位贡献者；PKUHub等其他官方或非官方的组织也在积极推动计算机基础教育的普及。
+
+然而，Getting Started和自学指南对于大一新生而言，存在的最大不足之处就是：不够基础。而对于有能力就读北大的学生而言，“上课”这种获取信息的形式的信息密度显然是不够的，大约是已经不再幻想上课有用了；真正有用的知识还是要靠同学们自己去学习实践。因此，我认为给同学们一本手册要比给同学们数小时的课程视频有用得多。笔者最终决定：制作这份手册，帮助同学们把初高中缺失的计算机知识，以及大学丢失的开发能力补回来。
+
+本手册可以认为是对大学常用计算机基础知识与基础开发能力的汇总，比起深度更注重广度，比起理论更注重实践。简而言之，我们手册中会讲一些\textbf{正课几乎不会讲、但是用处极大}的知识。我们认为使用本手册的同学都已经具备了最基本的计算机操作能力，例如“使用鼠标”“关机”这种操作默认大家非常熟练，因此也不会涉及相关内容。
+
+本手册正文分为两部分。第一部分面向计算机新手，讲述计算机基础知识，内容涵盖计算机组成和使用、编程环境配置、文本处理、Linux等内容，旨在将同学们的水平提升至能够接受大学计算机基础教育的水平；第二部分则面向工程开发新手，讲述工程开发的一些基础内容，包含C++和Python的语法基础、实用主义编程、调试和C语言工具链等，旨在将同学们的水平提升至能够进行简单工程开发的水平。
+
+本文偏理论的章节中有一些“开放性思考和探索”板块，使用黄色背景色标注，旨在引导同学们进行更深入的思考和探索。笔者仅仅提供一些选题供参考，自己也不知道有没有一个确定的答案以及答案是什么，因此也不会给出答案甚至思路。有兴趣、有技术的同学们可以自行探索相关话题，甚至可以作为大作业、数学建模、科创甚至毕业设计的选题种子。当然，如果觉得难度过高，也完全可以跳过。
+
+本手册以本人实践和经验为基底讲授。\textbf{如果本手册中的内容和正课中的内容或要求有差异，请以正课为准。}
+
+本手册参考了LCPU Getting Started以及诸多博文、指南的内容，并在此基础上进行了增删和修改。
+
+希望本手册能够对同学们有所帮助。
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.5\textwidth]{000/fly.jpg}
+\end{figure}
