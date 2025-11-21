@@ -1,0 +1,1077 @@
+\chapter{从C到C++}\label{chap:cpp-1}
+
+有的同学可能会问：那为什么又来了个C++呢？C不是已经很好了吗？为什么还要搞个C++出来呢？
+
+理由很简单：C语言的确简单高效，但“太弱”，缺乏现代编程语言的特性，如OOP（面向对象编程）、泛型；其标准库也极小，很多东西都得手搓，在日常编程中这是非常痛苦的。
+
+因此，C++应运而生。C++在保留C语言高效和灵活的同时，引入了许多现代编程语言的特性，如类和对象、继承、多态、模板等，从而使得程序设计更加模块化、可维护和可扩展。此外，C++还提供了一个强大的标准库（STL），包括容器、算法和迭代器等，大大简化了日常编程任务。
+
+C++广泛应用于多种需要兼顾性能和抽象的领域，如系统软件、游戏开发、嵌入式系统和高性能计算等，著名的Chrome、Adobe全家桶、MS Office、Visual Studio都是C++写的，古老的DirectX游戏引擎\footnote{该游戏引擎最著名的作品莫过于《红色警戒2》了。}、现代的虚幻引擎\footnote{这个写出来的东西就太多了，目前大多数3A大作都是用这个引擎写的。}等也都要求用C++开发；而Unity引擎虽然允许用户使用C\#辅助开发，但其底层核心（乃至C\#的.NET运行时）也是用C++完成；Python里相当多的高性能库（如PyTorch、TensorFlow、JAX\footnote{JAX是Numpy的GPU加速版本，Google出品。}等）也是用C++写的。C和C++在事实上构成了当今高性能计算和软件开发的基石，在编程语言排名中常年稳居第三名和第二名，仅次于Python\footnote{Python最通行的解释器CPython甚至也是C写的！}。
+
+\begin{caution}
+    如果你仅是为了应付课程或打算法竞赛，那不必完全遵从本文中涉及到的诸如代码风格等建议，只要能快速跑通就行；但如果你想真正学好C++，建议你认真阅读并遵从本文中的建议。
+
+    一种代码有一种代码的写法，一次性代码（如考试和竞赛）和长期维护的代码（如工程项目）是两码事。前者追求速度和简洁，后者追求可读性和可维护性。本文所述的代码风格和建议，都是面向后者的。笔者个人也比较建议同学们从一开始就养成良好的代码习惯，毕竟未来你写的代码很可能会被别人阅读和维护。
+
+    所以说，虽然笔者个人非常厌恶和反对在任何代码中使用诸如 \lstinline[language=C++]|#include <bits/c++.h>| 和 \lstinline[language=C++]|using namespace std;| 之类的东西，以及大量使用全局变量、开巨大的C风格静态数组、滥用宏定义、用无意义的函数和变量名、一点注释不写、通篇魔法数字等行为，但如果你仅是为了应付考试或竞赛，那么使用这些东西也无可厚非，毕竟在考试的时候这些东西确实能帮你节省不少时间——但依然建议避免这种不好的实践。
+    
+    但如果要是在大作业或工程项目中这么乱写，\textbf{那就太不负责任了}，被解雇了也是活该。
+\end{caution}
+
+\section{从C到C++的区别}
+
+C++的基本语法和C语言几乎完全一致，因此如果你已经掌握了C语言，那么学习C++将会非常容易。
+
+\subsection{第一个C++程序}
+
+下面是一个简单的C++程序，它输出“Hello, World!”到屏幕上：
+\begin{lstlisting}[language=C++]
+#include <iostream> // 引入输入输出流库
+
+int main() {
+    std::cout << "Hello, World!" << std::endl; // 输出Hello, World!
+    return 0; // 返回0表示程序成功结束
+}
+\end{lstlisting}
+
+我们发现，这个HelloWorld和C语言的HelloWorld长得很像，但确实存在一些区别：
+\begin{itemize}
+  \item 引入的头文件有区别；
+  \item 输出语句有区别。
+\end{itemize}
+
+在C++中，基本的语法结构和C语言类似，包括变量声明、数据类型、控制结构（如条件语句和循环语句）、函数定义等，统统一致。可以说，C怎么写，C++就怎么写，完全没有区别。C语言的标准库在C++中也有其移植版本，一般是从 \texttt{xx.h} 变成了 \texttt{cxx} ，例如C语言的 \texttt{stdio.h} 在C++中变成了 \texttt{cstdio} ，但函数和用法几乎完全一致。
+
+区别在于：C++自带bool类型，不需要 \texttt{\#include <stdbool.h>} ；另，结构体和联合体的定义上有所不同；第三，C++的字符串推荐用 \texttt{std::string} ，而不是C风格的字符串；最后，C++推荐使用流对象来输入输出。
+
+接下来会把C++的新特性一一列举。对于面向对象、泛型和STL则会在后续章节中详细介绍。
+
+\subsection{C++的输入输出及其格式化}
+
+在C++中，我们建议使用更安全的输入输出流 \texttt{cin} 和 \texttt{cout} 来进行输入输出操作。它们分别用于从标准输入（通常是键盘）读取数据和向标准输出（通常是屏幕）打印数据。
+
+\texttt{cin} 和 \texttt{cout} 的基本用法如下：
+\begin{lstlisting}[language=C++]
+#include <iostream>
+using namespace std;
+int main() {
+    int age;
+    cout << "请输入你的年龄：";  // 输出提示信息
+    cin >> age;  // 从标准输入读取数据
+    cout << "你输入的年龄是：" << age << endl;  // 输出读取到的数据
+    return 0;
+}
+\end{lstlisting}
+以上代码的意思是：先输出提示信息“请输入你的年龄：”，然后从标准输入读取一个整数值并存储到变量age中。接着输出“你输入的年龄是：”以及读取到的年龄值。
+
+C风格的 \texttt{printf} 和 \texttt{scanf} 速度更快，因为不需要流操作；但是它们存在一些安全隐患，例如格式化字符串攻击和缓冲区溢出等问题。现代C编程中，微软推荐使用 \texttt{scanf\_s} 和 \texttt{printf\_s} 来代替 \texttt{scanf} 和 \texttt{printf} ，它们允许一个额外的参数来指定缓冲区的大小，从而避免缓冲区溢出的问题。但是，gcc和clang均不支持这两个函数。
+
+不过，虽然在做题的时候确实可以使用 \texttt{scanf} 和 \texttt{printf} 来压榨时间，但是我们仍然建议在C++工程上使用更安全的 \texttt{cin} 和 \texttt{cout} 。
+
+另外，我们在写代码的时候{\color{red}\textbf{一定不要一句C一句C++，或者说不要一句printf一句cout（反过来也不行）}}，这样会导致缓冲区冲突，从而引发一些莫名其妙的问题。要么全用C的输入输出，要么全用C++的输入输出。
+
+\begin{note}
+  实际上， \texttt{cin} 和 \texttt{cout} 和 \texttt{printf} 和 \texttt{scanf} 区别巨大。后者是一个函数，而前者是一个“流对象”（可以理解为一个“东西”而不是一个“手段”）。它们是C++标准库中的流对象，真正负责输入输出的实际上是 \texttt{<istream>} 头文件中的 \texttt{istream::read} 和 \texttt{<ostream>} 头文件中的 \texttt{ostream::write} 方法，它们被封装进 \texttt{>>} 和 \texttt{<<} 这两个运算符（流运算符），和我们的加减乘除等运算符一样。这两个运算符必然是返回流对象的一个引用，因此可以链式调用。特别的，当输入失败的时候，会返回流对象的一个“失败”状态，因此可以通过 \texttt{cin.fail()} 来判断输入是否成功，也可以通过布尔上下文转换（例如 \texttt{while(cin>>n)} ）来判断输入是否成功。
+
+  流运算符也不是 \texttt{>>} 和 \texttt{<<} 的原本样子。它们原本是右移和左移运算符：例如 \texttt{a<<b} 是对a进行左移操作，将a的二进制表示整体向左边移动b位，右边补0；右移类似（只不过对于有符号整数最高位是0补0，是1补1；无符号整数默认补0）。在 \texttt{<iostream>} 头文件中，这两个运算符被重载了，使得它们可以用于流对象，进而辅助执行输入输出操作；也正因此，我们需要引用上述头文件才能使用它们。不过值得庆幸的是，我们可能一辈子都不会用到它们的原本样子。
+
+  头文件 \texttt{<stdio.h>} 是C的头文件，而 \texttt{<cstdio>} 是这个头文件在C++中的移植版本。两者内容完全一致，只不过 \texttt{<cstdio>} 使用了C++的命名空间（ \texttt{std} ）；但是由于C++是C的超集，因此大多数实现也允许不套命名空间直接用 \texttt{printf} 等。在现代风格的C++编程中，我们通常使用 \texttt{<iostream>} 或 \texttt{<cstdio>} 来进行输入输出操作，而不是使用 \texttt{<stdio.h>} 。
+\end{note}
+
+有时候，我们需要对输入输出进行一些格式化操作，例如设置小数点位数、对齐方式等。C++提供了一些操纵符（manipulator）来实现这些功能。
+\begin{itemize}
+  \item  \texttt{std::setw(n)} ：设置输出宽度为n个字符。
+  \item  \texttt{std::setprecision(n)} ：设置小数点位数为n位。
+  \item  \texttt{std::fixed} ：固定小数位数输出浮点数。
+  \item  \texttt{std::scientific} ：使用科学计数法输出浮点数。
+  \item  \texttt{std::left} ：左对齐输出。
+  \item  \texttt{std::right} ：右对齐输出。
+\end{itemize}
+
+上述不少操纵符需要引用头文件 \texttt{<iomanip>} 。例如，我们可以使用这些操纵符来格式化输出一个表格：
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <iomanip>  // 引入操纵符库
+using namespace std;
+
+int main() {
+    cout << left << setw(10) << "Name" << setw(5) << "Age" << setw(10) << "GPA" << endl;
+    cout << left << setw(10) << "Alice" << setw(5) << 20 << setw(10) << fixed << setprecision(2) << 3.5 << endl;
+    cout << left << setw(10) << "Bob" << setw(5) << 22 << setw(10) << fixed << setprecision(2) << 3.8 << endl;
+    return 0;
+}
+\end{lstlisting}
+
+另一方面，我们也可以使用 \texttt{<format>} 头文件中的许多格式化方法来进行输入输出的格式化操作。这个头文件在C++20中引入，提供了一些类似Python的格式化字符串的方法。例如，我们可以使用 \texttt{std::format} 函数来格式化输出一个字符串：
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <format>  // 引入格式化库
+using namespace std;
+
+int main() {
+    string name = "Alice";
+    int age = 20;
+    double gpa = 3.5;
+    cout << format("Name: {}, Age: {}, GPA: {:.2f}\n", name, age, gpa);
+    return 0;
+}
+\end{lstlisting}
+此类方式的格式化方法非常灵活，支持多种格式化选项，例如对齐方式、填充字符等。这种方法现代化、格式安全，推荐使用。
+
+如果使用{printf}等C风格的输出函数，则需要引用头文件 \texttt{<cstdio>} 。例如，我们可以使用 \texttt{printf} 函数来格式化输出一个字符串：
+\begin{lstlisting}[language=C++]
+#include <cstdio>  // 引入C风格输入输出库
+using namespace std;
+
+int main() {
+    const char* name = "Alice";
+    int age = 20;
+    double gpa = 3.5;
+    printf("Name: %s, Age: %d, GPA: %.2f\n", name, age, gpa);
+    return 0;
+}
+\end{lstlisting}
+
+对于输入方面，则复杂得多。我们推荐同学们使用更安全的C++风格输入输出方法，也就是 \texttt{cin} 、 \texttt{cout} 、 \texttt{getline} 等。
+
+对于确定数量的干净\footnote{这里的干净指的是简单的空格分割或换行符分割，没有诸如逗号等其他符号。与之相对应的脏数据则是指包含了各种符号、格式不统一等复杂情况的数据。}输入，可以直接使用 \texttt{cin} ：
+\begin{lstlisting}[language=C++]
+int a, b, c;
+// 假设输入格式为：1 2 3
+cin >> a >> b >> c;  // 读入三个整数
+\end{lstlisting}
+
+对于不确定数量的干净输入，可以使用循环配合 \texttt{cin} ：
+\begin{lstlisting}[language=C++]
+int n;
+while (cin >> n) {
+    // 处理输入的n
+}
+\end{lstlisting}
+上述代码会一直读取输入，直到遇到文件结束符（EOF）或者输入错误为止。其能工作的原因是 \texttt{cin} 在读取失败时会返回流对象的一个“失败”状态，该失败状态在布尔上下文中被解释为 \texttt{false} ，从而终止循环。
+
+如果遇到脏输入，则情况变得复杂许多。常见的脏输入包括逗号分割的数字、带有多余空格的字符串等。对于这些情况，推荐使用 \texttt{getline} 配合字符串流（ \texttt{stringstream} ）来处理。下文演示了这种方式，并将逗号分割的整数字符串转换为整数数组：
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
+using namespace std;
+
+int main(){
+    string line;
+    string tmp;
+    vector<int> results;
+
+    // 1. 读一整行
+    getline(cin, line);
+
+    // 2. 创建字符串流
+    stringstream ss(line);
+
+    // 3. 按逗号分割并处理
+    while (getline(ss, tmp, ',')) {
+        results.push_back(stoi(tmp)); // 转换为整数并存储
+    }
+    // 如果转换为double，可以使用stod
+}
+\end{lstlisting}
+
+此外，C++20引入了 \texttt{std::from\_chars} 函数，可以直接将字符串转换为数字，性能优于 \texttt{stoi} 和 \texttt{stod} 等函数。下文演示了如何使用 \texttt{std::from\_chars} 来处理逗号分割的整数字符串：
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <string>
+#include <vector>
+#include <charconv> // 引入from_chars头文件
+using namespace std;
+
+int main(){
+    string line;
+    string tmp;
+    vector<int> results;
+
+    // 1. 读一整行
+    getline(cin, line);
+
+    size_t start = 0;
+    size_t end = line.find(',');
+
+    // 2. 按逗号分割并处理
+    while (end != string::npos) {
+        tmp = line.substr(start, end - start);
+        int value;
+        from_chars(tmp.data(), tmp.data() + tmp.size(), value); // 转换为整数
+        results.push_back(value);
+        start = end + 1;
+        end = line.find(',', start);
+    }
+    // 处理最后一个数字
+    tmp = line.substr(start);
+    int value;
+    from_chars(tmp.data(), tmp.data() + tmp.size(), value);
+    results.push_back(value);
+}
+\end{lstlisting}
+
+工程上，脏数据非常常见，因此掌握这些输入方式是非常有必要的。
+\begin{caution}
+  流对象处理输入输出的本质依然是操作缓冲区。因此，有一部分OIer认为他们自己维护缓冲区的输入方式更快、更好。诚然， \texttt{getline} 等方法处理缓冲区的性能大概比手动操作缓冲区低了约5到10\%，但是实际上我并不推荐手动维护缓冲区，尤其是在工程上。原因有三：
+  \begin{itemize}
+    \item 不安全。这是最大的一个弊病。手动维护缓冲区和不穿衣服在街上乱晃是一个道理，属于是把自己的安全完全交给了用户的善意。恶意用户攻击你的缓冲区将变得轻而易举。
+    \item 不易懂。仅代码量一项，手动维护缓冲区就比使用流对象多出不少代码量，且难以阅读。这违背了工程代码的可读性原则。
+    \item 难维护。我们在做题的时候，不少题目虽然算法简单但是边界条件复杂（例如日历问题），做这些题目的时候应付边界条件的时间几乎可以占到做题时间的一半。对于工程而言，手动维护缓冲区需要自己处理各种边界情况，估计也没有几个团队会有这个时间和精力去维护这些边界条件。
+  \end{itemize}
+
+  综上所述，虽然手动维护缓冲区在某些情况下可能会有一些性能优势，但是这种优势并不值得我们为之付出安全性、可读性和可维护性的代价。这就是工程代码为了安全、可读、可维护而牺牲性能的一个典型例子；另一方面，可以看到竞赛思维和工程思维有显著的差异，不能够混为一谈。
+\end{caution}
+
+\subsection{常变量、常量和它们的关系}
+常变量（也叫不可变变量、只读变量、运行时常量）、常量（也叫编译期常量）往往笼统地称为常量。它们一旦确定就不会\textbf{在程序运行时}改变，任何试图对它们进行运行时更改的操作都会使得编译不通过。常量的值应当在声明时确定，可以通过赋值或者计算得到。它们的名字通常使用大写字母来表示，以便于和变量区分。
+
+声明常变量的方法和声明变量差不多，但是要在最前面加上 \texttt{const} 关键字，如：
+\begin{lstlisting}[language=C++]
+const int MAX_VALUE = 100;
+const int P = a + b; // 这里的a和b可以是变量
+// P = 10 // 这行代码编译不通过，因此要注释掉
+\end{lstlisting}
+以上代码的意思是：我要创建一个常量MAX\_VALUE，它的值是100。
+
+如果常变量的值\textbf{必须在编译时}确定，可以使用常量。常量的值在编译的时候值就确定了，不过因此也需要在定义中就写明它的值。常量的声明方法和常变量类似，只是把 \texttt{const} 换成 \texttt{constexpr} 。
+
+常量也可以通过计算得到，计算在编译时进行，可以节省程序运行时间，但是要求用于计算的东西也必须是常量、字面值（直接写出来的值）、constexpr函数或者立即函数\footnote{立即函数指的是声明为 \texttt{consteval} 的函数，在 \texttt{C++20} 中被引入，这样的函数\textbf{只能在编译时期调用}}。下文是常量的几个例子。
+
+\begin{lstlisting}[language=C++]
+constexpr double E = 2.71828;
+constexpr double PI = 3.14159;
+constexpr double EPI = E * PI;
+\end{lstlisting}
+
+在现代 \texttt{C++} 中， \texttt{const} 常变量不依靠运行时初始化来确定其值（例如\lstinline[language=c++]|const int b = 1;|），其表现就和 \texttt{constexpr} 常量一样了。因此，在大多数时候，我们也可以把 \texttt{const} 常变量当作 \texttt{constexpr} 常量来使用。但如希望严谨表达意图，仍建议使用 \texttt{constexpr} 来声明常量。
+
+\begin{tip}
+  还是不懂？可以通过以下例子理解一下变量、运行时常量、编译期常量的区别：
+\begin{lstlisting}[language=C++]
+    int sqr(int x) { return x * x; } // 普通函数
+    const int sqr_c(const int x) { return x * x; } // const函数
+    constexpr int sqr_ce(const int x) { return x * x; } // constexpr函数
+    consteval int sqr_cv(const int x) { return x * x; } // consteval函数
+\end{lstlisting}
+
+  那么对于以下声明，编译器的表现如下表所示。其中，编译失败的情形用红色标出；用 \texttt{const} 声明的运行时常量表现为编译期常量的特殊情形则使用蓝色标出。
+  \begin{small}            % 整体字号
+    \begin{longtable}[c]{lll}
+      \caption{变量/常量声明与编译器表现}
+      \label{tab:long}\\
+      \toprule
+      声明 & 编译器表现 & 理由 \\
+      \midrule
+      \endfirsthead          % 首页表头
+
+      \multicolumn{3}{c}{\footnotesize 续表~\ref{tab:long}}\\[.5ex]
+      \toprule
+      声明 & 编译器表现 & 理由 \\
+      \midrule
+      \endhead               % 后续页表头
+
+      \midrule
+      \multicolumn{3}{r}{\footnotesize 接下页}
+      \endfoot               % 每页底部（除末页）
+
+      \bottomrule
+      \endlastfoot           % 末页底部
+
+      \texttt{int a0 = 5;}  & 变量 & 显然 \\
+      \rowcolor{blue!15} \texttt{const int a1 = 5;}  & 常量 & 不依赖运行时初始化 \\
+      \texttt{constexpr int a2 = 5;}  & 常量 & 字面值 \\
+      \texttt{const int a3 = a0;}  & 常变量 & 依赖运行时值 \texttt{a0}  \\
+      \rowcolor{red!15} \texttt{constexpr int a4 = a0;}  & 编译失败 & 严格常量不能用运行时值初始化 \\
+      \texttt{int a5 = sqr(1);}  & 变量 & 显然 \\
+      \texttt{const int a6 = sqr(1);}  & 常变量 & 依赖运行时函数 \\
+      \rowcolor{red!15} \texttt{constexpr int a7 = sqr(1);}  & 编译失败 & 严格常量不能用运行时函数初始化 \\
+      \texttt{int a8 = sqr\_c(1);}  & 变量 & 显然 \\
+      \texttt{const int a8 = sqr\_c(1);}  & 常变量 & 依赖运行时函数 \\
+      \rowcolor{red!15} \texttt{constexpr int a9 = sqr\_c(1);}  & 编译失败 & 严格常量不能用运行时函数初始化 \\
+      \texttt{int a10 = sqr\_ce(1);}  & 变量 & 显然 \\
+      \rowcolor{blue!15} \texttt{const int a11 = sqr\_ce(1);}  & 常量 & 该函数接受常量则在编译期初始化 \\
+      \texttt{const int a12 = sqr\_ce(a0);}  & 常变量 & 依赖运行时值 \texttt{a0}  \\
+      \texttt{constexpr int a13 = sqr\_ce(1);}  & 常量 & 显然 \\
+      \rowcolor{red!15} \texttt{constexpr int a14 = sqr\_ce(a0);}  & 编译失败 & 严格常量不能用运行时值初始化 \\
+      \rowcolor{red!15} \texttt{int a15 = sqr\_cv(1);}  & 编译失败 & 立即函数不可以在运行时调用 \\
+      \rowcolor{blue!15} \texttt{const int a16 = sqr\_cv(1);}  & 常量 & 显然 \\
+      \rowcolor{red!15} \texttt{const int a17 = sqr\_cv(a0);}  & 编译失败 & 立即函数不可以在运行时调用 \\
+      \texttt{constexpr int a18 = sqr\_cv(1);}  & 常量 & 显然 \\
+      \rowcolor{red!15} \texttt{constexpr int a19 = sqr\_cv(a0);}  & 编译失败 & 立即函数不可以在运行时调用 \\
+    \end{longtable}
+  \end{small}
+\end{tip}
+
+\begin{tip}
+  用宏定义的常量和用 \texttt{const} 或 \texttt{constexpr} 定义的常量有一些区别。宏定义的常量没有类型，因此在使用时需要注意类型转换的问题；而 \texttt{const} 或 \texttt{constexpr} 定义的常量有类型，可以更好地进行类型检查和转换。此外，宏定义的常量在预处理阶段进行替换，因此可能会导致一些意想不到的问题，例如宏展开时的优先级问题等。而 \texttt{const} 或 \texttt{constexpr} 定义的常量在编译阶段进行处理，更加安全可靠。
+\end{tip}
+
+\subsection{数组}
+
+C++虽然支持C风格的数组 \texttt{int arr[10];}  ，但是不推荐使用这种方式来声明数组。
+
+在C++中，数组一般使用 \texttt{std::array} 和 \texttt{std::vector} 来声明。它们分别表示静态数组和动态数组。
+
+\subsubsection{静态数组}
+
+静态数组的大小在编译时确定，不能动态改变。它的基本格式如下：
+\begin{lstlisting}
+#include <array>  // 引入数组库
+array<int, 10> arr = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}; // 声明一个包含10个整数的数组
+cout << arr[0] << endl; // 访问数组的第一个元素
+\end{lstlisting}
+
+这东西的实现和C风格数组相似，但一个重要的区别是：它是一个复杂类，而不是基本类型，有很多方法能够操作；另一个重要的区别是，在作为函数参数传递时，它\textbf{不会退化}为指针，从而避免了信息丢失的问题。
+
+也就是说：
+\begin{lstlisting}[language=C++]
+void foo(array<int, 10> arr) {
+    cout << arr.size() << endl; // 可以获取数组的大小
+}
+
+void bar(int arr[10]) {
+    cout << sizeof(arr) / sizeof(arr[0]) << endl; // 这里会输出错误的结果，因为arr退化为指针，sizeof(arr)得到的是指针大小而非数组大小
+}
+\end{lstlisting}
+
+\subsubsection{动态数组}
+
+动态数组的大小可以在运行时确定，可以动态改变。它的基本格式如下：
+\begin{lstlisting}[language=C++]
+#include <vector>  // 引入向量库
+vector<int> vec; // 声明一个空的动态数组
+vec.push_back(1); // 向数组末尾添加一个元素1
+vec.push_back(2); // 向数组末尾添加一个元素2
+cout << vec[0] << endl; // 访问数组的第一个元素
+cout << vec.size() << endl; // 获取数组的大小
+vec.pop_back(); // 删除数组末尾的元素
+vec.remove(0); // 删除数组中值为0的元素
+\end{lstlisting}
+
+动态数组的实现和静态数组类似，也是一个复杂类，有很多方法能够操作。它的大小可以动态改变，因此非常灵活，但性能上有较大的损失，在大型数组上比array慢一倍；但数组如果太大又不得不使用动态数组，否则栈空间不够用。
+
+使用vector能够避免和C一样用malloc和free来直接操作内存，省心省力。
+
+\subsection{字符串}
+C++风格的字符串类型是 \texttt{std::string} ，它可以存储一串字符。字符串的基本格式如下：
+\begin{lstlisting}[language=C++]
+#include <string>   // 引入字符串库
+string str = "Hello, World!";
+\end{lstlisting}
+引用字符串库是必要的，否则编译器可能会报错；这个库还提供了一些对字符串进行操作的方法，非常方便。
+
+字符串的本质是一个数组，存储了一串字符（C风格的字符串正是char[]）。我们可以通过索引来访问字符串中的字符，例如str[0]表示第一个字符，str[1]表示第二个字符，以此类推。
+
+字符串的长度可以通过 \texttt{str.length()} 方法来获取。除此以外，还有很多字符串操作方法，例如 \texttt{str.substr()} （获取子串）、 \texttt{str.find()} （查找子串）等。
+
+字符串是一个复杂类，和以上提到的所有数据类型都有区别。具体为什么是“复杂类”，这涉及到C++的面向对象编程（OOP）特性。我们会在后续章节中详细介绍。
+
+\subsection{结构体、联合体}
+C++的结构体和联合体与C中的略有区别。
+
+例如，我们可以声明一个表示学生的结构体：
+\begin{lstlisting}[language=C++]
+struct Student {
+    string name;  // 学生姓名
+    int age;      // 学生年龄
+    double gpa;   // 学生绩点
+};
+
+Student student1;  // 声明一个学生变量
+student1.name = "Alice";  // 设置学生姓名
+student1.age = 20;  // 设置学生年龄
+student1.gpa = 3.5;  // 设置学生绩点
+cout << "Name: " << student1.name << ", Age: "
+     << student1.age << ", GPA: " << student1.gpa << endl;
+\end{lstlisting}
+
+以上内容很好地展示了怎么定义、声明、使用一个结构体。结构体的成员可以通过点（.）运算符来访问，例如 \texttt{student1.name} 表示学生1的姓名。可以看到，不需要再像C语言一样，定义起来那么复杂。联合体也类似，这里不再赘述了。
+
+\subsection{枚举}
+
+枚举是一个可以存储一组命名常量的变量。
+
+枚举有两种类型，一种是传统无作用域枚举 \texttt{enum} ，另一种是C++11引入的有作用域枚举 \texttt{enum class} （也叫强枚举）。它们的区别在于，传统无作用域枚举的常量可以直接访问，枚举名和枚举值都泄漏到所在的作用域；而有作用域枚举的常量需要通过枚举名来访问。
+
+传统无作用域枚举的基本格式如下：
+\begin{lstlisting}[language=C++]
+    enum Color { RED, GREEN=5, BLUE };
+\end{lstlisting}
+一般情况下，枚举的底层类型由编译器自选，只要能够容纳所有的值就行了，一般是 \texttt{int} 。常量从0开始依次递增，例如上面的RED的值为0。也可以设定枚举的值，上文中我们将GREEN的值设定为5，那么BLUE的值就是6。调用这种枚举非常简单：
+\begin{lstlisting}[language=C++]
+Color color = RED; // 正统调用，color的值为0
+int n = RED; // 不报错，n的值为0
+Color c = 7; // 不报错，但是c的值不是RED、GREEN、BLUE中的任何一个，属于有效但未命名的值
+\end{lstlisting}
+可以看出，这种枚举没有类型安全性，也没有作用域隔离。
+
+有作用域枚举的基本格式如下：
+\begin{lstlisting}[language=C++]
+    enum class Color : std::uint8_t { RED, GREEN=5, BLUE };
+\end{lstlisting}
+上述强枚举的枚举名被限定在作用域内，因此只能通过类似 \texttt{Color::RED} 来访问。强枚举的底层类型可以显式指定，例如上面的 \texttt{std::uint8\_t} 。如果不指定，默认是 \texttt{int} 。调用这种枚举智能使用上述的正统调用：
+\begin{lstlisting}[language=C++]
+Color color = Color::RED; // 正确，color的值为Color::RED
+int n = Color::RED; // 报错，不能将Color类型赋值给int类型
+Color c = 6; // 报错，不能将int类型赋值给Color类型
+int n = static_cast<int>(Color::RED); // 正确，n的值为0
+\end{lstlisting}
+可以看出，这种枚举有类型安全性，也有作用域隔离。
+
+枚举作为一个数据类型很笨，不仅没有任何方法，也不能进行运算，唯一的作用是定义一组常量，便于阅读；在 \texttt{switch} 语句中的使用较为多见。而剩下的很多方法，都不得不手动定义。
+
+例如下列代码中，我们定义了一个枚举的遍历方法：
+\begin{lstlisting}[language=C++]
+enum class Color : std::uint8_t {
+    FIRST=RED,
+    RED=0,
+    GREEN=1,
+    BLUE=2,
+    LAST=BLUE
+};
+
+for (Color c = Color::FIRST; c <= Color::LAST; c = static_cast<Color>(static_cast<int>(c) + 1)) {
+    // 遍历 Color 枚举的所有值
+}
+\end{lstlisting}
+这段代码中，我们定义了一个Color枚举，并且手动定义了FIRST和LAST两个常量，分别表示枚举的第一个值和最后一个值。
+
+\subsection{智能指针（穿了衣服版）}
+
+我们已经知道C风格的指针是什么了。C++中虽然也能和C一样使用“裸指针”，但是不推荐这么做。C++引入了智能指针的概念，来帮助我们更好地管理内存，不需要再手动malloc/free了。
+
+智能指针有四个：
+\begin{itemize}
+  \item \texttt{std::unique\_ptr} ：表示独占所有权的智能指针，一个对象只能有一个 \texttt{unique\_ptr} 指向它。当这个 \texttt{unique\_ptr} 被销毁时，所指向的对象也会被自动释放。
+  \item \texttt{std::shared\_ptr} ：表示共享所有权的智能指针，一个对象可以有多个 \texttt{shared\_ptr} 指向它。对象会在最后一个指向它的 \texttt{shared\_ptr} 被销毁时自动释放。
+  \item \texttt{std::weak\_ptr} ：表示弱引用的智能指针，它不会影响对象的生命周期。它通常与 \texttt{shared\_ptr} 一起使用，用于解决循环引用的问题。它更像是一个观察者，不拥有对象的所有权。
+  \item \texttt{std::auto\_ptr} ：严格唯一所有权的智能指针，在这里仅作介绍。它已经在C++11中被弃用。
+\end{itemize}
+
+例如：
+\begin{lstlisting}[language=C++]
+void foo(){
+    auto ptr = std::make_unique<int>(42); // 创建一个unique_ptr，指向一个整数42
+    std::cout << *ptr << std::endl; // 输出42
+} // ptr超出作用域，所指向的整数自动释放
+
+void bar(){
+    auto ptr1 = std::make_shared<int>(42); // 创建一个shared_ptr，指向一个整数42
+    {
+        auto ptr2 = ptr1; // 共享所有权
+        std::cout << *ptr2 << std::endl; // 输出42
+    } // ptr2超出作用域，但整数不会释放，因为ptr1仍然指向它
+    std::cout << *ptr1 << std::endl; // 输出42
+} // ptr1超出作用域，所指向的整数自动释放
+\end{lstlisting}
+
+而 \texttt{weak\_ptr} 的使用则更为复杂一些，通常用于解决循环引用的问题。例如：
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <memory>
+#include <string>
+using namespace std;
+struct Node {
+    string name;
+    shared_ptr<Node> next; // 强引用，可能导致循环引用
+    weak_ptr<Node> prev;   // 弱引用，避免循环引用
+
+    Node(const string& n) : name(n), next(nullptr), prev() {}
+};
+\end{lstlisting}
+这是写了一个双向链表节点的例子。注意其中的 \texttt{next} 是强引用，而 \texttt{prev} 是弱引用。这样可以避免循环引用的问题，从而防止内存泄漏。这个指针在多线程编程中也很有用，可以安全地访问共享资源。
+
+而数组中也不再建议使用指针来访问了，改为统一使用STL容器，例如 \texttt{std::vector} 、 \texttt{std::array} 等。于是，裸指针在C++中基本光荣退休。
+
+基本上，我们可把使用哪种指针的决策流程总结如下：
+\begin{itemize}
+  \item 不共享所有权，使用 \texttt{std::unique\_ptr} 。这是99\%的情况。
+  \item 共享所有权且肯定没有循环引用，使用 \texttt{std::shared\_ptr} 。
+  \item 共享所有权且可能有循环引用，使用 \texttt{std::shared\_ptr} 和 \texttt{std::weak\_ptr} ，后者用于打破循环引用。
+  \item 数组？使用 \texttt{std::vector} 、 \texttt{std::array} 等STL容器，而非指针。
+\end{itemize}
+
+C++的智能指针极大地简化了内存管理，减少了内存泄漏和悬空指针等问题的发生。推荐大家在C++编程中尽量使用智能指针，而不是裸指针。
+
+\section{C++独占的特性}
+
+上述内容中，就算是 \texttt{std::array} 和智能指针，实际上都能在C中找到影子，在C中也可以较为容易地实现这些功能。但是，C++中也有一些独占的特性，是C中很难或无法实现的。下面介绍几个重要的C++独占特性。
+
+\subsection{命名空间}
+
+我们知道，一个软件还是程序，可能由很多人来完成。为了方便，每一个人都有可能定义自己的东西，例如功能（函数）、数据（变量）等。那么，如果两个人给自己不同的东西起了同样的名字怎么办？这时，电脑就无法区分它们了。
+
+一个简单的方法是加强沟通，减少重名的可能性。但是，这样做并不现实。有的项目可能有数百人参与，沟通成本过高；有的项目是给下游使用的，这时又不可能沟通。这个问题非常棘手。
+
+为了解决这个问题，C++引入了\textbf{命名空间}的概念。命名空间可以参照我们说过的虚拟环境概念来理解：每一个人都有自己的一个沙盒，在自己的沙盒里可以随便起名字，互不干扰。这样一来，即使两个人起了同样的名字，也不会冲突，因为它们属于不同的命名空间。
+\begin{lstlisting}[language=C++]
+    namespace Alice {
+        int value = 42; // 数据（变量）
+        void show() {   // 功能（方法）
+            std::cout << "Alice's value: " << value << std::endl;
+        }
+    }
+    namespace Bob {
+        int value = 100; // 数据（变量）
+        void show() {    // 功能（方法）
+            std::cout << "Bob's value: " << value << std::endl;
+        }
+    }
+\end{lstlisting}
+这样，两者并不冲突。
+
+但是新的问题又来了：有时候，别人在他们的命名空间里写了一些东西，而这些东西又是我们想要的。为了方便起见，肯定不能写第二遍。那么，我们该怎么办呢？可以这样写：
+\begin{lstlisting}[language=C++]
+    Alice::show(); // 调用Alice命名空间中的show函数
+    Bob::show();   // 调用Bob命名空间中的show函数
+\end{lstlisting}
+于是困扰我们的重名问题就彻底解决了。
+
+为了帮助我们更好的开发，C++提供了一些东西减少我们的重复劳动。这些东西被C++放在了“标准”命名空间中，也就是 \texttt{std} 。诸如 \texttt{cout} 、 \texttt{cin} 、 \texttt{endl} 等都在这个命名空间中。因此，我们在使用这些东西的时候，必须加上 \texttt{std::} 前缀，例如 \texttt{std::cout} 、 \texttt{std::cin} 、 \texttt{std::endl} 等。
+
+为了方便起见，可以使用 \texttt{using namespace std;} 来引入整个 \texttt{std} 命名空间，这样在这个文件以及其下游文件中，就可以直接使用标准空间中的东西，而不需要加上 \texttt{std::} 前缀了。但是这样做也是有风险的：这会把整个标准命名空间都引进来，容易导致重名冲突等问题。
+
+举例：假设你自己写了一个swap函数，然后在你的头文件中使用了 \texttt{using namespace std;} ，那么当别人引入你的头文件时，标准命名空间中的 \texttt{std::swap} 函数也会被引入，从而导致重名冲突，最终引发编译错误。
+
+\begin{warning}
+  严格禁止在工程头文件中使用 \texttt{using namespace std;} ！这会污染全局的命名空间，从而导致重名冲突等问题。头文件是给别人用的，绝对不应污染别人的命名空间。
+  
+  如果确实需要，我们有以下手段来解决污染命名空间问题：
+
+  \begin{enumerate}
+    \item 每一次使用标准命名空间中的东西时，都加上 \texttt{std::} 前缀。
+        \begin{lstlisting}
+    std::cout << "Hello, World!" << std::endl;
+        \end{lstlisting}
+    \item 只引入需要的东西，例如：
+        \begin{lstlisting}
+    using std::cout;
+    using std::endl;
+        \end{lstlisting}
+      这样就只引入了 \texttt{cout} 和 \texttt{endl} ，而不会污染其他的东西。而一般人也不会去定义诸如 \texttt{cout} 和 \texttt{endl} 这样的名字，所以这样基本上可以认为是安全的。
+  \end{enumerate}
+\end{warning}
+
+\begin{caution}
+  在工程上，源文件也不推荐使用 \texttt{using namespace std;} 。但是这样做是可以容忍的，因为源文件是给自己用的，一般不至于污染命名空间，但是风险也是相当大的。对此，这需要大家自己权衡利弊了。如果项目周期非常短（例如做题），那么这么做没有毛病。但是如果是写工程这种长周期开发，则推荐老老实实用上面提到的两种方法来避免污染命名空间。
+\end{caution}
+
+\begin{note}
+  为了简便，本书中大部分代码都使用了 \texttt{using namespace std;} ，但是请大家务必牢记上述警告和注意事项。
+\end{note}
+
+\subsection{引用}
+
+引用是C++中的一个重要特性，其核心任务是让变量有第二个名字，但不管理生命周期。引用不能为空、不能重新指向、不拥有对象，但在函数参数传递、返回值等场景中极为有用。
+
+\subsubsection{左值引用}
+
+默认提到引用，指的就是左值引用。
+
+引用的基本格式如下：
+\begin{lstlisting}[language=C++]
+类型& 引用名 = 原变量名;
+\end{lstlisting}
+以上代码的意思是：声明一个名为引用名的引用，它是原变量名的别名。引用的作用是可以通过别名来访问原变量。例如，我们可以声明一个整数的引用：
+\begin{lstlisting}[language=C++]
+int a = 10;  // 声明一个整数变量
+int& ref = a;  // 声明一个整数的引用
+cout << "a: " << a << ", ref: " << ref << endl;
+ref = 20;  // 修改引用的值
+cout << "a: " << a << ", ref: " << ref << endl;
+\end{lstlisting}
+
+以上代码的意思是：声明一个名为ref的引用，它是变量a的别名。我们可以通过ref来访问a。当我们修改ref的值时，实际上也修改了a的值。
+
+而在函数形参中，引用是较大形参传递的首选。
+\begin{lstlisting}[language=C++]
+void draw(const Widget& w) {
+    // 使用w进行绘制操作
+}
+\end{lstlisting}
+上述一股Qt味的代码中，我们使用了一个常量引用作为函数参数。这样做有两个好处：
+\begin{itemize}
+  \item 避免了拷贝开销。如果Widget是一个较大的类，那么传递它的引用可以避免拷贝整个对象，从而提高性能。
+  \item 保持了对象的不可变性。使用常量引用可以确保函数不会修改传入的对象，从而提高代码的安全性。
+\end{itemize}
+而使用非常量引用作为函数参数，则表示函数可能会修改传入的对象：
+\begin{lstlisting}[language=C++]
+void update(Widget& w) {
+    // 修改w的状态
+}
+\end{lstlisting}
+
+为什么不用智能指针？因为智能指针管理生命周期，而引用不管理生命周期。引用更轻量级，适合用于函数参数传递和返回值等场景。除非你要转移或重置指针本身，否则不需要使用 \texttt{unique\_ptr} ；除非你要延长对象寿命（如缓存、异步任务等），否则不需要使用 \texttt{shared\_ptr} 。
+
+但引用也不是万能的：容器里就不要存引用了，这是值（具体对象）和多态基类（智能指针）的天下，引用请靠边站（不是对象，存不了）。
+
+\subsubsection{右值引用}
+
+右值引用是C++11引入的一种新特性，绑定的是“马上要死”的临时变量，这一点和左值引用绑定的“长期活着”的变量不同。
+
+一般，有自己名字的变量，要引用全都是左值引用；而没有自己名字的临时变量，则要用右值引用。另，\texttt{std::move} 可以把左值强制转换为右值引用，从而实现移动语义。那什么是“移动语义”呢？后面会讲。
+
+举例：
+\begin{lstlisting}[language=C++]
+int x = 1; // x 是一个左值，1 是一个右值
+int& lref = x; // 左值引用，绑定到左值 x
+int&& rref = 2; // 右值引用，绑定到右值 2
+int&& rref2 = x // 错误，不能将左值绑定到右值引用
+int&& rref3 = x + 3; // 合法，x + 3 是一个右值
+rref = x + 3; // 合法，x + 3 是一个右值
+\end{lstlisting}
+
+那么这玩意有什么用呢？
+
+第一个用途：把拷贝变成搬运，即“移动语义”。举个例子：
+\begin{lstlisting}
+    string s1 = "hello";
+    string s2 = s1 + "world";
+\end{lstlisting}
+我们发现，“s1 + "world"”是一个临时对象，生命周期就这一行。但是要把这玩意搬进s2，就不得不做一次深拷贝，挺浪费的。
+
+为了物尽其用，干脆把这个临时对象的资源直接搬进s2好了，不就省事了吗？这就是移动语义的核心思想。
+
+实现移动语义需要用到右值引用，也就是说，重载：
+\begin{lstlisting}
+    string(const string& other); // 拷贝构造函数
+    string(string&& other); // 移动构造函数
+\end{lstlisting}
+这就是“搬家”实现的关键。右值引用的“马上要死”特性，保证了我们可以放心地把资源搬走，而不会影响原来的对象。这有着典型的写法：
+\begin{lstlisting}
+    string(string&& other) noexcept
+        : data(other.data) {    // 直接抢夺资源指针
+        other.data = nullptr; // 搬家后，把原对象的指针置空，防止析构时重复释放
+    }
+\end{lstlisting}
+因为临时对象马上就销毁，所以我们“偷窃”其资源没有人会察觉，从而大大提高了性能。而自己实现的类，往往也需要实现移动构造函数和移动赋值运算符，从而支持移动语义。
+
+而第二个用途就是“完美转发”。这在模板编程中非常有用，可以把参数原封不动地传递给另一个函数，而不会丢失其左值/右值属性。
+\begin{lstlisting}[language=C++]
+template<class T>
+void foo(T&& arg) {
+    bar(std::forward<T>(arg)); // 完美转发
+}
+\end{lstlisting}
+上述代码中， \texttt{T\&\&} 是一个通用引用（也叫转发引用），它可以绑定到左值或右值。实际调用时，实参如果是左值， \texttt{T} 会被推导为左值引用类型；如果实参是右值， \texttt{T} 会被推导为右值类型。这样， \texttt{std::forward<T>(arg)} 就能根据 \texttt{T} 的类型正确地转发参数，保持其左值/右值属性。
+
+\texttt{unique\_ptr}只能移动、不能拷贝的特性就是由右值引用实现的：
+\begin{lstlisting}
+std::unique_ptr<int> p1 = std::make_unique<int>(5);
+std::unique_ptr<int> p2 = p1;      // 拷贝构造被删除
+std::unique_ptr<int> p3 = std::move(p1); // OK，移动构造
+\end{lstlisting}
+上述移动完后，p1变成了空指针，p3拥有了原来p1的资源。
+
+\subsection{C++函数的高级特性}
+
+C++下定义函数的方法和C完全一致。但是，C++对函数进行了扩展，增加了一些高级特性，例如函数重载、函数默认参数值等。
+
+\subsubsection{函数重载}
+
+函数重载是C++中的一个重要特性，它允许我们定义多个同名的函数或运算符，但它们的参数列表或返回类型不同。写一个例子就好了：
+
+\begin{lstlisting}[language=C++]
+struct Tensor2D{
+    int x_dim, y_dim;
+}
+Tensor2D operator+(const Tensor2D& other) {
+    // 实现加法运算
+    Tensor2D result;
+    result.x_dim = this->x_dim + other.x_dim;
+    result.y_dim = this->y_dim + other.y_dim;
+    return result;
+}
+\end{lstlisting}
+以上代码就是重载的一个鲜活实例。我们重载了加法运算符，这使得我们能够对Tensor2D对象进行加法运算。合适的重载可以使代码更简洁、更易读。
+
+除了重载运算符，还可以重载流运算符来实现自定义输入输出，重载函数实现对不同参数的处理等。重载的关键是参数列表的不同，返回类型可以相同或不同。C++不支持仅通过返回类型来区分重载函数。
+
+\subsubsection{函数默认参数值}
+
+函数默认参数值是C++中的一个特性，它允许我们在函数声明时为某些参数指定默认值。如果调用函数时没有提供这些参数的值，编译器会使用默认值。
+
+例如：
+\begin{lstlisting}[language=C++]
+void greet(const std::string& name = "Guest") {
+    std::cout << "Hello, " << name << "!" << std::endl;
+}
+
+greet(); // 输出: Hello, Guest!
+greet("Alice"); // 输出: Hello, Alice!
+\end{lstlisting}
+在上述代码中，函数 \texttt{greet} 有一个默认参数 \texttt{name} ，如果调用时没有提供该参数的值，默认值 \texttt{"Guest"} 会被使用，这个“没有提供参数”的规范名称是\textbf{参数缺省}。
+
+需要注意的是，函数缺省的参数必须从右向左依次定义，不能在中间或左侧定义缺省参数。这一点和C\#、Python等语言不同，必须牢记。例如，下面的代码是错误的：
+\begin{lstlisting}[language=C++]
+void foo(int a = 10, int b); // 错误，b没有默认值
+\end{lstlisting}
+正确的写法是：
+\begin{lstlisting}[language=C++]
+void foo(int a, int b = 20); // 正确
+\end{lstlisting}
+
+而在函数声明和定义分离的情况下，默认参数值只能在函数声明中指定，而不能在函数定义中指定。例如：
+\begin{lstlisting}[language=C++]
+void greet(const std::string& name = "Guest"); // 函数声明
+void greet(const std::string& name) { // 函数定义
+    std::cout << "Hello, " << name << "!" << std::endl;
+}
+\end{lstlisting}
+
+\subsection{类型推断}
+
+类型推断是C++11引入的一个特性，它允许编译器根据变量的初始值自动推断变量的类型。使用类型推断可以使代码更简洁、更易读。
+类型推断的基本语法是使用 \texttt{auto} 关键字：
+\begin{lstlisting}[language=C++]
+auto x = 5;  // 编译器推断x的类型为int
+auto y = 3.14;  // 编译器推断y的类型为double
+auto str = "Hello, World!";  // 编译器推断str的类型为const char*
+\end{lstlisting}
+以上代码中，编译器会根据初始值自动推断变量的类型。
+
+\begin{caution}
+  不要滥用 \texttt{auto} ，因为这会使得代码的可读性降低，尤其是当变量的类型不明显时。我们只推荐在\textbf{变量的类型是确定的}、\textbf{类型的名称非常冗长}、\textbf{你知道这个变量的类型是什么或者大概是什么}的情况下使用类型推断，例如\lstinline[language=C++]|auto it = std::max_element(v.begin(), v.end());|中， \texttt{it} 的类型是 \texttt{std::vector<int>::iterator} 是确定的，这个类型名称很长，你也知道它是个迭代器类型，这时候使用 \texttt{auto} 是非常合适的。但是如果你真写了\lstinline[language=C++]|auto x = 5;|这种代码，那就属于滥用了，是不提倡的。
+
+  如果变量的类型确实不确定（例如变量类型会随着初始化方式的不同而改变），这时候可以使用模板函数或模板类，而不是使用 \texttt{auto} 。如果你知道变量的类型是一个确定的类型，但是你不知道具体是什么类型，建议你先搞清楚这个变量的类型再写代码，否则几乎必然会出错。
+\end{caution}
+
+\subsection{类型别名}
+
+类型别名是C就有的一个特性，但是C++11对它进行了扩展。类型别名允许我们为现有的类型创建一个新的名称，使得代码更易读。
+
+C++中可以使用 \texttt{using} 关键字来定义类型别名。
+\begin{lstlisting}[language=C++]
+using ll = long long;  // 定义一个长整型的别名
+using IntVector = std::vector<int>;  // 定义一个整型向量的别名
+IntVector v = {1, 2, 3};  // 使用别名创建一个整型向量
+\end{lstlisting}
+
+如果使用C风格的语法，则是：
+\begin{lstlisting}[language=C++]
+typedef long long ll;  // 定义一个长整型的别名
+typedef std::vector<int> IntVector;  // 定义一个整型向量的别名
+IntVector v = {1, 2, 3};  // 使用别名创建一个整型向量
+\end{lstlisting}
+
+using和typedef几乎没有什么区别，只不过using的语法更加符合直觉（用这个作为这个的别名），类似于声明变量；而typedef则更像是定义一个宏（虽然实际上不是），阅读方向是反直觉的。
+
+using的另一个独特之处是可以用于模板类型的别名：
+\begin{lstlisting}[language=C++]
+template <typename T>
+using Matrix = std::vector<std::vector<T>>;  // 定义一个二维向量的别名
+Matrix<int> m = {{1, 2}, {3, 4}};  // 使用别名创建一个二维向量
+Matrix<double> dm = {{1.1, 2.2}, {3.3, 4.4}};  // 使用别名创建一个二维向量
+\end{lstlisting}
+typedef就无法应用于模板类型别名。因此，在C++中，我们推荐使用using来定义类型别名。
+
+\subsection{类型强转}
+
+有时候，在编程中我们需要将一个类型转化成另一个类型，以满足特定的需求。类型强转包括两类：隐式转换和显式转换。隐式转换是编译器自动进行的，而显式转换则需要程序员手动指定。
+
+在一般情况下，隐式转换是安全的，不会导致数据丢失或错误。然而，有些情况下隐式转换可能会引发诸如精度等问题。默认能够进行的隐式转换包括以下几步：
+\begin{enumerate}
+  \item \textbf{标准整形提升}：所有比 \texttt{int} 小的整型（如 \texttt{char} 、 \texttt{short} ）会被提升为 \texttt{int} 或 \texttt{unsigned int} 。
+  \item \textbf{整形等级转换}：提升之后，如果类型仍不匹配，编译器会尝试将较小的整型转换为较大的整型（如 \texttt{int} 转为 \texttt{long} ）。
+  \item \textbf{浮点等级转换}：如果涉及浮点数，编译器会尝试将较小的浮点类型转换为较大的浮点类型（如 \texttt{float} 转为 \texttt{double} ）。
+  \item \textbf{混合类别转换}：如果操作数类型不同，编译器会尝试将整型转换为浮点型，以避免精度丢失。转换后的类型为与浮点数的类型相同的浮点类型。
+  \item \textbf{其他转换}：包括数组到指针、函数到指针、空指针常量、枚举到整型\footnote{ \texttt{C++11} 起的强枚举不能隐式转换}、类类型的转换\footnote{指的是诸如代码： \lstinline[language=c++]|struct A{ A(int);}; void foo(A); foo(42);| 中， \texttt{foo(42)} 把整数隐式转换为类}等。
+\end{enumerate}
+
+在C++中，类型强转被拆成了四个方式（四大金刚）：
+\begin{itemize}
+  \item  \texttt{static\_cast} ：\textbf{编译期安全的强转}，包括数值提升/截断，枚举/整型，子类指针转父类指针、void*转型等。它是最常用的类型转换方式，适用于大多数情况。
+  \item  \texttt{dynamic\_cast} ：\textbf{运行时安全的强转}，几乎仅用于父类指针转子类指针。它会在运行时检查类型安全，如果转换不安全，则返回nullptr。它只能用于有虚函数的类。同时，它是唯一一个在运行时检查强转安全性的转换方式。
+  \item  \texttt{const\_cast} ：\textbf{常变转换}，其他啥都不干。它是唯一一个能去const的转换方式。
+  \item  \texttt{reinterpret\_cast} ：\textbf{按位重解释}，用于int指针互转、void指针互转、无关类指针互转等。它是危险的转换方式，仅在编译期做极弱的检查。它也可以用于转引用，但是如果转不了不会返回空引用\footnote{没有“空引用”这种东西。}而是报错。除非我们知道在干什么，否则不要使用它。
+\end{itemize}
+
+举例说明：
+\begin{lstlisting}[language=C++]
+#include <iostream>
+using namespace std;
+
+double d = 3.14;
+int a = static_cast<int>(d);  // 使用static_cast进行数值转换
+int a = (int)d;  // C风格的强转，也行
+
+const int c = 42;
+int* p = const_cast<int*>(&c);  // 使用const_cast去掉const属性
+// *p = 100; // 但是修改原变量的值是个UB
+
+class Base;
+class Derived : public Base;
+// 注意：以上两行代码仅用于说明继承关系，实际过不了编译
+Base* b = new Derived();
+Derived* d = dynamic_cast<Derived*>(b);  // 使用dynamic_cast将父类指针转为子类
+Derived* d = static_cast<Derived*>(b);  // 使用static_cast转型（不安全，但是能过编译）
+
+uintptr_t ptr = reinterpret_cast<uintptr_t>(b);  // 使用reinterpret_cast将指针转换为整数
+\end{lstlisting}
+
+那么有些同学可能会问：为什么C++要提供这么多种类型强转？难道C风格的强转不行吗？没错，两种代码实际上都可以用。不过，C风格的强转像个大锤，一口气把任何东西都能砸成目标东西，但是它可不带管安全性的；而C++强转四大金刚分别是四把精确的手术刀，功能单一、语义明确，编译器会帮助你把关；要是危险或者出错了，编译器给你兜底。这样就可以避免很多潜在的错误。
+
+C语言的强转实际上会先尝试常变转换，再尝试数值转换，要是不行就常变数值一起转，还不行就按位重解释。所以说这玩意实际上是四合一，不过也导致它隐形语义极为复杂、易于出错，出错了也不容易搜索定位。
+
+\begin{lstlisting}[language=C++]
+const volatile void* v = ...;
+int* bad = (int*)v;  // C风格的强转，实际上一口气把const和volatile都去掉了，顺便做了个按位重解释
+\end{lstlisting}
+
+所以说，我们非常建议优先使用C++四大强转做显式强转。我们非常不建议在C++中使用旧式风格的强转，除非要做向下兼容等不这么做不行的事情。
+
+\begin{note}
+  \texttt{volatile} 是C/C++中的一个关键字，表示变量可能会被外部因素改变，因此编译器不会对它进行优化。它通常用于多线程编程或硬件寄存器的访问等。这个东西和移位运算符一样，绝大多数人一辈子都不会用到。
+\end{note}
+
+\subsection{Lambda表达式}
+
+Lambda表达式是C++11引入的一个特性，它允许我们在代码中定义匿名函数。Lambda表达式可以捕获外部变量，并且可以作为参数传递给其他函数。它的基本语法如下：
+\begin{lstlisting}[language=C++]
+[捕获列表](参数列表) -> 返回类型 {
+    // 函数体
+}
+\end{lstlisting}
+捕获列表用于指定哪些外部变量可以在Lambda表达式中使用，参数列表和返回类型与普通函数类似。Lambda表达式可以直接在代码中定义，不需要单独声明。
+
+例如：
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    vector<int> nums = {1, 2, 3, 4, 5};
+    int sum = 0;
+    for_each(nums.begin(), nums.end(), [&sum](int n) { sum += n; });  // 使用Lambda表达式计算总和
+    cout << "Sum: " << sum << endl;  // 输出结果
+    return 0;
+}
+\end{lstlisting}
+以上代码中，我们定义了一个Lambda表达式，该表达式能够捕获外部变量 \texttt{sum} ，并对 \texttt{nums} 向量中的每个元素进行求和操作。Lambda表达式可以使代码更简洁。
+
+Lambda表达式的类型是特殊的。它是一个\textbf{独一无二}的、\textbf{不可命名}的、\textbf{由编译器生成}的\textbf{闭包类型}。该类是匿名的，每一个Lambda表达式都会生成一个独一无二的类。这个类会重载 \texttt{operator()} ，使得Lambda表达式可以像函数一样被调用。其类型是一个确定的类型，但是该类型既不能命名也不能写出。Lambda表达式也不是一个函数指针，但是可以隐式转换为函数指针（前提是没有捕获任何外部变量）。
+
+例如下列代码：
+\begin{lstlisting}[language=C++]
+auto lambda = [](int x) { return x * x; };
+\end{lstlisting}
+其类型实际上类似于：
+\begin{lstlisting}[language=C++]
+class __lambda_unique_name {
+public:
+    int operator()(int x) const { return x * x; }
+};
+\end{lstlisting}
+但是你永远不能直接写出这个类名，它是不可以访问的。
+
+有些时候，我们需要对其进行存储或传递，此时需要声明其类型。此时， \texttt{auto} 是好的实践之一。但是如果要传递给函数怎么办呢？为了这个目的，C++11引入了 \texttt{std::function} 模板类，它可以存储任何可调用对象，包括Lambda表达式、函数指针、函数对象等。使用 \texttt{std::function} 可以方便地传递和存储Lambda表达式。
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <functional>  // 包含std::function的头文件
+using namespace std;
+
+void applyFunction(const function<int(int)>& func, int value) {
+    cout << "Result: " << func(value) << endl;  // 调用传入的函数并输出结果
+}
+
+int main() {
+    auto lambda = [](int x) { return x * x; };  // 定义一个Lambda表达式
+    applyFunction(lambda, 5);  // 将Lambda表达式传递给函数
+    return 0;
+}
+\end{lstlisting}
+然而值得注意的是，即使是用 \texttt{std::function} ，它也仅仅是一个传递Lambda表达式的手段，而不是Lambda表达式本身的类型。且该类的性能开销比较大，有类型擦除的开销，可能会通过内联或堆分配来优化，因此在性能敏感的场景下应谨慎使用该类。实际上如果Lambda表达式不捕获任何外部变量，我们完全可以直接转成函数指针传递。
+\begin{lstlisting}[language=C++]
+    using FuncPtr = int(*)(int);  // 定义一个函数指针类型
+    FuncPtr func = [](int x) { return x * x; };  // 将Lambda表达式转换为函数指针
+    cout << "Result: " << func(5) << endl;  // 调用函数指针并输出结果
+\end{lstlisting}
+
+\subsection{多文件编程}
+
+\subsubsection{头文件和源文件}
+
+\textbf{头文件}是一些预先写好的代码的集合。通过包含头文件，我们可以使用这些预先写好的代码，而不需要重新编写它们。头文件的扩展名通常是 \texttt{.h} 或 \texttt{.hpp} 。引入头文件只需要在文件的开头使用 \texttt{\#include} 指令即可。
+
+头文件有两种类型：标准库头文件和自定义头文件。标准库头文件是C++标准库提供的头文件，通常使用尖括号括起来，例如 \texttt{<iostream>} 、 \texttt{<vector>} 等，这样会先在系统路径中查找，再去当前路径中查找；自定义头文件是用户自己编写的头文件，通常使用双引号括起来，例如 \texttt{"myheader.h"} ，这样会先在当前路径中查找，再去系统路径中查找。
+
+与“头文件”相对应的是\textbf{源文件}，它们通常包含程序的主要逻辑和实现代码。源文件的扩展名通常是 \texttt{.cpp} 、 \texttt{.cxx} 或 \texttt{.cc} 。源文件可以包含头文件，并且可以定义函数、类和变量等。
+
+\begin{lstlisting}[language=C++]
+// 这是一个源文件
+#include <iostream>  // 引入标准库头文件
+#include "myheader.h"  // 引入自定义头文件
+
+int main() {
+    // 使用头文件中的代码
+    return 0;
+}
+\end{lstlisting}
+
+\begin{warning}
+  严格禁止使用所谓的“万能头文件” \texttt{\#include <bits/stdc++.h>} ，\textbf{尤其是在工程中！}该头文件有三个严重的问题：
+  \begin{itemize}
+    \item 该头文件不是C++标准的一部分，而是GCC编译器提供的一个非标准头文件。使用该头文件会导致代码在不同编译器下表现不同，严重地影响代码的可移植性。
+    \item 该头文件会引入整个标准库，从而显著地降低代码的可维护性，具体表现为：
+      \begin{itemize}
+        \item 显著地增加编译时间，尤其是在大型项目中。
+        \item 引入大量实际上并不需要的库，严重地增加了命名冲突的风险。
+        \item 引入大量宏定义，可能会导致意想不到的行为。
+      \end{itemize}
+  \end{itemize}
+  综上所述，严格禁止使用该头文件！多背几个常用的头文件名称并不难，且对代码质量有显著提升。
+\end{warning}
+
+\subsubsection{自己写个头文件}
+
+有时候，我们自己需要写一个项目，这个项目代码量较大，可能有数千行。此时，我们需要多文件编程，以便于代码的组织和管理。
+
+C++的多文件编程，文件结构通常是这样的：
+\begin{lstlisting}
+project/
+    main.cpp // 主要的程序入口
+    module1.cpp // 模块1的实现
+    module1.h // 模块1的头文件
+    module2.cpp // 模块2的实现
+    module2.h // 模块2的头文件
+    ... 这里可能还有其他文件
+\end{lstlisting}
+由此可见，除了主要程序入口（ \texttt{main} 函数所在的文件）之外，其他的头文件和源文件通常是成对出现的。在头文件中，一般包括类、函数、变量等的声明；在源文件中，一般包括类、函数、变量等的定义和实现。
+
+自己写头文件时，通常包括以下内容：
+\begin{itemize}
+  \item 声明函数、类、变量等的接口。
+  \item 使用预处理指令防止重复包含。
+\end{itemize}
+例如，我们可以编写一个简单的头文件 \texttt{myheader.h} ，包含一个函数的声明和定义：
+\begin{lstlisting}[language=C++]
+#ifndef MYHEADER_H  // 编译守卫，防止重复包含
+#define MYHEADER_H
+int add(int, int);  // 函数声明
+#endif
+\end{lstlisting}
+然后在源文件 \texttt{myheader.cpp} 中实现这个函数：
+\begin{lstlisting}[language=C++]
+#include "myheader.h"  // 引入头文件
+int add(int a, int b) {  // 函数定义
+    return a + b;
+}
+\end{lstlisting}
+然后在主程序中使用这个函数：
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include "myheader.h"  // 引入头文件
+
+int main() {
+    int x = 5;
+    int y = 10;
+    int sum = add(x, y);  // 调用add函数
+    std::cout << "Sum: " << sum << std::endl;  // 输出结果
+    return 0;
+}
+\end{lstlisting}
+最终对其进行编译：
+\begin{lstlisting}[language=bash]
+g++ main.cpp myheader.cpp -o myprogram
+\end{lstlisting}
+这样，我们就完成了一个简单的多文件编程。在上述编译命令中，两个源文件的顺序无关紧要。
+
+如果源文件数量过多，那么就不应该使用诸如gcc等工具手动地编译。此时，应该使用 \texttt{Makefile} 、 \texttt{CMake} 、 \texttt{XMake} 、 \texttt{Conan} 等构建工具来管理编译过程。关于后三个构建工具的使用，将在下一章中介绍。
+
+再强调一遍：在多文件编程中，不建议使用 \texttt{using namespace std;} 。尤其是头文件，严格禁止在头文件中使用该语句！
+
+\begin{exercise}[重做]
+    试着把上述C语言中的所有练习题，都用C++的方式重写一遍。要求：
+    \begin{itemize}
+        \item 使用C++的输入输出流（ \texttt{iostream} ）替代C的标准输入输出（ \texttt{stdio.h} ）。
+        \item 使用C++的标准库容器（如 \texttt{std::array} 、 \texttt{std::vector} ）替代C的数组。
+        \item 不得出现裸指针和直接的内存管理（如 \texttt{malloc} 、 \texttt{free} ）。
+    \end{itemize}
+    
+    比较C和C++的代码风格和编程习惯，体会两者的异同。
+\end{exercise}
+
+\begin{exercise}[改错]    
+    以下几段代码存在一些错误、不良习惯或潜在问题，请找出并改正它们。
+\begin{multicols*}{2}
+\begin{lstlisting}[language=C++]
+#include <iostream>
+int main() {
+    auto x;              
+    x = 42;
+    std::cout << x << '\n';
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+int main() {
+    int a[5] = {1,2,3,4,5};
+    for (auto v : a)          
+        v += 10;
+    for (auto v : a)
+        std::cout << v << ' '; // 输出不符合预期的原因是？
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=C++]
+// a.cpp
+int add(int a, int b = 0) { return a + b; }
+
+// main.cpp
+int add(int a, int b = 0);   // 声明
+int main() {
+    std::cout << add(5) << '\n';
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+constexpr int sq(int x) { return x * x; }
+int main() {
+    int n;
+    std::cin >> n;
+    constexpr int val = sq(n);
+    std::cout << val << '\n';
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=C++]
+#include <cstdio>
+#include <iostream>
+int main() {
+    std::cout << "C++ ";
+    printf("C\n");          // 可能先打印 C
+}
+\end{lstlisting}
+
+\begin{lstlisting}
+#include <iostream>
+int f(int x) { return x + 1; }
+int f(void* p) { return 2; }
+int main() {
+    std::cout << f(nullptr) << '\n'; // 输出不确定
+}
+\end{lstlisting}
+
+\end{multicols*}
+\end{exercise}
+
+\begin{answer}
+    以下是上述练习题的错误，改正方法留给读者自行思考。
+    \begin{enumerate}
+        \item \lstinline[language=C++]|auto| 用作声明变量时，必须有初始值，否则编译器无法推断类型。改正方法： \lstinline[language=C++]|auto x = 42;| 。
+        \item 范围for循环中， \lstinline[language=C++]|auto v| 是按值传递的，修改 \lstinline[language=C++]|v| 不会影响原数组。改正方法：使用引用传递， \lstinline[language=C++]|for (auto& v : a)| 。
+        \item 函数默认参数值只能在函数声明中指定，不能在函数定义中指定。改正方法：在 \texttt{main.cpp} 中添加函数声明时指定默认参数值：
+\begin{lstlisting}[language=C++]
+int add(int a, int b = 0);
+\end{lstlisting}
+        \item \texttt{constexpr} 函数的参数必须是编译时常量， \lstinline[language=C++]|n| 是运行时输入的变量，不能作为 \texttt{constexpr} 变量的初始化值。
+        \item C++的标准输出流和C的标准输出使用不同的缓冲区，可能导致输出顺序不确定。改正方法：使用同一种输出方式，或者在 \texttt{printf} 之后调用 \texttt{std::cout.flush()} 。
+        \item \texttt{nullptr} 可以转换为任何指针类型，因此调用 \texttt{f(nullptr)} 时，编译器无法确定调用哪个重载版本。改正方法：显式指定调用的版本，例如 \lstinline[language=C++]|f(static_cast<int*>(nullptr))| 。
+    \end{enumerate}
+\end{answer}

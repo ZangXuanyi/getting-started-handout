@@ -1,0 +1,542 @@
+\chapter{C++真理大讨论}\label{chap:cpp-3}
+
+在上两章中，我们系统地学习了C++的语法和标准库，掌握了C++编程的基本技能。然而，C++作为一门复杂且多范式的编程语言，其设计理念、使用方式和最佳实践并非一成不变，而是随着时间和技术的发展不断演进的。因此，在本章中，我们将围绕C++的核心理念和现代C++的最佳实践展开讨论，帮助大家更深入地理解C++，并学会如何写出真正的现代C++代码。
+
+我们认识一门语言，往往需要回答两个问题：为什么要用它？怎样才能用好它？前者涉及语言的设计理念、历史背景和应用场景，后者则涉及具体的编程技巧和最佳实践。我们将从这两个角度出发，探讨C++和C的关系，以及怎么样写出好的C++代码。本章节是一个偏向阅读的章节，读者大可放松心情，细细品味，跳过去也不会对后续章节造成太大影响。
+
+\section{为什么不抛弃C？}
+
+学完C++，不少人估计又会问：C++这么好，为啥不让C直接光荣退休？实际上这句话在技术上听起来确实很爽，但是忽略了语言生态、历史路径和硬件底层几个因素。
+
+首先，在操作系统、启动文件、硬件裸机上，C是最后一层“可移植的汇编”：Linux全是C+内联的汇编，Linus明确“no C++”；POSIX标准上，系统API全是C接口，要保持C的ABI才能被后续C++、Python、Rust、Go等语言调用；Bootloader等只有8kBROM，没有C++喜欢的堆，其异常表、RTTI占空间，体积就是成本。所以说，换C++等于重做整个世界，代价巨大。
+
+另，C由于其简单性，导致其编译器、工具链、嵌入式支持等生态极其成熟，几乎所有平台都支持C，保持C标准实际上是保持全世界软件互相操作的“插头”继续正常工作。虽然C++也已经将近50岁、非常成熟，但因为其重载、模板、命名空间、符号重命名规则复杂，导致其ABI不稳定，跨编译器、跨版本互操作性差，无法取代C的地位。
+
+又，C和C++的两个委员会代表了不同的利益：WG14（C委员会）代表了嵌入式、操作系统、编译器等底层软件的利益，核心诉求是稳定、轻量、ABI，反对C++的特性污染；而WG21（C++委员会）代表了应用软件、游戏、图形等高层软件的利益，核心诉求是抽象、零开销、泛型，反对C的限制演进。脑壳更疼的是编译器厂商，他们要维护多重前端，合并了工作量也跟着翻倍。这“分家”实际上是政治和市场的平衡结果，不是技术优劣的简单问题。
+
+最终，现有的C代码库数量实在是太大了，估计怎么也已经有了几千亿行。要是随便乱换，那成本也是不可估量的。
+
+现在C和C++的委员会官方立场是和平共处、互不阻塞，WG14明确其“不与C++竞争泛型和OOP”，WG21也承诺“C++标准库头文件会和C头文件保持一致，不会破坏C的ABI”。所以说，C和C++各有各的用武之地，互不冲突。
+
+而我之所以要先讲C再讲C++，主要原因是C++中“指针”这个概念几乎完全隐身，其高级抽象掩盖了底层的内存模型和运行机制，如数组越界、函数指针、手动内存分配等在C++中都被STL、智能指针等抽象掉了，初学者很难理解其底层原理。而C语言则直接暴露了这些底层细节，能够帮助初学者更好地理解计算机的运行机制和内存模型，为后续学习C++打下坚实的基础。换句话说，我是为了“裸指针”这碟醋而包了“C语言语法”这盘菜；也只有知道C控制内存有多麻烦，才能体会C++智能指针和RAII的真正价值。
+
+要不然……同学，你也不想不知道什么是迭代器吧？
+
+\section{怎样写出真正的C++？}
+
+很多C++使用者实际上写的是“C with STL”，也就是仅用C++的语法糖和STL容器，却没有真正利用C++的面向对象、泛型编程等特性。这样写出来的代码往往冗长、低效、难以维护，无法发挥C++的真正优势。
+
+\subsection{从实例出发，到实例中去}
+
+任务：读取文件内容到字符串，并统计非空行数。我们只要得到结果的函数即可，不需要完整的程序框架。这些代码都对应着当时主流编译器、标准库、硬件和工程组织的硬约束，不能脱离实际。
+
+\subsubsection{C99，2000}
+\begin{lstlisting}[language=C]
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+size_t count_non_empty_lines(const char* path)
+{
+    FILE* fp = fopen(path, "r"); // 以读模式打开文件
+    if (!fp) return (size_t)-1; // 打开失败，返回-1表示错误
+
+    size_t cnt = 0; // 非空行计数器
+    char*  line = NULL; // 存储读取的行
+    size_t n = 0; // 行缓冲区大小
+    ssize_t len; // 读取的行长度
+    while ((len = getline(&line, &n, fp)) != -1) {
+        /* 至少有一个非空白字符 */
+        int non_blank = 0;
+        for (ssize_t i = 0; i < len; ++i)
+            if (!isspace((unsigned char)line[i])) { non_blank = 1; break; }
+        cnt += non_blank;
+    }
+    free(line);
+    fclose(fp);
+    return cnt;
+}
+\end{lstlisting}
+这个是很好的C代码，使用了标准库函数，处理了错误情况，逻辑清晰：手动管理文件、getline动态扩容、逐行读取、逐字符检查非空白。
+
+\subsubsection{C++03，2003}
+\begin{lstlisting}[language=C++]
+#include <cstdio>
+#include <vector>
+#include <string>
+
+std::size_t count_non_empty_lines(const std::string& path)
+{
+    FILE* fp = std::fopen(path.c_str(), "r");
+    if (!fp) return -1;
+
+    std::size_t cnt = 0;
+    std::vector<char> buf(1024);
+    while (std::fgets(buf.data(), buf.size(), fp)) {
+        bool blank = true;
+        for (char c : buf) {
+            if (c == '\0') break;
+            if (!std::isspace(static_cast<unsigned char>(c))) { blank = false; break; }
+        }
+        cnt += !blank;
+    }
+    std::fclose(fp);
+    return cnt;
+}
+\end{lstlisting}
+
+我们发现，上述代码和C代码几乎一模一样，逻辑完全没有变化，错误处理依然是靠返回值，资源管理依然是手动的\footnote{虽然ifstream是RAII的，但是这个风格太C}，编程方式也依然是相当面向过程的。
+
+\subsubsection{C++11，2011}
+\begin{lstlisting}[language=C++]
+#include <fstream>
+#include <string>
+#include <algorithm>
+
+std::size_t count_non_empty_lines(const std::string& path)
+{
+    std::ifstream ifs(path, std::ios::ate); // std::ios::ate表示打开文件后立即将读写位置移动到文件末尾，以便获取文件的大小。
+    if (!ifs) return -1;
+
+    std::size_t len = static_cast<std::size_t>(ifs.tellg()); // 获取文件大小
+    ifs.seekg(0);   // 把读写位置移动到文件开头
+    std::string content(len, '\0');
+    ifs.read(content.data(), len); // 一次性读入文件内容
+
+    std::size_t cnt = 0;
+    std::string::iterator bg = content.begin(); // 迭代器指向字符串开头
+    while (bg != content.end()) {
+        auto nl = std::find(bg, content.end(), '\n');
+        if (std::any_of(bg, nl,
+               [](unsigned char c){ return !std::isspace(c); }))
+            ++cnt;
+        bg = (nl == content.end()) ? nl : nl + 1;
+    }// 这段就是找行首和行尾，中间检查非空白字符
+    return cnt;
+}
+\end{lstlisting}
+这个代码的最大改进之处：
+\begin{itemize}
+  \item 一次性读入文件内容，避免逐行读取的系统调用开销；
+  \item 使用了STL的算法 \texttt{std::find} 和 \texttt{std::any\_of} ，代码更简洁，几乎没有任何手动循环；
+  \item 彻底的RAII，资源自动管理。
+\end{itemize}
+
+
+\subsubsection{C++17，2017}
+\begin{lstlisting}[language=C++]
+#include <fstream>
+#include <string>
+#include <optional>
+#include <sstream>
+#include <algorithm>
+
+std::optional<std::string> slurp(const std::string& path)
+{
+    std::ifstream ifs(path, std::ios::binary | std::ios::ate);  // 以二进制模式打开文件，并将读写位置移动到文件末尾
+    if (!ifs) return std::nullopt; // 打开失败，返回空的optional
+    std::size_t n = ifs.tellg();
+    ifs.seekg(0);
+    std::string s(n, '\0');
+    ifs.read(s.data(), n);
+    return s;
+}
+
+std::size_t count_non_empty_lines(const std::string& path)
+{
+    auto content = slurp(path);
+    if (!content) return -1;
+
+    std::istringstream in(content.value()); // 字符串流
+    return std::count_if(
+        std::istreambuf_iterator<char>(in), // 输入流迭代器
+        std::istreambuf_iterator<char>(),
+        [&in](char) mutable // mutable允许修改捕获的变量
+        {
+            std::string line;
+            std::getline(in, line);
+            return !line.empty() &&
+                   std::any_of(line.begin(), line.end(),
+                               [](unsigned char c){ return !std::isspace(c); });
+        });
+}
+\end{lstlisting}
+和之前的代码相比，这段代码有以下改进：
+\begin{itemize}
+  \item 使用了optional（C++17）来处理可能失败的文件读取，更加语义化；
+  \item 使用了 \texttt{std::istreambuf\_iterator} 来逐字符遍历输入流，避免了手动循环；
+  \item 使用了 \texttt{std::count\_if} 来统计非空行数，代码更加简洁明了。
+\end{itemize}
+
+\subsubsection{C++20，2020}
+\begin{lstlisting}[language=C++]
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <optional>
+#include <ranges>
+#include <algorithm>
+
+std::optional<std::string> slurp(const std::string& path)
+{
+    std::ifstream ifs(path, std::ios::binary | std::ios::ate);
+    if (!ifs) return std::nullopt;
+    auto n = ifs.tellg();
+    ifs.seekg(0);
+    std::string s(n, '\0');
+    ifs.read(s.data(), n);
+    return s;
+}
+
+std::size_t count_non_empty_lines(const std::string& path)
+{
+    auto content = slurp(path);
+    if (!content) return -1;
+
+    auto lines = std::views::split(content.value(), '\n') // 分割成行
+               | std::views::filter([](auto&& line) { // 过滤这些行：
+                   return !std::ranges::empty(line) && // 非空行
+                          !std::ranges::all_of(line,    // 且不全是空白字符
+                               [](unsigned char c){ return std::isspace(c); });
+                 });
+    return std::ranges::distance(lines); // 计算非空行数
+}
+\end{lstlisting}
+这个风格更是极端：
+\begin{itemize}
+  \item 全程没有显式循环；
+  \item 用管道操作符组合逻辑；
+  \item 声明式风格；
+  \item 类型安全，零拷贝。
+\end{itemize}
+
+我们看出，以上五段代码，虽然功能完全相同，但是风格和质量却有天壤之别，以C++11为显著分界线，区别主要有五：
+\begin{itemize}
+  \item 资源管理：从手动管理到C++11 RAII；
+  \item 错误处理：从返回值检查到C++17 optional等类型；
+  \item 算法和数据结构：从手动循环到C++11 STL算法和迭代器，再到C++20 ranges；
+  \item 内存策略：从逐行读取到C++11 一次性slurp，再到C++20的零拷贝视图；
+  \item 可读性和可组合性：从命令式到声明式。
+\end{itemize}
+
+
+\subsection{现代C++的思维方式}
+
+如果一个代码出现了以下特征，那么它很可能是“C with STL”：
+\begin{itemize}
+  \item 使用裸指针和手动内存管理。
+  \item 命令式、过程式，许多循环和条件判断。
+  \item 缺乏抽象，没有利用面向对象的特性。
+  \item 逻辑静态，重载一堆，难以复用。
+  \item 忽略异常安全，在异常情况下容易导致资源泄漏。
+\end{itemize}
+而真正的现代 C++ 思维方式是其反面，从上到下分别对应着：
+\begin{itemize}
+  \item RAII；
+  \item 面向对象，甚至多范式结合；
+  \item 泛型编程；
+  \item 元编程；
+  \item 异常安全。
+\end{itemize}
+
+这些思想在C++11就能很好写出来，而后续两次大更新（C++17和C++20）则进一步提升了代码的简洁性和表达力，使得C++代码能够更加接近声明式编程的风格。比如说，我们即使是在C++11，也可以问自己以下问题：
+\begin{itemize}
+    \item RAII：有没有用智能指针、容器等自动管理资源？
+    \item 泛型：有没有用模板、Lambda函数等泛型编程手段？
+    \item STL：有没有坚持使用 \texttt{copy\_if} 、 \texttt{accumulate} 等STL算法代替手动循环？
+    \item 异常安全：有没有考虑异常情况下的资源管理？（C++11只能自己写一个optional，但这玩意太好用了）
+    \item 性能（尤其是拷贝）：有没有用 \texttt{std::move} 、完美转发、emplace等手段减少不必要的拷贝？
+    \item 可读性：有没有用auto、范围for（感觉不如 \texttt{std::for\_each} ）等手段提升代码可读性？有没有用别名、命名空间等手段提升代码可维护性？
+\end{itemize}
+
+所以说，我们写代码的时候，尽可能利用C++的特性，把C++当成一种思维方式，而非仅用来抽象C的语法糖，这样才能写出真正的C++代码。
+
+例如，现有一个vector，要求所有元素都加一，我们的第一反应是什么？我给出四行代码：
+\begin{lstlisting}[language=C++]
+for (size_t i = 0; i < vec.size(); ++i) vec[i] += 1;
+for (auto& x : vec) x += 1;
+std::for_each(vec.begin(), vec.end(), [](auto& x) { x += 1; });
+std::ranges::for_each(vec, [](auto& x) { x += 1; });
+\end{lstlisting}
+这四行在功能乃至优化后的汇编上几乎等价，但是它们的思维方式却大相径庭。如果你的第一反应是后面三行当中的一个，那说明你的思维很现代C++化；如果是第一个，那说明你的思维模式还停留在古典C。
+
+所以说，我们写代码的时候，尽可能利用 C++ 的特性，把 C++ 当成一种思维方式，而非仅用来抽象 C 的语法糖，这样才能写出\textbf{在当前约束下最优雅、最安全、可维护}的代码。
+
+\section{否定之否定：FakeC++是否真正罪大恶极？}
+
+\subsection{再回到实例}
+
+任务依旧：把文件搬进内存，统计非空行数。依然是上述五段代码，但这一次请带着历史唯物主义的眼光看待它们，每一层都对应了当时主流编译器、标准库、硬件与工程组织的硬约束。
+
+\begin{itemize}
+    \item \textbf{C99，2000}：当时没有RAII、没有异常，操作系统一次分配4kB页，文件IO系统调用开销较大，内存分配开销较大，代码必须一次性 \texttt{gcc -std=c99 -pedantic} 通过，要不然进不了仓库（当时甚至连Git都没有）。于是我们发现，代码也只能这么写。
+    \item \textbf{C++03，2003}：项目组确实刚刚同意G++也可以提交，但是审查规则依然是禁止模板和异常。老工程师对C++的唯一诉求仅仅是“自动释放内存”，所以大家都只用STL容器来替代C的malloc/free，其他的编程习惯和C几乎没有区别。
+    \item \textbf{C++11，2011}：我们看着一次性读入文件内容很爽，但是在当时很多老派程序员依然是反对这么搞的。能做到这些，有赖于硬件和操作系统的进步：内存带宽超过硬盘带宽，一次性读文件反而成了性能更好、代码更简单的双赢；编译器也开始支持auto、lambda表达式，STL算法等现代C++特性，且性能优化也足够好了，大家终于敢用这些新特性了。
+    \item \textbf{C++17，2017}：而此时的编译器发展：optional刚刚进标准，编译器对现代C++的解析也稳定下来。而且硬件也更强了，内存更大了，文件更大了，大家终于开始用字符串流来处理文件内容了。编译器对STL算法的优化也更好了，istreambuf\_iterator来逐字符遍历输入流也不是什么大问题了。
+    \item \textbf{C++20，2020}：到了这个时候，编译器对ranges的优化终于做到了“零抽象惩罚”，split视图不产生额外内存，filter视图也不产生额外内存。大家终于敢用这些新特性了，代码简洁到令人发指，完全没有显式循环，逻辑清晰到仿佛在写SQL查询语句。而对应的代码审查也要求“禁止手动循环”，否则就要被打回重写。
+\end{itemize}
+
+如果我们能真正理解上述五段代码背后的历史背景和技术约束，我们就会发现两条有趣的曲线。
+
+我们会发现一条单调递减的曲线：运行时开销，C99如果是100，那么C++11大概是60，C++20大概就只有10了。
+
+而还有另一条单调递增的曲线：让编译器做的事。2000年，编译器仅负责帮你翻译成汇编；2011年，编译器开始帮你做内联、模板实例化、自动内存管理等；2020年，编译器甚至帮你做了零拷贝视图、管道优化等，临时对象几乎为0。
+
+这两条曲线，Bjarne在1994年就已经预见到了：
+\begin{quote}
+    You don’t pay for what you don’t use, and what you do use you couldn’t hand-code any better.
+\end{quote}
+这就是C++的零开销抽象（Zero-Cost Abstraction）理念：抽象本身不应该带来额外的运行时开销，编译器应该能够把高层抽象优化成和手写低层代码一样高效的机器码。这句话立刻可以拆成三条原则：
+\begin{itemize}
+  \item 你不使用的特性，不会带来任何开销；
+  \item 你使用的特性，编译器会帮你把它优化到和手写代码一样高效；
+  \item 如果编译器做不到，那就是编译器的错，不是语言设计的错。
+\end{itemize}
+于是顺便带来了三条启示：
+\begin{itemize}
+  \item \textbf{先问约束，再选抽象}：嵌入式64KB RAM的环境，\texttt{ranges::distance} 还真就不如 \texttt{for (char c : container)} 高效；而云端128vCPU的大型服务，不写ranges反而成了性能瓶颈。
+  \item \textbf{让错误尽早爆掉}：用optional、断言检查概念、用constexpr把运行时量变成编译时常量，都是让错误尽早爆掉的手段：如果能在编译期发现错误，就不要等到运行时才发现。
+  \item \textbf{零拷贝是默认策略，拷贝必须有理由}：从slurp到字符串视图，从传值到传引用，本质上说的一个事：把数据移动降级成指针移动，除非profiler说“不行”，否则不要轻易拷贝数据。
+\end{itemize}
+
+\subsection{再回看 Fake C++}
+
+于是，我们再把眼光放回到Fake C++中，或者C++03时代中的代码：\textbf{它们从来不是真正的 Fake C++，而是时代约束下的局部最优解}。
+
+真正的原罪只有一条：\textbf{明明约束条件已经改变，但仍然抱残守缺、固步自封、把旧的局部最优当成新的全剧最优}。如果你维护的是老库，那 \texttt{vector<char>} 是好的，接着用；但你要是在2025年写新服务，却因为同样的理由拒绝用 \texttt{ranges} 甚至拒绝 \texttt{string}，那这就是问题了。
+
+现代C++程序员的手里应该始终有一把锤子（Fake C++），但更应该有一整套电动工具（现代C++特性）。什么时候用锤子，什么时候用电钻，什么时候用激光切割机，全凭你对约束的理解和对工具的熟练程度；我们应该知道，从手写循环到ranges之间，每一级抽象背后的代价和收益；我们更应该知道，在当前需求、硬件、团队、编译器四维空间里，什么才是最优解。
+
+把这两套工具永远对立起来，只会让我们停滞不前，错失良机；不管黑猫白猫，抓到老鼠就是好猫，只要能做到以上两点，不管你写的是20年前的 \texttt{getline}，还是20年后的 \texttt{std::views::split}，那都是真正的C++：因为你让编译器在当前约束下，帮你写出了最优雅、最安全、最可维护、代价最低的代码。
+
+\section{解剖和验证：ranges 真的免费吗？}
+
+在前文中，我们多次提到C++20的ranges特性能够实现“零开销抽象”，并且能够让代码更加简洁和易读。但是，ranges真的完全免费吗？它真的不会带来任何运行时开销吗？
+
+\textbf{实践是检验真理的唯一标准}。为了验证ranges的性能，我们可以通过一个简单的实验来比较使用ranges和不使用ranges的代码在运行时的性能差异。这个我没办法带着同学们做，但是我给出一个实验方案，同学们可以在自己的机器上尝试。
+
+\subsection{任务}
+
+还是喜闻乐见的任务：读取一个大文件，统计其中非空行的数量（总行数约1亿行）。
+
+控制变量：在同一台机器、同一个编译器和编译选项上测试， \texttt{-O0} 、 \texttt{-O2} 、 \texttt{-O3} 三种优化等级都测试。文件先mmap进内存，防止磁盘的IO干扰。
+
+编译选项（以O3为例）：
+\begin{lstlisting}
+g++ -std=c++20 -O3 -march=native -DNDEBUG
+\end{lstlisting}
+
+写出四个版本的代码：
+\begin{itemize}
+    \item ranges+管道（真正零拷贝视图）；
+    \item algorithm + stringview（部分零拷贝）；
+    \item 裸指针 + 手动循环（完全手动）；
+    \item STL迭代器 + 手动循环（STL风格）。
+\end{itemize}
+
+测试：用perf测量每个版本的cycles、branch-misses、cache-misses三个指标；总用时可以用cpp的chrono库测量，直接按日志打印出来；汇编行数，可以用 \texttt{objdump -d} 来查看；源代码行数，可以自己数一下。
+
+对比上述结果，看看ranges版本和其他版本在性能上和代码简洁性上有什么差异。
+
+\subsection{预期结果}
+
+根据C++20的设计理念和编译器的优化能力，我预期结果如下：当内存够大时，在O3激进优化面前，ranges的零拷贝视图版本和充分优化的裸指针版本在性能上应该非常接近，差异可以忽略不计，估计不超过裸指针版本的2\%；而在代码简洁性上，ranges版本应该明显优于其他版本，代码行数和可读性都有显著提升。
+
+因此，\textbf{只要你的约束里不包含‘调试器必须单步进最简汇编’或者‘编译器必须是 2017 年之前’，就请默认用 ranges；否则，perf 出现 2 \% 以上回退时再考虑降级。}
+
+同学们也可以用实验验证我的上述断言。
+
+\subsection{启示}
+
+通过这个实验，我们可以得出以下启示：零开销从不是零成本，而是零“不必要的”成本。最终，管它是ranges还是手动写，perf才是唯一的裁判；只要在当前约束下，编译器能够把高层抽象优化成和手写低层代码一样高效的机器码，那这就是零开销抽象。
+
+\section{C++中的一些良好实践}
+
+在C++编程中，良好的代码风格可以提高代码的可读性，而遵守一些基本的编程规范则有助于减少错误和未定义行为。我在上述文本中已经提到过一些基本的代码规范。在这里，我将汇总并补充一些常见的代码规范和最佳实践，供大家参考。
+
+\subsection{头文件}
+
+\subsubsection{头文件保护}
+
+每个头文件都应该使用头文件保护（Header Guard）来防止重复包含。常见的做法是使用预处理指令 \texttt{\#ifndef} 、 \texttt{\#define} 和 \texttt{\#endif} 。例如：
+\begin{lstlisting}[language=C++]
+#ifndef MY_HEADER_H
+#define MY_HEADER_H
+// 头文件内容
+#endif // MY_HEADER_H
+\end{lstlisting}
+
+而在工程上，我们更推荐使用 \texttt{\#pragma once} ，它更简洁，大多数编译器都支持：
+\begin{lstlisting}[language=C++]
+#pragma once
+// 头文件内容
+\end{lstlisting}
+
+\subsubsection{使用标准的C++头文件}
+
+在引用标准库的时候，应该使用C++标准头文件（如 \texttt{<cstdio>} ）而不是C风格的头文件（如 \texttt{<stdio.h>} ）。C++标准头文件会将内容放在 \texttt{std} 命名空间中，避免命名冲突。例如：
+\begin{lstlisting}[language=C++]
+#include <cstdio> // 好的实践
+#include <stdio.h>  // 不推荐
+\end{lstlisting}
+
+\subsubsection{仅使用必要的头文件}
+
+只包含当前文件实际需要的头文件，避免不必要的依赖和编译时间增加。例如，如果只需要使用 \texttt{std::vector} ，就只包含 \texttt{<vector>} 。如果要用 \texttt{cin} 和 \texttt{cout} ，就包含 \texttt{<iostream>} 。避免一口气引入大量头文件，防止命名冲突和宏污染。
+
+绝对禁止在工程中使用 \texttt{\#include <bits/stdc++.h>} 这种头文件。该头文件非标准且不可移植；它包含了几乎所有的标准库头文件，导致编译时间增加，并且引入不可忍受的命名冲突和宏污染。
+
+\subsection{命名空间}
+
+在C++中应合理的使用命名空间。避免将所有代码放在全局命名空间中，防止命名冲突。建议为每个库或模块定义独立的命名空间。例如：
+\begin{lstlisting}[language=C++]
+namespace mylib {
+    // 库代码
+}
+\end{lstlisting}
+
+减少使用匿名命名空间 \texttt{namespace \{\}} 和 \texttt{using namespace std;} 。在头文件中，严格禁止使用 \texttt{using namespace std;} ，源文件中应谨慎使用，但这也会引发一些命名冲突问题，建议使用显式的命名空间前缀或仅引入需要的名称：
+\begin{lstlisting}
+using std::cout;  // 只引入需要的名称，是好的实践
+std::cout << ... // 直接使用std命名空间下的名称，也是好的实践
+\end{lstlisting}
+
+\subsection{变量声明和使用}
+
+\subsubsection{声明即初始化}
+
+为防止UB，变量应尽量做到“声明即初始化”。如果不知道初始化为什么，可以零初始化。例如：
+\begin{lstlisting}[language=C++]
+int x = 0; // 好的实践
+std::vector<int> vec; // 这会初始化为空vector，是好的实践 
+std::vector<int> vec = std::vector<int>(10, 0); // 好的实践
+
+int x;     // 不推荐
+std::vector<int> vec(10); // 不推荐
+\end{lstlisting}
+
+\subsubsection{使用局部变量替代全局变量}
+
+全局变量容易引发命名冲突和不可预期的副作用，建议尽量使用局部变量或类成员变量来替代全局变量。如果必须使用全局变量，建议使用命名空间封装，并加上适当的前缀以防止命名冲突。例如：
+\begin{lstlisting}[language=C++]
+namespace config {
+    extern int global_setting; // 声明全局变量
+}
+\end{lstlisting}
+
+\subsubsection{多用const、constexpr等修饰符}
+
+在C++中，建议尽可能使用 \texttt{const} 和 \texttt{constexpr} 修饰变量和函数，防止意外修改，提高安全性。在更安全的语言Rust中，变量甚至默认是不可变的。例如：
+\begin{lstlisting}[language=C++]
+const int MAX_SIZE = 100; // 好的实践
+const int square(int x) { return x * x; } // 好的实践
+Matrix operator+(const Matrix& a, const Matrix& b) { ... } // 好的实践
+\end{lstlisting}
+
+\subsubsection{用变量替代魔法数字、宏}
+
+避免在代码中使用魔法数字（前不着村后不着店的数字常量），也不建议使用无类型检查的宏定义。建议使用具名常量、枚举类或 \texttt{constexpr} 变量来替代魔法数字和宏。例如：
+\begin{lstlisting}[language=C++]
+constexpr int MAX_SIZE = 100; // 好的实践
+
+for (size_t i = 0; i < MAX_SIZE; ++i) { ... }
+\end{lstlisting}
+
+\subsubsection{用强枚举替代传统枚举}
+
+避免使用传统枚举（ \texttt{enum} ），因为它们会将枚举值提升为整型，可能引发命名冲突和隐式类型转换。建议使用强枚举（ \texttt{enum class} ）来定义枚举类型。例如：
+\begin{lstlisting}[language=C++]
+enum class Color { RED, GREEN, BLUE }; // 好的实践
+Color c = Color::RED;
+\end{lstlisting}
+
+\subsubsection{用RAII资源句柄来替代传统裸指针}
+
+现代C++最重要的特性之一就是RAII，我们要使用这个特性来管理资源，避免手动管理内存和资源。建议使用智能指针（如 \texttt{std::unique\_ptr} 和 \texttt{std::shared\_ptr} ）来替代传统的裸指针。例如：
+\begin{lstlisting}[language=C++]
+void foo() {
+    std::unique_ptr<MyClass> ptr = std::make_unique<MyClass>(); // 好的实践
+    return; // ptr会自动释放内存
+}
+\end{lstlisting}
+
+\subsubsection{使用C++风格的显式类型转换}
+
+避免隐式类型转换和C风格的强制类型转换（ \texttt{(type)value} ）。建议使用C++风格的显式类型转换（如 \texttt{static\_cast} 、 \texttt{dynamic\_cast} 、 \texttt{const\_cast} 和 \texttt{reinterpret\_cast} ）来提高代码的可读性和安全性。例如：
+\begin{lstlisting}[language=C++]
+int x = static_cast<int>(3.14); // 好的实践
+\end{lstlisting}
+
+\subsection{函数和类定义}
+
+\subsubsection{多模板、少重载}
+
+避免过度使用函数重载，尤其是当函数参数类型较多时。建议使用模板和默认参数来实现函数的多态性。例如：
+\begin{lstlisting}[language=C++]
+template <typename T>
+T add(T a, T b) { return a + b; } // 好的实践
+\end{lstlisting}
+
+\subsubsection{用STL代替自己实现}
+
+STL提供了丰富的容器和算法，建议尽可能使用STL来替代自己实现的数据结构和算法，避免重复造轮子；另外STL的实现也经过了大量的测试和优化，虽然常数时间复杂度较大但都会被编译器的激进优化抹平，且比自己维护类似数据结构和算法更正确、不易漏掉边界条件。例如：
+\begin{lstlisting}[language=C++]
+std::array<int, 5> arr = {1, 2, 3, 4, 5}; // 好的实践
+std::for_each(arr.begin(), arr.end(), [](int x) { ... }); // 好的实践
+\end{lstlisting}
+
+\subsubsection{用范围for循环替代传统for循环}
+
+范围for循环是最推荐的遍历容器的方式，简洁且不易出错，且比 \texttt{std::for\_each} 更直观。例如：
+\begin{lstlisting}[language=C++]
+for (const auto& item : container) { // 好的实践
+    // 使用item
+}
+\end{lstlisting}
+
+\subsubsection{函数参数传递的最佳实践}
+
+对于小的对象（如基本类型、 \texttt{std::pair} 、 \texttt{std::tuple} 等），建议传值；对于大的对象（如 \texttt{std::vector} 、 \texttt{std::string} 等），建议传引用以避免不必要的拷贝开销。避免传递非const引用，除非函数确实需要修改参数。例如：
+\begin{lstlisting}[language=C++]
+void process(const std::vector<int>& data) { ... } // 好的实践
+\end{lstlisting}
+
+\section{工程实践}
+
+为了促进同学们对上述C++良好实践的理解和应用，建议大家在实际项目中积极采用这些规范和最佳实践。以下是一些可供学习的选题：
+
+\textbf{黑白棋}：黑白棋是一个简单的棋类游戏：
+
+\begin{itemize}
+    \item 棋盘为8x8的方格，初始状态下中间四个格子分别放置两颗黑子和两颗白子。黑棋放在 3C 和 4D，白棋放在 3D 和 4C。
+    \item 两名玩家轮流下棋，每次只能在空格上放置一颗自己的棋子，并且必须至少翻转对方的一颗棋子。
+    \item 翻转规则是：如果新放置的棋子与已有的同色棋子之间夹着一条直线（水平、垂直或对角线）上的对方棋子，那么这些对方棋子都会被翻转为己方颜色。
+    \item 当一方无法下棋时，轮到对方继续下棋；当双方都无法下棋时，游戏结束，计算各自的棋子数量，数量多的一方获胜。
+\end{itemize}
+
+
+\textbf{UNO}：UNO是一种流行的纸牌游戏，规则简单。其规则是：
+\begin{itemize}
+    \item 每个玩家初始手牌为7张，牌堆中有108张牌，包括：
+    \begin{itemize}
+        \item 数字牌：每种颜色（红、黄、绿、蓝）有数字0-9的牌，每个数字有两张（0除外，只有一张），共计76张。
+        \item 功能牌：每种颜色有“跳过”、“反转”、“加二”三种功能牌，每种功能牌有两张，共计24张。
+        \item 万能牌：有“万能牌”和“万能加四”两种，每种有四张，共计8张。
+    \end{itemize}
+    \item 游戏开始时，翻开牌堆顶的一张牌作为起始牌。
+    \item 玩家轮流出牌，必须出与弃牌堆顶牌颜色相同或数字相同的牌，或者出万能牌。如果无法出牌，则必须从牌堆摸一张牌；如果还无法出牌，则轮到下一个玩家。
+    \item 功能牌的效果如下：
+    \begin{itemize}
+        \item 跳过：下一个玩家被跳过。
+        \item 反转：游戏顺序反转。
+        \item 加二：下一个玩家摸两张牌并跳过。
+        \item 万能牌：出牌者可以指定下一张牌的颜色。
+        \item 万能加四：出牌者可以指定下一张牌的颜色，下一个玩家摸四张牌并跳过。下家此时可以质疑出牌者是否有其他可出的牌，如果质疑成功，则出牌者必须摸四张牌；如果质疑失败，则下家摸六张牌。（但在本实现中可以忽略质疑规则）
+    \end{itemize}
+    \item 当一名玩家只剩下一张牌时，必须喊“UNO”；如果被其他玩家发现没有喊，则必须摸两张牌。（在本实现中也可以忽略此规则）
+    \item 当一名玩家出完所有牌时，游戏结束，该玩家获胜。
+\end{itemize}
+
+思考：怎样用命令行交互？能不能写一个AI玩家？能不能用现代C++的特性来简化代码？
+
+另：能不能用DirectX、Qt、OpenGL、UE等图形库或游戏引擎写出上述两个游戏的图形界面？这些就交由同学们自行发挥了。

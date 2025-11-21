@@ -1,0 +1,401 @@
+\chapter{终端101}\label{sec:terminal}
+
+在计算机的世界里，图形化界面（GUI）无疑是最直观、最易上手的交互方式。我们可以通过鼠标点击图标、菜单等元素来完成各种操作，而不需要记忆复杂的命令和语法。然而，图形化界面并不是唯一的交互方式：我们使用GUI，实际上是在使用程序员预先抽象好的交互逻辑。如果遇到一些复杂的任务，例如“从许多文件中快速找到特定的内容然后在它们的末尾都加上其修改日期”，此时使用GUI则会非常繁琐。难道只能坐等程序员更新软件吗？显然不是。我们可以使用另一种交互方式：命令行界面（CLI），也就是我们常说的“终端”或者“控制台”。不要害怕这个东西！影视剧等作品经常将终端描绘成黑客专用工具，实际这玩意远远没有那么可怕。它只是一个工具，和图形界面（GUI）一样，都是用来和计算机交互的手段而已。
+
+因为CLI直接与操作系统交互，能够提供更高的灵活性和效率。通过终端，我们可以直接输入命令来完成各种操作，例如文件管理、软件安装、系统配置等。虽然CLI的学习曲线较陡峭，需要记忆大量的命令和参数，但是一旦掌握了它，我们就能够更高效地使用计算机，甚至可以实现一些图形化界面无法完成的任务。
+
+在Windows上，只需要按下 \texttt{Win+R} ，然后输入 \texttt{cmd} ，按下回车键即可打开命令提示符（CMD）；在macOS上，可以通过“应用程序”中的“实用工具”文件夹找到“终端”应用程序；在Linux上，可以通过按下 \texttt{Ctrl+Alt+T} 快捷键或者在应用程序菜单中找到“终端”应用程序来打开终端。
+
+\begin{tip}
+  terminal、shell、CLI、console等术语严格说来是不同的概念，但是在大多数技术交流时几乎完全不作区分，可以随便混用。其具体定义是：
+  \begin{itemize}
+    \item terminal（终端）：最初指的是连接到大型计算机的物理设备，现在通常指的是提供命令行界面的软件。
+    \item shell（外壳）：指的是提供命令行界面的程序，它解释用户输入的命令并将其传递给操作系统执行。
+    \item CLI（命令行界面）：指的是通过命令行与计算机交互的界面。
+    \item console（控制台）：最初指的是计算机的物理控制台，现在通常指的是提供命令行界面的软件，类似于terminal。
+  \end{itemize}
+  那为什么这四个东西合流了呢？因为现代计算机中，这些概念往往是重叠的。例如，我们使用的terminal实际上就是console（但是在古老的计算机中，console和terminal是不同的东西，前者是管理员用的物理设备，而后者是用户用的物理设备）；而这玩意通常包含一个shell，并提供一个CLI界面。你看，区别起来是不是就毫无意义了？因此，在大多数情况下，我们可以将这些术语视为同义词，互换使用。
+
+  但是有些时候，这些东西也是不得不区分的，例如下文在介绍不同的shell时，我们就必须区分，因为这涉及到其具体功能（解释命令）。与之类似的，与GUI、TUI对应的只能是CLI，这涉及到其交互方式。又比如，Linux上的终端模拟器（例如GNOME Terminal、Konsole等）都是terminal，而不能说这些东西是shell或CLI。console仅在Windows语境下与terminal有区分，因为console在Windows语境下指的就是CMD.exe，而terminal则可以是Windows Terminal、PowerShell等，但console和terminal却往往都翻译成终端……真是一笔烂账。其他语境下则可以混用。
+\end{tip}
+
+\section{选择Shell}
+
+Shell是终端中的一个重要组件，它负责解释用户输入的命令并将其传递给操作系统执行。不同的操作系统有不同的默认shell，例如Linux和macOS默认使用bash或者zsh，而Windows默认使用CMD或者PowerShell。
+
+对于Linux和macOS，常见的shell有以下几种：
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{c|ccc}
+    \toprule
+    & \textbf{bash} & \textbf{zsh} & \textbf{fish} \\
+    \midrule
+    定位 & 通用，默认 & 高度定制 & 易用、美观、现代化 \\
+    兼容性 & POSIX标准兼容 & 大多数兼容bash & 不兼容bash，自成一套 \\
+    上手难度 & 中等 & 中等偏高 & 非常简单 \\
+    自动补全 & 仅有基础功能 & 需配合插件 & 开箱即用 \\
+    语法高亮 & 没有 & 有插件 & 默认有 \\
+    可定制性 & 较低 & 非常高 & 较高 \\
+    脚本通用性 & 几乎全通用 & 高 & 低 \\
+    资源占用 & 非常低 & 取决于插件 & 较低 \\
+    \bottomrule
+  \end{tabular}
+  \caption{常见的Linux/macOS Shell对比}
+\end{table}
+我们推荐使用zsh或者fish。关于zsh怎么安装插件的问题，可以参考网上的各种教程，例如Oh My Zsh等。
+
+对于Windows，默认的终端是CMD，其风格太老了，基本与现代开发脱节，不建议使用。我们建议使用PowerShell。PowerShell的命令统一采用的是动词-名词的格式，和Linux Shell的简单缩写形式有很大的不同。这是因为PowerShell的设计理念是模仿C\#的“对象”，而不是Linux Shell的文本流。不过也正因此，PowerShell本身就是一门完备的语言，功能非常强大，在处理复杂的任务上更为简单。
+
+\begin{caution}
+  Windows上自带的那个默认的“PowerShell”和我们从MS Store上安装的PowerShell不是一个东西。前者是Windows PowerShell，基于.NET Framework，版本最高为5.1；而后者是PowerShell Core，基于.NET Core，版本从6开始。两者在语法和功能上有一些差异。我们推荐使用PowerShell Core，因为它是跨平台的，并且得到了微软的持续支持和更新，而微软也推荐使用后者。
+\end{caution}
+
+除了这些以外，如果不希望使用Windows的原生shell，也可以使用诸如Cygwin、MSYS2等类UNIX环境，来获得类似Linux的终端体验。有些教程会让你使用git bash，这东西是一个精简版MSYS2，主要用于Git操作，功能非常有限，不建议长期使用。
+
+\section{怎样使用终端？}
+
+\subsection{命令的基本结构}
+
+一般情况下，一条命令满足以下结构：
+\begin{lstlisting}[language=bash]
+程序 [子命令] [选项] [对象]
+\end{lstlisting}
+
+其中，除了程序是必须的，其他的子命令、选项和对象都是可选的，选项和对象中有的顺序可以颠倒，有的则不行。例如，命令：
+\begin{lstlisting}
+apt install git -y
+\end{lstlisting}
+这里的apt是一个程序（包管理器）；install是一个子命令，表示安装软件包；-y是一个选项，表示自动确认安装；git是一个对象，表示要安装的软件包名称。上述命令中，子命令install和对象git的位置是不能颠倒的，而选项-y的位置则可以放在子命令和对象的前后。
+
+\subsection{终端的基本操作}
+
+需要注意的是，终端大多不支持鼠标点击，因此需要全程使用键盘输入命令，用方向键的左右键移动光标。方向键的上下键可以用来浏览历史输入过的命令，这对于重复输入相似命令非常有用。有时候，终端会帮我们提前补全一些命令（表现为半透明文字），我们只需要按下Tab键即可自动补全命令或者文件名。
+
+有的命令执行时间很长，或执行时遇到了错误需要掐断。这时，我们可以按下 \texttt{Ctrl+C} 来终止当前命令的执行。而如果我们仅仅是希望暂停而非终止当前命令的执行，可以按下 \texttt{Ctrl+Z} ，这会将当前命令暂停并挂起，然后你可以输入其他命令。要恢复暂停的命令，可以使用  \texttt{fg}  命令将其恢复到前台继续执行，或者使用 \texttt{bg} 命令将其放到后台继续执行。
+
+有的时候，命令执行时间实在是太长了，我们不想等着这东西一直运行下去。这时，我们可以在命令后面加上一个 \texttt{\&} 符号，表示让这个命令在后台运行，这样我们就可以继续输入其他命令了。
+
+还有的时候，命令会输出大量的信息，我们不想让这些信息全部显示在屏幕上。这时，我们仅需要重定向其输出，也就是在命令的末尾加上 \texttt{> output.txt} ，这样命令的输出就会被写入到一个名为 \texttt{output.txt} 的文件中，而不是显示在屏幕上。如果我们希望将输出追加到文件的末尾，而不是覆盖文件的内容，可以使用 \texttt{>>} 符号。这个output.txt可以是任意文件名。
+
+有时候，我们从其他地方复制来了一些命令，或希望将命令的输出复制走。我们知道在终端中 \texttt{Ctrl+C} 是用来终止命令的执行的，这时我们该怎么办呢？这时，我们可以使用鼠标左键选中要复制的内容，然后按下 \texttt{Ctrl+Shift+C} 来复制选中的内容。要将内容粘贴到终端中，可以按下 \texttt{Ctrl+Shift+V} 。这一点是和普通的文本编辑器不同的。另外，虽然很多终端不支持鼠标点击光标，但也有一部分终端支持用鼠标选定一些内容并右键，以显示菜单来进行复制和粘贴操作。
+
+下表\ref{tab:terminal-commands}是一些常见的命令。
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{c|cc}
+    \hline
+    \textbf{操作} & \textbf{Bash等} & \textbf{Pwsh} \\
+    \hline
+    创建文件 & touch & New-Item \\
+    列出文件 & ls & Get-ChildItem \\
+    复制文件 & cp & Copy-Item \\
+    移动文件 & mv & Move-Item \\
+    删除文件 & rm & Remove-Item \\
+    创建目录 & mkdir & New-Item -Type Directory \\
+    删除目录 & rmdir & Remove-Item -Recurse \\
+    查看帮助 & man & Get-Help \\
+    \hline
+  \end{tabular}
+  \caption{Bash和PowerShell的常用命令对比}
+  \label{tab:terminal-commands}
+\end{table}
+
+当然，上述命令在Windows上并不常用。然而，如果想从事开发，终端反而会变得不可或缺，尤其是在使用诸如Git、Docker等工具时。另外，在希望对文件进行批量处理时，终端也会显得非常有用。
+
+另，上述命令虽然在Windows上的全称看起来很吓人，但是PowerShell支持命令别名，例如 \texttt{ls} 实际上就是 \texttt{Get-ChildItem} 的别名， \texttt{cp} 是 \texttt{Copy-Item} 的别名，等等。因此，我们可以直接使用这些简短的命令。要是实在不行，那还是老老实实用PowerShell里的全称吧。
+
+例如，“Windows聚焦”每天都会更新新的图片，例如风景、动物等，并将其作为锁屏背景或桌面背景。这些图片被缓存储在一个隐藏目录中，且没有扩展名。如果遇到特别喜欢的图片，可以把这些缓存提取出来，并批量加上扩展名：
+\begin{lstlisting}
+  Rename-Item -Path "Your\Path\Here\*" -NewName { $_.Name + ".jpg" } # Pwsh 风格
+  ren Your\Path\Here\* *.jpg # CMD 风格，一般Pwsh兼容
+\end{lstlisting}
+这样比起手动地一个个添加扩展名要方便得多。
+
+\section{常用终端命令行辞典}\label{sec:shell}
+
+在表\ref{tab:terminal-commands}中，我们初步认识了一些常用的命令。接下来我们会对它们进行一定的扩展，这些基本上覆盖了我们日常使用终端时最常用的命令，大家记住其中的大多数命令就可以玩转终端了。
+
+\begin{itemize}
+  \item \textbf{系统命令}
+    \begin{itemize}
+      \item  \texttt{sudo} 命令用于提权。
+      \item  \texttt{poweroff} 和 \texttt{shutdown} 两个命令用于关机。
+      \item  \texttt{reboot} 命令用于重启电脑。
+      \item  \texttt{whoami} 命令用于查看自己是哪个用户。
+      \item  \texttt{which} 命令用于查找可执行文件的路径。
+      \item  \texttt{ps} 命令用于显示当前运行的进程。
+        \begin{itemize}
+          \item  \texttt{-e} ：显示所有进程。
+          \item  \texttt{-f} ：以全格式显示进程信息，包括父进程ID、用户等。
+          \item  \texttt{-l} ：以长格式显示进程信息。
+          \item  \texttt{-u} ：显示指定用户的进程。
+          \item  \texttt{-p} ：显示指定进程ID的进程。
+          \item  \texttt{-o} ：自定义输出格式。
+          \item  \texttt{-H} ：以树形结构显示进程之间的关系。
+          \item  \texttt{-j} ：以作业控制格式显示进程信息。
+          \item  \texttt{-x} ：显示所有进程，包括没有控制终端的进程。
+        \end{itemize}
+      \item  \texttt{kill} 命令用于终止进程。
+      \item  \texttt{fg} 命令可以将后台运行的任务调回前台，这个命令可以恢复被 \texttt{Ctrl+Z} 挂起的任务。
+      \item  \texttt{bg} 命令可以将任务放到后台运行。
+    \end{itemize}
+  \item \textbf{列出和查找类}
+    \begin{itemize}
+      \item  \texttt{pwd} 命令用于显示当前工作目录的绝对路径。
+      \item  \texttt{ls} 命令用于列出目录中的文件和子目录。
+        \begin{itemize}
+          \item  \texttt{-l} ：以长格式列出文件和目录的详细信息。
+          \item  \texttt{-a} ：列出所有文件和目录，包括隐藏文件。
+          \item  \texttt{-h} ：以人类可读的格式显示文件大小。
+          \item  \texttt{-R} ：递归地列出子目录中的文件和目录。
+          \item  \texttt{-t} ：按修改时间排序。
+        \end{itemize}
+      \item  \texttt{tree} 命令用于以树形结构显示目录中的文件和子目录。
+      \item  \texttt{find} 命令用于在目录中查找文件和目录。
+    \end{itemize}
+  \item \textbf{文件系统操作类}
+    \begin{itemize}
+      \item  \texttt{cd} 命令用于切换当前工作目录。
+      \item  \texttt{mkdir} 命令用于创建新目录。
+        \begin{itemize}
+          \item  \texttt{-p} ：递归地创建多级目录，如果上级目录不存在则一并创建。
+          \item  \texttt{-v} ：显示创建目录的详细信息。
+          \item  \texttt{-m} ：设置新目录的权限。
+        \end{itemize}
+      \item  \texttt{touch} 命令用于创建新文件或更新现有文件的修改时间。
+        \begin{itemize}
+          \item  \texttt{-a} ：只更新访问时间。
+          \item  \texttt{-m} ：只更新修改时间。
+          \item  \texttt{-c} ：如果文件不存在则不创建。
+          \item  \texttt{-t} ：设置文件的时间戳。
+          \item  \texttt{-r} ：使用指定文件的时间戳。
+        \end{itemize}
+      \item  \texttt{rm} 命令用于删除文件或目录。
+        \begin{itemize}
+          \item  \texttt{-r} ：递归地删除目录及其内容。
+          \item  \texttt{-f} ：强制删除文件或目录，不提示确认。
+          \item  \texttt{-i} ：在删除前提示确认。
+          \item  \texttt{-v} ：显示删除的详细信息。
+        \end{itemize}
+      \item  \texttt{rmdir} 命令用于删除空目录。
+      \item  \texttt{cp} 命令用于复制文件或目录。
+        \begin{itemize}
+          \item  \texttt{-r} ：递归地复制目录及其内容。
+          \item  \texttt{-f} ：强制覆盖目标文件。
+          \item  \texttt{-i} ：在覆盖前提示确认。
+          \item  \texttt{-v} ：显示复制的详细信息。
+          \item  \texttt{-u} ：只在源文件比目标文件新时才进行复制。
+        \end{itemize}
+      \item  \texttt{mv} 命令用于移动或重命名文件或目录。
+        \begin{itemize}
+          \item  \texttt{-f} ：强制覆盖目标文件。
+          \item  \texttt{-i} ：在覆盖前提示确认。
+          \item  \texttt{-v} ：显示移动的详细信息。
+          \item  \texttt{-u} ：只在源文件比目标文件新时才进行移动。
+        \end{itemize}
+      \item  \texttt{ln} 命令用于创建链接。
+        \begin{itemize}
+          \item  \texttt{-s} ：创建软链接（符号链接）。
+          \item  \texttt{-f} ：强制覆盖目标链接。
+          \item  \texttt{-i} ：在覆盖前提示确认。
+          \item  \texttt{-v} ：显示链接的详细信息。
+          \item  \texttt{-T} ：将目标视为一个普通文件，而不是目录。
+        \end{itemize}
+      \item  \texttt{tar} 命令用于打包和解包文件。
+        \begin{itemize}
+          \item  \texttt{-c} ：创建一个新的归档文件。
+          \item  \texttt{-x} ：从归档文件中提取文件。
+          \item  \texttt{-f} ：指定归档文件的名称。
+          \item  \texttt{-v} ：显示详细的操作信息。
+          \item  \texttt{-z} ：使用 gzip 压缩或解压缩归档文件。
+          \item  \texttt{-j} ：使用 bzip2 压缩或解压缩归档文件。
+          \item  \texttt{-J} ：使用 xz 压缩或解压缩归档文件。
+          \item  \texttt{-p} ：保留文件的权限和时间戳。
+          \item  \texttt{-C} ：切换到指定目录后再进行打包或解包。
+        \end{itemize}
+    \end{itemize}
+  \item \textbf{文本处理类}
+    \begin{itemize}
+      \item  \texttt{head} 命令用于显示文件的前几行。
+      \item  \texttt{tail} 命令用于显示文件的后几行。
+      \item  \texttt{cat} 命令用于连接文件并打印到标准输出。
+        \begin{itemize}
+          \item  \texttt{-n} ：为每一行添加行号。
+          \item  \texttt{-b} ：为非空行添加行号。
+          \item  \texttt{-s} ：压缩连续的空行。
+          \item  \texttt{-E} ：在每行末尾显示 \texttt{\$} 符号。
+          \item  \texttt{-T} ：将制表符显示为 \texttt{\^I} 。
+          \item  \texttt{-v} ：显示不可见字符。
+          \item  \texttt{-A} ：显示所有不可见字符，包括空格和制表符。
+          \item  \texttt{-e} ：等同于 \texttt{-vE} ，显示不可见字符并在行末添加 \texttt{\$} 符号。
+        \end{itemize}
+      \item  \texttt{echo} 命令用于在终端输出文本。
+        \begin{itemize}
+          \item  \texttt{-n} ：不在输出末尾添加换行符。
+          \item  \texttt{-e} ：启用转义字符的解释，例如 \texttt{\textbackslash n} 表示换行， \texttt{\textbackslash t} 表示制表符。
+          \item  \texttt{-E} ：禁用转义字符的解释。
+          \item  \texttt{-c} ：不输出任何内容。
+          \item  \texttt{-C} ：将输出内容转换为大写字母。
+          \item  \texttt{-l} ：将输出内容转换为小写字母。
+          \item  \texttt{-a} ：将输出内容转换为首字母大写字母。
+          \item  \texttt{-s} ：将输出内容转换为首字母小写字母。
+          \item  \texttt{-p} ：将输出内容转换为首字母大写字母，并将其他字母转换为小写字母。
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+
+\begin{warning}
+  导啊，咱们生产环境为啥执行  \texttt{dpkg}  会说  \texttt{command not found}  呀？
+
+  我之前干了啥？清了一下工作路径垃圾，好像是  \texttt{sudo rm -rf /} 
+
+  什么叫相对路径要加个点？
+
+  {\color{red}\textbf{警告：除非你知道你在输入什么，否则任何情况下均不要带上 \texttt{sudo} 执行删除命令！}}
+\end{warning}
+
+\section{进阶：命令联动}
+
+在 Linux 中，重定向、管道、变量和进程替换是四种把“数据”从一条命令挪到另一条命令（或文件）的核心手段。它们常被混用，但机理各不相同。
+
+\subsection{重定向}
+
+重定向只认识真正的文件（或文件描述符），有两种： \texttt{>}  把标准输出定向到文件（写）； \texttt{<} 把文件内容定向到标准输入（读）。
+\begin{lstlisting}[language=bash]
+echo "Hello, World!" > hello.txt   # 新建或覆盖文件
+cat < hello.txt                    # 把文件当输入
+\end{lstlisting}
+
+\subsection{管道}
+
+管道  \texttt{|}  在内核里创建一条匿名管道，让左边进程的标准输出直接成为右边进程的标准输入，两边同时运行。
+
+\begin{lstlisting}[language=bash]
+ls | grep "file"          # 边 ls 边 grep，流式处理
+\end{lstlisting}
+
+\subsection{ \texttt{Here-String} }
+
+ \texttt{<<< word} 是 Bash 的 here-string 语法，shell 会先把  \texttt{word}  的扩展结果写进一个临时文件（或匿名管道），再把该临时对象作为标准输入递给命令。因此它正好弥补了重定向只能读文件的不足。
+
+\begin{lstlisting}[language=bash]
+grep "file" <<< "$(ls)"   # 等价于 ls | grep "file"，但没用管道
+\end{lstlisting}
+
+ \texttt{Here-String} 和管道有一定的区别。管道是流式的，边产生边消费； \texttt{Here-String} 必须等整个字符串生成完才能开始消费。
+
+\subsection{进程替换}
+
+进程替换是一种“把命令输出/输入伪装成文件名”的 Bash 特性。 \texttt{<(cmd)}  把命令的标准输出绑定到一个命名管道（或  \texttt{/dev/fd/N} ），返回一个可读文件名； \texttt{>(cmd)}  则把命令的标准输入绑定到一个命名管道，返回一个可写文件名。对任何“只能读文件”的工具（`diff`、`cat`、`sort`…）来说，这就像凭空多了两个临时文件。
+
+\begin{lstlisting}[language=bash]
+diff <(cmd1) <(cmd2)      # 比较两条命令的输出，而无需临时落盘
+sort >(uniq > result.txt) # 把排序结果直接丢给 uniq
+\end{lstlisting}
+
+\subsection{变量与命令替换}
+
+ \texttt{\$(cmd)}  是“命令替换”，shell 会等待该命令执行结束，把它的全部标准输出当成一段文本收回来，可以赋给变量，也可以直接嵌入命令行。
+
+\begin{lstlisting}[language=bash]
+out=$(ls)                 # 把 ls 的输出存进变量
+grep "file" <<< "$out"    # 这里用 here-string 消费变量
+diff <(echo "$out") <(ls) # 用进程替换再比一次
+\end{lstlisting}
+
+ \texttt{\$(cmd)}  本身不是管道，也不是重定向。它只是“把命令输出变成字符串”的一种手段。
+
+\begin{table}[ht]\small
+  \centering
+  \begin{tabular}{llll}
+    \toprule
+    机制 & 数据形态 & 左侧何时开始 & 右侧何时开始 \\
+    \midrule
+     \texttt{cmd1 | cmd2}  & 管道字节流 & 立即 & 立即 \\
+     \texttt{cmd < file}  & 已有文件 & 立即 & - \\
+     \texttt{cmd <<< "\$str"}  & 临时文件 & 字符串生成完后 & 字符串生成完后 \\
+     \texttt{cmd <(cmd1)}  & 命名管道/FD & 立即 & 立即 \\
+     \texttt{str=\$(cmd1); cmd2 <<< "\$str"}  & 变量$\rightarrow$临时文件 & cmd1 结束后 & cmd1 结束后 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+掌握这些手法后，你就可以根据各种实际条件，灵活选择最简洁、最高效的写法。同时，这些写法也组成了 shell 脚本的基础：shell 脚本也仅仅比上述指令多出了变量赋值、流程控制和函数定义而已！
+
+
+
+
+\section{进阶：更好的终端}
+
+默认终端的界面比较简陋，不能显示很多信息。为了让终端更美观、更实用，我们可以使用一些终端美化工具，这里我推荐使用\textbf{Oh My Posh}和\textbf{Oh My Zsh}。
+
+\subsection{Oh My Posh 及其配置}
+
+Oh My Posh（简称OMP）是一个跨平台的终端美化工具，支持Windows、Linux和macOS等操作系统上的多个shell（如PowerShell、Bash、Zsh等）。它提供了丰富的主题和插件，可以帮助用户更好地使用终端，提高工作效率。
+
+\begin{tip}
+  在配置Oh My Posh的时候，很多的命令涉及到执行脚本。默认情况下，Windows PowerShell会阻止执行脚本以保护系统安全。因此，你需要先修改执行策略来允许执行脚本。在PowerShell中运行以下命令：
+\begin{lstlisting}[language=bash]
+  Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+\end{lstlisting}
+  就可以允许当前用户执行远程签名的脚本。
+\end{tip}
+
+我们建议使用winget来安装Oh My Posh。你可以在PowerShell中运行以下命令来安装：
+
+\begin{lstlisting}[language=bash]
+  winget install JanDeDobbeleer.OhMyPosh
+\end{lstlisting}
+
+安装完成后，你需要在PowerShell中运行以下命令来初始化Oh My Posh：
+\begin{lstlisting}[language=bash]
+  oh-my-posh init pwsh
+\end{lstlisting}
+
+如果你使用的是其他终端，例如cmd，你可以在Oh My Posh的\href{https://ohmyposh.dev/docs/installation/prompt}{安装文档}中找到相应的安装方法。
+
+要配置OMP，首先应该安装OMP推荐使用的字体，例如Nerd Font。这是因为Oh My Posh使用了一些特殊的图标，如果没有合适的字体，可能会导致图标无法正常显示。
+
+你可以在\href{https://www.nerdfonts.com/}{Nerd Fonts官网}下载最新的字体包。安装完成后，你需要在终端中设置字体为Nerd Font，以便能够正确显示Oh My Posh的图标。另一个办法是利用OhMyPosh安装这个字体：
+\begin{lstlisting}[language=bash]
+  oh-my-posh font install meslo
+\end{lstlisting}
+
+安装完成后，你需要在终端中设置字体为Nerd Font。以PowerShell为例，你可以右键点击窗口标题栏，选择“属性”，然后在“字体”选项卡中选择Nerd Font即可。
+
+为了保证Oh My Posh在每次启动PowerShell时都能自动加载，你需要将初始化命令添加到PowerShell的配置文件中。你可以在PowerShell中运行以下命令来打开配置文件：
+\begin{lstlisting}[language=bash]
+  notepad $PROFILE
+\end{lstlisting}
+
+然后在文件的末尾添加以下内容，并重新启动终端：
+\begin{lstlisting}[language=bash]
+  oh-my-posh init pwsh | Invoke-Expression
+\end{lstlisting}
+
+接下来，你可以在PowerShell中运行命令来设置Oh My Posh的主题了。\href{https://ohmyposh.dev/docs/themes}{其他主题}及\href{https://ohmyposh.dev/docs/installation/customize}{其安装方法}可自行查阅。例如使用 \texttt{powerlevel10k\_classic} 为主题：编辑Powershell配置文件，在文件末尾编辑 \texttt{oh-my-posh init pwsh --config 'powerlevel10k\_classic' | Invoke-Expression} ，重启终端后即可。
+
+\subsection{Oh My Zsh}
+
+Oh My Zsh 是一个开源的、社区驱动的框架，用于管理 Zsh 配置，一般简称为omz。它提供了大量的插件和主题，可以帮助用户更好地使用 Zsh，提高工作效率，其官网为\url{ohmyz.sh}。之所以使用omz，主要是因为zsh本身就是大多数人在Linux和macOS上使用的默认shell，功能强大且易于定制，而omz作为zsh的专用配置框架，显然比omp更适合zsh。
+
+安装、配置等内容请参考官网。
+
+omz最令人眼前一亮的是其插件系统，内置了大量实用的插件，可以极大地扩展zsh的功能。我个人非常喜欢自动补全和语法高亮两个插件。而著名的 \texttt{git} 和 \texttt{z} 我个人反而很少用，主要是因为在别处已经彻底习惯用git命令的正常形式了，连图形化界面都几乎不用；而 \texttt{z} 我个人觉得没有必要，毕竟我用得最多的目录也就那么几个，结合KDE桌面和Dolphin文件管理器完全足够快速访问。
+
+除此以外，starship也是一个非常不错的跨平台终端美化工具，支持Bash、Zsh、Fish等多种shell。其官网为\url{starship.rs}。安装和配置也非常简单，推荐一试。
+
+\subsection{使用其他工具}
+
+默认的软件（如ls、cat、top等）功能比较简单，界面也比较丑陋。为了让终端更美观、更实用，我们可以使用一些替代工具，这里推荐几个我个人常用的：
+\begin{itemize}
+    \item 用 \texttt{fd} 替代 \texttt{find} ： \texttt{fd} 是一个快速且用户友好的文件查找工具，支持正则表达式和模糊匹配等功能，使用起来比 \texttt{find} 更加简单和高效。
+    \item 用 \texttt{ripgrep} 替代 \texttt{grep} ： \texttt{ripgrep} 是一个快速且高效的文本搜索工具，支持正则表达式和多线程搜索等功能，使用起来比 \texttt{grep} 更加简单和高效。
+    \item 用 \texttt{bat} 替代 \texttt{cat} ： \texttt{bat} 是一个增强版的文本查看工具，支持语法高亮、行号显示等功能，使用起来比 \texttt{cat} 更加美观和易读。
+    \item 用 \texttt{htop} 替代 \texttt{top} ： \texttt{htop} 是一个交互式的进程管理工具，支持彩色显示、进程排序等功能，使用起来比 \texttt{top} 更加直观和易用。
+    \item 用 \texttt{exa} 替代 \texttt{ls} ： \texttt{exa} 是一个现代化的文件列表工具，支持彩色显示、图标显示等功能，使用起来比 \texttt{ls} 更加美观和易读。
+\end{itemize}
+
+当然，这些工具都需要单独安装。
