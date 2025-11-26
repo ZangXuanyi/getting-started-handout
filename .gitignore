@@ -9,3 +9,6 @@
 *.run.xml
 *.bcf
 *.synctex(busy)
+
+# minted cache
+_minted/

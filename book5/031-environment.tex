@@ -1,0 +1,79 @@
+\section[环境管理与配置]{环境管理与配置\protect\footnote{本节作者许亮，\faGithub\url{https://github.com/Liang-Psych}}}
+\label{sec:environment}
+
+在先前，我们已经知道了怎么用 Conda 来管理环境（见\ref{sec:conda}）。但这只是最基础的环境管理。实际上，“怎么管理环境”是一个非常重要且复杂的话题。
+
+我们经常会遇到一些经典场景：GitHub上的某个仓库，我们把它clone下来之后试图运行它，但完全无法运行。又例如，我们的代码在自己的笔记本上跑得完美无缺，但当你把它发给室友，或者提交给助教时，他们却告诉你：“跑不起来，报错了。”
+
+这时候我们肯定会叫屈：“明明在我的电脑上是好的啊！”实际上这也在程序员中有一个meme：It works on my machine!
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.6\textwidth]{meme/works-on-my-machine.jpg}
+    \caption{It works on my machine!}
+    \label{fig:works-on-my-machine}
+\end{figure}
+
+在工程中，这个不是理由，而是事故。这种事故的根源，几乎九成九来自环境问题。也就是说，你的代码依赖于某些环境，而这些环境在别人的电脑上并不存在，或者版本不对，导致代码无法运行。为了保证这些环境的一致性，一方面作为使用者，我们应当学会怎样复制别人的环境；另一方面作为包的发布者，我们也应当学会怎样把环境打包，方便别人复现。实际上这都属于\textbf{环境管理与配置}的范畴。
+
+本章我们将介绍一些常见的环境管理与配置的方法，帮助大家更好地管理和配置自己的开发环境，从而避免“it works on my machine”的尴尬局面。
+
+\subsection{什么是“环境”？}
+
+所谓的环境，不仅仅是“安装一个Python解释器”那么简单。环境包括了许多方面：
+\begin{description}
+    \item[解释器版本] 例如Python 3.8和Python 3.9就有一些不兼容的地方，如果你的代码使用了Python 3.9的新特性，那么在Python 3.8上就无法运行。
+    \item[第三方库] 例如你的代码依赖于numpy和pandas，如果别人的电脑上没有安装这些库，或者版本不对，那么代码就无法运行。
+    \item[系统级依赖] 部分底层库也是非常重要的，例如操作系统底层的C/C++运行时库（例如glibc）等。 
+\end{description}
+
+如果不加以管理，那么随着我们安装的库越来越多，那么整个电脑也会变成一个充满冲突的“依赖地狱”（dependency hell），其实很多大一新生的电脑都是这样的。
+
+为了解决这个问题，我们最终还是引入了“虚拟环境”（实际上这个东西我已经说过了！）
+
+\subsection{环境管理工具的进化}
+
+为了解决这些问题，人民群众发明了各种各样的环境管理工具。
+
+\paragraph{传统流派}
+\begin{enumerate}
+    \item conda：conda是数据科学领域的开山鼻祖，是一个最大的全家桶，能管理Python、R和C++的库。作为“开山鼻祖”级别的东西，其支持和功能都相当强大，但也因此显得极为笨重。其依赖解析速度非常缓慢，有时候安装一个包可能需要等上好几分钟，因此往往和pip等工具搭配使用。
+    \item mamba：mamba是conda的快速版本，其完美兼容了conda的生态，但速度要快得多。
+    \item micromamba：相比mamba，micromamba更小巧，是去掉了所有累赘的纯净版本，仅十几mb大小，而且依然能够管理系统级依赖。这是目前最轻量的虚拟环境管理工具之一。
+\end{enumerate}
+
+\paragraph{现代流派} 随着Rust\footnote{我没写过Rust，但Rust是类似C/C++的高性能编译型语言，旨在利用严格的语法限制来保证内存安全。虽然Rust牺牲了自由度、学习曲线相当陡，但大幅减少了内存相关的bug（如C/C++常见的数组越界、悬空指针等），且其性能也非常接近良好优化的C/C++代码。其另一个缺点是编译过程非常缓慢且占用大量内存（相比C），但这并不影响用它写出的包作为系统级工具的地位，只是不方便测试罢了。}的兴起，新一代的工具追求极致的性能和工程体验。
+\begin{enumerate}
+    \item uv：目前最快的Python包管理工具，但目前主要集中于Python，对其他方面的支持还不够完善。
+    \item Pixi：基于conda生态，但引入了现代工程理念（类似npm、cargo等），大幅提升了用户体验，是一个良好的“项目级别”管理工具。
+\end{enumerate}
+
+\subsection{新的意识：DevOps}
+
+在先前，我们教同学们使用conda来管理环境，实际上这也是最主流且最简单的做法之一。上述方法虽然也很新手友好，但不是很方便理解和使用。其根源问题在于：conda的\textbf{代码和环境相互分离}。这就导致了环境和代码之间的耦合性很差，容易出现“it works on my machine”的问题；另一方面，当我们删除代码时，环境往往会被遗留在系统中，导致系统变得臃肿。
+
+DevOps实际上就是上述问题的破局手段。这是一个非常重要的工程意识，翻译成中文就是“开发运维一体化”。它的核心思想是：\textbf{把代码和环境绑定在一起}，从而保证环境和代码的一致性。实际上在npm等现代包管理工具中，这个思想已经被广泛采用。而该思想的具体实现工具就是Pixi：
+\begin{description}
+    \item[项目即环境] 在 Pixi 的逻辑里，一个文件夹 = 一个项目 = 一个环境。当你运行 pixi init 时，环境配置直接生成在项目目录下。当你不再需要这个项目，直接删除文件夹，环境也随之消失，干干净净。这非常符合人类的直觉。 
+    \item[声明式配置] 以前的配置是“命令式的”，大概是：我们先打\verb|pip install numpy|，报错了再试图改版本，这个过程很难被其他人重复。而 Pixi 采用“声明式”的配置方式，你只需要写一个\verb|pixi.toml|，告诉 Pixi 你需要哪些包，Pixi 会自动帮你解决依赖并安装好一切。这样别人只需要拿到你的代码和\verb|pixi.yaml|，运行\verb|pixi install|就能复现你的环境。 
+    \item[契约精神] Pixi会生成一个\verb|pixi.lock|。这是一个“契约”，它锁定了所有包的具体版本，保证无论何时何地，只要有这个文件，就能复现完全一样的环境。这实际上也是Pixi的核心价值：只要把这整个项目发给别人，别人得到的环境肯定就是和我们一模一样的，彻底避免了“it works on my machine”的问题。
+\end{description}
+有关于Pixi怎么使用的问题，请参考官方文档。
+
+\subsection{最佳实践：micromamba+Pixi}
+
+为了兼顾日常的便利性和工程的严谨性，我们实际上建议采取上述两种工具的结合使用：使用 micromamba 来管理全局环境，使用 Pixi 来管理项目环境。这样既能保证系统的整洁，又能保证项目的可复现性。
+
+\paragraph{Base环境} 使用 micromamba 创建一个基础环境，安装一些常用的包，例如numpy、pandas、jupyter等。这个环境主要用于日常的实验和学习。这种环境不需要过于严谨，可以适当放宽版本要求，以便于快速迭代和实验。比如说，随便写点什么小脚本，或者跑一些临时的实验。
+
+\paragraph{项目环境} 对于每一个正式的项目，使用 Pixi 来创建一个独立的项目环境。这个环境应当严格指定所有依赖的版本，并且使用\verb|pixi.lock|来锁定版本。这样可以确保无论何时何地，只要有这个项目文件夹，就能复现完全一样的环境，避免“it works on my machine”的问题。大致上，运行下列几个命令：
+\begin{minted}{bash}
+mkdir my_project
+cd my_project # 这里是你的项目文件夹
+pixi init  # 初始化pixi项目
+# 编辑pixi.toml，添加你需要的依赖
+# 或者也可以命令式
+pixi add numpy pandas matplotlib
+pixi install  # 安装依赖
+\end{minted}
+然后提交作业或打包项目的时候连着\verb|pixi.toml|和\verb|pixi.lock|一起提交即可。这样别人只需要运行\verb|pixi install|就能复现你的环境。当我们习惯这套工作流之后，我们就已经不再是一个简单的“写代码的学生”，而是一个拥有工程思维的“准软件工程师”了。

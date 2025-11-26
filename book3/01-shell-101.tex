@@ -58,14 +58,14 @@ Shell是终端中的一个重要组件，它负责解释用户输入的命令并
 \subsection{命令的基本结构}
 
 一般情况下，一条命令满足以下结构：
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
 程序 [子命令] [选项] [对象]
-\end{lstlisting}
+\end{minted}
 
 其中，除了程序是必须的，其他的子命令、选项和对象都是可选的，选项和对象中有的顺序可以颠倒，有的则不行。例如，命令：
-\begin{lstlisting}
+\begin{minted}{bash}
 apt install git -y
-\end{lstlisting}
+\end{minted}
 这里的apt是一个程序（包管理器）；install是一个子命令，表示安装软件包；-y是一个选项，表示自动确认安装；git是一个对象，表示要安装的软件包名称。上述命令中，子命令install和对象git的位置是不能颠倒的，而选项-y的位置则可以放在子命令和对象的前后。
 
 \subsection{终端的基本操作}
@@ -106,11 +106,11 @@ apt install git -y
 
 另，上述命令虽然在Windows上的全称看起来很吓人，但是PowerShell支持命令别名，例如 \texttt{ls} 实际上就是 \texttt{Get-ChildItem} 的别名， \texttt{cp} 是 \texttt{Copy-Item} 的别名，等等。因此，我们可以直接使用这些简短的命令。要是实在不行，那还是老老实实用PowerShell里的全称吧。
 
-例如，“Windows聚焦”每天都会更新新的图片，例如风景、动物等，并将其作为锁屏背景或桌面背景。这些图片被缓存储在一个隐藏目录中，且没有扩展名。如果遇到特别喜欢的图片，可以把这些缓存提取出来，并批量加上扩展名：
-\begin{lstlisting}
-  Rename-Item -Path "Your\Path\Here\*" -NewName { $_.Name + ".jpg" } # Pwsh 风格
-  ren Your\Path\Here\* *.jpg # CMD 风格，一般Pwsh兼容
-\end{lstlisting}
+例如，“Windows聚焦”每天都会更新新的图片，例如风景、动物等，并将其作为锁屏背景或桌面背景。这些图片被缓存在一个隐藏目录中，且没有扩展名。如果遇到特别喜欢的图片，可以把这些缓存提取出来，并批量加上扩展名：
+\begin{minted}{powershell}
+Rename-Item -Path "Your\Path\Here\*" -NewName { $_.Name + ".jpg" } # Pwsh 风格
+ren Your\Path\Here\* *.jpg # CMD 风格，一般Pwsh兼容
+\end{minted}
 这样比起手动地一个个添加扩展名要方便得多。
 
 \section{常用终端命令行辞典}\label{sec:shell}
@@ -263,26 +263,26 @@ apt install git -y
 \subsection{重定向}
 
 重定向只认识真正的文件（或文件描述符），有两种： \texttt{>}  把标准输出定向到文件（写）； \texttt{<} 把文件内容定向到标准输入（读）。
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
 echo "Hello, World!" > hello.txt   # 新建或覆盖文件
 cat < hello.txt                    # 把文件当输入
-\end{lstlisting}
+\end{minted}
 
 \subsection{管道}
 
 管道  \texttt{|}  在内核里创建一条匿名管道，让左边进程的标准输出直接成为右边进程的标准输入，两边同时运行。
 
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
 ls | grep "file"          # 边 ls 边 grep，流式处理
-\end{lstlisting}
+\end{minted}
 
 \subsection{ \texttt{Here-String} }
 
  \texttt{<<< word} 是 Bash 的 here-string 语法，shell 会先把  \texttt{word}  的扩展结果写进一个临时文件（或匿名管道），再把该临时对象作为标准输入递给命令。因此它正好弥补了重定向只能读文件的不足。
 
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
 grep "file" <<< "$(ls)"   # 等价于 ls | grep "file"，但没用管道
-\end{lstlisting}
+\end{minted}
 
  \texttt{Here-String} 和管道有一定的区别。管道是流式的，边产生边消费； \texttt{Here-String} 必须等整个字符串生成完才能开始消费。
 
@@ -290,20 +290,20 @@ grep "file" <<< "$(ls)"   # 等价于 ls | grep "file"，但没用管道
 
 进程替换是一种“把命令输出/输入伪装成文件名”的 Bash 特性。 \texttt{<(cmd)}  把命令的标准输出绑定到一个命名管道（或  \texttt{/dev/fd/N} ），返回一个可读文件名； \texttt{>(cmd)}  则把命令的标准输入绑定到一个命名管道，返回一个可写文件名。对任何“只能读文件”的工具（`diff`、`cat`、`sort`…）来说，这就像凭空多了两个临时文件。
 
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
 diff <(cmd1) <(cmd2)      # 比较两条命令的输出，而无需临时落盘
 sort >(uniq > result.txt) # 把排序结果直接丢给 uniq
-\end{lstlisting}
+\end{minted}
 
 \subsection{变量与命令替换}
 
  \texttt{\$(cmd)}  是“命令替换”，shell 会等待该命令执行结束，把它的全部标准输出当成一段文本收回来，可以赋给变量，也可以直接嵌入命令行。
 
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
 out=$(ls)                 # 把 ls 的输出存进变量
 grep "file" <<< "$out"    # 这里用 here-string 消费变量
 diff <(echo "$out") <(ls) # 用进程替换再比一次
-\end{lstlisting}
+\end{minted}
 
  \texttt{\$(cmd)}  本身不是管道，也不是重定向。它只是“把命令输出变成字符串”的一种手段。
 
@@ -337,43 +337,43 @@ Oh My Posh（简称OMP）是一个跨平台的终端美化工具，支持Windows
 
 \begin{tip}
   在配置Oh My Posh的时候，很多的命令涉及到执行脚本。默认情况下，Windows PowerShell会阻止执行脚本以保护系统安全。因此，你需要先修改执行策略来允许执行脚本。在PowerShell中运行以下命令：
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
   Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-\end{lstlisting}
+\end{minted}
   就可以允许当前用户执行远程签名的脚本。
 \end{tip}
 
 我们建议使用winget来安装Oh My Posh。你可以在PowerShell中运行以下命令来安装：
 
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
   winget install JanDeDobbeleer.OhMyPosh
-\end{lstlisting}
+\end{minted}
 
 安装完成后，你需要在PowerShell中运行以下命令来初始化Oh My Posh：
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
   oh-my-posh init pwsh
-\end{lstlisting}
+\end{minted}
 
 如果你使用的是其他终端，例如cmd，你可以在Oh My Posh的\href{https://ohmyposh.dev/docs/installation/prompt}{安装文档}中找到相应的安装方法。
 
 要配置OMP，首先应该安装OMP推荐使用的字体，例如Nerd Font。这是因为Oh My Posh使用了一些特殊的图标，如果没有合适的字体，可能会导致图标无法正常显示。
 
 你可以在\href{https://www.nerdfonts.com/}{Nerd Fonts官网}下载最新的字体包。安装完成后，你需要在终端中设置字体为Nerd Font，以便能够正确显示Oh My Posh的图标。另一个办法是利用OhMyPosh安装这个字体：
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
   oh-my-posh font install meslo
-\end{lstlisting}
+\end{minted}
 
 安装完成后，你需要在终端中设置字体为Nerd Font。以PowerShell为例，你可以右键点击窗口标题栏，选择“属性”，然后在“字体”选项卡中选择Nerd Font即可。
 
 为了保证Oh My Posh在每次启动PowerShell时都能自动加载，你需要将初始化命令添加到PowerShell的配置文件中。你可以在PowerShell中运行以下命令来打开配置文件：
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
   notepad $PROFILE
-\end{lstlisting}
+\end{minted}
 
 然后在文件的末尾添加以下内容，并重新启动终端：
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
   oh-my-posh init pwsh | Invoke-Expression
-\end{lstlisting}
+\end{minted}
 
 接下来，你可以在PowerShell中运行命令来设置Oh My Posh的主题了。\href{https://ohmyposh.dev/docs/themes}{其他主题}及\href{https://ohmyposh.dev/docs/installation/customize}{其安装方法}可自行查阅。例如使用 \texttt{powerlevel10k\_classic} 为主题：编辑Powershell配置文件，在文件末尾编辑 \texttt{oh-my-posh init pwsh --config 'powerlevel10k\_classic' | Invoke-Expression} ，重启终端后即可。
 
