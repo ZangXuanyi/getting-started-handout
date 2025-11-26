@@ -814,7 +814,7 @@ namespace Rules
         }
         return true; // Path is clear
     }
-    bool try_move(Board &board, const Pos &start, const Pos &end, const Pos &obstacle, PlayerType player)
+    bool try_move(Board &board, const Pos &start, const Pos &end, PlayerType player)
     {
         CellType self = side_to_cell(player);
         if (board.get_cell(start) != self)
@@ -829,14 +829,18 @@ namespace Rules
             std::cout << "there is a obstacle in your move way\n";
             return false;
         }
-        if (!(path_clean(board, end, obstacle)))
-        {
-            std::cout << "there is a obstacle in your obstacle way\n";
-            return false;
-        }
 
         /* 真正执行 */
         board.move_piece(start, end, self);
+        return true;
+    }
+    bool try_shoot(Board& board, const Pos &piece, const Pos& obstacle)
+    {
+        if (!(path_clean(board, piece, obstacle)))
+        {
+            std::cout << "there is a obstacle in your shooting way\n";
+            return false;
+        }
         board.place_obstacle(obstacle);
         return true;
     }
@@ -860,13 +864,20 @@ namespace IO{
         }
     }
     
-    void read_move(Pos &start, Pos &end, Pos &obstacle)
+    void read_move(Pos &start, Pos &end)
     {
-        std::cout << "Enter your move (start_x start_y end_x end_y obstacle_x obstacle_y): ";
-        int sx, sy, ex, ey, ox, oy;
-        std::cin >> sx >> sy >> ex >> ey >> ox >> oy;
+        std::cout << "Enter your move (start_x start_y end_x end_y): ";
+        int sx, sy, ex, ey;
+        std::cin >> sx >> sy >> ex >> ey;
         start = {sx, sy};
         end = {ex, ey};
+    }
+
+    void read_obstacle(Pos &obstacle)
+    {
+        std::cout << "Enter your obstacle position (obstacle_x obstacle_y): ";
+        int ox, oy;
+        std::cin >> ox >> oy;
         obstacle = {ox, oy};
     }
 };
@@ -882,16 +893,15 @@ int main()
     while (1)
     {
         IO::print_board(game_map);
-        IO::read_move(start, end, obstacle);
-        if (Rules::try_move(game_map, start, end, obstacle, current_player))
-        {
-            std::cout << "Move successful!\n";
-            Rules::flip_player(current_player);
-        }
-        else
-        {
-            std::cout << "Invalid move, try again.\n";
-        }
+
+        do{
+            IO::read_move(start, end);
+        }while(!Rules::try_move(game_map, start, end, current_player));
+
+        do{
+            IO::read_obstacle(obstacle);
+        }while(!Rules::try_shoot(game_map, end, obstacle));
+        Rules::flip_player(current_player);
     }
 }
 \end{lstlisting}
@@ -909,38 +919,55 @@ int main()
 
 例如，\lstinline[language=C++]|Rules::try_move|函数：
 \begin{lstlisting}
-void try_move(Board &board, const Pos &start, const Pos &end, const Pos &obstacle, PlayerType player)
+void try_move(Board &board, const Pos &start, const Pos &end, PlayerType player)
 {
     CellType self = side_to_cell(player);
     if (board.at(start) != self)
         throw std::invalid_argument("You are trying to move a piece that is not yours or that does not exist.");
     if (!(path_clean(board, start, end)))
         throw std::invalid_argument("There is an obstacle in your moving way.");
-    if (!(path_clean(board, end, obstacle)))
-        throw std::invalid_argument("There is an obstacle in your shooting way.");
 
     /* 真正执行 */
     board.move_piece(start, end, self);
-    board.place_obstacle(obstacle);
     return;
 }
 \end{lstlisting}
 然后在主函数中捕获异常：
 \begin{lstlisting}[language=C++]
-try
+// IO中增加一个print_error函数
+void print_error(const std::exception &e)
 {
+    std::cerr << "Error: " << e.what() << std::endl;
+    std::cerr << "Please try again." << std::endl;
+}
+
+// C++中没有try-until-success的语法糖，我们可以自己写一个模板函数来实现这个功能
+// 最好不要在主函数中直接while(true){try{}catch{}}，这会使得主要函数变得臃肿不堪
+// 因此我们写一个模板函数 retry 来封装这个逻辑
+template <class F>
+auto retry(F&& f) -> decltype(f()) // 根据调用自动推导返回值类型
+{
+    while (true) {
+        try { return f(); } // 尝试调用 f，如果成功则返回结果
+        catch (const std::exception& e) { IO::print_error(e); } // 如果抛出异常，则捕获并打印错误信息
+    }
+} // 这里没有std::forward，因为我们不需要转交f，而是直接调用它，因此不必搞完美转发
+
+// 主函数中改为这样
+while(game){
     IO::print_board(game_map);
-    IO::read_move(start, end, obstacle);
-    Rules::try_move(game_map, start, end, obstacle, current_player);
+    retry([&]{
+        IO::read_move(start, end);
+        Rules::try_move(game_map, start, end, current_player);
+    }); // 用Lambda表达式把多个待调用对象包成一个，实际上这一行是retry(lambda)。
+    retry([&]{
+        IO::read_obstacle(obstacle);
+        Rules::try_shoot(game_map, end, obstacle);
+    });
     Rules::flip_player(current_player);
 }
-catch (const std::exception &e)
-{
-    std::cerr << e.what() << std::endl;
-    std::cout << "Please try again." << std::endl;
-}
 \end{lstlisting}
-当然，这样的抛出引用还是太简单了，在实际工程中，我们一般习惯于这样做：
+当然，这样的抛出异常还是太简单了，在实际工程中，我们一般习惯于这样做：
 \begin{lstlisting}[language=C++]
 class MoveError : public std::runtime_error
 {
@@ -953,11 +980,11 @@ class MoveError : public std::runtime_error
 \paragraph{边界检查} 
 边界检查主要需要在读取玩家输入时进行。我们可以检查输入的位置是否在棋盘范围内，如果不在则抛出异常。例如，在\lstinline[language=C++]|IO::read_move|函数中：
 \begin{lstlisting}
-void read_move(Pos &start, Pos &end, Pos &obstacle)
+void read_move(Pos &start, Pos &end)
 {
-    std::cout << "Enter your move (start_x start_y end_x end_y obstacle_x obstacle_y): ";
-    int sx, sy, ex, ey, ox, oy;
-    std::cin >> sx >> sy >> ex >> ey >> ox >> oy;
+    std::cout << "Enter your move (start_x start_y end_x end_y): ";
+    int sx, sy, ex, ey;
+    std::cin >> sx >> sy >> ex >> ey;
     auto lambda = [](int val)
     { return val >= 0 && val < Board::get_size(); };
     if (std::cin.fail())
@@ -966,7 +993,7 @@ void read_move(Pos &start, Pos &end, Pos &obstacle)
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // discard invalid input
         throw std::invalid_argument("Invalid input format. Please enter integers only.");
     }
-    else if (!(lambda(sx) && lambda(sy) && lambda(ex) && lambda(ey) && lambda(ox) && lambda(oy)))
+    else if (!(lambda(sx) && lambda(sy) && lambda(ex) && lambda(ey)))
     {
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -974,7 +1001,6 @@ void read_move(Pos &start, Pos &end, Pos &obstacle)
     }
     start = {sx, sy};
     end = {ex, ey};
-    obstacle = {ox, oy};
 }
 \end{lstlisting}
 其实上述代码中读进引用也并不是特别好的设计，最好是返回一个结构体或者元组，避免引用带来的副作用。不过这里就不改了，再改就太复杂了。

@@ -5,7 +5,7 @@
 %---------- 常用宏包 ----------
 \usepackage{geometry}
 \geometry{b5paper, margin=0.5in}
-\usepackage{amssymb,amsmath}
+\usepackage{amssymb,amsmath,amsthm}
 \usepackage{fontspec}
 \usepackage{xeCJK}
 \usepackage{graphicx}
@@ -135,6 +135,12 @@
   fontupper    = \small,
   before upper = {\setlength{\parindent}{2em}}%
 }
+
+\newtheorem{theorem}{\indent 定理}
+\newtheorem{lemma}[theorem]{\indent 引理}
+\newtheorem{proposition}[theorem]{\indent 命题}
+\newtheorem{corollary}[theorem]{\indent 推论}
+\newtheorem{definition}{\indent 定义}
 
 %---------- 标题信息 ----------
 \title{\Huge\textbf{北京大学计算机基础能力手册}}

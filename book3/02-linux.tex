@@ -48,11 +48,11 @@ Linux内核采用了GPL协议，这使得任何人都可以自由地使用、修
     \bottomrule
     \endlastfoot
 
-    Ubuntu\faUbuntu & 用户友好，社区活跃 & 两年 & Linux新手，桌面用户 \\
+    Ubuntu & 用户友好，社区活跃 & 两年 & Linux新手，桌面用户 \\
     Debian & 稳定，软件包丰富 & 两年 & 服务器等生产环境 \\
-    Fedora\faFedora & 最新技术，社区驱动 & 半年 & 开发者，技术爱好者 \\
-    RHEL \faRedhat& 商业支持，稳定 & 三年 & 企业用户，服务器 \\
-    CentOS\faCentos & RHEL的免费版本 & 死了 & 企业用户，服务器 \\
+    Fedora & 最新技术，社区驱动 & 半年 & 开发者，技术爱好者 \\
+    RHEL & 商业支持，稳定 & 三年 & 企业用户，服务器 \\
+    CentOS & RHEL的免费版本 & 死了 & 企业用户，服务器 \\
     Arch & 滚动更新，极简 & 以天计 & 高级用户，DIY爱好者 \\
     NixOS & 声明式配置，原子升级 & 以天计 & 高级用户，系统管理员 \\
     Rocky & Cent的复活版本 & 三年 & 企业用户，服务器 \\
@@ -67,6 +67,12 @@ Linux内核采用了GPL协议，这使得任何人都可以自由地使用、修
   \end{longtable}
 \end{small}
 
+\begin{tip}
+  现在的CentOS实际上已经被RHEL官方收编并停止维护了，CentOS被收编后的名称叫做CentOS Stream，定位是RHEL的上游测试版。
+
+  另一方面，Alma和Rocky虽然均声称是CentOS的复活版、RHEL的复刻、两者行为基本一致，但也有细微的差别：Alma兼容RHEL的ABI\footnote{ABI：Application Binary Interface，应用二进制接口，是指程序在运行时与操作系统之间的接口规范。}，声称其软件通用，但不承诺代码完全一致，因此其补丁有些时候甚至比RHEL还快24小时；Rocky则是CentOS的“精神继承者”，承诺与RHEL完全一致，但获取源码的路径比较曲折。
+\end{tip}
+
 上述发行版是相对常见的Linux发行版。其中，最出圈的发行版莫过于Ubuntu了，有不少人甚至直接将Ubuntu和Linux划等号（这实际上是不对的）。Ubuntu拥有着庞大的用户群体和丰富的软件资源，非常适合初学者入门。
 
 对于什么都不会的小白而言，我们推荐使用Ubuntu、Mint、Manjaro等用户友好的发行版；如果你愿意折腾，可以尝试Arch、Gentoo等极简主义的发行版；如果你要玩服务器，可以选择Debian、RHEL、CentOS（或其复活版本Rocky、Alma）等稳定的发行版；如果你对网络安全感兴趣，可以尝试Kali等专用发行版。
@@ -75,7 +81,7 @@ Linux内核采用了GPL协议，这使得任何人都可以自由地使用、修
   Linux大致可以分为以下几个“家族”：
   \begin{itemize}
     \item Debian系：包括Debian、Ubuntu、Mint等，特点是稳定，软件包丰富，适合新手和服务器。
-    \item Red Hat系：包括Fedora、RHEL、CentOS、Rocky、Alma等，特点是商业支持，稳定，适合企业用户和服务器。其软件生态又以RHEL为核心，因此也叫做“红帽生态”，具体流程是最新技术给Fedora测试，稳定后给RHEL使用，RHEL再给CentOS等衍生版使用。
+    \item Red Hat系：包括Fedora、RHEL、CentOS、Rocky、Alma等，特点是商业支持，稳定，适合企业用户和服务器。其软件生态又以RHEL为核心，因此也叫做“红帽生态”，具体流程是：Fedora激进上游 $\rightarrow$ CentOS Stream中游测试 $\rightarrow$ RHEL稳定版商业支持 $\rightarrow$ Rocky/Alma下游免费替补。
     \item Arch系：包括Arch、Manjaro等，特点是滚动更新，极简，适合高级用户和DIY爱好者。
     \item 其他系。
   \end{itemize}
