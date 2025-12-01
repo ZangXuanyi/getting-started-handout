@@ -4,6 +4,8 @@
 
 数据结构，也就是STL中的“容器”部分，是算法的基础。本章就来探讨一下数据结构的相关内容。
 
+有的数据结构理解起来比较复杂，我们推荐一个\href{https://www.cs.usfca.edu/~galles/visualization/Algorithms.html}{网站}，该网站可以可视化地展示各种数据结构的操作过程，帮助理解。
+
 \section{线性数据结构}
 
 \subsection{顺序表}
@@ -18,7 +20,14 @@ std::array<int, 10>;  // C++风格的顺序表
 
 顺序表的优点在于它的内存是连续的，所以可以通过下标快速访问任意位置的元素，时间复杂度为$O(1)$。但是它的缺点也很明显，那就是在中间的插入和删除操作需要移动大量元素，时间复杂度为$O(n)$。
 
-那么，\lstinline[language=C++]|std::vector<T>|是个什么东西呢？它也是顺序表吗？实际上，这东西也是顺序表，但它的实现方式更复杂一些。它会预留一部分内存空间，当需要插入元素时，如果当前容量不够，它会分配一块更大的内存空间，然后把原来的数据拷贝过去，再插入新的元素。这样做的好处是，\lstinline[language=C++]|std::vector<T>|在大多数情况下在末尾插入和删除元素的时间复杂度是$O(1)$，只有在需要扩容的时候才是$O(n)$；而在中间插入和删除元素的时间复杂度仍然是$O(n)$。
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.6\textwidth]{data-structure/seqtable.png}
+    \caption{顺序表的插入操作示意图}
+\end{figure}
+由此图可见，顺序表的插入需要先把插入位置之后的所有元素向后移动一位，然后再插入新元素。这导致插入非常缓慢，尤其是在顺序表较大时。
+
+那么，\lstinline[language=C++]|std::vector<T>|是个什么东西呢？实际上，这东西也是顺序表，但它的实现方式更复杂一些。它会预留一部分内存空间，当需要插入元素时，如果当前容量不够，它会分配一块更大的内存空间，然后把原来的数据拷贝过去，再插入新的元素。这样做的好处是，\lstinline[language=C++]|std::vector<T>|在大多数情况下在末尾插入和删除元素的时间复杂度是$O(1)$，只有在需要扩容的时候才是$O(n)$；而在中间插入和删除元素的时间复杂度仍然是$O(n)$。
 
 \subsection{链表}
 
@@ -53,6 +62,12 @@ p->next = newNode;
 \end{lstlisting}
 请试着完成删除节点的代码。
 
+单向链表的插入可用以下图解来理解：
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.6\textwidth]{data-structure/chain-insert.png}
+\end{figure}
+
 链表的优点在于插入和删除操作的时间复杂度为$O(1)$，只需要修改指针即可；但缺点是访问任意位置的元素需要从头开始遍历，时间复杂度为$O(n)$。因此，在根据索引寻找要插入或删除的元素时，虽然插入和删除本身是$O(1)$，但寻找元素的过程仍然是$O(n)$。
 
 \paragraph{双向链表}
@@ -80,6 +95,12 @@ newNode->prev = p;
 p->next->prev = newNode;
 p->next = newNode;
 \end{lstlisting}
+
+双向链表的插入可用以下图解来理解：
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.6\textwidth]{data-structure/chain2-insert.png}
+\end{figure}
 
 在C++标准库中，\lstinline[language=C++]|std::list<T>|就是一个双向链表的实现。我们不要自己试图实现一个链表，直接使用标准库中的实现即可。
 
@@ -133,7 +154,29 @@ dq.pop_back();      // 删除尾部元素
 \end{lstlisting}
 双端队列结合了栈和队列的特点，允许在两端进行操作，适用于需要频繁在两端插入和删除元素的场景。
 
-有的同学可能会疑惑：为什么有了顺序表和链表，还需要栈和队列呢？这是因为栈和队列是对数据结构的抽象，提供了特定的操作接口，方便我们在特定场景下使用。例如，在函数调用时使用栈来保存返回地址，在任务调度时使用队列来管理任务顺序。如果自己维护一个顺序表或链表来实现栈或队列，代码会变得复杂且容易出错。
+有的同学可能会疑惑：为什么有了顺序表和链表，还需要栈和队列呢？这是因为栈和队列是对数据结构的抽象，提供了特定的操作接口，方便我们在特定场景下使用。例如，在函数调用时使用栈来保存返回地址，在任务调度时使用队列来管理任务顺序。如果自己维护一个顺序表或链表来实现栈或队列，代码会变得复杂且容易出错。非常常见的两个用法，一个是用栈来替代递归函数，另一个是用队列来实现广度优先搜索（BFS）算法（见后续章节）。下面是一个用栈替代递归函数的例子：
+\begin{lstlisting}[language=C++, title={用stack替代递归函数}]
+void recursiveFunction(int n) {
+    if (n <= 0) return;
+    // 处理当前节点
+    recursiveFunction(n - 1);
+    // 处理返回时的操作
+} // 普通的递归函数
+
+void iterativeFunction(int n) {
+    std::stack<int> s;
+    s.push(n);
+    while (!s.empty()) {
+        int current = s.top();
+        s.pop();
+        if (current <= 0) continue;
+        // 处理当前节点
+        s.push(current - 1);
+        // 处理返回时的操作
+    }
+} // 用栈实现的迭代函数
+\end{lstlisting}
+那为什么要这么做呢？实际上，递归在底层上本来就是用栈来实现的。如果递归程度过深，则导致栈溢出，俗称“爆栈”。因此，在某些情况下，使用显式的栈来替代递归函数，可以在一定程度上避免栈溢出的问题，也可以更好地控制内存使用。把裸递归写成栈是一种非常常见的技巧，工程上也经常会用到。
 
 但栈和队列也有一些不太好的地方，就是无法在中间访问，即使是简单的查询操作也不行。如果需要频繁在中间访问元素，还是需要使用顺序表或链表。
 
@@ -166,7 +209,7 @@ struct TreeNode {
     \item[高度] 树中节点的最大深度。 
 \end{description}
 
-树的操作包括插入、删除、遍历等。
+树的操作包括插入、删除、遍历等。一般情况下，对于一棵树，我们往往用其根节点来称呼整棵树。
 
 树的插入操作通常是将新节点添加为某个节点的子节点。例如，向节点p插入一个新节点newNode：
 \begin{lstlisting}[language=C++]
@@ -174,7 +217,7 @@ p->children.push_back(newNode);
 newNode->father = p; // 设置父节点指针
 \end{lstlisting}
 
-树的删除包括删除叶节点和删除内部节点两种情况，删除内部节点时需要考虑如何处理其子节点。因此很少直接删除树节点，更多的是标记节点为删除状态。
+树的删除包括删除叶节点和删除内部节点两种情况，删除内部节点时需要考虑如何处理其子节点。因此很少直接删除树节点，更多的是标记该节点不再使用。
 
 而树的遍历（周游）有两种策略：深度优先遍历（Depth-First Search, DFS）和广度优先遍历（Breadth-First Search, BFS）。深度优先遍历又分为前序遍历、中序遍历和后序遍历三种方式。我们以下面这棵树为例：
 \begin{lstlisting}
@@ -204,6 +247,26 @@ void preOrderTraversal(std::shared_ptr<TreeNode> node) {
     }
 }
 \end{lstlisting}
+
+当然也可以用栈来写，但是入栈的过程应该是\textbf{逆向压栈}，即先压右子节点，再压左子节点，这样出栈时才能保证左子节点先被访问。
+\begin{lstlisting}[language=C++]
+#include <stack>
+void preOrderTraversalIterative(std::shared_ptr<TreeNode> root) {
+    if (!root) return;
+    std::stack<std::shared_ptr<TreeNode>> s;
+    s.push(root);
+    while (!s.empty()) {
+        auto node = s.top();
+        s.pop();
+        std::cout << node->data << " "; // 访问节点
+        // 逆向压栈
+        for (auto it = node->children.rbegin(); it != node->children.rend(); ++it) {
+            s.push(*it);
+        }
+    }
+}
+\end{lstlisting}
+其他DFS写成栈的形式就不再赘述了，这里留作练习。
 
 \paragraph{中序遍历} 中序遍历只能用于二叉树这种有明显的“左子树”和“右子树”概念的树。中序遍历指的是：先访问左子树，再访问根节点，最后访问右子树。对于上面的树，我们写一下过程：
 \begin{itemize}

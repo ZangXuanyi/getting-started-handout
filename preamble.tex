@@ -22,6 +22,7 @@
 \usepackage{url}
 \usepackage{nameref}
 \usepackage{xeCJKfntef}
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
 \usepackage{metalogo}
 \usepackage{hyperref}
 \usepackage{fontawesome5}
@@ -38,14 +39,15 @@
 %---------- 列表、代码、脚注 ----------
 \setlist{nosep}
 \lstset{
-  basicstyle=\ttfamily\footnotesize,
+  basicstyle=\ttfamily\small,
   keywordstyle=\color{blue},
   commentstyle=\color{green!50!black},
   stringstyle=\color{red},
-  numbers=left,numberstyle=\tiny\color{gray},stepnumber=1,numbersep=5pt,
+  numbers=left,numberstyle=\small\color{gray},stepnumber=1,numbersep=5pt,
   backgroundcolor=\color{white},
   showspaces=false,showstringspaces=false,breaklines=true,frame=single
 }
+\SetAlFnt{\small}
 
 \let\oldnameref\nameref
 \renewcommand{\nameref}[1]{%
