@@ -422,7 +422,7 @@ gedit test.txt
 一般可能遇到以下问题：
 \begin{itemize}
   \item apt龟速：换源，见上文。当然也可能是没有 \texttt{sudo apt update} 导致的。
-  \item 内存\footnote{指的是RAM！}爆炸：WSL默认分配给Linux的内存是无限制的，会根据需要动态增长，但不会自动释放。对此，你需要建立一个文件： \texttt{\~/.wslconfig} ，内容如下：
+  \item 内存\footnote{指的是RAM！}爆炸：WSL默认分配给Linux的内存是无限制的，会根据需要动态增长，但不会自动释放。对此，你需要建立一个文件： \texttt{\~{}/.wslconfig} ，内容如下：
 \begin{lstlisting}
 [wsl2]
 memory=4GB # 限制最大内存为4GB，当然一般会更大一些
