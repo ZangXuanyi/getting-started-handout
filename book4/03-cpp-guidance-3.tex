@@ -299,15 +299,95 @@ std::ranges::for_each(vec, [](auto& x) { x += 1; });
   \item \textbf{零拷贝是默认策略，拷贝必须有理由}：从slurp到字符串视图，从传值到传引用，本质上说的一个事：把数据移动降级成指针移动，除非profiler说“不行”，否则不要轻易拷贝数据。
 \end{itemize}
 
+所以说，现在的C++，以下代码:
+
+\begin{lstlisting}[language=C++]
+// All nececssary includes
+
+constexpr std::array<int, 5> data = {1, 2, 3, 4, 5};
+
+void print0() { // C++11 style
+    for (const auto& value : data) {
+        std::cout << value << " ";
+    }
+    std::cout << std::endl;
+}
+
+void print1() { // C++11 with std::for_each
+    std::for_each(data.begin(), data.end(), [](int value) {
+        std::cout << value << " ";
+    });
+    std::cout << std::endl;
+}
+
+void print2() { // C++20 with ranges
+    std::ranges::for_each(data, [](int value) {
+        std::cout << value << " ";
+    });
+    std::cout << std::endl;
+}
+
+void print3() { // C++20 with ranges and views
+    auto view = data | std::views::all;
+    for (const auto& value : view) {
+        std::cout << value << " ";
+    }
+    std::cout << std::endl;
+}
+\end{lstlisting}
+
+实际上\textbf{编译器激进优化}的情况下，这四者的汇编行数\textbf{完全相同}，因为编译器已经把它们都优化成了同样的机器码：51行，一行不多，一行不少。在更加复杂的情况下，高级抽象可能确实要多几行，但也不会多太多——当然，前提是你正确地使用了这些抽象，而不是滥用或错用。
+
 \subsection{再回看 Fake C++}
 
 于是，我们再把眼光放回到Fake C++中，或者C++03时代中的代码：\textbf{它们从来不是真正的 Fake C++，而是时代约束下的局部最优解}。
 
-真正的原罪只有一条：\textbf{明明约束条件已经改变，但仍然抱残守缺、固步自封、把旧的局部最优当成新的全剧最优}。如果你维护的是老库，那 \texttt{vector<char>} 是好的，接着用；但你要是在2025年写新服务，却因为同样的理由拒绝用 \texttt{ranges} 甚至拒绝 \texttt{string}，那这就是问题了。
+真正的原罪只有一条：\textbf{明明约束条件已经改变，但仍然抱残守缺、固步自封、把旧的局部最优当成新的全局最优}。如果你维护的是老库，那 \texttt{vector<char>} 是好的，接着用；但你要是在2025年写新服务，却因为同样的理由拒绝用 \texttt{ranges} 甚至拒绝 \texttt{string}，那这就是问题了。
 
-现代C++程序员的手里应该始终有一把锤子（Fake C++），但更应该有一整套电动工具（现代C++特性）。什么时候用锤子，什么时候用电钻，什么时候用激光切割机，全凭你对约束的理解和对工具的熟练程度；我们应该知道，从手写循环到ranges之间，每一级抽象背后的代价和收益；我们更应该知道，在当前需求、硬件、团队、编译器四维空间里，什么才是最优解。
+现代C++程序员的手里应该始终有一把锤子（Fake C++），但更应该有一整套电动工具（现代C++特性）。什么时候用锤子，什么时候用电钻，什么时候用激光切割机，全凭你对约束的理解和对工具的熟练程度；我们应该知道，从手写循环到ranges之间，每一级抽象背后的代价和收益；我们更应该知道，在当前需求、硬件、团队、编译器四维空间这一线性规划下的最优解。
 
 把这两套工具永远对立起来，只会让我们停滞不前，错失良机；不管黑猫白猫，抓到老鼠就是好猫，只要能做到以上两点，不管你写的是20年前的 \texttt{getline}，还是20年后的 \texttt{std::views::split}，那都是真正的C++：因为你让编译器在当前约束下，帮你写出了最优雅、最安全、最可维护、代价最低的代码。
+
+\subsection{相信编译器}
+
+而在最后，我想要跟读者强调的一点是，\textbf{相信编译器}。
+
+不懂C++的人写一段代码可能是这样写的：
+\begin{lstlisting}[language=C++]
+std::vector<int> foo(int i){
+    std::vector<int> v{};
+    // some code
+    return v;
+}
+\end{lstlisting}
+
+半懂不懂的人写一段代码可能是这样写的：
+\begin{lstlisting}[language=C++]
+inline ::std::vector<int> foo(const int& i){
+    ::std::vector<int> v{};
+    // some code
+    return std::move(v);
+}
+\end{lstlisting}
+
+而真正懂C++的人写一段代码可能还是这样写的：
+\begin{lstlisting}[language=C++]
+std::vector<int> foo(int i){
+    std::vector<int> v{};
+    // some code
+    return v;
+}
+\end{lstlisting}
+
+大家一看：怎么又回到原点了？其实不然，实际上这就是“看山是山”“看山不是山”“看山还是山”的区别。真正懂C++的人知道，现代C++编译器已经足够聪明。我们来看看那个“半懂不懂”的人究竟犯了什么错误：
+\begin{itemize}
+    \item \lstinline[language=C++]|inline| 多余，编译器会自动决定是否内联，一般小函数才需要显式inline。而在激进优化下，所有的函数都是内联的，此举更是多余。
+    \item \lstinline[language=C++]|const int&| 无用，因为\lstinline[language=C++]|int| 本身就是小类型，传引用反而增加了间接寻址开销，更慢。另一方面，这里是\textbf{传值}，肯定不会修改实参，没必要加\lstinline[language=C++]|const|（当然这个加了也不会影响性能和正确性）。
+    \item \lstinline[language=C++]|::std::vector<int>| 多余，全局命名空间前缀没必要，除非你在写头文件并且担心命名冲突，但这肯定不是头文件。
+    \item \lstinline[language=C++]|std::move(v)| 错误，因为这里的\lstinline[language=C++]|v|是一个局部变量，返回时会触发\textbf{返回值优化}（RVO），编译器会直接在调用者的栈帧上构造返回值，根本不会发生拷贝或移动操作。强制使用\lstinline[language=C++]|std::move|反而会阻止RVO的发生，导致不必要的移动开销。
+\end{itemize}
+
+所以，\textbf{相信编译器}，让编译器帮你做它该做的事，而不是试图去“优化”编译器已经优化过的东西，这才是现代C++程序员的正确姿势。只有在perf出现瓶颈时，我们才需要考虑手动优化，否则请相信编译器的优化能力。
 
 \section{解剖和验证：ranges 真的免费吗？}
 

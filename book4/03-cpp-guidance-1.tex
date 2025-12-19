@@ -225,6 +225,81 @@ int main(){
   综上所述，虽然手动维护缓冲区在某些情况下可能会有一些性能优势，但是这种优势并不值得我们为之付出安全性、可读性和可维护性的代价。这就是工程代码为了安全、可读、可维护而牺牲性能的一个典型例子；另一方面，可以看到竞赛思维和工程思维有显著的差异，不能够混为一谈。
 \end{caution}
 
+\begin{tip}
+    在C++中，除\verb|std::cout|，还有\verb|std::cerr|和\verb|std::clog|两个流对象用于错误输出和日志输出。它们的用法和\verb|std::cin|、\verb|std::cout|类似，但有一些区别：
+    \begin{itemize}
+        \item \verb|cout|是\textbf{行缓冲}的，也就是缓冲到换行符或缓冲区满才输出，可以重定向到文件或其他设备（例如\verb|./program > file|），一般用于正常输出，关联的设备是标准输出设备（stdout）。
+        \item \verb|cerr|是\textbf{无缓冲}的，也就是每次输出都会立即显示，不会缓冲，常用作错误信息的输出。其关联的设备也不是标准输出设备，而是标准错误设备（stderr）。重定向方式例如\verb|./program 2> error.log|，其中\verb|2>|表示重定向标准错误输出。
+        \item \verb|clog|是\textbf{全缓冲}的，也就是缓冲区满才输出，可以重定向到文件或其他设备，一般用于日志信息的输出。虽然该流对象也关联标准错误设备（stderr），但其行为更像\verb|cout|。重定向方式同\verb|cerr|。
+    \end{itemize}
+\end{tip}
+
+\subsection{利用文件流进行文件读写}
+
+在C语言的章节中，我们已经知道，可以使用\verb|FILE|结构体的指针来操作文件。但是这种操作有一定弊病：需要手动管理文件指针，容易出错。虽然智能指针能够部分解决手动管理文件指针的麻烦，但C++提供了更好的文件操作方式：文件流（file stream）。
+
+文件流和输入输出流类似，也是一个流对象。文件流有两个：\lstinline[language=C++]|std::ifstream|用于从文件读取数据，\lstinline[language=C++]|std::ofstream|用于向文件写入数据，分别对应标准输入输出的\lstinline[language=C++]|std::cin|和\lstinline[language=C++]|std::cout|。这两个流对象提供了和标准输入输出流类似的操作方法，例如使用\texttt{>>}和\texttt{<<}运算符进行读写操作。
+
+下面是一个简单的例子，演示如何使用文件流读取和写入文件：
+\begin{lstlisting}[language=C++]
+#include <iostream> 
+#include <fstream>  // 引入文件流库
+
+int main(){
+    std::ifstream infile("input.txt"); // 打开输入文件
+    std::ofstream outfile("output.txt"); // 打开输出文件，默认是覆盖模式
+    int a, b;
+    infile >> a >> b; // 从输入文件读取数据
+    outfile << "Sum: " << (a + b) << std::endl; // 向输出文件写入数据
+    infile.close(); // 关闭输入文件
+    outfile.close(); // 关闭输出文件
+    return 0;
+}
+\end{lstlisting}
+在上述代码中，“读取”和“写入”两个操作被分成两个流对象而不是一个文件。这是因为C++的OOP思想，每一个对象仅负责一个职责。另，在这里也可以看出，文件流应当\textbf{自行定义}，而不是已经定义好的\lstinline[language=C++]|std::cin|和\lstinline[language=C++]|std::cout|。
+
+\lstinline[language=C++]|ofstream|默认是覆盖模式打开文件的，如果想要以追加模式打开文件，可以使用以下方式：
+\begin{lstlisting}[language=C++]
+std::ofstream outfile("output.txt", std::ios::app); // 以追加模式打开输出文件
+\end{lstlisting}
+
+当然，也可以使用一个统一的文件流对象来同时进行读写操作，这时需要使用\lstinline[language=C++]|std::fstream|类，但这时候需要指定读写模式：
+\begin{lstlisting}[language=C++]
+std::fstream file("data.txt", std::ios::in | std::ios::out); // 以读写模式打开文件
+\end{lstlisting}
+
+我们有这些读写模式可以使用：
+\begin{itemize}
+  \item \texttt{std::ios::in} ：以读模式打开文件。
+  \item \texttt{std::ios::out} ：以写模式打开文件。
+  \item \texttt{std::ios::app} ：以追加模式打开文件，写入的数据会追加到文件末尾。
+  \item \texttt{std::ios::ate} ：打开文件后将文件指针移动到文件末尾，可以用于读写操作。
+  \item \texttt{std::ios::trunc} ：如果文件已存在，则在打开时将其内容截断为0长度。
+  \item \texttt{std::ios::binary} ：以二进制模式打开文件，而不是文本模式。这一手段打开的文件能够避免字符转换。
+\end{itemize}
+这些读写模式实际上都是独热编码，也正因此，我们可以使用按位或运算符（\texttt{|}）来组合多个模式。
+
+\subsection{文件的其他操作}
+
+在C语言中，我们能够使用\verb|remove|等函数来对文件和目录进行操作。在C++中也有类似的功能，位于\texttt{<filesystem>}头文件中。这个头文件在C++17中引入，提供了一些用于文件和目录操作的类和函数。 下面是一些常用的文件操作函数：
+\begin{itemize}
+  \item \texttt{std::filesystem::remove(path)} ：删除指定路径的文件或目录。
+  \item \texttt{std::filesystem::rename(old\_path, new\_path)} ：重命名文件或目录。
+  \item \texttt{std::filesystem::copy(source, destination)} ：复制文件或目录。
+  \item \texttt{std::filesystem::create\_directory(path)} ：创建一个新目录。
+  \item \texttt{std::filesystem::exists(path)} ：检查指定路径是否存在。
+  \item \texttt{std::filesystem::file\_size(path)} ：获取指定文件的大小。
+  \item \texttt{std::filesystem::current\_path()} ：获取当前工作目录的路径。
+  \item \texttt{std::filesystem::absolute(path)} ：获取指定路径的绝对路径。
+  \item \texttt{std::filesystem::directory\_iterator(path)} ：迭代指定目录下的文件和子目录。
+  \item \texttt{std::filesystem::space(path)} ：获取指定路径所在文件系统的空间信息。
+  \item \texttt{std::filesystem::last\_write\_time(path)} ：获取指定文件的最后修改时间。
+  \item \texttt{std::filesystem::permissions(path, perms)} ：设置指定文件或目录的权限。
+  \item \texttt{std::filesystem::remove\_all(path)} ：递归删除指定路径的文件或目录及其内容。
+\end{itemize}
+
+需要注意的是，\verb|path|是一个类型，可以是字符串类型（如\verb|std::string|）或者\verb|std::filesystem::path|类型。使用这些函数时，需要包含头文件\verb|<filesystem>|，并且在编译时需要链接文件系统库（例如使用\verb|-lstdc++fs|选项）。
+
 \subsection{常变量、常量和它们的关系}
 常变量（也叫不可变变量、只读变量、运行时常量）、常量（也叫编译期常量）往往笼统地称为常量。它们一旦确定就不会\textbf{在程序运行时}改变，任何试图对它们进行运行时更改的操作都会使得编译不通过。常量的值应当在声明时确定，可以通过赋值或者计算得到。它们的名字通常使用大写字母来表示，以便于和变量区分。
 
@@ -443,13 +518,28 @@ for (Color c = Color::FIRST; c <= Color::LAST; c = static_cast<Color>(static_cas
 
 我们已经知道C风格的指针是什么了。C++中虽然也能和C一样使用“裸指针”，但是不推荐这么做。C++引入了智能指针的概念，来帮助我们更好地管理内存，不需要再手动malloc/free了。
 
-智能指针有四个：
+智能指针有三个\footnote{实际上还有第四种 \lstinline[language=C++]|std::auto\_ptr|，但是因为这个类型存在一些设计缺陷，已经在C++11中被弃用，因此这里不做介绍。}主要类型。这三个主要类型都定义在\lstinline[language=C++]|<memory>| 头文件中，分别是：
 \begin{itemize}
   \item \texttt{std::unique\_ptr} ：表示独占所有权的智能指针，一个对象只能有一个 \texttt{unique\_ptr} 指向它。当这个 \texttt{unique\_ptr} 被销毁时，所指向的对象也会被自动释放。
   \item \texttt{std::shared\_ptr} ：表示共享所有权的智能指针，一个对象可以有多个 \texttt{shared\_ptr} 指向它。对象会在最后一个指向它的 \texttt{shared\_ptr} 被销毁时自动释放。
-  \item \texttt{std::weak\_ptr} ：表示弱引用的智能指针，它不会影响对象的生命周期。它通常与 \texttt{shared\_ptr} 一起使用，用于解决循环引用的问题。它更像是一个观察者，不拥有对象的所有权。
-  \item \texttt{std::auto\_ptr} ：严格唯一所有权的智能指针，在这里仅作介绍。它已经在C++11中被弃用。
+  \item \texttt{std::weak\_ptr} ：表示弱引用的智能指针，不拥有对象的所有权。它通常与 \texttt{shared\_ptr} 一起使用，用于解决循环引用的问题。
 \end{itemize}
+
+\begin{note}
+    上述文字中，提到了一个新的名词：\textbf{所有权}。这是编程中的一个非常重要的概念。
+
+    所有权指的是：若某个对象A拥有另一个对象B的所有权，那么A就负责B的生命周期管理，包括B的创建、使用和销毁。换句话说，A有权决定B什么时候被创建，什么时候被销毁。例如在传统的C中，以下代码是常见的：
+    \begin{lstlisting}
+void foo() {    
+    int a = 42; // 创建一个整数对象，a拥有它的所有权
+    int* ptr = new int(42); // 创建一个整数对象，ptr拥有它的所有权
+    delete ptr; // 释放ptr指向的整数对象
+}
+    \end{lstlisting}
+    上述代码中，函数 \texttt{foo} 拥有指针 \texttt{ptr} 指向的整数对象的所有权，因此它负责这个对象的创建和销毁；而在该函数结束时，也要负责销毁所有的对象，也就是释放内存。如果上述代码中没有\lstinline[language=C++]|delete ptr;| 这一行，那么就会导致内存泄漏，因为这个整数对象的内存没有被释放（但上述\lstinline[language=C++]|int a = 42;| 这一行不会导致内存泄漏，因为它是栈上的对象，会在函数结束时自动销毁）。这个实际上就是C的一个大问题：如果程序员忘记释放内存，那就会导致程序内存泄漏。
+
+    而有了智能指针，这个问题就迎刃而解了，见下文。
+\end{note}
 
 例如：
 \begin{lstlisting}[language=C++]
@@ -481,7 +571,39 @@ struct Node {
 
     Node(const string& n) : name(n), next(nullptr), prev() {}
 };
+class List{
+public:
+    shared_ptr<Node> head;
+    shared_ptr<Node> tail;
+    ... // 其他方法
+}
 \end{lstlisting}
+
+\begin{note}
+    那两个\lstinline[language=C++]|shared_ptr|为什么会导致循环引用？这是因为智能指针对内存进行管理的方式是通过\textbf{引用计数}来实现的。每有一个\lstinline[language=C++]|unique_ptr|或者\lstinline[language=C++]|shared_ptr|指向一个对象，这个对象的引用计数就会增加1；每当一个\lstinline[language=C++]|unique_ptr|或者\lstinline[language=C++]|shared_ptr|被销毁或者重新指向其他对象时，引用计数就会减少1。当引用计数变为0时，表示没有任何智能指针指向这个对象了，这时对象的内存就会被自动释放。而\lstinline[language=C++]|weak_ptr|不会影响引用计数。
+
+    这就可以看出问题。如果我们写了这样的代码：
+\begin{lstlisting}[language=C++]
+struct Node {
+    string name;
+    shared_ptr<Node> next; // 强引用，可能导致循环引用
+    shared_ptr<Node> prev; // 强引用，可能导致循环引用
+}
+\end{lstlisting}
+    那么如果我们创建了两个节点A和B，并且让A的next指向B，B的prev指向A，那么A和B就形成了一个循环引用。即使我们不再使用A和B，它们的引用计数也不会变为0，因为它们互相引用着对方。于是，A和B的内存永远不会被自动释放，因而就会导致内存泄漏。
+
+    为了解决这个问题，我们可以使用\lstinline[language=C++]|weak_ptr|来打破循环引用。例如，我们可以让prev成为一个\lstinline[language=C++]|weak_ptr|，这样就不会增加引用计数，从而避免循环引用的问题。
+
+    而为什么在上述\lstinline[language=C++]|List|类中，head和tail使用\lstinline[language=C++]|shared_ptr|呢？这是因为head和tail是链表的入口和出口，它们需要拥有节点的所有权，以确保链表中的节点在链表存在期间\textbf{不会}被销毁。因此，使用\lstinline[language=C++]|shared_ptr|是合适的选择。我们也可以模拟以下销毁整个链表的过程：
+    \begin{enumerate}
+        \item 在链表的生命周期内：链表头的引用计数是1，链表尾节点的引用计数是2（“链表尾”\footnote{“链表尾”和“链表尾节点”不是一个东西。以一个长度为10的链表为例，链表尾节点是第10个节点，而链表尾是一个指向第10个节点的指针。}指向尾节点，而前一个节点也指向尾节点）。
+        \item 先销毁整个\lstinline[language=C++]|List|。这时候，链表头的引用计数会减少1（变成0），而尾节点的引用计数也会减少1（变成1）。
+        \item 由于链表头的引用计数变成0，因此头节点会被自动释放。头节点的释放会导致它的next指针指向的下一个节点的引用计数减少1，也就是第二个节点的引用计数变成0。
+        \item 于是产生链式反应，整个链表的节点都会被依次释放，直到尾节点。
+    \end{enumerate}
+\end{note}
+
+
 这是写了一个双向链表节点的例子。注意其中的 \texttt{next} 是强引用，而 \texttt{prev} 是弱引用。这样可以避免循环引用的问题，从而防止内存泄漏。这个指针在多线程编程中也很有用，可以安全地访问共享资源。
 
 而数组中也不再建议使用指针来访问了，改为统一使用STL容器，例如 \texttt{std::vector} 、 \texttt{std::array} 等。于是，裸指针在C++中基本光荣退休。

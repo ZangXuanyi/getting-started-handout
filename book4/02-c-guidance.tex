@@ -976,6 +976,67 @@ const int* const p3 = &a; // 谁都别想动我
 
 \end{exercise}
 
+\section{文件操作}
+
+\subsection{文件读写}
+
+C的文件操作也是基于指针的。
+
+在C中，文件操作主要通过标准库中的 \texttt{FILE} 结构体和相关函数来实现。 \texttt{FILE} 结构体表示一个文件流，它包含了文件的状态信息和缓冲区等数据。我们可以使用指向 \texttt{FILE} 结构体的指针来操作文件。为了使用文件操作功能，我们需要包含头文件 \texttt{stdio.h} 。
+
+例如，我们需要使用以下手段来进行文件操作：
+\begin{itemize}
+    \item 打开文件：使用 \texttt{fopen} 函数打开一个文件，返回一个指向 \texttt{FILE} 结构体的指针。
+    \item 读取文件：使用 \texttt{fread} 或 \texttt{fgets} 等函数从文件中读取数据。
+    \item 写入文件：使用 \texttt{fwrite} 或 \texttt{fputs} 等函数向文件中写入数据。
+    \item 关闭文件：使用 \texttt{fclose} 函数关闭文件，释放资源。
+\end{itemize}
+
+具体而言，下面是一个简单的文件操作示例：
+\begin{lstlisting}[language=C]
+#include <stdio.h>  
+
+int main() {
+    // 打开文件
+    FILE* file = fopen("example.txt", "w");
+    if (file == NULL) {
+        perror("无法打开文件");
+        return 1;
+    }
+
+    // 写入数据
+    const char* text = "Hello, World!\n";
+    fwrite(text, sizeof(char), strlen(text), file);
+
+    // 关闭文件
+    fclose(file);
+    return 0;
+}
+\end{lstlisting}
+
+\lstinline[language=C]|fopen| 函数接受两个参数：文件名（实际上是文件相对可执行文件的路径）和模式。模式可以是r（只读）、w（只写，文件不存在则创建，存在则清空）、a（追加写入，文件不存在则创建）等。函数返回一个指向 \texttt{FILE} 结构体的指针，如果打开失败则返回 \texttt{NULL} 。
+
+\subsection{文件操作}
+
+除了文件的读写外，我们有时候还希望删除、重命名文件等操作。C标准库提供了一些函数来实现这些功能，例如：
+\begin{itemize}
+  \item \texttt{remove(filename)} ：删除指定的文件。
+  \item \texttt{rename(old\_filename, new\_filename)} ：重命名文件。
+  \item \texttt{fseek(file\_ptr, offset, whence)} ：设置文件指针的位置。
+  \item \texttt{ftell(file\_ptr)} ：获取文件指针的当前位置。
+  \item \texttt{rewind(file\_ptr)} ：将文件指针重新定位到文件的开头。
+  \item \texttt{feof(file\_ptr)} ：检查是否到达文件末尾。
+  \item \texttt{ferror(file\_ptr)} ：检查文件操作是否出错。
+\end{itemize}
+例如，我们想删除一个文件，可以使用 \texttt{remove} 函数：
+\begin{lstlisting}[language=C]
+if (remove("example.txt") == 0) {
+    printf("文件删除成功\n");
+} else {
+    perror("文件删除失败");
+}
+\end{lstlisting}
+\verb|perror| 函数用于打印最近一次系统调用失败的错误信息。
 
 \section{标准库常用头文件}
 

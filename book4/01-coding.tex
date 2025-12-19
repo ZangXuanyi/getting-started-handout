@@ -240,6 +240,7 @@ brew install gcc gdb
         "-g",           # 开启调试信息
         "${file}",      # 当前打开的文件
         "-O3",          # 开启O3优化
+        "--std=c++23",  # 指定C++标准为C++23。这里是因为笔者习惯现代C++。不指定则使用编译器默认的标准，现代GCC默认C++17。
         "-o",           # 指定输出文件
         "${fileDirname}\\${fileBasenameNoExtension}.exe" # 输出文件路径到当前文件同目录，文件名和当前文件名相同但扩展名为.exe
       ],
@@ -293,7 +294,7 @@ brew install gcc gdb
 \begin{itemize}
   \item 配置名称：默认即可。
   \item 编译器路径：选择你要选用的编译器的路径。该选项一般会自动检测电脑上的编译器。
-  \item 编译器参数：留空即可。如需要，可以添加一个 \texttt{-O2} 或者 \texttt{-O3} 来开启编译优化，或者添加一个 \texttt{-g} 来开启调试信息。但是， \texttt{-g} 会严重拖慢编译速度，因此建议只在调试时开启。
+  \item 编译器参数：留空即可。如需要，可以添加一个 \texttt{-O2} 或者 \texttt{-O3} 来开启编译优化，或者添加一个 \texttt{-g} 来开启调试信息。但是， \texttt{-g} 会严重拖慢编译速度，因此建议只在调试时开启。另，如果想使用较新的C++特性，也可以加上 \verb|--std=c++23| 之类的选项。
   \item IntelliSense模式：根据你的系统、编译器、CPU架构选择对应的模式。该选项会为你打开对应的代码补全、语法高亮、错误警示功能。
   \item 包含路径：不用动。
   \item 定义：不用动。
@@ -354,9 +355,9 @@ g++ main.cpp -O2 -g -o main.exe
 
 现在，你就可以愉快地在WSL里编写C/C++代码了！（当然你依然需要创建一个工作目录，并在里面创建源代码文件，否则扩展不起作用。）
 
-\section{Python、虚拟环境及其配置}\label{sec:virtualenv}
+\section{Python、虚拟环境及其配置}\label{sec:conda}
 
-\subsection{简单安装}
+\subsection{简单安装Python}
 
 如果仅仅是安装Python，那可比安装C系编译器简单得多了，直接去\href{https://www.python.org/downloads/}{Python官网}上下载符合你操作系统的最新版本就行了，只要记得安装时勾选“添加到Path”就行了。
 
@@ -366,63 +367,53 @@ python --version
 \end{lstlisting}
 如果输出了Python的版本信息，例如 \texttt{Python 3.12.0} ，则说明Python安装成功且配置正确。否则，请检查你的安装步骤和环境变量设置是否正确。
 
-\subsection{安装miniconda}
+\subsection{虚拟环境及其配置}
 
 然而，这样安装会有一个问题：会将Python安装到全局环境中。
 
 Python作为一门流行的编程语言，拥有丰富的第三方库和框架，可以帮助我们快速实现各种功能，并不需要从零开始开发，第三方库的安装和管理是必然是开发中非常重要的一部分。而不同的开发往往需要不同的包，或者同一个包的不同版本。这些包有可能会产生冲突，如果用全局环境则会导致依赖混乱。这时，我们引入了虚拟环境，它是解决包冲突的有效手段。
 
-虚拟环境可以理解为一个单独的沙盒，包含了特定版本的编译器、解释器和所有依赖的包。用户可以在虚拟环境中自由安装和管理包，而不会影响全局的Python环境，更不会影响其他沙盒。一般有以下几种方法创建虚拟环境：
-\begin{itemize}
-  \item \textbf{venv}：Python内置的虚拟环境模块，适用于大多数场景。
-  \item \textbf{virtualenv}：一个第三方库，提供了更多的功能和灵活性。
-  \item \textbf{conda}：Anaconda发行版提供的虚拟环境管理工具，非常简洁高效，逐渐成为目前开发的主流选择。
-  \item \textbf{docker}：容器化技术，可以将应用及其所有依赖打包在一个容器中，适用于生产环境，但是由于比较复杂、笨重、资源开销大，一般不推荐用于开发环境。
-\end{itemize}
+虚拟环境可以理解为一个单独的沙盒，包含了特定版本的编译器、解释器和所有依赖的包。用户可以在虚拟环境中自由安装和管理包，而不会影响全局的Python环境，更不会影响其他沙盒。目前较常见的虚拟环境创建工具有conda、mamba、venv、uv、pixi等。在这里我们讲述传统手段，也就是conda和mamba。
 
-对于学生一般使用的是conda，或者其衍生高速版本mamba。我们的讲述也是以conda为主。
+\paragraph{conda} conda是数据科学领域开山鼻祖级别的包管理和虚拟环境管理工具。它不仅可以管理Python包，还可以管理其他语言的包，例如R、Ruby等，因此也是迄今为止用的最广泛的跨语言包管理工具。但conda有两个缺点：一个是笨重，一个是慢。
 
-conda有两个发行版，一个是Anaconda，另一个是Miniconda。Anaconda包含了大量的预装包，适合初学者和数据科学家使用；而Miniconda则是一个轻量级的发行版，只包含conda和Python，适合需要自定义环境的用户。我们非常建议使用Miniconda，因为它更轻量，安装速度更快，并且可以根据需要安装所需的包。
+conda有两个主要的发行版：Anaconda和Miniconda。Anaconda是一个完整的数据科学平台，包含了大量的预装包，适合初学者和数据科学家使用；Miniconda则是一个轻量级的版本，解决了笨重的问题（虽然依然慢）。我们推荐使用Miniconda。
 
-以上两个发行版在Linux和Windows上都难以利用包管理器进行安装。因此，我们一般都是直接从官网下载对应的安装包进行安装。安装时，用户需要设置环境变量，以便在命令行中直接使用conda命令；如果你在安装时选择了“Add to PATH”选项，则不需要手动设置环境变量。
-
-接下来，因为一些原因，我们应当重启计算机（或者终端），以确保环境变量生效。
-
-然后，我们需要进行终端初始化，例如在Windows上，我们可以使用以下命令：
-\begin{lstlisting}[language=bash]
-    conda init powershell
+Windows用户可以把以下命令直接贴到终端里运行：
+\begin{lstlisting}
+curl https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe -o .\miniconda.exe
+start /wait "" .\miniconda.exe /S
+del .\miniconda.exe
 \end{lstlisting}
-如果上述命令能够成功执行，则说明初始化成功；否则，请检查你的安装步骤和环境变量设置是否正确。
+Linux用户见\href{https://www.anaconda.com/docs/getting-started/miniconda/install}{官方网站}即可，其实大差不差。
 
-你应该将上述命令替换为你所使用的终端类型，例如在Linux上可以使用 \texttt{bash} 或 \texttt{zsh} 。然后你需要关闭所有终端，再打开一个新的，以使初始化完全生效。
-
-\subsection{创建和使用虚拟环境}
-
-我们可以创建一个新的虚拟环境，例如：
+安装完成后，你可以通过以下命令来创建并激活一个新的虚拟环境：
 \begin{lstlisting}[language=bash]
-    conda create -n myenv python=3.10
+conda create -n myenv python=3.12
+conda activate myenv
 \end{lstlisting}
-这样就可以创建一个名为 \texttt{myenv} 的虚拟环境，并安装Python 3.10的尽可能新的版本。
+上述命令的含义是：创建一个名为 \texttt{myenv} 的虚拟环境，并安装Python 3.12版本。你可以根据需要更改环境名称和Python版本。在快速开发的背景下，可以把东西一股脑的安装到base环境中，但不推荐把这种手段用到正式开发中。
 
-下面我们需要激活虚拟环境：
+\paragraph{mamba} mamba是conda的一个替代品，旨在解决conda的慢的问题。mamba使用C++编写，具有更快的包解析和安装速度。mamba完全兼容conda的命令和配置文件，因此用户可以无缝切换到mamba，而无需修改现有的环境和脚本。
+
+如果计算机上已经安装了conda，则可以通过以下命令来安装mamba：
 \begin{lstlisting}[language=bash]
-    conda activate myenv
+conda install mamba -n base -c conda-forge
 \end{lstlisting}
-这样就进入了虚拟环境，你可以在终端上看到提示符前面有 \texttt{(myenv)} ，表示当前处于 \texttt{myenv} 虚拟环境中。如没有，可能是终端配置失败或者其他原因，安装OhMyPosh的部分主题也可能会导致这个问题（最大的可能是你的主题没有Python虚拟环境对应的section）。
-
-现在在Python中我们一般流行使用 \texttt{pip} 来安装包，它从PyPI安装和管理第三方库。现在不流行直接使用conda管理包了。
-
-我们可以使用以下命令安装一个包，例如安装 \texttt{NumPy} 库：
+安装完成后，你可以使用 \texttt{mamba} 命令来代替 \texttt{conda} 命令，例如：
 \begin{lstlisting}[language=bash]
-    pip install numpy
+mamba create -n myenv python=3.12
+mamba activate myenv  
 \end{lstlisting}
-这将会在当前虚拟环境中安装NumPy库，而不会影响全局的Python环境。
+上述命令的含义与使用conda时相同。
 
-如果你需要安装多个包，可以将它们写在一个文件中，例如 \texttt{requirements.txt} ，然后使用以下命令安装：
+对于没有安装过conda的用户，我们遵从“最简单”原则，安装micromamba。micromamba是mamba的一个轻量级“纯净”版本，不依赖于conda或Anaconda。它仅包含mamba的核心功能，适合那些只需要基本包管理和虚拟环境管理功能的用户。
+
+只需要运行下列命令：
 \begin{lstlisting}[language=bash]
-    pip install -r requirements.txt
+"${SHELL}" <(curl -L micro.mamba.pm/install.sh)
 \end{lstlisting}
-以上命令也常用于项目的依赖管理，可以方便地安装和更新项目所需的所有包；同时也可以通过修改 \texttt{requirements.txt} 文件来管理项目的依赖版本，适宜分发。
+然后按照提示操作即可。安装完成后，你可以使用 \texttt{micromamba} 命令来创建和管理虚拟环境，使用方法与conda类似。
 
 \subsection{在VS Code中配置Python}
 
