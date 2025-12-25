@@ -317,7 +317,7 @@ L1正则化有助于产生稀疏的权重矩阵，从而实现特征选择。
 我们知道，一个图是一个二维矩阵（加上颜色通道），而我们可以使用\textbf{卷积操作}（Convolution Operation）来提取图像的局部特征。卷积操作通过一个小的滤波器（Kernel）在图像上滑动，计算局部区域的加权和，从而提取边缘、纹理等特征。
 
 换句话说，如果用Python从头写一个卷积操作，大概是这样子的：
-\begin{lstlisting}
+\begin{minted}{python}
 import numpy as np
 def conv2d(image, kernel, stride=1, padding=0):
     # 添加零填充
@@ -343,7 +343,7 @@ def conv2d(image, kernel, stride=1, padding=0):
                 output[y, x, c] = np.sum(region * kernel[:, :, c])
     
     return output
-\end{lstlisting}
+\end{minted}
 
 这里的image是输入图像，kernel是卷积核，stride是步幅，padding是填充。这个函数会返回卷积后的特征图。
 
@@ -618,7 +618,7 @@ PyTorch和TensorFlow的一个重要区别在于，PyTorch采用动态计算图�
 \subsection{使用nn.Module构建神经网络}
 
 在PyTorch中，神经网络模型通常通过继承\verb|nn.Module|类来构建。我们可以定义一个新的类，重写\verb|__init__|方法来定义网络的层，并重写\verb|forward|方法来定义前向传播的计算过程。下面是一个简单的示例，展示如何构建一个包含两个全连接层的神经网络：
-\begin{lstlisting}[language=Python]
+\begin{minted}{python}
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -639,7 +639,7 @@ class SimpleNN(nn.Module):
     
 # 创建模型实例
 model = SimpleNN(input_size=784, hidden_size=128, output_size=10)
-\end{lstlisting}
+\end{minted}
 在这个示例中，我们定义了一个名为\verb|SimpleNN|的神经网络类，包含两个全连接层。前向传播过程中，我们使用ReLU激活函数对第一层的输出进行非线性变换。
 
 而在反向传播过程中，我们只需调用\verb|loss.backward()|，PyTorch会自动计算梯度，无需手动实现反向传播算法，这是非常人性化的一个设计。
@@ -655,7 +655,7 @@ model = SimpleNN(input_size=784, hidden_size=128, output_size=10)
 \end{itemize}
 
 下面是一个简单的训练循环示例：
-\begin{lstlisting}[language=Python]
+\begin{minted}{python}
 import torch.optim as optim
 
 # 定义损失函数和优化器
@@ -670,11 +670,11 @@ for epoch in range(num_epochs):
         loss = criterion(outputs, labels)  # 计算损失
         loss.backward()  # 反向传播
         optimizer.step()  # 更新参数
-\end{lstlisting}
+\end{minted}
 在这个示例中，我们使用交叉熵损失函数和随机梯度下降（SGD）优化器来训练模型。每个epoch中，我们遍历数据集，进行前向传播、计算损失、反向传播和参数更新。
 
 而对模型的评估通常在训练完成后进行，我们可以使用验证集或测试集来评估模型的性能。评估过程通常包括前向传播和计算准确率等指标：
-\begin{lstlisting}[language=Python]
+\begin{minted}{python}
 # 评估模型
 model.eval()  # 切换到评估模式
 correct = 0
@@ -686,12 +686,12 @@ with torch.no_grad():  # 禁用梯度计算
         total += labels.size(0)
         correct += (predicted == labels).sum().item()
 print('Accuracy: {:.2f}%'.format(100 * correct / total))
-\end{lstlisting}
+\end{minted}
 在评估过程中，我们使用\verb|model.eval()|切换到评估模式，并使用\verb|torch.no_grad()|禁用梯度计算，实际是冻住模型参数，防止验证集和测试集数据泄漏到训练过程中。
 
 \subsection{使用预定义的神经网络模块和优化器等}
 PyTorch的\verb|torch.nn|模块提供了许多预定义的神经网络层和模块，如卷积层、池化层、批量归一化层等。我们可以直接使用这些模块来构建复杂的神经网络结构，而无需从头实现每个层。例如，我们可以使用\verb|nn.Conv2d|来定义卷积层，使用\verb|nn.MaxPool2d|来定义池化层：
-\begin{lstlisting}[language=Python]
+\begin{minted}{python}
 class ConvNet(nn.Module):
     def __init__(self):
         super(ConvNet, self).__init__()
@@ -701,22 +701,22 @@ class ConvNet(nn.Module):
     def forward(self, x):
         x = self.pool(F.relu(self.conv1(x)))
         ...
-\end{lstlisting}
+\end{minted}
 此外，PyTorch还提供了多种优化器，如Adam、RMSprop等，我们可以根据需要选择合适的优化器来训练模型：
-\begin{lstlisting}[language=Python]
+\begin{minted}{python}
 optimizer = optim.Adam(model.parameters(), lr=0.001)
-\end{lstlisting}
+\end{minted}
 
 而LSTM甚至Transformer等复杂模块也都被封装好了，直接调用即可：
-\begin{lstlisting}[language=Python]
+\begin{minted}{python}
 self.lstm = nn.LSTM(input_size=128, hidden_size=256, num_layers=2, batch_first=True)
 self.transformer = nn.Transformer(d_model=512, nhead=8, num_encoder_layers=6, num_decoder_layers=6)
-\end{lstlisting}
+\end{minted}
 
 \subsection{数据加载和预处理}
 
 在训练神经网络模型之前，我们需要准备好数据集，并进行必要的预处理。PyTorch提供了\verb|torch.utils.data|模块，用于方便地加载和处理数据集。我们可以使用\verb|Dataset|类来定义自定义数据集，并使用\verb|DataLoader|类来批量加载数据。下面是一个简单的数据加载和预处理示例：
-\begin{lstlisting}[language=Python]
+\begin{minted}{python}
 from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
 
@@ -743,19 +743,19 @@ transform = transforms.Compose([
 # 创建数据集和数据加载器
 dataset = CustomDataset(data, labels, transform=transform)
 dataloader = DataLoader(dataset, batch_size=32, shuffle=True)
-\end{lstlisting}
+\end{minted}
 
 尽管如此，对于诸如MNIST-10等著名数据集，PyTorch的\verb|torchvision.datasets|模块已经封装好了，我们只需一行代码就能搞定：
-\begin{lstlisting}[language=Python]
+\begin{minted}{python}
 from torchvision import datasets
 mnist_dataset = datasets.MNIST(root='./data', train=True, download=True, transform=transform)
-\end{lstlisting}
+\end{minted}
 \verb|download=true|参数会自动帮你下载数据集，非常方便。
 
 \subsection{模型保存和加载}
 
 有时候，我们需要保存训练好的模型，以便在之后进行评估或部署。PyTorch提供了简单的接口来保存和加载模型参数。我们可以使用\verb|torch.save|函数来保存模型的状态字典（state dict），并使用\verb|torch.load|函数来加载模型参数。下面是一个简单的示例：
-\begin{lstlisting}[language=Python]
+\begin{minted}{python}
 # 保存模型
 torch.save(model.state_dict(), 'model.pth')
 # 加载模型
@@ -763,7 +763,7 @@ model = SimpleNN(input_size=784, hidden_size=128, output_size=10)
 model.load_state_dict(torch.load('model.pth'))
 model.eval()  # 切换到评估模式
 ...
-\end{lstlisting}
+\end{minted}
 
 通过使用PyTorch中的高级神经网络模块，我们可以方便地构建、训练和评估各种神经网络模型。丰富的预定义模块和函数使得我们能够专注于模型设计和优化，而无需过多关注底层实现细节，从而大大提高了开发效率。
 
@@ -778,18 +778,18 @@ CUDA-C要写好，首先要熟悉C、GPU的计算模型和多线程并发编程�
 GPU的计算模型与CPU有很大的不同。GPU采用的是SIMD（Single Instruction, Multiple Data）架构，能够同时处理大量的数据并行计算。GPU中的计算单元被称为“线程块”（Thread Block），每个线程块包含多个线程（Thread）。线程块之间可以并行执行，而线程块内的线程可以通过共享内存进行通信和协作。因此我们很容易就能看出，GPU是天生比CPU更适合大规模并行计算的。
 
 在CUDA-C中，我们可以使用\verb|__global__|关键字来定义一个GPU内核函数（Kernel Function），该函数将在GPU上并行执行。内核函数中的每个线程可以通过内置变量 \verb|threadIdx| 和 \verb|blockIdx| 来获取自己的线程索引和块索引，从而实现数据的并行处理。下面是一个简单的CUDA-C内核函数示例，展示如何在GPU上进行向量加法：
-\begin{lstlisting}[language=C]
+\begin{minted}{c}
 __global__ void vectorAdd(const float* A, const float* B, float* C, int N) {
     int i = blockIdx.x * blockDim.x + threadIdx.x;
     if (i < N) {
         C[i] = A[i] + B[i];
     }
 }
-\end{lstlisting}
+\end{minted}
 在这个示例中，我们定义了一个名为\verb|vectorAdd|的内核函数，用于将两个向量A和B相加，并将结果存储在向量C中。每个线程通过计算自己的全局索引\verb|i|来处理对应的向量元素。
 
 为了给CUDA-C编写内核函数，我们还得手动管理GPU内存的分配和释放，这就更让人头疼了。我们需要使用\verb|cudaMalloc|函数来分配GPU内存，使用\verb|cudaMemcpy|函数来在主机（CPU）和设备（GPU）之间传输数据，最后使用\verb|cudaFree|函数来释放GPU内存。下面是一个完整的CUDA-C程序示例，展示如何在GPU上进行向量加法：
-\begin{lstlisting}[language=C]
+\begin{minted}{c}
 #include <stdio.h>
 #include <cuda.h>
 __global__ void vectorAdd(const float* A, const float* B, float* C, int N) {
@@ -846,7 +846,7 @@ int main() {
 
     return 0;
 }
-\end{lstlisting}
+\end{minted}
 在这个示例中，我们首先分配了主机和设备内存，然后将输入向量从主机复制到设备，启动内核函数进行向量加法，最后将结果从设备复制回主机。最后，我们释放了设备和主机内存。
 
 但是说实话，我看到这么多裸指针和malloc/free就已经头大如斗了。为了在GPU上运算，CUDA-C不接受塞struct，代码可读性和可维护性极差，真是让一个现代C++程序员痛不欲生。更别提调试了，CUDA-C的调试工具远不如CPU端的成熟，调试起来非常麻烦。
@@ -947,7 +947,7 @@ W_{out} = (W_{in} - 1) \times S_w - 2P_w + K_w
 \begin{answer}
 在这里，我们仅试着完成第一题的解答，其他题目留给读者自行完成。
 
-\begin{lstlisting}[language=Python]
+\begin{minted}{python}
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -1033,7 +1033,7 @@ def eval_model(model, test_loader):
 if __name__ == '__main__':
     train_model(model, epochs=10, train_loader, criterion, optimizer)
     eval_model(model, test_loader)
-\end{lstlisting}
+\end{minted}
 
 
 

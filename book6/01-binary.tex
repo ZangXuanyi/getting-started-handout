@@ -223,13 +223,13 @@ x86-64架构的汇编码通常由操作码（opcode）和操作数（operand）�
 \end{itemize}
 
 在x86-64架构中，假如我们想要把某个整数从寄存器RAX移动到寄存器RBX，可以使用以下指令：
-\begin{lstlisting}
+\begin{minted}{gas}
 mov rbx, rax
-\end{lstlisting}
+\end{minted}
 或者说我们想要call一个函数，假设函数名为 \texttt{foo} ，可以使用以下指令：
-\begin{lstlisting}
+\begin{minted}{gas}
 call foo
-\end{lstlisting}
+\end{minted}
 这是最基本的一些汇编码指令。对于其他的机器（例如Arm架构），汇编码的语法和指令可能会有所不同，但基本原理是相似的。编译器会在不同的架构上生成不同的汇编码，来保证程序的正确性和效率。
 
 对于同一个机器，不同程序的同一句汇编码被编译出的机器码是一样的。比如说在x86-64架构上且使用AT\&T语法时， \texttt{mov rbx, rax} 这句汇编码被编译成的机器码永远 \texttt{48 89 D8} ，不会改变。
@@ -256,18 +256,18 @@ call foo
 当然，也有一些病毒等恶意程序会利用系统漏洞来直接操作其他进程的内存空间，或者直接操作外存中的内容，破坏文件系统的完整性和安全性。
 
 怎样才能证明上述ELF文件“确实”包括这些内容呢？我们可以这样，先用 C \footnote{这里不用C++，是因为C++会引入一些额外的内容，例如异常处理、虚函数表等，可能会干扰我们的观察。}写一点东西，然后运行下列命令：
-\begin{lstlisting}
+\begin{minted}{bash}
   gcc -o hello hello.cpp # 编译 C++ 源代码
   objdump -d hello      # 反汇编可执行文件
-\end{lstlisting}
+\end{minted}
 然后我们就会看到类似下面的输出：
-\begin{lstlisting}
+\begin{minted}{text}
 hello:     file format elf64-x86-64
 Disassembly of section .text:
 0000000000401136 <_start>:
   401136:	31 ed                	xor    %ebp,%ebp
   ...
-\end{lstlisting}
+\end{minted}
 在上述反汇编输出中，我们可以看到ELF文件的格式信息，以及程序的代码段（.text section）中的汇编码指令。这些指令就是程序在运行时会被CPU执行的机器码指令。通过这种方式，我们可以验证ELF文件确实包含了程序的代码段。而数据段、堆、栈等内容则可以通过调试器（如gdb）来查看。
 
 一般情况下，在C中，程序的入口点是 \texttt{main} 函数。然而，在ELF文件中，程序的实际入口点是 \texttt{\_start} 标签。这个标签是由编译器自动生成的，它负责初始化程序的运行环境，并调用 \texttt{main} 函数。因此，当我们运行一个C++程序时，操作系统实际上是从 \texttt{\_start} 标签开始执行程序的。
@@ -277,18 +277,18 @@ Disassembly of section .text:
 有时候，代码不是由单一源文件组成的，而是由多个源文件组成的。在这种情况下，编译器会将每一个源文件编译成一个目标文件（.o或.obj文件），然后再利用链接器（linker）将这些目标文件链接成一个可执行文件。
 
 例如，有一个目录：
-\begin{lstlisting}
+\begin{minted}{text}
 project/
 - utils.c
 - utils.h
 - main.c
-\end{lstlisting}
+\end{minted}
 这个目录中的文件（不依赖任何构建工具的话）是这样编译和链接的：
-\begin{lstlisting}
+\begin{minted}{bash}
 gcc -c utils.c -o utils.o  # 编译 utils.c 成为目标文件
 gcc -c main.c -o main.o    # 编译 main.c 成为目标文件
 gcc utils.o main.o -o app   # 链接目标文件成为可执行文件
-\end{lstlisting}
+\end{minted}
 在链接过程中，链接器会将各个目标文件中的符号表进行合并，并解决符号引用。例如，如果 \texttt{main.c} 中调用了 \texttt{utils.c} 中的函数，链接器会将这些函数的地址进行替换，从而使得程序能够正确地调用这些函数。
 
 我们知道，在C语言中，变量有局部和全局之分。这些变量还有一些重要的属性，如static、extern等。这些属性会影响变量的链接方式。例如，static变量是局部变量，只能在定义它的源文件中访问，因此它不会出现在符号表中。而extern变量是全局变量，可以在多个源文件中访问，因此它会出现在符号表中，链接器会将这些变量的地址进行替换。通过符号表，链接器能够正确地将各个目标文件中的符号进行链接，从而生成一个完整的可执行文件。

@@ -147,17 +147,17 @@ Rufus、Ventoy等启动盘制作工具可以从其官方网站下载。Rufus适�
 在Linux和Mac OS上一般不建议使用安装包来安装软件，这是因为可能导致依赖问题。Linux和Mac OS都有自己的包管理器，建议使用包管理器来安装软件。
 
 例如，在arch linux下，我们可以使用pacman包管理器来安装软件，例如安装git：
-\begin{lstlisting}
+\begin{minted}{bash}
 sudo pacman -S git
-\end{lstlisting}
+\end{minted}
 不懂命令可以先不去理解这个，本节其他命令也是如此。
 
 在Windows中，包管理器的使用不普遍。虽然有一个官方的包管理器winget，但是支持的软件包较少，且无法自动管理依赖（但也基本够用）；还有一些例如Chocolatey、Scoop等第三方包管理器。除此以外，使用MSYS2、Cygwin等类UNIX环境也可以从某种程度上当成包管理器使用。例如后文讲的安装GCC的过程，我们就是使用MSYS2来安装的，比下载预编译版本简单许多。
 
 比方说，在Windows上想要安装git，我们可以使用winget来安装：
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
     winget install Microsoft.Git 
-\end{lstlisting}
+\end{minted}
 这条命令会自动下载并安装git，并且将其添加到系统的PATH环境变量中，方便我们在命令行中使用git命令，省去了在网上查找安装包、下载安装包、运行安装包等繁琐的步骤。
 
 不会用终端？没关系，后面讲了怎么用这玩意。
@@ -228,26 +228,26 @@ sudo pacman -S git
 正确的做法有两种：要么使用计算机自带的“程序与功能”界面删除软件，要么使用软件自带的卸载程序（通常命名为uninstall.exe或者类似名称）。某些软件可能会在安装时提供一个卸载程序，我们可以在开始菜单或者软件的安装目录中找到它。使用这些方法可以确保软件被完全卸载，留下的残留文件也较少。如要彻底删除残留文件，可以使用一些专业的卸载工具，例如Geek等。
 
 另，用包管理器安装的软件，最好也用包管理器卸载。例如上文提到的winget安装git，我们可以使用以下命令来卸载git：
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
     winget uninstall Microsoft.Git
-\end{lstlisting}
+\end{minted}
 而在Linux上则类似的用包管理器卸载，例如在Arch Linux上卸载GCC：
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
     sudo pacman -R gcc
-\end{lstlisting}
+\end{minted}
 
 \subsubsection{进阶：SHA256校验}
 
 SHA256校验是一种常用的文件完整性校验方法。它可以帮助我们验证下载的软件包是否被篡改或者损坏。通常情况下，软件的官方网站会提供一个SHA256校验值，我们可以使用SHA256校验工具来计算下载的软件包的SHA256值，然后将其与官方网站提供的SHA256值进行比较。如果两个值相同，则说明下载的软件包是完整的，没有被篡改或者损坏；如果两个值不同，则说明下载的软件包可能被篡改或者损坏，建议重新下载。
 
 常见的SHA256校验工具有很多，例如Windows自带的CertUtil工具、Linux和macOS自带的sha256sum工具等。使用这些工具非常简单，只需要在命令行中输入相应的命令即可。例如，在Windows中，我们可以使用以下命令来计算文件的SHA256值：
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
     certutil -hashfile path\to\file SHA256
-\end{lstlisting}
+\end{minted}
 你需要把 \texttt{path\textbackslash to\textbackslash file} 替换成你要计算SHA256值的文件的路径。在Linux和macOS中，我们可以使用以下命令来计算文件的SHA256值：
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
     sha256sum path/to/file
-\end{lstlisting}
+\end{minted}
 
 当然，如果从官网下载，则基本上不会有问题，毕竟官网大概率是不会篡改自己的软件的。但如果真的从其他网站下载，则建议进行SHA256校验。但如果你搞了个盗版软件，那校验就多余了（因为肯定篡改了），这也是盗版软件的风险所在（谁知道在破解的同时有没有给你塞点别的东西进去）。
 
@@ -285,22 +285,22 @@ SHA256校验是一种常用的文件完整性校验方法。它可以帮助我�
 
 这个服务主要是用于自行更新mirrorlist的。mirrorlist是软件包管理器 pacman 的软件下载渠道；也许它是一个很好的工具，但是在国内的特殊网络环境下，这个东西反而成了累赘，不妨禁用之。因此，这个东西一定要在联网之前搞。
 
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
   systemctl stop reflector.service # 禁用reflector服务
-\end{lstlisting}
+\end{minted}
 
 \subsubsection{联网}
 
 我们使用 \texttt{iwctl} 来联网：
 
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
 iwctl # 进入交互式命令行
 device list # 列出无线网卡设备名，比如无线网卡看到叫 wlan0
 station wlan0 scan # 扫描网络
 station wlan0 get-networks # 列出所有 wifi 网络
 station wlan0 connect wifi-name # 进行连接，注意这里无法输入中文。回车后输入密码即可
 exit # 连接成功后退出
-\end{lstlisting}
+\end{minted}
 
 可以使用 \texttt{ping} 等工具来检查是否联网了。在Linux下 \texttt{ping} 必须按下 \texttt{Ctrl+C} 终止输出。
 
@@ -308,15 +308,15 @@ exit # 连接成功后退出
 
 我们使用 \texttt{timedatectl} 来同步系统的时间。这一步是必要的，这是因为 Linux 很多加密校验（HTTPS、GPG）依赖正确时间。如果时间差太多，证书会被判定过期。
 
-\begin{lstlisting}
-  timedatectl set-ntp true
-\end{lstlisting}
+\begin{minted}{bash}
+timedatectl set-ntp true
+\end{minted}
 
 \subsubsection{检查是不是国内源}
 
-\begin{lstlisting}
-  vim /etc/pacman.d/mirrorlist
-\end{lstlisting}
+\begin{minted}{bash}
+vim /etc/pacman.d/mirrorlist
+\end{minted}
 
 检查有没有熟悉的pku.edu.cn和隔壁镜像。如果没有，说明你的reflector服务禁用晚了，不过并非不能解决，只需要在开头加上相关镜像就行了。不要在这一步添加社区源（例如archlinuxcn）。
 
@@ -324,11 +324,11 @@ exit # 连接成功后退出
 
 这两个操作对数据很危险！不要把含有重要数据的盘当作目标盘。
 
- \texttt{lsblk} 命令可以帮助我们确定我们要把archlinux安装在哪里。一般有两种硬盘编号，要么是走SATA协议的sdx，其中x是字母；要么是走NVME协议的nvmexn1，其中x是数字。我们可以通过观察磁盘的大小、已存在的分区情况等判断。下文统一使用sda作为磁盘编号，请根据你自己的实际情况更改磁盘编号。
+\texttt{lsblk} 命令可以帮助我们确定我们要把archlinux安装在哪里。一般有两种硬盘编号，要么是走SATA协议的sdx，其中x是字母；要么是走NVME协议的nvmexn1，其中x是数字。我们可以通过观察磁盘的大小、已存在的分区情况等判断。下文统一使用sda作为磁盘编号，请根据你自己的实际情况更改磁盘编号。
 
-\begin{lstlisting}[language=bash]
-  cfdisk /dev/sda
-\end{lstlisting}
+\begin{minted}{bash}
+cfdisk /dev/sda
+\end{minted}
 
 我们要分出三个区：EFI用来启动（如果做双系统时已有一个EFI分区，则无需）；Swap用于临时存储（至少给到你物理内存的60\%以上）、不活跃页交换和休眠；文件分区（使用Btrfs文件系统，不需要多个文件分区了）。
 
@@ -342,7 +342,7 @@ exit # 连接成功后退出
 
 现在，我们需要格式化各种分区。我们假设EFI分区是sda1，Swap分区是sda2，Btrfs分区是sda3。
 
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
   mkfs.fat -F32 /dev/sda1
   mkswap /dev/sda2
   mkfs.btrfs -L myArch /dev/sda3 # -L操作是指定盘符用的
@@ -350,20 +350,20 @@ exit # 连接成功后退出
   btrfs subvolume create /mnt/@ # 创建 / 目录子卷
   btrfs subvolume create /mnt/@home # 创建 /home 目录子卷
   umount /mnt # 卸载分区以便于之后的挂载操作
-\end{lstlisting}
+\end{minted}
 
 \subsubsection{挂载分区}
 
 挂载分区有顺序性，需要从根目录开始挂载：
 
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
 mount -t btrfs -o subvol=/@,compress=zstd /dev/sda3 /mnt # 挂载 / 目录
 mkdir /mnt/home # 创建 /home 目录
 mount -t btrfs -o subvol=/@home,compress=zstd /dev/sda3 /mnt/home # 挂载 /home 目录
 mkdir -p /mnt/boot # 创建 /boot 目录
 mount /dev/sda1 /mnt/boot # 挂载 /boot 目录
 swapon /dev/sda2 # 挂载交换分区
-\end{lstlisting}
+\end{minted}
 
 用 \texttt{df -h} 命令和 \texttt{free -h} 来复查挂载情况。
 
@@ -371,78 +371,78 @@ swapon /dev/sda2 # 挂载交换分区
 
 现在终于到了最重要的一步：安装系统了。我们使用 \texttt{pacstrap} 来安装最基础的包和功能性软件。
 
-\begin{lstlisting}
-  pacstrap /mnt base base-devel linux linux-firmware btrfs-progs
-  pacstrap /mnt networkmanager vim sudo zsh zsh-completions # zsh也可以换成bash，但是不建议新手换这个。
-\end{lstlisting}
+\begin{minted}{bash}
+pacstrap /mnt base base-devel linux linux-firmware btrfs-progs
+pacstrap /mnt networkmanager vim sudo zsh zsh-completions # zsh也可以换成bash，但是不建议新手换这个。
+\end{minted}
 
 倘若提示GPG证书错误，用以下命令更新一下密钥环：
 
-\begin{lstlisting}
-  pacman -S archlinux-keyring
-\end{lstlisting}
+\begin{minted}{bash}
+pacman -S archlinux-keyring
+\end{minted}
 
 然后经过一系列安装时信息的刷屏，就安装好了。之后，我们利用 \texttt{genfstab} 命令来根据当前挂载情况生成并写入fstab文件\footnote{该文件用来定义磁盘分区。它是 Linux 系统中重要的文件之一。}即可。
 
-\begin{lstlisting}
+\begin{minted}{bash}
   genfstab
-\end{lstlisting}
+\end{minted}
 
 \subsubsection{换根，以及一些基础设置}
 
 接下来，我们需要从安装介质中切出，进入新系统的目录下。
 
-\begin{lstlisting}
+\begin{minted}{bash}
   arch-chroot /mnt
-\end{lstlisting}
+\end{minted}
 
 现在可以发现命令行的提示符颜色和样式发生了改变。我们现在可以设置主机名和时区了：
-\begin{lstlisting}
+\begin{minted}{bash}
   vim /etc/hostname
-\end{lstlisting}
+\end{minted}
 输入你喜欢的主机名称，当然这里也不要包含特殊字符以及空格。
 
 下一步，设置 \texttt{/etc/hosts} ：
-\begin{lstlisting}
+\begin{minted}{bash}
   vim /etc/hosts
-\end{lstlisting}
+\end{minted}
 保证里面有以下内容：
-\begin{lstlisting}
+\begin{minted}{bash}
 127.0.0.1   localhost
 ::1         localhost
 127.0.1.1   myarch.localdomain myarch
-\end{lstlisting}
+\end{minted}
 
 再下一步，设置时区和硬件时间：
-\begin{lstlisting}
+\begin{minted}{bash}
   ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
   hwclock --systohc
-\end{lstlisting}
+\end{minted}
 这里没有北京，只有上海，所以不要傻傻的找北京了！
 
 使用vim或者nano编辑/etc/locale.gen，去掉 en\_US.UTF-8 UTF-8 以及 zh\_CN.UTF-8 UTF-8 行前的注释符号，并保存。之后用 \texttt{locale-gen} 命令来生成locale\footnote{这个文件决定了软件使用的语言、书写习惯、字符集等}。
 
-\begin{lstlisting}
+\begin{minted}{bash}
   locale-gen
-\end{lstlisting}
+\end{minted}
 
 下一步运行以下命令来设置默认locale：
-\begin{lstlisting}
+\begin{minted}{bash}
   echo 'LANG=en_US.UTF-8'  > /etc/locale.conf
-\end{lstlisting}
+\end{minted}
 我们不建议在这一步设置任何中文的locale，会导致tty乱码。
 
 现在为root用户设置密码：
-\begin{lstlisting}
+\begin{minted}{bash}
   passwd root
-\end{lstlisting}
+\end{minted}
 根据提示操作即可。注意输入密码时不会显示，不要以为键盘坏了。
 
 最后，安装CPU微码：
-\begin{lstlisting}
+\begin{minted}{bash}
 pacman -S intel-ucode # Intel
 pacman -S amd-ucode # AMD
-\end{lstlisting}
+\end{minted}
 CPU微码是厂商发布的CPU补丁，它们在启动早期加载，使用软件来修复硬件缺陷。
 
 \subsubsection{作引导}
@@ -450,57 +450,57 @@ CPU微码是厂商发布的CPU补丁，它们在启动早期加载，使用软�
 引导是让主板和系统内核沟通的桥梁，系统的启动依赖于引导。
 
 第一步，装包：
-\begin{lstlisting}
+\begin{minted}{bash}
   pacman -S grub efibootmgr os-prober
-\end{lstlisting}
+\end{minted}
 os-prober是为了能够引导Windows系列系统而不得不装的一个东西。如果不需要Windows系统，完全可以不安装之。但是，前两个还是要装的。
 
 下一步，把grub安装到EFI分区：
-\begin{lstlisting}
+\begin{minted}{bash}
   grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=ARCH
-\end{lstlisting}
+\end{minted}
 
 然后，对开机指令进行一些微调，以加快速度：
-\begin{lstlisting}
+\begin{minted}{bash}
   vim /etc/default/grub
-\end{lstlisting}
+\end{minted}
 主要是对GRUB\_CMDLINE\_LINUX\_DEFAULT进行修改：去掉最后的 quiet 参数（这样可以在启动的时候就把内核日志打出来，便于排错）；把 loglevel 的数值从 3 改成 5，方便排错；加入 nowatchdog 参数，这可以显著提高开关机速度。
 
 如果需要引导Windows系列系统，则不得不添加新的一行：
-\begin{lstlisting}
+\begin{minted}{bash}
   GRUB_DISABLE_OS_PROBER=false
-\end{lstlisting}
+\end{minted}
 
 最后，生成配置文件：
-\begin{lstlisting}
+\begin{minted}{bash}
   grub-mkconfig -o /boot/grub/grub.cfg
-\end{lstlisting}
+\end{minted}
 
 \subsubsection{完成基础安装}
 
 输入以下命令以完成安装：
-\begin{lstlisting}
+\begin{minted}{bash}
 exit # 退回安装环境
 umount -R /mnt # 卸载新分区
 reboot # 重启
-\end{lstlisting}
+\end{minted}
 计算机关闭后，立刻拔掉U盘，进入引导界面，然后选择archlinux。
 
 登录系统需要输入用户名和密码。在这时，我们还没有创建任何账户，因此只有一个root。输入用户名root，以及你的密码，即可进入系统。
 
 为了保证这玩意能够自动联网，可以使用
-\begin{lstlisting}
+\begin{minted}{bash}
 systemctl enable --now NetworkManager # 设置开机自启并立即启动 NetworkManager 服务
 nmcli dev wifi list # 显示附近的 Wi-Fi 网络
 nmcli dev wifi connect "<Your_Wifi>" password "<your_password>" # 连接指定的无线网络
 ping 8.8.8.8 # 测试网络连接
-\end{lstlisting}
+\end{minted}
 
 最后，安装并运行fastfetch：
-\begin{lstlisting}
+\begin{minted}{bash}
   pacman -S fastfetch
   fastfetch
-\end{lstlisting}
+\end{minted}
 看着显示出的Arch徽标，我们终于可以长舒一口气：安装Arch Linux的过程终于结束了。当然，这个系统肯定很难日常使用，还需要一些后续配置，例如安装视窗等。之后的各种配置实际上都是在已经有的内容上继续开枝散叶，和现代Windows有显著的不同：现代Windows的视窗实际上已经紧紧地和系统内核绑定在一起了，而Linux的视窗只是个软件罢了！
 
 \subsubsection{创建非根用户}
@@ -508,71 +508,71 @@ ping 8.8.8.8 # 测试网络连接
 根用户的权限太高了，他本身就是系统。这导致其自由度太高、安全度太低，几乎毫无容错。因此，有必要创建一个非根用户。
 
 先做一点准备工作：使用vim或者nano编辑一下 \texttt{~/.bash\_profile} 文件：
-\begin{lstlisting}
+\begin{minted}{bash}
   vim ~/.bash_profile
-\end{lstlisting}
+\end{minted}
 向其中加入以下内容：
-\begin{lstlisting}
+\begin{minted}{bash}
   export EDITOR='vim'
-\end{lstlisting}
+\end{minted}
 这样就会显式地制定编辑器为vim，保证部分情况下不会出错。
 
 然后就可以添加用户了：
-\begin{lstlisting}
+\begin{minted}{bash}
   useradd -m -G wheel -s /bin/bash myusername
-\end{lstlisting}
+\end{minted}
 你可以把myusername改为你喜欢的名字，但是同样不能包含空格和特殊字符。这个wheel是一个特殊的用户组，可以使用sudo提权。你可以使用以下命令设置新用户的密码：
-\begin{lstlisting}
+\begin{minted}{bash}
   passwd myusername
-\end{lstlisting}
+\end{minted}
 再下一步，编辑sudoers文件：
-\begin{lstlisting}
+\begin{minted}{bash}
   EDITOR=vim visudo # 这里需要显式的指定编辑器，因为上面的环境变量还未生效
-\end{lstlisting}
+\end{minted}
 找到这一行，把前面的注释符号\#去掉：
-\begin{lstlisting}
+\begin{minted}{bash}
   #%wheel ALL=(ALL:ALL) ALL
-\end{lstlisting}
+\end{minted}
 保存并退出就可以了。现在你就有了一个非根用户。
 
 \subsubsection{开启多个库的支持}
 
 编辑这个文件：
-\begin{lstlisting}
+\begin{minted}{bash}
   vim /etc/pacman.conf
-\end{lstlisting}
+\end{minted}
 然后去掉 \texttt{[multilib]} 一节中所有内容的注释即可。这样可以开启32位库的支持。
 
 然后在文档结尾处加入下面的文字来添加中国社区源：
-\begin{lstlisting}
+\begin{minted}{toml}
 [archlinuxcn]
 Server = https://mirrors.ustc.edu.cn/archlinuxcn/$arch # 中国科学技术大学开源镜像站
 Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch # 清华大学开源软件镜像站
 Server = https://mirrors.hit.edu.cn/archlinuxcn/$arch # 哈尔滨工业大学开源镜像站
 Server = https://repo.huaweicloud.com/archlinuxcn/$arch # 华为开源镜像站
-\end{lstlisting}
+\end{minted}
 
 保存并退出上述文件，然后使用以下命令刷新数据库并更新系统：
-\begin{lstlisting}
+\begin{minted}{bash}
   pacman -Syyu
-\end{lstlisting}
+\end{minted}
 
 \subsection{配置视窗，以及后续内容}
 
 通过以下的命令安装视窗相关的软件包：
-\begin{lstlisting}
+\begin{minted}{bash}
   pacman -S plasma-meta konsole dolphin
-\end{lstlisting}
+\end{minted}
 安装完成之后，运行以下命令：
-\begin{lstlisting}
+\begin{minted}{bash}
   systemctl enable sddm
-\end{lstlisting}
+\end{minted}
 之后重启电脑就行。输入你新创建的非根用户的密码，然后回车，就可以登录桌面了。
 
 值得注意的是，这时尚未安装任何显卡驱动。如果你在进入桌面环境时遭遇闪退、花屏等异常情况，建议尝试安装相应的显卡驱动。这里我就不提了，感兴趣的同学可以自行查找相关资料进行了解。
 
 之后，可以做一些很好的操作，例如使用 \texttt{Ctrl+Alt+T} 打开Konsole（不是Console，这个是一个终端模拟器）。连接一下网络，然后安装一些基础功能包：
-\begin{lstlisting}
+\begin{minted}{bash}
 sudo pacman -S sof-firmware alsa-firmware alsa-ucm-conf # 声音固件
 sudo pacman -S ntfs-3g # 使系统可以识别 NTFS 格式的硬盘
 sudo pacman -S adobe-source-han-serif-cn-fonts wqy-zenhei # 安装几个开源中文字体。一般装上文泉驿就能解决大多 wine 应用中文方块的问题
@@ -583,7 +583,7 @@ sudo pacman -S packagekit-qt6 packagekit appstream-qt appstream # 确保 Discove
 sudo pacman -S gwenview # 图片查看器
 sudo pacman -S archlinuxcn-keyring # cn 源中的签名（archlinuxcn-keyring 在 archlinuxcn）
 sudo pacman -S yay # yay 命令可以让用户安装 AUR 中的软件（yay 在 archlinuxcn）
-\end{lstlisting}
+\end{minted}
 
 之后，如同root账户一样，配置其默认编辑器即可。
 
@@ -592,26 +592,26 @@ sudo pacman -S yay # yay 命令可以让用户安装 AUR 中的软件（yay 在 
 首先应当配置系统为中文。打开 \texttt{System Settings > Language and Regional Settings > Language > Add languages} ，找到并加入简体中文，然后拖拽到最上面一位，保存并退出设置。重启电脑就可以生效了。
 
 现在该配置汉语输入法了：
-\begin{lstlisting}
+\begin{minted}{bash}
 sudo pacman -S fcitx5-im # 输入法基础包组
 sudo pacman -S fcitx5-chinese-addons # 官方中文输入引擎
 sudo pacman -S fcitx5-anthy # 日文输入引擎
 sudo pacman -S fcitx5-pinyin-moegirl # 萌娘百科词库。二刺猿必备（archlinuxcn）
 sudo pacman -S fcitx5-material-color # 输入法主题
-\end{lstlisting}
+\end{minted}
 下一步，创建以下文件，然后编辑这个文件：
-\begin{lstlisting}
+\begin{minted}{bash}
   vim ~/.config/environment.d/im.conf
-\end{lstlisting}
+\end{minted}
 向文件中加入这些内容并保存退出，以修正输入法的一些错误：
-\begin{lstlisting}
+\begin{minted}{text}
 # fix fcitx problem
 GTK_IM_MODULE=fcitx
 QT_IM_MODULE=fcitx
 XMODIFIERS=@im=fcitx
 SDL_IM_MODULE=fcitx
 GLFW_IM_MODULE=ibus
-\end{lstlisting}
+\end{minted}
 之后，打开系统设置-区域和语言，找到输入法一项，运行fcitx。之后，点击添加输入法，找到拼音输入（或者你喜欢的输入），将其添加为拼音输入法。
 
 现在重启电脑就可以输入中文了。

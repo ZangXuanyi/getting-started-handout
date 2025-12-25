@@ -67,7 +67,7 @@ DevOps实际上就是上述问题的破局手段。这是一个非常重要的�
 \paragraph{Base环境} 使用 micromamba 创建一个基础环境，安装一些常用的包，例如numpy、pandas、jupyter等。这个环境主要用于日常的实验和学习。这种环境不需要过于严谨，可以适当放宽版本要求，以便于快速迭代和实验。比如说，随便写点什么小脚本，或者跑一些临时的实验。
 
 \paragraph{项目环境} 对于每一个正式的项目，使用 Pixi 来创建一个独立的项目环境。这个环境应当严格指定所有依赖的版本，并且使用\verb|pixi.lock|来锁定版本。这样可以确保无论何时何地，只要有这个项目文件夹，就能复现完全一样的环境，避免“it works on my machine”的问题。大致上，运行下列几个命令：
-\begin{lstlisting}
+\begin{minted}{bash}
 mkdir my_project
 cd my_project # 这里是你的项目文件夹
 pixi init  # 初始化pixi项目
@@ -75,5 +75,5 @@ pixi init  # 初始化pixi项目
 # 或者也可以命令式
 pixi add numpy pandas matplotlib
 pixi install  # 安装依赖
-\end{lstlisting}
+\end{minted}
 然后提交作业或打包项目的时候连着\verb|pixi.toml|和\verb|pixi.lock|一起提交即可。这样别人只需要运行\verb|pixi install|就能复现你的环境。当我们习惯这套工作流之后，我们就已经不再是一个简单的“写代码的学生”，而是一个拥有工程思维的“准软件工程师”了。

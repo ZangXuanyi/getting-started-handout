@@ -58,10 +58,10 @@ Markdown 的内容输入和纯文本文件几乎一模一样，接下来我们�
   Markdown 的语法并不是固定的，不同的 Markdown 渲染器可能会有一些差异，这被称作\textbf{方言性}。我们在这里介绍的是最常见也最通用的 Markdown 语法。同时，你在不同的地方看到的 Markdown 渲染结果可能会不同，这也是正常现象，这是因为不同的 Markdown 渲染器往往有着不同的渲染风格。本人在这里讲述的也是几乎所有渲染器都支持的标记风格。
 
   举一个方言的例子：在Obsidian中，有一个语法“CallOut”，可以用来创建带有边框和图标的注释块，例如：
-  \begin{lstlisting}
+  \begin{minted}{text}
   > [!NOTE]
   > 这是一个注释块。
-  \end{lstlisting}
+  \end{minted}
   但是该语法几乎只有Obsidian支持，诸如Typora、VS Code等其他渲染器并不支持该语法。因此，在使用Markdown时，建议尽量使用通用的语法，以确保在不同的渲染器中都能正确显示；如要使用方言，则应当确保目标渲染器支持该语法。
 \end{note}
 
@@ -77,22 +77,22 @@ Markdown 的内容输入和纯文本文件几乎一模一样，接下来我们�
 
 Markdown 使用井号（\#）来表示标题。井号的数量表示标题的层级，例如：
 
-\begin{lstlisting}
+\begin{minted}{md}
 # 一级标题
 ## 二级标题
 ### 三级标题
-\end{lstlisting}
+\end{minted}
 
 \subsubsection{强调、删除}
 
 在 Markdown 中，可以使用星号 (*) 或下划线 (\_) 来表示强调。单个星号或下划线表示斜体，两个星号或下划线表示粗体。同时，还可以使用波浪号(~)来表示删除线，例如：
 
-\begin{lstlisting}
+\begin{minted}{md}
 *斜体文本*
 **粗体文本**
 ***粗斜体文本***
 ~~删除线文本~~
-\end{lstlisting}
+\end{minted}
 
 \subsubsection{转义}
 
@@ -102,13 +102,13 @@ Markdown 使用井号（\#）来表示标题。井号的数量表示标题的层
 
 在 Markdown 中，可以使用反引号来表示代码。单个反引号表示行内代码，三个反引号表示代码块。例如：
 
-\begin{lstlisting}
+\begin{minted}{md}
 `行内代码`
 
 ```
 代码块
 ```
-\end{lstlisting}
+\end{minted}
 
 如果需要在代码块中打出反引号且防止此反引号被编译，只要保证用于包装的反引号数量比防止编译的反引号数量多就可以了。
 
@@ -116,67 +116,67 @@ Markdown 使用井号（\#）来表示标题。井号的数量表示标题的层
 
 在 Markdown 中，可以使用大于号 ( \texttt{>} ) 来表示引用。引用块也是可以嵌套的，只需要在每一行的开头添加一个大于号即可。例如：
 
-\begin{lstlisting}
+\begin{minted}{md}
 > 这是一段引用文本。
 > > 这是一段嵌套的引用文本。
-\end{lstlisting}
+\end{minted}
 
 \subsubsection{列表}
 
 在 Markdown 中，可以使用减号 (-) 来表示无序列表。例如：
 
-\begin{lstlisting}
+\begin{minted}{md}
 - 列表项 1
 - 列表项 2
 - 列表项 3
-\end{lstlisting}
+\end{minted}
 
 有序列表则使用数字加点的方式表示，例如：
 
-\begin{lstlisting}
+\begin{minted}{md}
 1. 列表项 1
 2. 列表项 2
 3. 列表项 3
-\end{lstlisting}
+\end{minted}
 
 \subsubsection{表格}
 
 在 Markdown 中，可以使用竖线 (|) 来表示表格。表格的第一行是表头，第二行是分隔线，后面的行是表格内容。例如：
 
-\begin{lstlisting}
+\begin{minted}{md}
 | 列表项 1 | 列表项 2 | 列表项 3 |
 | -------- | -------- | -------- |
 | 内容 1  | 内容 2  | 内容 3  |
-\end{lstlisting}
+\end{minted}
 
 \subsubsection{外部资源：链接、图片}
 
 在 Markdown 中，可以使用方括号和圆括号来表示链接。例如：
 
-\begin{lstlisting}
+\begin{minted}{md}
 [链接文本](https://www.example.com)
-\end{lstlisting}
+\end{minted}
 
 在 Markdown 中，可以使用感叹号、方括号和圆括号来表示图片。例如：
 
-\begin{lstlisting}
+\begin{minted}{md}
 ![图片描述](https://www.example.com/image.png)
-\end{lstlisting}
+\end{minted}
 
 \subsubsection{数学公式}
 
 在 Markdown 中，可以使用美元符号 (\$) 来表示行内公式。例如：
 
-\begin{lstlisting}
+\begin{minted}{md}
 这是一个行内公式 $E=mc^2$ 的示例。
-\end{lstlisting}
+\end{minted}
 
 如果需要输入块级公式，可以使用两个美元符号 (\$\$) 来包裹公式。例如：
 
-\begin{lstlisting}
+\begin{minted}{md}
 这是一个块级公式的示例：
 $$ E=mc^2 $$
-\end{lstlisting}
+\end{minted}
 
 大多数的 Markdown 编译器都会正确渲染 \LaTeX 公式，但是不排除少数编译器不支持渲染 \LaTeX 。一般而言，不支持渲染的编译器将会原样显示公式内容。开始写作前试试编辑器能否正常渲染公式总是好的选择。
 
@@ -206,7 +206,7 @@ Typst 有两类语言模式：标记模式和脚本模式，而本质上都可�
 
 对于 Typst，所有的标记其实都是语法糖。这样能像 Markdown 一样做到内容和格式的彻底分离，也方便了我们的控制。在标记模式中，用户可以使用以下语法来进行排版：
 
-\begin{lstlisting}
+\begin{minted}{text}
   = 一级标题
   上述文本等价于
   #heading(level: 1, [一级标题])
@@ -244,36 +244,36 @@ Typst 有两类语言模式：标记模式和脚本模式，而本质上都可�
 
   还有一种特殊的语法糖：
   #fn(ZZZ)[XXX][YYY] 是 #fn(ZZZ, XXX, YYY) 的语法糖。
-\end{lstlisting}
+\end{minted}
 
 \subsubsection{脚本模式}
 
 在脚本模式中，用户可以使用类似于 Python 的语法来编写代码。主要有三个最重要的脚本：set、show和let。
 
 set可以设置样式，也就是“为参数设置默认值”的能力。例如：
-\begin{lstlisting}
+\begin{minted}{text}
   #set heading(numbering: "1.")
-\end{lstlisting}
+\end{minted}
 上述代码设置了标题的编号。
 
 show 的本意是进行“显示替换”，也就是把某个内容替换成另一个内容。例如：
-\begin{lstlisting}
+\begin{minted}{text}
   #show "大陆": "中国"
-\end{lstlisting}
+\end{minted}
 上述代码可以把整篇文档中的所有“大陆”在编译出的文档都显示成“中国”，例如“哥伦布发现了新大陆”会被编译成“哥伦布发现了新中国”\footnote{该笑话来自台湾网友，显然不是历史事实：实际上是讽刺台当局的“去大陆化”政策。}。
 
 show 还可以用于样式设计：
-\begin{lstlisting}
+\begin{minted}{text}
   #show heading.where(level: 1): body =>{
     set align(center)
     body
   }
-\end{lstlisting}
+\end{minted}
 这里的heading.where()有sqlalchemy库的影子，大家应该可以意会到它是一个选择器，选择标题中等级为 1 的所有元素。body则是检索到的原始内容，这里的箭头则是一个函数，指的是接受箭头前面的内容，然后返回修改后的内容，也就是大括号内部的东西。在大括号内部，我们使用set调整了样式，使其居中。
 
 let 用于定义变量和函数等，很像它在JavaScript中的亲戚。主要有以下几种使用方式：
 
-\begin{lstlisting}
+\begin{minted}{text}
 // 存储基本值
 #let x = 10
 #let name = "Typst"
@@ -302,7 +302,7 @@ This is *emphasized* text. // 红色加粗
 
 #title-style
 = This is a title // 使用 Helvetica, 16pt, 加粗
-\end{lstlisting}
+\end{minted}
 
 默认情况下，该方法定义的变量是有类似 C 系的变量作用域的。let和show结合使用，则可以制作出各种各样的模板。
 

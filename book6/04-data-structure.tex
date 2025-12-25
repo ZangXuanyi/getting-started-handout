@@ -13,10 +13,10 @@
 顺序表是最简单的一种数据结构，可以简单的理解为\textbf{一段连续的内存空间}。
 
 在C++中，对应的是下面两个东西：
-\begin{lstlisting}
+\begin{minted}{cpp}
 int arr[10];          // C风格的顺序表
 std::array<int, 10>;  // C++风格的顺序表
-\end{lstlisting}
+\end{minted}
 
 顺序表的优点在于它的内存是连续的，所以可以通过下标快速访问任意位置的元素，时间复杂度为$O(1)$。但是它的缺点也很明显，那就是在中间的插入和删除操作需要移动大量元素，时间复杂度为$O(n)$。
 
@@ -33,7 +33,7 @@ std::array<int, 10>;  // C++风格的顺序表
 
 \paragraph{单向链表}
 链表是另一种简单的线性数据结构，虽然不是一段连续的内存空间，但它通过指针将各个节点连接起来。每个节点包含数据和指向下一个节点的指针。用C++实现一个链表，需要实现节点结构体和链表类：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 struct Node {
     int data;
     std::shared_ptr<Node> next;
@@ -48,18 +48,18 @@ public:
     void remove(int val);
     void display();
 };
-\end{lstlisting}
+\end{minted}
 
 具体的插入、删除和显示方法可以根据需要实现。这个被称作“单向链表”，也就是说每一个元素只能指向下一个节点，不能往回走。要想给上述链表写析构函数，需要遍历链表并释放每个节点的内存。
 
 在链表中删除或插入某一个节点时，需要修改相邻节点的指针。例如，如果要在p、q之间插入一个新节点newNode，只需要：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 // 先前： p->next = q;
 newNode->next = p->next;
 p->next = newNode;
 // 当然这样写起来不是很安全，实际代码中需要检查p是否为空等
 // 下同，简单起见不再赘述
-\end{lstlisting}
+\end{minted}
 请试着完成删除节点的代码。
 
 单向链表的插入可用以下图解来理解：
@@ -73,7 +73,7 @@ p->next = newNode;
 \paragraph{双向链表}
 
 为了解决上述链表只能走单行道的问题，我们引入了双向链表。这个用C++来实现的话，节点结构体需要增加一个指向前一个节点的指针：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 struct DNode {
     int data;
     std::shared_ptr<DNode> next;
@@ -84,17 +84,17 @@ struct DNode {
 class DoublyLinkedList {
     ...
 };
-\end{lstlisting}
+\end{minted}
 链表内部的操作略有不同，但总体思路类似。双向链表的优点在于可以双向遍历，插入和删除操作仍然是$O(1)$，但缺点是每个节点需要额外的内存来存储前驱指针。
 
 如果要插入或删除一个节点，也需要修改指针。例如，插入一个新节点newNode在p和q之间：
-\begin{lstlisting}
+\begin{minted}{cpp}
 // 先前： p->next = q; q->prev = p;
 newNode->next = p->next;
 newNode->prev = p;
 p->next->prev = newNode;
 p->next = newNode;
-\end{lstlisting}
+\end{minted}
 
 双向链表的插入可用以下图解来理解：
 \begin{figure}[htbp]
@@ -111,7 +111,7 @@ p->next = newNode;
 \paragraph{栈}
 
 栈是一种只能在一端进行插入和删除操作的数据结构。我们可以使用\lstinline[language=C++]|std::stack<T>|来实现栈：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 #include <stack>
 std::stack<int, std::vector<int>> s; // 使用vector作为底层容器
 // 也可以使用list作为底层容器：std::stack<int, std::list<int>> s;
@@ -120,14 +120,14 @@ s.push(1);    // 入栈
 s.push(2);
 int top = s.top(); // 获取栈顶元素
 s.pop();      // 出栈
-\end{lstlisting}
+\end{minted}
 
 栈只能访问其顶元素，其余元素都无法直接访问。我们可以把栈想象成一个装东西的箱子，只能从上面放东西和拿东西，中间的东西是看不到的。因此，栈遵循\textbf{后进先出}的原则。
 
 \paragraph{队列}
 
 队列和栈类似，但它允许在一端插入元素，在另一端删除元素。我们可以使用\lstinline[language=C++]|std::queue<T>|来实现队列：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 #include <queue>
 std::queue<int, std::list<int>> q; // 使用list作为底层容器
 // 也可以使用vector作为底层容器：std::queue<int, std::vector<int>> q;
@@ -136,13 +136,13 @@ q.push(1);    // 入队
 q.push(2);
 int front = q.front(); // 获取队首元素
 q.pop();      // 出队
-\end{lstlisting}
+\end{minted}
 队列也只能访问其首元素，其余元素都无法直接访问。我们可以把队列想象成一条排队买票的队伍，前面的人先买票离开，后面的人只能等着。因此，队列遵循\textbf{先进先出}的原则。
 
 \paragraph{双端队列}
 
 双端队列是一种特殊的队列，允许在两端进行插入和删除操作。我们可以使用\lstinline[language=C++]|std::deque<T>|来实现双端队列：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 #include <deque>
 std::deque<int> dq; // 双端队列，底层容器即为deque本身
 dq.push_back(1);    // 在尾部插入元素
@@ -151,11 +151,11 @@ int front = dq.front(); // 获取头部元素
 int back = dq.back();   // 获取尾部元素
 dq.pop_front();     // 删除头部元素
 dq.pop_back();      // 删除尾部元素
-\end{lstlisting}
+\end{minted}
 双端队列结合了栈和队列的特点，允许在两端进行操作，适用于需要频繁在两端插入和删除元素的场景。
 
 有的同学可能会疑惑：为什么有了顺序表和链表，还需要栈和队列呢？这是因为栈和队列是对数据结构的抽象，提供了特定的操作接口，方便我们在特定场景下使用。例如，在函数调用时使用栈来保存返回地址，在任务调度时使用队列来管理任务顺序。如果自己维护一个顺序表或链表来实现栈或队列，代码会变得复杂且容易出错。非常常见的两个用法，一个是用栈来替代递归函数，另一个是用队列来实现广度优先搜索（BFS）算法（见后续章节）。下面是一个用栈替代递归函数的例子：
-\begin{lstlisting}[language=C++, title={用stack替代递归函数}]
+\begin{minted}{cpp}
 void recursiveFunction(int n) {
     if (n <= 0) return;
     // 处理当前节点
@@ -175,7 +175,7 @@ void iterativeFunction(int n) {
         // 处理返回时的操作
     }
 } // 用栈实现的迭代函数
-\end{lstlisting}
+\end{minted}
 那为什么要这么做呢？实际上，递归在底层上本来就是用栈来实现的。如果递归程度过深，则导致栈溢出，俗称“爆栈”。因此，在某些情况下，使用显式的栈来替代递归函数，可以在一定程度上避免栈溢出的问题，也可以更好地控制内存使用。把裸递归写成栈是一种非常常见的技巧，工程上也经常会用到。
 
 但栈和队列也有一些不太好的地方，就是无法在中间访问，即使是简单的查询操作也不行。如果需要频繁在中间访问元素，还是需要使用顺序表或链表。
@@ -189,14 +189,14 @@ void iterativeFunction(int n) {
 树是一种层次化的数据结构，由节点和边组成。每个节点可以有多个子节点，但只有一个父节点（根节点除外）。树的常见应用包括文件系统、XML/HTML文档等。
 
 C++没有内置的树结构，但我们可以通过自定义类来实现。例如，下面是一个简单的树节点结构体：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 struct TreeNode {
     int data;
     std::weak_ptr<TreeNode> father; // 指向父节点的弱指针，防止循环引用
     std::vector<std::shared_ptr<TreeNode>> children; // 多个子节点
     TreeNode(int val) : data(val), left(nullptr), right(nullptr) {}
 };
-\end{lstlisting}
+\end{minted}
 
 特别的，每一个节点只有至多两个子节点的树，称为二叉树（Binary Tree）。二叉树有很多特殊的性质和操作，例如二叉搜索树（Binary Search Tree, BST）和堆（Heap）等，在后文会详细叙述。这里仅介绍一般树的基本概念和操作。
 
@@ -212,21 +212,21 @@ struct TreeNode {
 树的操作包括插入、删除、遍历等。一般情况下，对于一棵树，我们往往用其根节点来称呼整棵树。
 
 树的插入操作通常是将新节点添加为某个节点的子节点。例如，向节点p插入一个新节点newNode：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 p->children.push_back(newNode);
 newNode->father = p; // 设置父节点指针
-\end{lstlisting}
+\end{minted}
 
 树的删除包括删除叶节点和删除内部节点两种情况，删除内部节点时需要考虑如何处理其子节点。因此很少直接删除树节点，更多的是标记该节点不再使用。
 
 而树的遍历（周游）有两种策略：深度优先遍历（Depth-First Search, DFS）和广度优先遍历（Breadth-First Search, BFS）。深度优先遍历又分为前序遍历、中序遍历和后序遍历三种方式。我们以下面这棵树为例：
-\begin{lstlisting}
+\begin{minted}{text}
         A
        / \
       B   C
      / \   \
     D   E   F
-\end{lstlisting}
+\end{minted}
 
 \paragraph{前序遍历} 树的前序遍历指的是：先访问根节点，再访问左子树，最后访问右子树。我们大致为大家写一下过程：
 \begin{itemize}
@@ -238,7 +238,7 @@ newNode->father = p; // 设置父节点指针
     \item 访问F，输出F，没有子树，返回C，C已经没有子树，返回A，结束
 \end{itemize}
 于是就可以得到前序遍历结果：\texttt{A B D E C F}。其代码实现大致是：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 void preOrderTraversal(std::shared_ptr<TreeNode> node) {
     if (!node) return;
     std::cout << node->data << " "; // 访问节点
@@ -246,10 +246,10 @@ void preOrderTraversal(std::shared_ptr<TreeNode> node) {
         preOrderTraversal(child); // 递归访问子节点
     }
 }
-\end{lstlisting}
+\end{minted}
 
 当然也可以用栈来写，但是入栈的过程应该是\textbf{逆向压栈}，即先压右子节点，再压左子节点，这样出栈时才能保证左子节点先被访问。
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 #include <stack>
 void preOrderTraversalIterative(std::shared_ptr<TreeNode> root) {
     if (!root) return;
@@ -265,7 +265,7 @@ void preOrderTraversalIterative(std::shared_ptr<TreeNode> root) {
         }
     }
 }
-\end{lstlisting}
+\end{minted}
 其他DFS写成栈的形式就不再赘述了，这里留作练习。
 
 \paragraph{中序遍历} 中序遍历只能用于二叉树这种有明显的“左子树”和“右子树”概念的树。中序遍历指的是：先访问左子树，再访问根节点，最后访问右子树。对于上面的树，我们写一下过程：
@@ -278,7 +278,7 @@ void preOrderTraversalIterative(std::shared_ptr<TreeNode> root) {
     \item 访问F，没有子树，输出F，返回C，C已经没有子树，返回A，结束
 \end{itemize}
 于是就可以得到中序遍历结果：\texttt{D B E A C F}。其代码实现大致是：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 void inOrderTraversal(std::shared_ptr<TreeNode> node) {
     if (!node) return;
     if (node->children.size() > 0)
@@ -287,7 +287,7 @@ void inOrderTraversal(std::shared_ptr<TreeNode> node) {
     if (node->children.size() > 1)
         inOrderTraversal(node->children[1]); // 访问右子树
 }
-\end{lstlisting}
+\end{minted}
 
 \paragraph{后序遍历} 后序遍历指的是：先访问左子树，再访问右子树，最后访问根节点。对于上面的树，我们写一下过程：
 \begin{itemize}
@@ -299,7 +299,7 @@ void inOrderTraversal(std::shared_ptr<TreeNode> node) {
     \item 访问F，没有子树，输出F，返回C，C已经没有子树，输出C，返回A，A已经没有子树，结束
 \end{itemize}
 于是就可以得到后序遍历结果：\texttt{D E B F C A}。其代码实现大致是：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 void postOrderTraversal(std::shared_ptr<TreeNode> node) {
     if (!node) return;
     for (const auto& child : node->children) {
@@ -307,7 +307,7 @@ void postOrderTraversal(std::shared_ptr<TreeNode> node) {
     }
     std::cout << node->data << " "; // 访问节点
 }
-\end{lstlisting}
+\end{minted}
 
 \paragraph{广度优先遍历} 广度优先遍历指的是：按层次从上到下、从左到右依次访问节点。对于上面的树，我们写一下过程：
 \begin{itemize}
@@ -319,7 +319,7 @@ void postOrderTraversal(std::shared_ptr<TreeNode> node) {
     \item 访问F，输出F，没有子节点，结束
 \end{itemize}
 可以看到树的广度优先遍历需要用到队列来辅助实现。其代码实现大致是：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 #include <queue>
 void breadthFirstTraversal(std::shared_ptr<TreeNode> root) {
     if (!root) return;
@@ -334,7 +334,7 @@ void breadthFirstTraversal(std::shared_ptr<TreeNode> root) {
         }
     }
 }
-\end{lstlisting}
+\end{minted}
 
 树的应用非常广泛，例如文件系统就是一种树结构，根目录是根节点，子目录和文件是子节点。我们可以使用树来表示和操作这些层次化的数据。
 
@@ -343,20 +343,20 @@ void breadthFirstTraversal(std::shared_ptr<TreeNode> root) {
 图是另一种更复杂的数据结构，由节点（顶点）和边组成。图可以是有向的或无向的，可以包含环或不包含环。图的常见应用包括社交网络、地图导航等，用于表示复杂的关系。
 
 一般的图有多种写法。朴素的图写法可以用许多下面的Node表示：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 struct GraphNode {
     int data;
     std::vector<std::shared_ptr<GraphNode>> tos; // 可以前往的节点
     std::vector<std::weak_ptr<GraphNode>> froms; // 可以从哪里来，这里用weak_ptr防止循环引用
     GraphNode(int val) : data(val) {}
 };
-\end{lstlisting}
+\end{minted}
 但是这样的写法比较笨拙，无法表示边权重等信息，但在表示无权的小图时使用起来还算方便。
 
 更常见的图的表示方法有两种：邻接矩阵和邻接表。
 \paragraph{邻接矩阵}
 邻接矩阵是一种二维数组，用于表示图中节点之间的连接关系。如果节点i和节点j之间有边连接，则矩阵中的元素A[i][j]为1（或边的权重），否则为0。对于有向图，A[i][j]表示从节点i指向节点j的边；对于无向图，A[i][j]和A[j][i]表示节点i和节点j之间的边。
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 #include <vector>
 class Graph {
 private:
@@ -369,12 +369,12 @@ public:
         // adjMatrix[v][u] = weight;
     }
 };
-\end{lstlisting}
+\end{minted}
 邻接矩阵的优点是查询边的存在性非常快，时间复杂度为$O(1)$；但缺点是空间复杂度为$O(n^2)$，对于稀疏图来说非常浪费。稀疏图是指边的数量远小于节点数量平方的图。
 
 \paragraph{邻接表}
 邻接表是一种更节省空间的图表示方法。它使用一个数组或向量，每个元素对应一个节点，存储该节点的所有邻接节点。对于有向图，邻接表中的每个节点只存储其出边的邻接节点；对于无向图，则存储所有邻接节点。
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 #include <vector>
 #include <list>
 class Graph {
@@ -388,7 +388,7 @@ public:
         // adjList[v].emplace_back(u, weight);
     }
 };
-\end{lstlisting}
+\end{minted}
 邻接表的优点是空间复杂度为$O(n + m)$，其中n是节点数量，m是边的数量，适合表示稀疏图；但缺点是查询边的存在性需要遍历邻接节点列表，时间复杂度为$O(k)$，其中k是节点的度数。
 
 图的遍历也有深度优先遍历（DFS）和广度优先遍历（BFS）两种策略，类似于树的遍历。不同的是，图可能包含环，因此在遍历时需要记录已经访问过的节点，防止重复访问。这里可以用类似的递归或队列来实现DFS和BFS，我就不再赘述了。
@@ -402,7 +402,7 @@ public:
 刚刚讲树的时候，我们提到了二叉树。二叉树是一种特殊的树结构，每个节点最多有两个子节点，分别称为左子节点和右子节点。二叉树有很多变体，常见的有二叉搜索树（Binary Search Tree, BST）和堆（Heap）。
 
 二叉树的节点可以写得更简略：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 struct BinaryTreeNode {
     int data;
     std::shared_ptr<BinaryTreeNode> left;  // 左子节点
@@ -410,7 +410,7 @@ struct BinaryTreeNode {
     std::weak_ptr<BinaryTreeNode> father; // 父节点
     BinaryTreeNode(int val) : data(val), left(nullptr), right(nullptr), father(nullptr) {}
 };
-\end{lstlisting}
+\end{minted}
 该节点未使用诸如vector之类的容器，因为二叉树的每个节点最多只有两个子节点，使用两个指针即可，更加高效。
 
 仅仅是二叉树是没什么意思的，我们要对它进行一些限制，才能发挥它的作用。
@@ -494,7 +494,7 @@ AVL树是一种自平衡二叉搜索树，它通过在每个节点上维护一�
 哈希的基本原理就是将键通过哈希函数转换为一个整数索引，然后将值存储在该索引位置的数组中。
 
 在C++中，哈希表可以通过\lstinline[language=C++]|std::unordered_map<K, V>|和\lstinline[language=C++]|std::unordered_set<T>|来实现：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 #include <unordered_map>
 #include <unordered_set>
 
@@ -505,7 +505,7 @@ int value = hashMap["apple"]; // 查找键对应的值
 std::unordered_set<int> hashSet; // 哈希集合
 hashSet.insert(10); // 插入元素
 bool exists = hashSet.find(10) != hashSet.end(); // 查找元素是否存在
-\end{lstlisting}
+\end{minted}
 
 在理想状态下，散列函数应该能给每个不同的键生成不同的索引，但实际上可能会出现冲突（Collision），即不同的键被映射到相同的索引位置。为了解决冲突，常用的方法有链地址法和开放地址法。
 
@@ -519,14 +519,14 @@ bool exists = hashSet.find(10) != hashSet.end(); // 查找元素是否存在
 堆是一种特殊的完全二叉树，满足堆性质（Heap Property）：对于最大堆（Max Heap），每个节点的值都大于或等于其子节点的值；对于最小堆（Min Heap），每个节点的值都小于或等于其子节点的值。堆常用于实现优先队列和排序算法（如堆排序）。
 
 在C++中的堆是通过\lstinline[language=C++]|std::priority_queue<T>|来实现的：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 #include <queue>
 std::priority_queue<int> maxHeap; // 最大堆
 std::priority_queue<int, std::vector<int>, std::greater<int>> minHeap; // 最小堆
 maxHeap.push(10); // 插入元素
 int top = maxHeap.top(); // 获取堆顶元素
 maxHeap.pop(); // 删除堆顶元素
-\end{lstlisting}
+\end{minted}
 优先队列实际上也是一个“队列”，但内部并不是简单的先进先出，而是根据元素的优先级来决定出队顺序。最大堆的优先级是值越大越高，最小堆则是值越小越高。在C++中优先队列也是一个容器适配器，底层通常使用\lstinline[language=C++]|std::vector<T>|来存储元素，并通过堆操作来维护堆性质；也可以自定义底层容器，但必须满足随机访问迭代器的要求。
 
 堆的插入操作包括将新元素添加到堆的末尾，然后通过上浮（Bubble Up）操作恢复堆性质。上浮操作是将新元素与其父节点比较，如果违反堆性质，则交换它们的位置，直到堆性质得到恢复或到达根节点为止。这一过程大概是：
@@ -544,7 +544,7 @@ maxHeap.pop(); // 删除堆顶元素
 那么具体是以一种什么方式来实现的呢？首先，先像淘汰赛一样，把所有元素排成一个完全二叉树的叶节点，然后从底向上比较每对节点，较小（或较大）的节点胜出，成为其父节点的值，这个过程一直持续到根节点。这样，根节点就存储了所有元素中的最小值（或最大值），这就是胜者树。而败者树相反，父节点存的是比较过程中“输掉”的那个节点的值，但决出祖父节点的方式依然是两个胜者比较，而不是败者比较；这样设计的好处是，在进行多路归并时，只需要更新败者树中的节点，而不需要重新比较所有节点，从而提高效率；而在根节点上一般也多一个辅助变量（或者专门的节点）来存储当前的最小值（或最大值，实际上就是最终的胜者）。
 
 我们用一个例子来说明胜者树和败者树的构建过程。假设我们有8个元素：5, 3, 8, 1, 4, 7, 6, 2。我们知道，8 是2的整数次幂（$2^3$），因此可以直接构建一个完整的二叉树，无需考虑“轮空”或“补齐”的问题。对于胜者树，构建过程较为简单。假设我们取较小值为胜者，那么构建过程如下：
-\begin{lstlisting}
+\begin{minted}{text}
        1
     /     \
    1       2
@@ -552,9 +552,9 @@ maxHeap.pop(); // 删除堆顶元素
  3   1   4   2
 / \ / \ / \ / \
 5 3 8 1 4 7 6 2
-\end{lstlisting}
+\end{minted}
 而败者树的构建过程则稍微复杂一些。假设我们取较小值为胜者，那么构建过程如下：
-\begin{lstlisting}
+\begin{minted}{text}
        2(1)
     /     \
    3       4
@@ -562,7 +562,7 @@ maxHeap.pop(); // 删除堆顶元素
  5   8   7   6
 / \ / \ / \ / \
 5 3 8 1 4 7 6 2
-\end{lstlisting}
+\end{minted}
 胜者树和败者树在多路归并排序中非常有用。假设我们有多个已排序的序列，需要将它们合并成一个有序序列。使用胜者树或败者树可以高效地找到当前最小（或最大）的元素，并将其添加到结果序列中，然后更新树结构以反映新的状态。
 
 理解和掌握这些数据结构对于编写高效的程序至关重要。在实际编程中，我们通常会使用C++标准库提供的容器和算法来简化数据结构的实现和操作，从而专注于解决具体的问题。

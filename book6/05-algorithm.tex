@@ -110,7 +110,7 @@
     我们可以先预处理出1000以内的所有素数，然后对于每个输入的整数，直接判断它是否在素数列表中即可。
 
     我们知道，数组的索引天然是自然数，非常适宜做这种标记，在筛完之后只需要按索引查询即可；想到“按索引查询”，立刻想到顺序表\texttt{vector}。于是，我们得以模拟过程，得到如下代码：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 vector<int> primes(1001, 1); // 初始化一个大小为1001的数组，初始值全为1
 primes[0] = primes[1] = 0; // 0和1不是素数
 for (int i = 2; i * i <= 1000; ++i) { // 遍历每个数
@@ -120,7 +120,7 @@ for (int i = 2; i * i <= 1000; ++i) { // 遍历每个数
         }
     }
 }
-\end{lstlisting}
+\end{minted}
     这样，我们就得到了一个标记了1000以内所有素数的数组。接下来，我们只需要读取输入的整数，然后直接查询这个数组即可。查询部分代码留作练习。
 \end{answer}
 
@@ -183,7 +183,7 @@ for (int i = 2; i * i <= 1000; ++i) { // 遍历每个数
     更进一步地，把$y$移到等式右边，我们发现$7x$必须是$25-y$的4的倍数，因此我们可以直接以4为步长枚举$x$，这样就可以进一步减少枚举的次数。
 
     代码实现如下：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 for (int x = 0; x <= 25; x += 4) { // 枚举公鸡数量
     int y = (100 - 7 * x) / 4; // 计算母鸡数量
     int z = 100 - x - y; // 计算小鸡数量
@@ -191,7 +191,7 @@ for (int x = 0; x <= 25; x += 4) { // 枚举公鸡数量
         cout << x << " " << y << " " << z << endl; // 输出结果
     }
 }
-\end{lstlisting}
+\end{minted}
 \end{answer}
 
 \subsection{贪心}
@@ -291,7 +291,7 @@ for (int x = 0; x <= 25; x += 4) { // 枚举公鸡数量
     下面我们来分析这个问题。一个朴素的想法是，不妨设\texttt{dp[i]}表示以第$i$个元素结尾的最长非降子序列的长度。对于任何元素，我们都遍历它前面的所有元素，如果前面的元素$A_j$小于等于当前元素$A_i$，那么我们就把$A_i$接到$A_j$的后面，这样就形成了一个更长的非降子序列。因此，我们可以得到以下递推关系：
     $$ \forall A_j \leq A_i, \forall j < i, dp[i] = \max(dp[j] + 1) $$
     代码写出来如下：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 vector<int> dp(n, 1); // 初始化dp数组，初始值为1
 for (int i = 1; i < n; ++i) { // 遍历每个元素
     for (int j = 0; j < i; ++j) { // 遍历前面的元素
@@ -300,7 +300,7 @@ for (int i = 1; i < n; ++i) { // 遍历每个元素
         }
     }
 }
-\end{lstlisting}
+\end{minted}
     如果不懂，可以举一个例子，在纸上或者脑子里模拟一下上述过程，大概就能理解了。上述算法的时间复杂度是$O(n^2)$，对于$n$在几千以内的情况是可以接受的。
 
     回到刚才，我们是用枚举法来求符合条件的$j$，进而求出\texttt{dp[i]}。如果我们能用更高效的方法来求出符合条件的$j$，就能进一步提高算法效率。我们知道，枚举是很笨的，有没有更高效的算法来解决这个问题呢？答案是有的。
@@ -311,7 +311,7 @@ for (int i = 1; i < n; ++i) { // 遍历每个元素
 
     容易证明，\texttt{tails}数组是严格非降的，因此我们可以使用二分查找来提高查找效率。这样，整个算法的时间复杂度就降到了$O(n \log n)$。
 
-    \begin{lstlisting}[language=C++]
+    \begin{minted}{cpp}
 vector<int> nums = ...; // 输入的整数序列
 vector<int> tails;
 for (int num : nums) {
@@ -322,7 +322,7 @@ for (int num : nums) {
         *it = num; // 替换掉更大的末尾
     }
 }
-    \end{lstlisting}
+    \end{minted}
 \end{answer}
 
 \subsection{回溯和分支限界}
@@ -349,7 +349,7 @@ for (int num : nums) {
     该问题可以通过回溯法来解决。我们可以逐行放置后，对于每一行，我们尝试将后放在每一列上，并检查是否与之前放置的后冲突。如果不冲突，则继续放置下一行的后；如果冲突，则回溯到上一行，尝试其他列。这样，我们可以遍历所有可能的放置方案。
 
     具体实现时，我们可以使用一个数组\texttt{positions}来记录每一行后所在的列。我们还需要一个函数来检查当前放置的后是否与之前的后冲突。代码实现如下：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 void solveNQueens(int row, vector<int>& positions, vector<vector<int>>& results) {
     if (row == 8) { // 所有行都放置完毕
         results.push_back(positions); // 记录当前方案
@@ -370,7 +370,7 @@ void solveNQueens(int row, vector<int>& positions, vector<vector<int>>& results)
         }
     }
 }
-\end{lstlisting}
+\end{minted}
     最终，我们可以调用上述函数来计算所有可能的放置方案，并将结果输出。
 \end{answer}
 
@@ -579,7 +579,7 @@ void solveNQueens(int row, vector<int>& positions, vector<vector<int>>& results)
 
 \paragraph{冒泡排序} 冒泡排序重复地遍历要排序的数列，一次比较两个元素，如果它们的顺序错误就把它们交换过来。遍历数列的工作是重复进行直到没有再需要交换，也就是说该数列已经排序完成。
 
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 vector<int> arr = ...; // 输入的数组
 int n = arr.size();
 for (int i = 0; i < n - 1; ++i) {
@@ -589,10 +589,10 @@ for (int i = 0; i < n - 1; ++i) {
         }
     }
 }
-\end{lstlisting}
+\end{minted}
 
 \paragraph{选择排序} 选择排序的工作原理是每次从未排序的部分中选择最小（或最大）的元素，放到已排序部分的末尾。
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 vector<int> arr = ...; // 输入的数组
 int n = arr.size();
 for (int i = 0; i < n - 1; ++i) {
@@ -604,11 +604,11 @@ for (int i = 0; i < n - 1; ++i) {
     }
     swap(arr[i], arr[min_idx]); // 交换
 }
-\end{lstlisting}
+\end{minted}
 
 \paragraph{插入排序} 插入排序的工作原理是从左向右地构建有序序列，对于未排序数据，在已排序序列中从后向前扫描，找到相应位置并插入。
 
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 for (int i = 1; i < n; ++i) {
     int key = arr[i]; // 当前元素
     int j = i - 1;
@@ -618,11 +618,11 @@ for (int i = 1; i < n; ++i) {
     }
     arr[j + 1] = key; // 插入
 }
-\end{lstlisting}
+\end{minted}
 
 \paragraph{快速排序} 快速排序的工作原理是通过一个“基准”元素将数组分成两部分，左边部分的元素都小于基准，右边部分的元素都大于基准，然后递归地对这两部分进行排序。快速排序是一种分治算法。
 
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 void quicksort(int left, int right) {
     if (left >= right) return;
     int pivot = arr[(left + right) / 2]; // 选择基准
@@ -639,13 +639,13 @@ void quicksort(int left, int right) {
     quicksort(left, j); // 递归排序左半部分
     quicksort(i, right); // 递归排序右半部分
 }
-\end{lstlisting}
+\end{minted}
 
 快排有一个变种：随机快排，即每次随机选择一个基准元素，从而避免在某些特定情况下退化为$O(n^2)$的时间复杂度。该算法是一个拉斯维加斯算法，因为它保证每次运行都能得到正确解，但运行时间是随机的。
 
 \paragraph{归并排序} 归并排序的工作原理是将数组分成两半，分别对这两半进行排序，然后将排序好的两半合并在一起。归并排序也是一种分治算法。
 
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 void merge(int left, int mid, int right) {
     int n1 = mid - left + 1;
     int n2 = right - mid;
@@ -667,11 +667,11 @@ void mergesort(int left, int right) {
     mergesort(mid + 1, right); // 递归排序右半部分
     merge(left, mid, right); // 合并
 }
-\end{lstlisting}
+\end{minted}
 
 \paragraph{堆排序} 堆排序的工作原理是将数组构建成一个最大堆（或最小堆），然后不断地将堆顶元素与数组的最后一个元素交换，并将堆的大小减1，重新调整堆，直到堆为空。
 
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 void heapify(int n, int i) {
     int largest = i; // 初始化最大元素为根节点
     int left = 2 * i + 1; // 左子节点
@@ -691,15 +691,15 @@ void heapsort() {
         heapify(i, 0); // 重新调整堆
     }
 }
-\end{lstlisting}
+\end{minted}
 如不这么写，也可以用C++现成的堆函数来实现堆排序：
-\begin{lstlisting}
+\begin{minted}{cpp}
 vector<int> arr = ...; // 输入的数组
 make_heap(arr.begin(), arr.end()); // 构建堆
 sort_heap(arr.begin(), arr.end()); // 堆排序
-\end{lstlisting}
+\end{minted}
 更或者直接使用\lstinline[language=C++]|std::priority_queue|这样的堆：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 priority_queue<int> pq; // 创建最大堆
 for (int num : arr) {
     pq.push(num); // 插入元素
@@ -710,7 +710,7 @@ while (!pq.empty()) {
     pq.pop(); // 删除堆顶元素
 }
 reverse(sorted_arr.begin(), sorted_arr.end()); // 反转得到升序排列
-\end{lstlisting}
+\end{minted}
 
 \begin{table}[ht]
     \centering
@@ -739,7 +739,7 @@ reverse(sorted_arr.begin(), sorted_arr.end()); // 反转得到升序排列
 
 \paragraph{线性搜索} 线性搜索基本思想是从数据结构的第一个元素开始，逐个比较每个元素与目标元素是否相等，直到找到目标元素或遍历完整个数据结构为止。最常见的线性搜索例如：找最大值、找最小值、在无序的数组中确认某个值的索引等。
 
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 vector<int> arr = ...; // 输入的数组
 int target = ...; // 目标值
 for (int i = 0; i < arr.size(); ++i) {
@@ -748,7 +748,7 @@ for (int i = 0; i < arr.size(); ++i) {
         break;
     }
 }
-\end{lstlisting}
+\end{minted}
 
 \paragraph{双向搜索} 双向搜索和普通的线性搜索类似，但是它从起点和终点同时开始搜索，直到两个搜索相遇。这一算法常用于状态空间对称的问题，例如在图中寻找最短路径等。在线性数据结构上，这个算法并不常见（但有时候也有奇效，例如其变体“双指针法”），但在图论中非常有用。
 
@@ -773,7 +773,7 @@ for (int i = 0; i < arr.size(); ++i) {
 
 \paragraph{二分搜索} 二分查找是一种高效的搜索算法，适用于\textbf{有序数组}。它通过不断地将搜索范围缩小一半来查找目标值。二分查找也是一种分治算法。
 
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 vector<int> arr = ...; // 输入的有序数组
 int target = ...; // 目标值
 int left = 0, right = arr.size() - 1;
@@ -788,22 +788,22 @@ while (left <= right) {
         right = mid - 1; // 目标在左半部分
     }
 }
-\end{lstlisting}
+\end{minted}
 
 \paragraph{哈希搜索} 哈希搜索通过将数据映射到一个固定大小的数组（哈希表）中来实现快速查找。它适用于\textbf{需要频繁插入、删除和查找}的场景。哈希表的平均时间复杂度为$O(1)$，但在最坏情况下可能退化为$O(n)$。另外，在查找之前有一个建立哈希表的过程，这个过程是$O(n)$的；哈希表也有着较大的常数时间和较大的空间开销。我们通常不手写哈希表，而是使用标准库中的哈希容器，如C++的\texttt{std::unordered\_map}和\texttt{std::unordered\_set}。
 
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 unordered_map<int, int> hash_map; // 创建哈希表
 hash_map[key] = value; // 插入或更新键值对
 if (hash_map.find(key) != hash_map.end()) { // 查找键
     cout << "Found: " << hash_map[key] << endl;
 }
 hash_map.erase(key); // 删除键值对
-\end{lstlisting}
+\end{minted}
 
 \paragraph{快速选择} 受到快速排序的启发，出现了一种名为“快速选择”的算法。快速选择是一种用于在无序数组中查找第k小（或第k大）元素的算法。它基于快速排序的分治思想，通过选择一个“基准”元素，将数组分成两部分，然后递归地在包含第k小元素的部分继续搜索。快速选择也是一种分治算法，但它只关注找到第k小元素，而不是对整个数组进行排序。
 
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 int quickselect(vector<int>& arr, int left, int right, int k) {
     if (left == right) return arr[left]; // 只有一个元素
     int pivot = arr[(left + right) / 2]; // 选择基准
@@ -821,15 +821,15 @@ int quickselect(vector<int>& arr, int left, int right, int k) {
     if (k >= i) return quickselect(arr, i, right, k); // 在右半部分继续搜索
     return arr[k]; // 找到第k小元素
 }
-\end{lstlisting}
+\end{minted}
 
 当然，如果使用STL的\texttt{nth\_element}函数，可以更简单地实现快速选择。
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 vector<int> arr = ...; // 输入的数组
 int k = 2; // 举例：查找第3小元素（k从0开始）
 nth_element(arr.begin(), arr.begin() + k, arr.end()); // 部分排序
 int kth_smallest = arr[k]; // 第3小元素
-\end{lstlisting}
+\end{minted}
 值得注意的是，k是从0开始计数的。
 
 \begin{table}[ht]

@@ -31,7 +31,7 @@
 任务：读取文件内容到字符串，并统计非空行数。我们只要得到结果的函数即可，不需要完整的程序框架。这些代码都对应着当时主流编译器、标准库、硬件和工程组织的硬约束，不能脱离实际。
 
 \subsubsection{C99，2000}
-\begin{lstlisting}[language=C]
+\begin{minted}{c}
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -56,11 +56,11 @@ size_t count_non_empty_lines(const char* path)
     fclose(fp);
     return cnt;
 }
-\end{lstlisting}
+\end{minted}
 这个是很好的C代码，使用了标准库函数，处理了错误情况，逻辑清晰：手动管理文件、getline动态扩容、逐行读取、逐字符检查非空白。
 
 \subsubsection{C++03，2003}
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 #include <cstdio>
 #include <vector>
 #include <string>
@@ -83,12 +83,12 @@ std::size_t count_non_empty_lines(const std::string& path)
     std::fclose(fp);
     return cnt;
 }
-\end{lstlisting}
+\end{minted}
 
 我们发现，上述代码和C代码几乎一模一样，逻辑完全没有变化，错误处理依然是靠返回值，资源管理依然是手动的\footnote{虽然ifstream是RAII的，但是这个风格太C}，编程方式也依然是相当面向过程的。
 
 \subsubsection{C++11，2011}
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 #include <fstream>
 #include <string>
 #include <algorithm>
@@ -114,7 +114,7 @@ std::size_t count_non_empty_lines(const std::string& path)
     }// 这段就是找行首和行尾，中间检查非空白字符
     return cnt;
 }
-\end{lstlisting}
+\end{minted}
 这个代码的最大改进之处：
 \begin{itemize}
   \item 一次性读入文件内容，避免逐行读取的系统调用开销；
@@ -124,7 +124,7 @@ std::size_t count_non_empty_lines(const std::string& path)
 
 
 \subsubsection{C++17，2017}
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 #include <fstream>
 #include <string>
 #include <optional>
@@ -160,7 +160,7 @@ std::size_t count_non_empty_lines(const std::string& path)
                                [](unsigned char c){ return !std::isspace(c); });
         });
 }
-\end{lstlisting}
+\end{minted}
 和之前的代码相比，这段代码有以下改进：
 \begin{itemize}
   \item 使用了optional（C++17）来处理可能失败的文件读取，更加语义化；
@@ -169,7 +169,7 @@ std::size_t count_non_empty_lines(const std::string& path)
 \end{itemize}
 
 \subsubsection{C++20，2020}
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -201,7 +201,7 @@ std::size_t count_non_empty_lines(const std::string& path)
                  });
     return std::ranges::distance(lines); // 计算非空行数
 }
-\end{lstlisting}
+\end{minted}
 这个风格更是极端：
 \begin{itemize}
   \item 全程没有显式循环；
@@ -252,12 +252,12 @@ std::size_t count_non_empty_lines(const std::string& path)
 所以说，我们写代码的时候，尽可能利用C++的特性，把C++当成一种思维方式，而非仅用来抽象C的语法糖，这样才能写出真正的C++代码。
 
 例如，现有一个vector，要求所有元素都加一，我们的第一反应是什么？我给出四行代码：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 for (size_t i = 0; i < vec.size(); ++i) vec[i] += 1;
 for (auto& x : vec) x += 1;
 std::for_each(vec.begin(), vec.end(), [](auto& x) { x += 1; });
 std::ranges::for_each(vec, [](auto& x) { x += 1; });
-\end{lstlisting}
+\end{minted}
 这四行在功能乃至优化后的汇编上几乎等价，但是它们的思维方式却大相径庭。如果你的第一反应是后面三行当中的一个，那说明你的思维很现代C++化；如果是第一个，那说明你的思维模式还停留在古典C。
 
 所以说，我们写代码的时候，尽可能利用 C++ 的特性，把 C++ 当成一种思维方式，而非仅用来抽象 C 的语法糖，这样才能写出\textbf{在当前约束下最优雅、最安全、可维护}的代码。
@@ -301,7 +301,7 @@ std::ranges::for_each(vec, [](auto& x) { x += 1; });
 
 所以说，现在的C++，以下代码:
 
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 // All nececssary includes
 
 constexpr std::array<int, 5> data = {1, 2, 3, 4, 5};
@@ -334,7 +334,7 @@ void print3() { // C++20 with ranges and views
     }
     std::cout << std::endl;
 }
-\end{lstlisting}
+\end{minted}
 
 实际上\textbf{编译器激进优化}的情况下，这四者的汇编行数\textbf{完全相同}，因为编译器已经把它们都优化成了同样的机器码：51行，一行不多，一行不少。在更加复杂的情况下，高级抽象可能确实要多几行，但也不会多太多——当然，前提是你正确地使用了这些抽象，而不是滥用或错用。
 
@@ -353,31 +353,31 @@ void print3() { // C++20 with ranges and views
 而在最后，我想要跟读者强调的一点是，\textbf{相信编译器}。
 
 不懂C++的人写一段代码可能是这样写的：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 std::vector<int> foo(int i){
     std::vector<int> v{};
     // some code
     return v;
 }
-\end{lstlisting}
+\end{minted}
 
 半懂不懂的人写一段代码可能是这样写的：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 inline ::std::vector<int> foo(const int& i){
     ::std::vector<int> v{};
     // some code
     return std::move(v);
 }
-\end{lstlisting}
+\end{minted}
 
 而真正懂C++的人写一段代码可能还是这样写的：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 std::vector<int> foo(int i){
     std::vector<int> v{};
     // some code
     return v;
 }
-\end{lstlisting}
+\end{minted}
 
 大家一看：怎么又回到原点了？其实不然，实际上这就是“看山是山”“看山不是山”“看山还是山”的区别。真正懂C++的人知道，现代C++编译器已经足够聪明。我们来看看那个“半懂不懂”的人究竟犯了什么错误：
 \begin{itemize}
@@ -402,9 +402,9 @@ std::vector<int> foo(int i){
 控制变量：在同一台机器、同一个编译器和编译选项上测试， \texttt{-O0} 、 \texttt{-O2} 、 \texttt{-O3} 三种优化等级都测试。文件先mmap进内存，防止磁盘的IO干扰。
 
 编译选项（以O3为例）：
-\begin{lstlisting}
+\begin{minted}{bash}
 g++ -std=c++20 -O3 -march=native -DNDEBUG
-\end{lstlisting}
+\end{minted}
 
 写出四个版本的代码：
 \begin{itemize}
@@ -439,26 +439,26 @@ g++ -std=c++20 -O3 -march=native -DNDEBUG
 \subsubsection{头文件保护}
 
 每个头文件都应该使用头文件保护（Header Guard）来防止重复包含。常见的做法是使用预处理指令 \texttt{\#ifndef} 、 \texttt{\#define} 和 \texttt{\#endif} 。例如：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 #ifndef MY_HEADER_H
 #define MY_HEADER_H
 // 头文件内容
 #endif // MY_HEADER_H
-\end{lstlisting}
+\end{minted}
 
 而在工程上，我们更推荐使用 \texttt{\#pragma once} ，它更简洁，大多数编译器都支持：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 #pragma once
 // 头文件内容
-\end{lstlisting}
+\end{minted}
 
 \subsubsection{使用标准的C++头文件}
 
 在引用标准库的时候，应该使用C++标准头文件（如 \texttt{<cstdio>} ）而不是C风格的头文件（如 \texttt{<stdio.h>} ）。C++标准头文件会将内容放在 \texttt{std} 命名空间中，避免命名冲突。例如：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 #include <cstdio> // 好的实践
 #include <stdio.h>  // 不推荐
-\end{lstlisting}
+\end{minted}
 
 \subsubsection{仅使用必要的头文件}
 
@@ -469,117 +469,117 @@ g++ -std=c++20 -O3 -march=native -DNDEBUG
 \subsection{命名空间}
 
 在C++中应合理的使用命名空间。避免将所有代码放在全局命名空间中，防止命名冲突。建议为每个库或模块定义独立的命名空间。例如：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 namespace mylib {
     // 库代码
 }
-\end{lstlisting}
+\end{minted}
 
 减少使用匿名命名空间 \texttt{namespace \{\}} 和 \texttt{using namespace std;} 。在头文件中，严格禁止使用 \texttt{using namespace std;} ，源文件中应谨慎使用，但这也会引发一些命名冲突问题，建议使用显式的命名空间前缀或仅引入需要的名称：
-\begin{lstlisting}
+\begin{minted}{cpp}
 using std::cout;  // 只引入需要的名称，是好的实践
 std::cout << ... // 直接使用std命名空间下的名称，也是好的实践
-\end{lstlisting}
+\end{minted}
 
 \subsection{变量声明和使用}
 
 \subsubsection{声明即初始化}
 
 为防止UB，变量应尽量做到“声明即初始化”。如果不知道初始化为什么，可以零初始化。例如：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 int x = 0; // 好的实践
 std::vector<int> vec; // 这会初始化为空vector，是好的实践 
 std::vector<int> vec = std::vector<int>(10, 0); // 好的实践
 
 int x;     // 不推荐
 std::vector<int> vec(10); // 不推荐
-\end{lstlisting}
+\end{minted}
 
 \subsubsection{使用局部变量替代全局变量}
 
 全局变量容易引发命名冲突和不可预期的副作用，建议尽量使用局部变量或类成员变量来替代全局变量。如果必须使用全局变量，建议使用命名空间封装，并加上适当的前缀以防止命名冲突。例如：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 namespace config {
     extern int global_setting; // 声明全局变量
 }
-\end{lstlisting}
+\end{minted}
 
 \subsubsection{多用const、constexpr等修饰符}
 
 在C++中，建议尽可能使用 \texttt{const} 和 \texttt{constexpr} 修饰变量和函数，防止意外修改，提高安全性。在更安全的语言Rust中，变量甚至默认是不可变的。例如：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 const int MAX_SIZE = 100; // 好的实践
 const int square(int x) { return x * x; } // 好的实践
 Matrix operator+(const Matrix& a, const Matrix& b) { ... } // 好的实践
-\end{lstlisting}
+\end{minted}
 
 \subsubsection{用变量替代魔法数字、宏}
 
 避免在代码中使用魔法数字（前不着村后不着店的数字常量），也不建议使用无类型检查的宏定义。建议使用具名常量、枚举类或 \texttt{constexpr} 变量来替代魔法数字和宏。例如：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 constexpr int MAX_SIZE = 100; // 好的实践
 
 for (size_t i = 0; i < MAX_SIZE; ++i) { ... }
-\end{lstlisting}
+\end{minted}
 
 \subsubsection{用强枚举替代传统枚举}
 
 避免使用传统枚举（ \texttt{enum} ），因为它们会将枚举值提升为整型，可能引发命名冲突和隐式类型转换。建议使用强枚举（ \texttt{enum class} ）来定义枚举类型。例如：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 enum class Color { RED, GREEN, BLUE }; // 好的实践
 Color c = Color::RED;
-\end{lstlisting}
+\end{minted}
 
 \subsubsection{用RAII资源句柄来替代传统裸指针}
 
 现代C++最重要的特性之一就是RAII，我们要使用这个特性来管理资源，避免手动管理内存和资源。建议使用智能指针（如 \texttt{std::unique\_ptr} 和 \texttt{std::shared\_ptr} ）来替代传统的裸指针。例如：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 void foo() {
     std::unique_ptr<MyClass> ptr = std::make_unique<MyClass>(); // 好的实践
     return; // ptr会自动释放内存
 }
-\end{lstlisting}
+\end{minted}
 
 \subsubsection{使用C++风格的显式类型转换}
 
 避免隐式类型转换和C风格的强制类型转换（ \texttt{(type)value} ）。建议使用C++风格的显式类型转换（如 \texttt{static\_cast} 、 \texttt{dynamic\_cast} 、 \texttt{const\_cast} 和 \texttt{reinterpret\_cast} ）来提高代码的可读性和安全性。例如：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 int x = static_cast<int>(3.14); // 好的实践
-\end{lstlisting}
+\end{minted}
 
 \subsection{函数和类定义}
 
 \subsubsection{多模板、少重载}
 
 避免过度使用函数重载，尤其是当函数参数类型较多时。建议使用模板和默认参数来实现函数的多态性。例如：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 template <typename T>
 T add(T a, T b) { return a + b; } // 好的实践
-\end{lstlisting}
+\end{minted}
 
 \subsubsection{用STL代替自己实现}
 
 STL提供了丰富的容器和算法，建议尽可能使用STL来替代自己实现的数据结构和算法，避免重复造轮子；另外STL的实现也经过了大量的测试和优化，虽然常数时间复杂度较大但都会被编译器的激进优化抹平，且比自己维护类似数据结构和算法更正确、不易漏掉边界条件。例如：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 std::array<int, 5> arr = {1, 2, 3, 4, 5}; // 好的实践
 std::for_each(arr.begin(), arr.end(), [](int x) { ... }); // 好的实践
-\end{lstlisting}
+\end{minted}
 
 \subsubsection{用范围for循环替代传统for循环}
 
 范围for循环是最推荐的遍历容器的方式，简洁且不易出错，且比 \texttt{std::for\_each} 更直观。例如：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 for (const auto& item : container) { // 好的实践
     // 使用item
 }
-\end{lstlisting}
+\end{minted}
 
 \subsubsection{函数参数传递的最佳实践}
 
 对于小的对象（如基本类型、 \texttt{std::pair} 、 \texttt{std::tuple} 等），建议传值；对于大的对象（如 \texttt{std::vector} 、 \texttt{std::string} 等），建议传引用以避免不必要的拷贝开销。避免传递非const引用，除非函数确实需要修改参数。例如：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 void process(const std::vector<int>& data) { ... } // 好的实践
-\end{lstlisting}
+\end{minted}
 
 \section{工程实践}
 

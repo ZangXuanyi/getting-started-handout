@@ -11,6 +11,7 @@
 \usepackage{graphicx}
 \graphicspath{{./images/}}
 \usepackage{longtable,array,booktabs}
+\usepackage{minted}
 \usepackage{multicol}
 \usepackage{subcaption}
 \usepackage{enumitem}
@@ -34,8 +35,8 @@
 \setsansfont{Source Sans Pro}[Scale=MatchLowercase]
 \setmonofont{Source Code Pro}[Scale=MatchLowercase]
 \setCJKmainfont[ItalicFont = * ]{Source Han Serif CN}
-\setCJKsansfont{Source Han Sans CN}
-\setCJKmonofont{Source Han Sans CN}
+\setCJKsansfont[ItalicFont = * ]{Source Han Sans CN}
+\setCJKmonofont[ItalicFont = * ]{Source Han Sans CN}
 
 %---------- 列表、代码、脚注 ----------
 \setlist{nosep}
@@ -49,6 +50,22 @@
   showspaces=false,showstringspaces=false,breaklines=true,frame=single
 }
 \SetAlFnt{\small}
+
+% 自定义 minted 样式
+\setminted{
+    fontsize=\small,           % 字体大小
+    baselinestretch=1.0,       % 行间距
+    linenos=true,              % 行号
+    frame=lines,               % 边框样式
+    framesep=2mm,              % 边框间距
+    rulecolor=\color{black},   % 边框颜色
+    numbersep=5pt,             % 行号间距
+    breaklines=true,           % 自动换行
+    breakanywhere=false,       % 不在任意位置断行
+    showspaces=false,          % 不显示空格
+    showtabs=false,            % 不显示制表符
+    tabsize=4,                 % 制表符大小
+}
 
 \let\oldnameref\nameref
 \renewcommand{\nameref}[1]{%

@@ -1,7 +1,7 @@
 \section[实例：帮某位大一同学修改代码]{实例：帮某位大一同学修改代码\protect\footnote{感谢王煜程同学提供的反面教材。}}
 
 下文是某位大一同学写的一段程序，用于进行“亚马逊棋”的游玩。虽然初学者能够把这么冗长的一大段代码写对已经是非常值得肯定的事情了，但是从工程眼光看来，这段代码依然存在巨大的问题。\footnote{我没有检查该实现的正确性，这位同学也没有提供跳出最后循环（游戏结束）的条件，因此我假设该实现是正确的。}下面我将对这段代码进行修改和优化，展示如何将一段初学者代码改造成更优雅、更易维护的代码。
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 #include <iostream>
 #include <utility>
 #include <math.h>
@@ -180,7 +180,7 @@ int main()
     }
     return 0;
 }
-\end{lstlisting}
+\end{minted}
 
 我们逐段来看。首先这位同学能够利用“面向对象”的思想来封装棋盘相关的操作，这一点非常值得肯定。下面我们来看一看这个代码到底哪里不好。
 
@@ -189,13 +189,13 @@ int main()
 首先，映入眼帘的是\lstinline[language=C++]|#include <math.h>|。这可以看出这位同学以前可能有OI相关经验，习惯性地使用C风格的头文件了。在C++中，应该使用\lstinline[language=C++]|#include <cmath>|来替代上述头文件。
 
 然后是这段代码的第10行：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
     int map[WIDTH][HEIGHT];
-\end{lstlisting}
+\end{minted}
 这里使用了C风格的二维数组来存储棋盘数据，这种方式虽然简单，但失去了安全性。我们知道该数组的大小是固定的，因此可以使用C++的标准库容器 \texttt{std::array} 来替代它，从而提高代码的安全性和可读性。改成下面这样：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
     std::array<std::array<int, HEIGHT>, WIDTH> map;
-\end{lstlisting}
+\end{minted}
 当然需要引用的头文件又多了一个，即 \lstinline[language=C++]|#include <array>| 。
 
 继续看，然后我们发现这个初始化竟然是写在一个\lstinline[language=C++]|void init()|函数里面的。虽然这样做没有错，但是更好的方式是把初始化写在构造函数里面，这样可以确保每次创建对象时都会进行初始化，避免忘记调用初始化函数的问题。而另一条则是，这个类竟然没有构造函数！那么我们就帮他写一个构造函数，替代\lstinline[language=C++]|void init()|函数。
@@ -203,12 +203,12 @@ int main()
 但是，看他的注释，“使用1来代表白方棋子，2代表黑方棋子，-1代表障碍物”，这不就是“魔法数字”吗？我们应该使用枚举类型来替代这些魔法数字，从而提高代码的可读性和可维护性。
 
 于是这一大段都要大改特改了。先写一个强枚举\footnote{我这里为了美观压行了，实际上应当拆成多行，后同。}
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 enum class CellType{ EMPTY, WHITE, BLACK, OBSTACLE };
-\end{lstlisting}
+\end{minted}
 
 然后把array的类型改成 \lstinline[language=C++]|std::array<std::array<CellType, SIZE>, SIZE>| \footnote{由于棋盘是正方形的，因此这里用一个SIZE就够了，节省一个常量的定义。}，并且把初始化函数改成构造函数，代码如下：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 // 辅助的Pattern结构体
 struct Pattern{ int row; int col; CellType type; };
 // class Map 改名为 Board 更合适，防止和 std::map 冲突
@@ -229,13 +229,13 @@ Board()
     for (const auto &pattern : initial_patterns)
         board.at(pattern.row).at(pattern.col) = pattern.type;
 }
-\end{lstlisting}
+\end{minted}
 这样代码就自解释了，避免了魔法数字、无构造函数等多个问题。当然，在改动到这里的时候，肯定要把剩下的代码里面所有对\lstinline[language=C++]|map|的访问都改成使用\lstinline[language=C++]|CellType|类型。另外，\lstinline[language=C++]|map|这个名字太差了，要是将来用到了STL的\lstinline[language=C++]|std::map|容器就冲突了。我们可以把它改成\lstinline[language=C++]|board|，更符合语境。
 
 然后我们竟然发现这位同学在用成员函数来访问\lstinline[language=C++]|map|的时候，竟然都是直接使用\lstinline[language=C++]|Map::map|这种形式来调用的！这说明他并没有理解“面向对象”中的“封装”思想。成员函数应该直接访问成员变量，而不是通过类名来访问成员变量。我们应该把所有的\lstinline[language=C++]|Map::map|都改成\lstinline[language=C++]|this->board|或者直接\lstinline[language=C++]|board|。
 
 然后还有很多输出语句，这里也得改，从以前的输出魔法数字到输出枚举类型对应的字符串。我们可以试着对该枚举类型重载\lstinline[language=C++]|operator<<|运算符，从而实现枚举类型到字符串的转换。代码如下：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 std::ostream &operator<<(std::ostream &os, const CellType &cell)
 {
     switch (cell)
@@ -257,7 +257,7 @@ std::ostream &operator<<(std::ostream &os, const CellType &cell)
     }
     return os;
 }
-\end{lstlisting}
+\end{minted}
 这样我们就可以直接输出枚举类型了。
 
 \subsection{重构代码结构：更加OOP、更加模块化}
@@ -275,7 +275,7 @@ std::ostream &operator<<(std::ostream &os, const CellType &cell)
 当然，我们发现后面两个“类”不需要任何属性，所以完全可以用命名空间来代替它们，从而避免不必要的类实例化。
 
 为了防止魔法数字，我们再写一个枚举和几个辅助用的结构体：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 enum class PlayerType{ WHITE, BLACK };
 struct Pos // 这个结构体用来表示位置，替代先前所说的 using Pos = std::pair<int, int>;
 {
@@ -286,10 +286,10 @@ struct Pos // 这个结构体用来表示位置，替代先前所说的 using Po
         return x == other.x && y == other.y;
     }
 };
-\end{lstlisting}
+\end{minted}
 
 然后实现Board class：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 class Board // This class represents the game board with necessary methods like moving pieces, placing obstacles and getting cell states
 {
 private:
@@ -333,10 +333,10 @@ public:
     // method to place an obstacle
     void place_obstacle(const Pos &pos) { board.at(pos.x).at(pos.y) = CellType::OBSTACLE; }
 };
-\end{lstlisting}
+\end{minted}
 
 Rule类：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 namespace Rules
 {
     template <typename T>
@@ -394,10 +394,10 @@ namespace Rules
         return true;
     }
 };
-\end{lstlisting}
+\end{minted}
 
 最后是IO：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 namespace IO{
     std::ostream std::ostream &operator<<(std::ostream &os, const CellType &cell) { ... } // 前面已经写过了
 
@@ -430,10 +430,10 @@ namespace IO{
         obstacle = {ox, oy};
     }
 };
-\end{lstlisting}
+\end{minted}
 
 最后是主函数：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 int main()
 {
     Board game_map;
@@ -453,7 +453,7 @@ int main()
         Rules::flip_player(current_player);
     }
 }
-\end{lstlisting}
+\end{minted}
 
 这样，我们就把这段代码改得更加优雅、易维护了。通过拆分类，我们提高了代码的可读性和可维护性；通过使用枚举类型，我们避免了魔法数字的问题；通过重载运算符，我们简化了输出操作。总之，这样的代码更符合现代C++的编程风格，更容易被其他开发人员理解和维护。
 
@@ -467,7 +467,7 @@ int main()
 目前，这段代码没有任何异常处理机制，如果输入无效数据，程序可能会崩溃。我们可以使用C++的异常处理机制来捕获和处理这些异常，从而提高程序的健壮性。例如，在读取玩家输入时，我们可以检查输入是否合法，如果不合法则抛出异常，并在主函数中捕获该异常并提示玩家重新输入。
 
 例如，\lstinline[language=C++]|Rules::try_move|函数：
-\begin{lstlisting}
+\begin{minted}{cpp}
 void try_move(Board &board, const Pos &start, const Pos &end, PlayerType player)
 {
     CellType self = side_to_cell(player);
@@ -480,9 +480,9 @@ void try_move(Board &board, const Pos &start, const Pos &end, PlayerType player)
     board.move_piece(start, end, self);
     return;
 }
-\end{lstlisting}
+\end{minted}
 然后在主函数中捕获异常：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 // IO中增加一个print_error函数
 void print_error(const std::exception &e)
 {
@@ -515,20 +515,20 @@ while(game){
     });
     Rules::flip_player(current_player);
 }
-\end{lstlisting}
+\end{minted}
 当然，这样的抛出异常还是太简单了，在实际工程中，我们一般习惯于这样做：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 class MoveError : public std::runtime_error
 {
     using std::runtime_error::runtime_error; // 继承构造函数
     std::string_view type() const noexcept { return "MoveError"; } // 定义自己的异常类型
 };
-\end{lstlisting}
+\end{minted}
 然后抛出\lstinline[language=C++]|MoveError|异常，从而更好地区分不同类型的异常。但现在的小项目就不必这么复杂了。
 
 \paragraph{边界检查} 
 边界检查主要需要在读取玩家输入时进行。我们可以检查输入的位置是否在棋盘范围内，如果不在则抛出异常。例如，在\lstinline[language=C++]|IO::read_move|函数中：
-\begin{lstlisting}
+\begin{minted}{cpp}
 void read_move(Pos &start, Pos &end)
 {
     std::cout << "Enter your move (start_x start_y end_x end_y): ";
@@ -551,19 +551,19 @@ void read_move(Pos &start, Pos &end)
     start = {sx, sy};
     end = {ex, ey};
 }
-\end{lstlisting}
+\end{minted}
 其实上述代码中读进引用也并不是特别好的设计，最好是返回一个结构体或者元组，避免引用带来的副作用。不过这里就不改了，再改就太复杂了。
 
 \paragraph{修饰函数}
 对于一些不修改成员变量的成员函数，应该加上\lstinline[language=C++]|const|修饰符，从而提高代码的可读性和安全性；对于肯定不抛出异常的函数，应该加上\lstinline[language=C++]|noexcept|修饰符，从而提高代码的性能和安全性。例如，在\lstinline[language=C++]|Rules::sgn|函数中：
-\begin{lstlisting}
+\begin{minted}{cpp}
 template <typename T>
 [[nodiscard]] constexpr int sgn(T val) noexcept
 {
     static_assert(std::is_arithmetic_v<T>, "sgn requires an arithmetic type");
     return (T(0) < val) - (val < T(0));
 }
-\end{lstlisting}
+\end{minted}
 在这里，我们使用了\lstinline[language=C++]|[[nodiscard]]|属性来提示调用者不要忽略返回值，使用了\lstinline[language=C++]|constexpr|来表示该函数可以在编译时求值，使用了\lstinline[language=C++]|noexcept|来表示该函数不会抛出异常，并且使用了\lstinline[language=C++]|static_assert|来确保模板参数是算术类型。这些修饰符大大提高了代码的可读性和安全性，符合现代C++编程“让错误在编译期暴露出来”的理念。
 
 \begin{tip}
@@ -581,7 +581,7 @@ template <typename T>
 
 首先，我们创建一个头文件 \verb|board.hpp|，用于声明\lstinline[language=C++]|Board|类：
 
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 #ifndef BOARD_HPP
 #define BOARD_HPP // 经典编译守卫
 #include <array>
@@ -604,10 +604,10 @@ public:
     void place_obstacle(const Pos &pos);
 };
 #endif // BOARD_HPP
-\end{lstlisting}
+\end{minted}
 
 然后，我们创建一个源文件 \verb|board.cpp|，用于实现\lstinline[language=C++]|Board|类：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 #include "board.hpp"
 // 初始化 initial_patterns 静态成员
 constexpr std::array<Pattern, 8> Board::initial_patterns{
@@ -630,16 +630,16 @@ void Board::move_piece(const Pos &start, const Pos &end, CellType type)
     board.at(end.x).at(end.y) = type;
 }
 void Board::place_obstacle(const Pos &pos) { board.at(pos.x).at(pos.y) = CellType::OBSTACLE; }
-\end{lstlisting}
+\end{minted}
 通过这种方式，我们就把\lstinline[language=C++]|Board|类拆成了头文件和源文件，从而实现了模块化编程。其他类（命名空间）也可以采用类似的方式进行拆分。而在CMake中，我们大致需要这样写：
-\begin{lstlisting}
+\begin{minted}{cmake}
 cmake_minimum_required(VERSION 3.10)
 project(AmazonsGame)
 set(CMAKE_CXX_STANDARD 17)
 add_executable(AmazonsGame main.cpp board.cpp rules.cpp io.cpp) # 把所有源文件都加进去
 # 这里因为没有用到第三方库，所以不需要find_package和target_link_libraries等命令
 # 如果用到了第三方库，例如Google Test等，就需要加上这些命令
-\end{lstlisting}
+\end{minted}
 这样，我们就可以通过CMake来管理我们的项目，从而提高编译效率和代码质量。CMake的使用方式不再赘述，有兴趣的同学可以参考CMake的官方文档或者相关教程进行学习。
 
 \paragraph{测试}

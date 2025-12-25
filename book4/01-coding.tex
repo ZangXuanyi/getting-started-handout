@@ -154,10 +154,10 @@ C/C++有三个最常见的编译器：GCC、Clang和MSVC。它们各有特点，
 
 你需要在\href{https://www.msys2.org/}{MSYS2官网}下载最新的安装包，并按照官网的说明进行安装。安装完成后，你可以在MSYS2终端中运行以下命令来安装GCC和GDB（建议使用UCRT64终端，不建议使用逐渐失去支持的32位以及MINGW64环境，也不建议新手使用CLANG64环境，该环境完全使用Clang代替GCC）：
 
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
 pacman -S mingw-w64-ucrt-x86_64-gcc
 pacman -S mingw-w64-ucrt-x86_64-gdb
-\end{lstlisting}
+\end{minted}
 
 在MSYS2中安装完成后，用户如果想要在Windows终端中使用GCC，则需要设置环境变量，以便在命令行中直接使用编译器命令。
 
@@ -171,18 +171,18 @@ pacman -S mingw-w64-ucrt-x86_64-gdb
 \end{itemize}
 
 在安装完GCC和GDB后，我们可以在终端中运行以下命令来验证是否安装成功：
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
 gcc --version
 gdb --version
-\end{lstlisting}
+\end{minted}
 
 输出大概类似于：
-\begin{lstlisting}
+\begin{minted}{text}
 gcc (GCC) 15.2.1 20250813
 Copyright © 2025 Free Software Foundation, Inc.
 本程序是自由软件；请参看源代码的版权声明。本软件没有任何担保；
 包括没有适销性和某一专用目的下的适用性担保。
-\end{lstlisting}
+\end{minted}
 或其英文版本。GDB的输出类似。如果你能看到上述输出，则说明GCC和GDB安装成功且配置正确。否则，请检查你的安装步骤和环境变量设置是否正确。
 
 \begin{caution}
@@ -197,15 +197,15 @@ Copyright © 2025 Free Software Foundation, Inc.
 
 \begin{tip}
   Linux用户安装GCC是最简单的。例如在Arch Linux上，只需要运行以下命令：
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
 sudo pacman -S gcc gdb
-\end{lstlisting}
+\end{minted}
   即可安装GCC和GDB。其他的发行版则使用对应的包管理器安装即可，例如Debian/Ubuntu使用 \texttt{apt} ，Fedora使用 \texttt{dnf} 等。
 
   macOS也是类UNIX系统，因此使用HomeBrew安装GCC也是非常简单的：
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
 brew install gcc gdb
-\end{lstlisting}
+\end{minted}
 \end{tip}
 
 \subsection{在VS Code中配置C/C++}\label{sec:configure-cpp}
@@ -231,7 +231,7 @@ brew install gcc gdb
 
 以下是一个简单的 \texttt{tasks.json} 文件示例\footnote{其实就是上面自动生成的那个，按照笔者的计算机环境稍微改了改}。我会使用\#来表示注释内容，但JSON文件是不支持注释的，因此请不要把这些注释内容放进你的JSON文件中。不懂JSON文件的可以把整个手册翻到《数据交换格式》一节。
 
-\begin{lstlisting}
+\begin{minted}{text}
 {
   "version": "2.0.0", 
   "tasks": [
@@ -256,11 +256,11 @@ brew install gcc gdb
     }
   ]
 }
-\end{lstlisting}
+\end{minted}
 
 以下是一个简单的 \texttt{launch.json} 文件示例：
 
-\begin{lstlisting}
+\begin{minted}{text}
 {
   "version": "0.2.0",
   "configurations": [
@@ -287,7 +287,7 @@ brew install gcc gdb
       }
   ]
 }
-\end{lstlisting}
+\end{minted}
 
 \paragraph[UI配置]{UI配置\protect\footnote{本节作者张天齐。}}
 
@@ -325,10 +325,10 @@ brew install gcc gdb
 \subsection{不依赖VS Code的编译方式}
 
 如果你不想使用VS Code来编译和运行C/C++代码，你也可以直接在命令行中使用GCC来编译和运行代码。以下是一个简单的示例：
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
 g++ main.cpp -O2 -g -o main.exe
 ./main.exe
-\end{lstlisting}
+\end{minted}
 上述命令的含义是：使用 \texttt{g++} 编译器编译 \texttt{main.cpp} 文件，开启 \texttt{-O2} 优化，开启调试信息 \texttt{-g} ，并将生成的可执行文件命名为 \texttt{main.exe} 。然后，使用 \texttt{./main.exe} 命令来运行生成的可执行文件。
 
 命令行能提供更高的灵活性，可以随意增删改编译选项，例如添加 \texttt{-Wall} 来开启所有警告等。我个人非常推荐同学们学会使用命令行来编译和运行代码，这样可以更好地理解编译过程，并且能够更好地控制编译选项。
@@ -338,21 +338,21 @@ g++ main.cpp -O2 -g -o main.exe
 使用WSL，可以大大简化配置环境的过程。
 
 首先，假设你没有安装过任何WSL发行版。打开PowerShell，输入以下命令：
-\begin{lstlisting}
+\begin{minted}{bash}
   wsl --install # 默认安装 Ubuntu 发行版，完全足够
-\end{lstlisting}
+\end{minted}
 等待安装完成后，重启电脑。重启后，在开始界面找到Ubuntu图标，点击打开。第一次打开时，会提示你创建一个Linux用户名和密码，按照提示操作即可。
 
 接下来，换源并更新系统：
-\begin{lstlisting}
+\begin{minted}{bash}
   sudo apt update && sudo apt upgrade -y
-\end{lstlisting}
+\end{minted}
 换源操作请参考\href{https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/}{清华大学开源软件镜像站的帮助页面}。
 
 然后，安装C/C++开发环境：
-\begin{lstlisting}
+\begin{minted}{bash}
   sudo apt install gcc gdb # CMake先不装，新手用不上
-\end{lstlisting}
+\end{minted}
 
 下一步，打开你的VS Code，在欢迎页上选择“连接到”，在弹出的菜单里选择WSL，此时如果没有安装过WSL插件则会自动安装。连接成功后，VS Code会自动打开一个新的窗口，左下角会显示你当前连接的WSL发行版名称。
 
@@ -367,9 +367,9 @@ g++ main.cpp -O2 -g -o main.exe
 如果仅仅是安装Python，那可比安装C系编译器简单得多了，直接去\href{https://www.python.org/downloads/}{Python官网}上下载符合你操作系统的最新版本就行了，只要记得安装时勾选“添加到Path”就行了。
 
 检验安装的方式是：打开终端，输入以下命令：
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
 python --version
-\end{lstlisting}
+\end{minted}
 如果输出了Python的版本信息，例如 \texttt{Python 3.12.0} ，则说明Python安装成功且配置正确。否则，请检查你的安装步骤和环境变量设置是否正确。
 
 \subsection{虚拟环境及其配置}
@@ -385,39 +385,39 @@ Python作为一门流行的编程语言，拥有丰富的第三方库和框架�
 conda有两个主要的发行版：Anaconda和Miniconda。Anaconda是一个完整的数据科学平台，包含了大量的预装包，适合初学者和数据科学家使用；Miniconda则是一个轻量级的版本，解决了笨重的问题（虽然依然慢）。我们推荐使用Miniconda。
 
 Windows用户可以把以下命令直接贴到终端里运行：
-\begin{lstlisting}
+\begin{minted}{bash}
 curl https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe -o .\miniconda.exe
 start /wait "" .\miniconda.exe /S
 del .\miniconda.exe
-\end{lstlisting}
+\end{minted}
 Linux用户见\href{https://www.anaconda.com/docs/getting-started/miniconda/install}{官方网站}即可，其实大差不差。
 
 安装完成后，你可以通过以下命令来创建并激活一个新的虚拟环境：
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
 conda create -n myenv python=3.12
 conda activate myenv
-\end{lstlisting}
+\end{minted}
 上述命令的含义是：创建一个名为 \texttt{myenv} 的虚拟环境，并安装Python 3.12版本。你可以根据需要更改环境名称和Python版本。在快速开发的背景下，可以把东西一股脑的安装到base环境中，但不推荐把这种手段用到正式开发中。
 
 \paragraph{mamba} mamba是conda的一个替代品，旨在解决conda的慢的问题。mamba使用C++编写，具有更快的包解析和安装速度。mamba完全兼容conda的命令和配置文件，因此用户可以无缝切换到mamba，而无需修改现有的环境和脚本。
 
 如果计算机上已经安装了conda，则可以通过以下命令来安装mamba：
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
 conda install mamba -n base -c conda-forge
-\end{lstlisting}
+\end{minted}
 安装完成后，你可以使用 \texttt{mamba} 命令来代替 \texttt{conda} 命令，例如：
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
 mamba create -n myenv python=3.12
 mamba activate myenv  
-\end{lstlisting}
+\end{minted}
 上述命令的含义与使用conda时相同。
 
 对于没有安装过conda的用户，我们遵从“最简单”原则，安装micromamba。micromamba是mamba的一个轻量级“纯净”版本，不依赖于conda或Anaconda。它仅包含mamba的核心功能，适合那些只需要基本包管理和虚拟环境管理功能的用户。
 
 只需要运行下列命令：
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
 "${SHELL}" <(curl -L micro.mamba.pm/install.sh)
-\end{lstlisting}
+\end{minted}
 然后按照提示操作即可。安装完成后，你可以使用 \texttt{micromamba} 命令来创建和管理虚拟环境，使用方法与conda类似。
 
 \subsection{在VS Code中配置Python}
@@ -431,21 +431,21 @@ mamba activate myenv
 \subsection{不依赖VS Code的运行方式}
 
 如果你不想使用VS Code来运行Python代码，你也可以直接在命令行中使用Python解释器来运行代码。以下是一个简单的示例：
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
 python main.py
-\end{lstlisting}
+\end{minted}
 上述命令的含义是：使用当前虚拟环境中的Python解释器来运行 \texttt{main.py} 文件。
 
 我们也可以指定特定的Python解释器来运行代码，例如：
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
 /path/to/python main.py
-\end{lstlisting}
+\end{minted}
 这样就可以使用指定路径下的Python解释器来运行代码。一般有CPython、PyPy等不同的Python解释器可供选择。
 
 另外，如果你想要运行一个交互式的Python环境，可以使用以下命令：
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
 python
-\end{lstlisting}
+\end{minted}
 这将会启动一个交互式的Python解释器，你可以在其中输入Python代码并立即执行。想要退出该环境，可以使用 \texttt{exit()} 命令或者按下 \texttt{Ctrl + D} （Linux/macOS）或 \texttt{Ctrl + Z} （Windows），以输入一个EOF信号。如果你在Linux上不小心按下了 \texttt{Ctrl + Z} ，则会将Python进程挂起，此时可以使用 \texttt{fg} 命令将其恢复。
 
 \subsection{在VS Code中配置终端}
@@ -468,26 +468,26 @@ VS Code内置了终端功能，可以方便地在编辑器中运行命令。终�
 
 对于C++，我们可以使用以下代码来编写第一个程序。你可以在VS Code中创建一个新的C++文件，例如 \texttt{hello.cpp} （\textbf{该文件的路径不能包含空格和中文！}），然后输入以下代码：
 
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 #include <iostream>
 int main() {
     std::cout << "Hello, World!" << std::endl;
     return 0;
 }
-\end{lstlisting}
+\end{minted}
 
 然后如果配置得当，我们就可以通过按下F5键来编译并运行这个程序了。VS Code会自动调用编译器进行编译，并在终端中显示输出结果。如果一切顺利，你应该会看到“Hello, World!”的输出。
 
 在一些极端情况下（例如无GUI环境），你可能需要手动编译和运行程序。可以使用以下命令来编译和运行程序：
 
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
 g++ -o hello hello.cpp
 ./hello
-\end{lstlisting}
+\end{minted}
 
 请使用类似的方式\textbf{手敲}、编译、运行以下代码：
 
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 #include <iostream>
 int main() {
     int a, b;
@@ -498,29 +498,29 @@ int main() {
     std::cout << "Their sum is: " << a + b << std::endl;
     return 0;
 }
-\end{lstlisting}
+\end{minted}
 
 \subsubsection{Python}
 
 对于Python，我们同样可以使用以下代码来编写第一个程序：
 
-\begin{lstlisting}[language=Python]
+\begin{minted}{python}
 print("Hello, World!")
-\end{lstlisting}
+\end{minted}
 
 同样，如果配置得当，我们就可以通过按下F5键来运行这个程序了。VS Code会自动调用Python解释器运行，并在终端中显示输出结果。同样的，如果希望使用命令行来运行程序，可以使用以下命令：
 
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
 python hello.py
-\end{lstlisting}
+\end{minted}
 
 请使用类似的方式\textbf{手敲}、编译、运行以下代码：
 
-\begin{lstlisting}[language=Python]
+\begin{minted}{python}
 a = int(input("Enter the first integer: "))
 b = int(input("Enter the second integer: "))
 print("Their sum is:", a + b)
-\end{lstlisting}
+\end{minted}
 
 \subsubsection{这两个语言有什么区别？}
 
@@ -540,7 +540,7 @@ print("Their sum is:", a + b)
 
 例如，以下是C++初学者常见的错误：
 
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
   #include<iostream>
   using namespace std;
   int mian()
@@ -548,23 +548,23 @@ print("Their sum is:", a + b)
       cout<<"Hello World!"<<endl;
       return 0;
   }
-\end{lstlisting}
+\end{minted}
 
 而它的错误信息是在编译时报出：
 
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
 > g++ example.cpp -o example.exe
 
 ld.exe: *.a(lib64_libmingw32_a-crtexewin.o): in function `main':
 C:/.../crtexewin.c:70: undefined reference to `WinMain'
 collect2.exe: error: ld returned 1 exit status
-\end{lstlisting}
+\end{minted}
 
 虽然信息略显抽象，但我们还是可以看到很多有用的信息。 ld 是 C++ 中的链接器，再往上看可以发现对 WinMain 的引用是未定义的。这提示我们去看 main 函数，从而发现这里将 \texttt{main} 函数写成了 \texttt{mian} ，因此链接器无法找到 main 函数，从而引发错误。
 
 而Python给出的错误信息则更为直观，例如以下代码：
 
-\begin{lstlisting}[language=Python]
+\begin{minted}{python}
 def calc(numbers):
   total = sum(numbers)
   count = len(numbers)
@@ -575,10 +575,10 @@ print("Average:", calc(numbers))
 
 numbers.append("60")
 print("Updated Average:", calc(numbers))
-\end{lstlisting}
+\end{minted}
 
 其报错是：
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
 Average: 30.0
 Traceback (most recent call last):
   File "example.py", line 10, in <module>
@@ -586,7 +586,7 @@ Traceback (most recent call last):
   File "example.py", line 2, in calc
     total = sum(numbers)
 TypeError: unsupported operand type(s) for +: 'int' and 'str'
-\end{lstlisting}
+\end{minted}
 
 可以看到，解释器对第10行和第2行进行了报错。第10行的报错是因为在调用 \texttt{calc} 函数时，传入的 \texttt{numbers} 列表中包含了一个字符串“60”，而 \texttt{calc} 函数期望的是一个数字列表，因此在计算平均值时出现了类型错误（TypeError）。而第2行的报错则是因为在计算总和时，无法将整数和字符串相加。于是我们发现了问题所在：在第9行，我们向 \texttt{numbers} 列表中添加了一个字符串“60”，而不是一个数字。我们可以通过将其改为 \texttt{numbers.append(60)} 来解决这个问题。
 
