@@ -1018,12 +1018,12 @@ int main(){
 \begin{answer}
     以下是各代码段的问题和修正方法：
     \begin{enumerate}
-        \item 迭代器的加减应该用\lstinline[language=C++]|std::advance(it, 3);|。另外，迭代器不能直接转换为指针，应该使用\lstinline[language=C++]|&(*it);|来获取指向元素的指针。
-        \item 在遍历集合（其他容器也一样）时，不能添加或删除元素，因为这会使迭代器失效。因此要用STL提供的\lstinline[language=C++]|remove_if|函数，或者先收集要删除的元素，再统一删除。
+        \item 迭代器的加减应该用\mintinline{cpp}|std::advance(it, 3);|。另外，迭代器不能直接转换为指针，应该使用\mintinline{cpp}|&(*it);|来获取指向元素的指针。
+        \item 在遍历集合（其他容器也一样）时，不能添加或删除元素，因为这会使迭代器失效。因此要用STL提供的\mintinline{cpp}|remove_if|函数，或者先收集要删除的元素，再统一删除。
         \item 模板的显式实例化应该放在头文件中，或者在使用模板的文件中进行实例化。
         \item 在构造函数中调用虚函数会调用基类的版本，而不是派生类的版本。可以将虚函数调用移到构造函数之外，例如在派生类的构造函数中调用。
         \item 基类的析构函数应该是虚的，以确保派生类的析构函数被正确调用，从而避免内存泄漏。
-        \item std::remove并不会改变容器的大小，它只是将要删除的元素移动到容器的末尾。需要使用\lstinline[language=C++]|v.erase(std::remove(v.begin(), v.end(), 2), v.end());|来真正删除这些元素。
+        \item std::remove并不会改变容器的大小，它只是将要删除的元素移动到容器的末尾。需要使用\mintinline{cpp}|v.erase(std::remove(v.begin(), v.end(), 2), v.end());|来真正删除这些元素。
         \item std::vector<bool>是一个特殊的容器，它并不存储实际的bool值，而是使用位来表示布尔值。因此，不能直接获取对bool值的引用。可以使用std::vector<char>或std::vector<int>来代替。
     \end{enumerate}
 \end{answer}

@@ -15,8 +15,8 @@
 
 对于同一组数据，不同的算法往往会在不同的时间内完成任务。例如，我们要在一堆有序的数据中找到某个数值（不保证该数值一定在表中存在），我提出以下两种方法：
 \begin{itemize}
-    \item 方法一：从头到尾依次检查每个数值，直到找到目标数值为止（线性查找）。在C++中，该查找方式是\lstinline[language=C++]|std::find|。
-    \item 方法二：先和表里的中间数值比较，如果目标数值较小，则继续在前半部分查找，否则在后半部分查找。重复这个过程，直到找到目标数值为止（二分查找）。在C++中，该查找方式是\lstinline[language=C++]|std::binary_search|。
+    \item 方法一：从头到尾依次检查每个数值，直到找到目标数值为止（线性查找）。在C++中，该查找方式是\mintinline{cpp}|std::find|。
+    \item 方法二：先和表里的中间数值比较，如果目标数值较小，则继续在前半部分查找，否则在后半部分查找。重复这个过程，直到找到目标数值为止（二分查找）。在C++中，该查找方式是\mintinline{cpp}|std::binary_search|。
 \end{itemize}
 假设我们有n个数据。那么，我们可以列出一个表格，来比较这两种方法在不同数据规模下需要的比较次数：
 
@@ -698,7 +698,7 @@ vector<int> arr = ...; // 输入的数组
 make_heap(arr.begin(), arr.end()); // 构建堆
 sort_heap(arr.begin(), arr.end()); // 堆排序
 \end{minted}
-更或者直接使用\lstinline[language=C++]|std::priority_queue|这样的堆：
+更或者直接使用\mintinline{cpp}|std::priority_queue|这样的堆：
 \begin{minted}{cpp}
 priority_queue<int> pq; // 创建最大堆
 for (int num : arr) {
@@ -940,7 +940,7 @@ int kth_smallest = arr[k]; // 第3小元素
     \Return{$dist$}\;
 \end{algorithm}
 
-在上述代码中，\lstinline{graph}是图的邻接矩阵表示，其中\lstinline{graph[i][j]}表示从节点$i$到节点$j$的边权重，如果不存在边则为无穷大。最终返回的\lstinline{dist}数组包含了所有节点之间的最短路径长度。
+在上述代码中，\mintinline{c}{graph}是图的邻接矩阵表示，其中\mintinline{c}{graph[i][j]}表示从节点$i$到节点$j$的边权重，如果不存在边则为无穷大。最终返回的\mintinline{c}{dist}数组包含了所有节点之间的最短路径长度。
 
 \subsection{最大流问题}
 

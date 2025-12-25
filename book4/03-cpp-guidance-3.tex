@@ -381,10 +381,10 @@ std::vector<int> foo(int i){
 
 大家一看：怎么又回到原点了？其实不然，实际上这就是“看山是山”“看山不是山”“看山还是山”的区别。真正懂C++的人知道，现代C++编译器已经足够聪明。我们来看看那个“半懂不懂”的人究竟犯了什么错误：
 \begin{itemize}
-    \item \lstinline[language=C++]|inline| 多余，编译器会自动决定是否内联，一般小函数才需要显式inline。而在激进优化下，所有的函数都是内联的，此举更是多余。
-    \item \lstinline[language=C++]|const int&| 无用，因为\lstinline[language=C++]|int| 本身就是小类型，传引用反而增加了间接寻址开销，更慢。另一方面，这里是\textbf{传值}，肯定不会修改实参，没必要加\lstinline[language=C++]|const|（当然这个加了也不会影响性能和正确性）。
-    \item \lstinline[language=C++]|::std::vector<int>| 多余，全局命名空间前缀没必要，除非你在写头文件并且担心命名冲突，但这肯定不是头文件。
-    \item \lstinline[language=C++]|std::move(v)| 错误，因为这里的\lstinline[language=C++]|v|是一个局部变量，返回时会触发\textbf{返回值优化}（RVO），编译器会直接在调用者的栈帧上构造返回值，根本不会发生拷贝或移动操作。强制使用\lstinline[language=C++]|std::move|反而会阻止RVO的发生，导致不必要的移动开销。
+    \item \mintinline{cpp}|inline| 多余，编译器会自动决定是否内联，一般小函数才需要显式inline。而在激进优化下，所有的函数都是内联的，此举更是多余。
+    \item \mintinline{cpp}|const int&| 无用，因为\mintinline{cpp}|int| 本身就是小类型，传引用反而增加了间接寻址开销，更慢。另一方面，这里是\textbf{传值}，肯定不会修改实参，没必要加\mintinline{cpp}|const|（当然这个加了也不会影响性能和正确性）。
+    \item \mintinline{cpp}|::std::vector<int>| 多余，全局命名空间前缀没必要，除非你在写头文件并且担心命名冲突，但这肯定不是头文件。
+    \item \mintinline{cpp}|std::move(v)| 错误，因为这里的\mintinline{cpp}|v|是一个局部变量，返回时会触发\textbf{返回值优化}（RVO），编译器会直接在调用者的栈帧上构造返回值，根本不会发生拷贝或移动操作。强制使用\mintinline{cpp}|std::move|反而会阻止RVO的发生，导致不必要的移动开销。
 \end{itemize}
 
 所以，\textbf{相信编译器}，让编译器帮你做它该做的事，而不是试图去“优化”编译器已经优化过的东西，这才是现代C++程序员的正确姿势。只有在perf出现瓶颈时，我们才需要考虑手动优化，否则请相信编译器的优化能力。

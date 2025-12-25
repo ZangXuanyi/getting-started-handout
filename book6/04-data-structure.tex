@@ -27,7 +27,7 @@ std::array<int, 10>;  // C++风格的顺序表
 \end{figure}
 由此图可见，顺序表的插入需要先把插入位置之后的所有元素向后移动一位，然后再插入新元素。这导致插入非常缓慢，尤其是在顺序表较大时。
 
-那么，\lstinline[language=C++]|std::vector<T>|是个什么东西呢？实际上，这东西也是顺序表，但它的实现方式更复杂一些。它会预留一部分内存空间，当需要插入元素时，如果当前容量不够，它会分配一块更大的内存空间，然后把原来的数据拷贝过去，再插入新的元素。这样做的好处是，\lstinline[language=C++]|std::vector<T>|在大多数情况下在末尾插入和删除元素的时间复杂度是$O(1)$，只有在需要扩容的时候才是$O(n)$；而在中间插入和删除元素的时间复杂度仍然是$O(n)$。
+那么，\mintinline{cpp}|std::vector<T>|是个什么东西呢？实际上，这东西也是顺序表，但它的实现方式更复杂一些。它会预留一部分内存空间，当需要插入元素时，如果当前容量不够，它会分配一块更大的内存空间，然后把原来的数据拷贝过去，再插入新的元素。这样做的好处是，\mintinline{cpp}|std::vector<T>|在大多数情况下在末尾插入和删除元素的时间复杂度是$O(1)$，只有在需要扩容的时候才是$O(n)$；而在中间插入和删除元素的时间复杂度仍然是$O(n)$。
 
 \subsection{链表}
 
@@ -102,7 +102,7 @@ p->next = newNode;
   \includegraphics[width=0.6\textwidth]{data-structure/chain2-insert.png}
 \end{figure}
 
-在C++标准库中，\lstinline[language=C++]|std::list<T>|就是一个双向链表的实现。我们不要自己试图实现一个链表，直接使用标准库中的实现即可。
+在C++标准库中，\mintinline{cpp}|std::list<T>|就是一个双向链表的实现。我们不要自己试图实现一个链表，直接使用标准库中的实现即可。
 
 \subsection{栈和队列}
 
@@ -110,7 +110,7 @@ p->next = newNode;
 
 \paragraph{栈}
 
-栈是一种只能在一端进行插入和删除操作的数据结构。我们可以使用\lstinline[language=C++]|std::stack<T>|来实现栈：
+栈是一种只能在一端进行插入和删除操作的数据结构。我们可以使用\mintinline{cpp}|std::stack<T>|来实现栈：
 \begin{minted}{cpp}
 #include <stack>
 std::stack<int, std::vector<int>> s; // 使用vector作为底层容器
@@ -126,7 +126,7 @@ s.pop();      // 出栈
 
 \paragraph{队列}
 
-队列和栈类似，但它允许在一端插入元素，在另一端删除元素。我们可以使用\lstinline[language=C++]|std::queue<T>|来实现队列：
+队列和栈类似，但它允许在一端插入元素，在另一端删除元素。我们可以使用\mintinline{cpp}|std::queue<T>|来实现队列：
 \begin{minted}{cpp}
 #include <queue>
 std::queue<int, std::list<int>> q; // 使用list作为底层容器
@@ -141,7 +141,7 @@ q.pop();      // 出队
 
 \paragraph{双端队列}
 
-双端队列是一种特殊的队列，允许在两端进行插入和删除操作。我们可以使用\lstinline[language=C++]|std::deque<T>|来实现双端队列：
+双端队列是一种特殊的队列，允许在两端进行插入和删除操作。我们可以使用\mintinline{cpp}|std::deque<T>|来实现双端队列：
 \begin{minted}{cpp}
 #include <deque>
 std::deque<int> dq; // 双端队列，底层容器即为deque本身
@@ -485,7 +485,7 @@ AVL树是一种自平衡二叉搜索树，它通过在每个节点上维护一�
     \end{itemize}
     \item 最后，确保根节点是黑色。如果不是，将其染成黑色。
 \end{itemize}
-而删除的过程更是复杂，不再赘述。C++标准库中的\lstinline[language=C++]|std::map<K, V>|和\lstinline[language=C++]|std::set<T>|就是基于红黑树实现的，我们可以直接使用它们来存储有序的键值对或集合。
+而删除的过程更是复杂，不再赘述。C++标准库中的\mintinline{cpp}|std::map<K, V>|和\mintinline{cpp}|std::set<T>|就是基于红黑树实现的，我们可以直接使用它们来存储有序的键值对或集合。
 
 \subsection{哈希表}
 
@@ -493,7 +493,7 @@ AVL树是一种自平衡二叉搜索树，它通过在每个节点上维护一�
 
 哈希的基本原理就是将键通过哈希函数转换为一个整数索引，然后将值存储在该索引位置的数组中。
 
-在C++中，哈希表可以通过\lstinline[language=C++]|std::unordered_map<K, V>|和\lstinline[language=C++]|std::unordered_set<T>|来实现：
+在C++中，哈希表可以通过\mintinline{cpp}|std::unordered_map<K, V>|和\mintinline{cpp}|std::unordered_set<T>|来实现：
 \begin{minted}{cpp}
 #include <unordered_map>
 #include <unordered_set>
@@ -510,7 +510,7 @@ bool exists = hashSet.find(10) != hashSet.end(); // 查找元素是否存在
 在理想状态下，散列函数应该能给每个不同的键生成不同的索引，但实际上可能会出现冲突（Collision），即不同的键被映射到相同的索引位置。为了解决冲突，常用的方法有链地址法和开放地址法。
 
 \paragraph{链地址法}
-链地址法是将每个数组位置存储为一个链表（或其他数据结构），当发生冲突时，将新元素添加到该位置的链表中。查找时，需要遍历链表以找到目标元素。这样的实现方式在C++的\lstinline[language=C++]|std::unordered_map|和\lstinline[language=C++]|std::unordered_set|中被广泛使用。
+链地址法是将每个数组位置存储为一个链表（或其他数据结构），当发生冲突时，将新元素添加到该位置的链表中。查找时，需要遍历链表以找到目标元素。这样的实现方式在C++的\mintinline{cpp}|std::unordered_map|和\mintinline{cpp}|std::unordered_set|中被广泛使用。
 
 \paragraph{开放地址法} 
 开放地址法是当发生冲突时，通过探测（Probing）找到下一个可用的数组位置来存储新元素。常见的探测方法有线性探测、二次探测和双重散列等。查找时，同样需要按照探测序列查找目标元素，直到找到或遇到空位置为止。这样的方法在某些哈希表实现中使用，但C++标准库并未采用这种方法。
@@ -518,7 +518,7 @@ bool exists = hashSet.find(10) != hashSet.end(); // 查找元素是否存在
 \subsection{堆}
 堆是一种特殊的完全二叉树，满足堆性质（Heap Property）：对于最大堆（Max Heap），每个节点的值都大于或等于其子节点的值；对于最小堆（Min Heap），每个节点的值都小于或等于其子节点的值。堆常用于实现优先队列和排序算法（如堆排序）。
 
-在C++中的堆是通过\lstinline[language=C++]|std::priority_queue<T>|来实现的：
+在C++中的堆是通过\mintinline{cpp}|std::priority_queue<T>|来实现的：
 \begin{minted}{cpp}
 #include <queue>
 std::priority_queue<int> maxHeap; // 最大堆
@@ -527,7 +527,7 @@ maxHeap.push(10); // 插入元素
 int top = maxHeap.top(); // 获取堆顶元素
 maxHeap.pop(); // 删除堆顶元素
 \end{minted}
-优先队列实际上也是一个“队列”，但内部并不是简单的先进先出，而是根据元素的优先级来决定出队顺序。最大堆的优先级是值越大越高，最小堆则是值越小越高。在C++中优先队列也是一个容器适配器，底层通常使用\lstinline[language=C++]|std::vector<T>|来存储元素，并通过堆操作来维护堆性质；也可以自定义底层容器，但必须满足随机访问迭代器的要求。
+优先队列实际上也是一个“队列”，但内部并不是简单的先进先出，而是根据元素的优先级来决定出队顺序。最大堆的优先级是值越大越高，最小堆则是值越小越高。在C++中优先队列也是一个容器适配器，底层通常使用\mintinline{cpp}|std::vector<T>|来存储元素，并通过堆操作来维护堆性质；也可以自定义底层容器，但必须满足随机访问迭代器的要求。
 
 堆的插入操作包括将新元素添加到堆的末尾，然后通过上浮（Bubble Up）操作恢复堆性质。上浮操作是将新元素与其父节点比较，如果违反堆性质，则交换它们的位置，直到堆性质得到恢复或到达根节点为止。这一过程大概是：
 \begin{itemize}

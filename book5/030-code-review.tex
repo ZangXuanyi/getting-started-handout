@@ -186,7 +186,7 @@ int main()
 
 \subsection{先把代码变得更C++一点}
 
-首先，映入眼帘的是\lstinline[language=C++]|#include <math.h>|。这可以看出这位同学以前可能有OI相关经验，习惯性地使用C风格的头文件了。在C++中，应该使用\lstinline[language=C++]|#include <cmath>|来替代上述头文件。
+首先，映入眼帘的是\mintinline{cpp}|#include <math.h>|。这可以看出这位同学以前可能有OI相关经验，习惯性地使用C风格的头文件了。在C++中，应该使用\mintinline{cpp}|#include <cmath>|来替代上述头文件。
 
 然后是这段代码的第10行：
 \begin{minted}{cpp}
@@ -196,9 +196,9 @@ int main()
 \begin{minted}{cpp}
     std::array<std::array<int, HEIGHT>, WIDTH> map;
 \end{minted}
-当然需要引用的头文件又多了一个，即 \lstinline[language=C++]|#include <array>| 。
+当然需要引用的头文件又多了一个，即 \mintinline{cpp}|#include <array>| 。
 
-继续看，然后我们发现这个初始化竟然是写在一个\lstinline[language=C++]|void init()|函数里面的。虽然这样做没有错，但是更好的方式是把初始化写在构造函数里面，这样可以确保每次创建对象时都会进行初始化，避免忘记调用初始化函数的问题。而另一条则是，这个类竟然没有构造函数！那么我们就帮他写一个构造函数，替代\lstinline[language=C++]|void init()|函数。
+继续看，然后我们发现这个初始化竟然是写在一个\mintinline{cpp}|void init()|函数里面的。虽然这样做没有错，但是更好的方式是把初始化写在构造函数里面，这样可以确保每次创建对象时都会进行初始化，避免忘记调用初始化函数的问题。而另一条则是，这个类竟然没有构造函数！那么我们就帮他写一个构造函数，替代\mintinline{cpp}|void init()|函数。
 
 但是，看他的注释，“使用1来代表白方棋子，2代表黑方棋子，-1代表障碍物”，这不就是“魔法数字”吗？我们应该使用枚举类型来替代这些魔法数字，从而提高代码的可读性和可维护性。
 
@@ -207,7 +207,7 @@ int main()
 enum class CellType{ EMPTY, WHITE, BLACK, OBSTACLE };
 \end{minted}
 
-然后把array的类型改成 \lstinline[language=C++]|std::array<std::array<CellType, SIZE>, SIZE>| \footnote{由于棋盘是正方形的，因此这里用一个SIZE就够了，节省一个常量的定义。}，并且把初始化函数改成构造函数，代码如下：
+然后把array的类型改成 \mintinline{cpp}|std::array<std::array<CellType, SIZE>, SIZE>| \footnote{由于棋盘是正方形的，因此这里用一个SIZE就够了，节省一个常量的定义。}，并且把初始化函数改成构造函数，代码如下：
 \begin{minted}{cpp}
 // 辅助的Pattern结构体
 struct Pattern{ int row; int col; CellType type; };
@@ -230,11 +230,11 @@ Board()
         board.at(pattern.row).at(pattern.col) = pattern.type;
 }
 \end{minted}
-这样代码就自解释了，避免了魔法数字、无构造函数等多个问题。当然，在改动到这里的时候，肯定要把剩下的代码里面所有对\lstinline[language=C++]|map|的访问都改成使用\lstinline[language=C++]|CellType|类型。另外，\lstinline[language=C++]|map|这个名字太差了，要是将来用到了STL的\lstinline[language=C++]|std::map|容器就冲突了。我们可以把它改成\lstinline[language=C++]|board|，更符合语境。
+这样代码就自解释了，避免了魔法数字、无构造函数等多个问题。当然，在改动到这里的时候，肯定要把剩下的代码里面所有对\mintinline{cpp}|map|的访问都改成使用\mintinline{cpp}|CellType|类型。另外，\mintinline{cpp}|map|这个名字太差了，要是将来用到了STL的\mintinline{cpp}|std::map|容器就冲突了。我们可以把它改成\mintinline{cpp}|board|，更符合语境。
 
-然后我们竟然发现这位同学在用成员函数来访问\lstinline[language=C++]|map|的时候，竟然都是直接使用\lstinline[language=C++]|Map::map|这种形式来调用的！这说明他并没有理解“面向对象”中的“封装”思想。成员函数应该直接访问成员变量，而不是通过类名来访问成员变量。我们应该把所有的\lstinline[language=C++]|Map::map|都改成\lstinline[language=C++]|this->board|或者直接\lstinline[language=C++]|board|。
+然后我们竟然发现这位同学在用成员函数来访问\mintinline{cpp}|map|的时候，竟然都是直接使用\mintinline{cpp}|Map::map|这种形式来调用的！这说明他并没有理解“面向对象”中的“封装”思想。成员函数应该直接访问成员变量，而不是通过类名来访问成员变量。我们应该把所有的\mintinline{cpp}|Map::map|都改成\mintinline{cpp}|this->board|或者直接\mintinline{cpp}|board|。
 
-然后还有很多输出语句，这里也得改，从以前的输出魔法数字到输出枚举类型对应的字符串。我们可以试着对该枚举类型重载\lstinline[language=C++]|operator<<|运算符，从而实现枚举类型到字符串的转换。代码如下：
+然后还有很多输出语句，这里也得改，从以前的输出魔法数字到输出枚举类型对应的字符串。我们可以试着对该枚举类型重载\mintinline{cpp}|operator<<|运算符，从而实现枚举类型到字符串的转换。代码如下：
 \begin{minted}{cpp}
 std::ostream &operator<<(std::ostream &os, const CellType &cell)
 {
@@ -466,7 +466,7 @@ int main()
 \paragraph{异常处理}
 目前，这段代码没有任何异常处理机制，如果输入无效数据，程序可能会崩溃。我们可以使用C++的异常处理机制来捕获和处理这些异常，从而提高程序的健壮性。例如，在读取玩家输入时，我们可以检查输入是否合法，如果不合法则抛出异常，并在主函数中捕获该异常并提示玩家重新输入。
 
-例如，\lstinline[language=C++]|Rules::try_move|函数：
+例如，\mintinline{cpp}|Rules::try_move|函数：
 \begin{minted}{cpp}
 void try_move(Board &board, const Pos &start, const Pos &end, PlayerType player)
 {
@@ -524,10 +524,10 @@ class MoveError : public std::runtime_error
     std::string_view type() const noexcept { return "MoveError"; } // 定义自己的异常类型
 };
 \end{minted}
-然后抛出\lstinline[language=C++]|MoveError|异常，从而更好地区分不同类型的异常。但现在的小项目就不必这么复杂了。
+然后抛出\mintinline{cpp}|MoveError|异常，从而更好地区分不同类型的异常。但现在的小项目就不必这么复杂了。
 
 \paragraph{边界检查} 
-边界检查主要需要在读取玩家输入时进行。我们可以检查输入的位置是否在棋盘范围内，如果不在则抛出异常。例如，在\lstinline[language=C++]|IO::read_move|函数中：
+边界检查主要需要在读取玩家输入时进行。我们可以检查输入的位置是否在棋盘范围内，如果不在则抛出异常。例如，在\mintinline{cpp}|IO::read_move|函数中：
 \begin{minted}{cpp}
 void read_move(Pos &start, Pos &end)
 {
@@ -555,7 +555,7 @@ void read_move(Pos &start, Pos &end)
 其实上述代码中读进引用也并不是特别好的设计，最好是返回一个结构体或者元组，避免引用带来的副作用。不过这里就不改了，再改就太复杂了。
 
 \paragraph{修饰函数}
-对于一些不修改成员变量的成员函数，应该加上\lstinline[language=C++]|const|修饰符，从而提高代码的可读性和安全性；对于肯定不抛出异常的函数，应该加上\lstinline[language=C++]|noexcept|修饰符，从而提高代码的性能和安全性。例如，在\lstinline[language=C++]|Rules::sgn|函数中：
+对于一些不修改成员变量的成员函数，应该加上\mintinline{cpp}|const|修饰符，从而提高代码的可读性和安全性；对于肯定不抛出异常的函数，应该加上\mintinline{cpp}|noexcept|修饰符，从而提高代码的性能和安全性。例如，在\mintinline{cpp}|Rules::sgn|函数中：
 \begin{minted}{cpp}
 template <typename T>
 [[nodiscard]] constexpr int sgn(T val) noexcept
@@ -564,22 +564,22 @@ template <typename T>
     return (T(0) < val) - (val < T(0));
 }
 \end{minted}
-在这里，我们使用了\lstinline[language=C++]|[[nodiscard]]|属性来提示调用者不要忽略返回值，使用了\lstinline[language=C++]|constexpr|来表示该函数可以在编译时求值，使用了\lstinline[language=C++]|noexcept|来表示该函数不会抛出异常，并且使用了\lstinline[language=C++]|static_assert|来确保模板参数是算术类型。这些修饰符大大提高了代码的可读性和安全性，符合现代C++编程“让错误在编译期暴露出来”的理念。
+在这里，我们使用了\mintinline{cpp}|[[nodiscard]]|属性来提示调用者不要忽略返回值，使用了\mintinline{cpp}|constexpr|来表示该函数可以在编译时求值，使用了\mintinline{cpp}|noexcept|来表示该函数不会抛出异常，并且使用了\mintinline{cpp}|static_assert|来确保模板参数是算术类型。这些修饰符大大提高了代码的可读性和安全性，符合现代C++编程“让错误在编译期暴露出来”的理念。
 
 \begin{tip}
-    有的同学可能会好奇：为什么上述静态断言能够确保模板参数是算术类型？这是因为\lstinline[language=C++]|std::is_arithmetic_v<T>|是一个类型特征（type trait），它在C++标准库的\texttt{<type\_traits>}头文件中定义。它会在编译时检查类型\texttt{T}是否是算术类型（包括整数类型和浮点类型），如果是则返回\texttt{true}，否则返回\texttt{false}。
+    有的同学可能会好奇：为什么上述静态断言能够确保模板参数是算术类型？这是因为\mintinline{cpp}|std::is_arithmetic_v<T>|是一个类型特征（type trait），它在C++标准库的\texttt{<type\_traits>}头文件中定义。它会在编译时检查类型\texttt{T}是否是算术类型（包括整数类型和浮点类型），如果是则返回\texttt{true}，否则返回\texttt{false}。
 
-    那可能有的同学还有疑问：template不是泛型吗，为什么能在编译时就确定类型？这是因为C++的模板机制是在编译时进行实例化的，这一点和Python的“动态类型”完全不同；与之类似的还有\lstinline[language=C++]|auto|关键字，虽然看起来这家伙能接受任何类型的值，但实际上编译器会在编译时根据赋值语句推导出具体的类型，从而确保类型安全。也正因此，C++的模板和\lstinline[language=C++]|auto|关键字都能在编译时进行类型检查，从而避免了运行时的类型错误。
+    那可能有的同学还有疑问：template不是泛型吗，为什么能在编译时就确定类型？这是因为C++的模板机制是在编译时进行实例化的，这一点和Python的“动态类型”完全不同；与之类似的还有\mintinline{cpp}|auto|关键字，虽然看起来这家伙能接受任何类型的值，但实际上编译器会在编译时根据赋值语句推导出具体的类型，从而确保类型安全。也正因此，C++的模板和\mintinline{cpp}|auto|关键字都能在编译时进行类型检查，从而避免了运行时的类型错误。
 
-    还有的同学可能会问：为什么断言能和noexcept一起用？这是因为静态断言是在编译时进行检查的，如果不满足该断言条件（例如在某次实例化中传入了非算术类型），编译器会报错并停止编译过程，无法实例化模板，编译也被掐断，从而避免了运行时的错误。而\lstinline[language=C++]|noexcept|是用来修饰函数的，它表示该方法（模板）\textbf{实例化后}的任何运行时调用都不会抛出异常。因此，这两者并不冲突，反而是相辅相成的。换句话说，如果把断言去掉，那这个noexcept就不成立了，因为传入非算术类型时，函数体内的比较操作会抛出异常，从而违反了noexcept的承诺；但仅把noexcept去掉，断言依然成立，只是编译器不会对这个函数调用进行优化罢了。
+    还有的同学可能会问：为什么断言能和noexcept一起用？这是因为静态断言是在编译时进行检查的，如果不满足该断言条件（例如在某次实例化中传入了非算术类型），编译器会报错并停止编译过程，无法实例化模板，编译也被掐断，从而避免了运行时的错误。而\mintinline{cpp}|noexcept|是用来修饰函数的，它表示该方法（模板）\textbf{实例化后}的任何运行时调用都不会抛出异常。因此，这两者并不冲突，反而是相辅相成的。换句话说，如果把断言去掉，那这个noexcept就不成立了，因为传入非算术类型时，函数体内的比较操作会抛出异常，从而违反了noexcept的承诺；但仅把noexcept去掉，断言依然成立，只是编译器不会对这个函数调用进行优化罢了。
 \end{tip}
 
 \paragraph{多文件编程}
 上述代码全都塞进了一个文件，这是非常不好的做法。虽然现在这个代码量满打满算还不到两百行，但是如果将来植入GUI、AI等功能，代码量肯定会大幅增加。我们应该把代码拆成多个文件，从而提高代码的可维护性和可读性。上述几个类（命名空间）都可以拆成单独的头文件和源文件，从而实现模块化编程。
 
-实现多文件的编程还有一个好处，就是可以使用CMake等工具来精细的控制编译过程，从而提高编译效率和代码质量。我们以\lstinline[language=C++]|Board|类为例，展示如何把它拆成头文件和源文件。
+实现多文件的编程还有一个好处，就是可以使用CMake等工具来精细的控制编译过程，从而提高编译效率和代码质量。我们以\mintinline{cpp}|Board|类为例，展示如何把它拆成头文件和源文件。
 
-首先，我们创建一个头文件 \verb|board.hpp|，用于声明\lstinline[language=C++]|Board|类：
+首先，我们创建一个头文件 \verb|board.hpp|，用于声明\mintinline{cpp}|Board|类：
 
 \begin{minted}{cpp}
 #ifndef BOARD_HPP
@@ -606,7 +606,7 @@ public:
 #endif // BOARD_HPP
 \end{minted}
 
-然后，我们创建一个源文件 \verb|board.cpp|，用于实现\lstinline[language=C++]|Board|类：
+然后，我们创建一个源文件 \verb|board.cpp|，用于实现\mintinline{cpp}|Board|类：
 \begin{minted}{cpp}
 #include "board.hpp"
 // 初始化 initial_patterns 静态成员
@@ -631,7 +631,7 @@ void Board::move_piece(const Pos &start, const Pos &end, CellType type)
 }
 void Board::place_obstacle(const Pos &pos) { board.at(pos.x).at(pos.y) = CellType::OBSTACLE; }
 \end{minted}
-通过这种方式，我们就把\lstinline[language=C++]|Board|类拆成了头文件和源文件，从而实现了模块化编程。其他类（命名空间）也可以采用类似的方式进行拆分。而在CMake中，我们大致需要这样写：
+通过这种方式，我们就把\mintinline{cpp}|Board|类拆成了头文件和源文件，从而实现了模块化编程。其他类（命名空间）也可以采用类似的方式进行拆分。而在CMake中，我们大致需要这样写：
 \begin{minted}{cmake}
 cmake_minimum_required(VERSION 3.10)
 project(AmazonsGame)

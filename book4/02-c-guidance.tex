@@ -92,7 +92,7 @@ int main() {
 \begin{caution}
   尽量单独使用 \texttt{++} 和 \texttt{--} ，不要把它们和其他运算混在一起使用，更不要在同一个表达式中对同一个变量使用多次 \texttt{++} 或 \texttt{--} 。例如， \texttt{a = b++} 虽然不推荐但还勉强可以，但是 \texttt{a = b++ + b++} 和 \texttt{i = i++} 都是未定义行为。一个饱受诟病的题目“ \texttt{i = 3, i++ + i++ = ?} ”答：这个题目是错误的，至少是不良定义的。不同的编译器对上述代码的处理方式不同。
 
-  笔者个人从工程的眼光上看来，非常不建议弄出 \texttt{a = b++} 这类的代码，尽管这类代码在竞赛中会让很多OIer感到Tricky，但是在工程中会让人无比恼火。如果想先用b的值再加1，可以写成 \texttt{a = b; b++;} ；如果想先加1再用b的值，可以写成 \texttt{b++; a = b;} 。上述写法一般只有非常约定俗成的场合才会使用，例如 \texttt{while(T--)} 或者 \texttt{stk[++top]=x} ——不过即使是我，也更习惯于写成\lstinline[language=C++]|for(;T>0;T--)| 和 \lstinline[language=C++]|stack<int> stk; stk.push(x);|。
+  笔者个人从工程的眼光上看来，非常不建议弄出 \texttt{a = b++} 这类的代码，尽管这类代码在竞赛中会让很多OIer感到Tricky，但是在工程中会让人无比恼火。如果想先用b的值再加1，可以写成 \texttt{a = b; b++;} ；如果想先加1再用b的值，可以写成 \texttt{b++; a = b;} 。上述写法一般只有非常约定俗成的场合才会使用，例如 \texttt{while(T--)} 或者 \texttt{stk[++top]=x} ——不过即使是我，也更习惯于写成\mintinline{cpp}|for(;T>0;T--)| 和 \mintinline{cpp}|stack<int> stk; stk.push(x);|。
 \end{caution}
 
 \subsection{注释}
@@ -1015,7 +1015,7 @@ int main() {
 }
 \end{minted}
 
-\lstinline[language=C]|fopen| 函数接受两个参数：文件名（实际上是文件相对可执行文件的路径）和模式。模式可以是r（只读）、w（只写，文件不存在则创建，存在则清空）、a（追加写入，文件不存在则创建）等。函数返回一个指向 \texttt{FILE} 结构体的指针，如果打开失败则返回 \texttt{NULL} 。
+\mintinline{c}|fopen| 函数接受两个参数：文件名（实际上是文件相对可执行文件的路径）和模式。模式可以是r（只读）、w（只写，文件不存在则创建，存在则清空）、a（追加写入，文件不存在则创建）等。函数返回一个指向 \texttt{FILE} 结构体的指针，如果打开失败则返回 \texttt{NULL} 。
 
 \subsection{文件操作}
 
@@ -1045,7 +1045,7 @@ C标准库头文件按照C17标准一共29个，其中有一些方法是我们�
 
 \subsection{stdio.h}
 
-该库主要负责输入输出操作。除了\lstinline[language=C]|scanf|和\lstinline[language=C]|printf|，还包括文件操作等功能。
+该库主要负责输入输出操作。除了\mintinline{c}|scanf|和\mintinline{c}|printf|，还包括文件操作等功能。
 \begin{itemize}
   \item \texttt{fopen(filename, mode)} ：打开文件，返回一个文件指针。
   \item \texttt{fclose(file\_ptr)} ：关闭文件。
@@ -1196,14 +1196,14 @@ int main(){
 \begin{answer}
 以上八个题目（以左栏第一个为第一题）分别错在：
 \begin{enumerate}
-    \item n未初始化就使用。应先读入n，再定义数组。另，VLA不是C标准的一部分，建议使用动态内存分配\lstinline[language=C]|malloc|。
-    \item 数组越界。应改为\lstinline[language=C]|i < 5|。
+    \item n未初始化就使用。应先读入n，再定义数组。另，VLA不是C标准的一部分，建议使用动态内存分配\mintinline{c}|malloc|。
+    \item 数组越界。应改为\mintinline{c}|i < 5|。
     \item 指针未初始化就使用。
-    \item 数组长度不足以存储输入的字符串，是忘记\verb|\0|导致的。应改为\lstinline[language=C]|char str[6];|。
-    \item 误用赋值运算符。应改为\lstinline[language=C]|if (x == 0)|。
+    \item 数组长度不足以存储输入的字符串，是忘记\verb|\0|导致的。应改为\mintinline{c}|char str[6];|。
+    \item 误用赋值运算符。应改为\mintinline{c}|if (x == 0)|。
     \item 返回局部变量地址，导致悬空指针。应改为静态变量或动态分配内存。
     \item 数组作为函数参数时退化为指针，sizeof结果是指针大小。应传入数组大小作为额外参数。
-    \item 未定义行为，因为\lstinline[language=C]|a++|的副作用未定义顺序。应改为两行分别处理。
+    \item 未定义行为，因为\mintinline{c}|a++|的副作用未定义顺序。应改为两行分别处理。
 \end{enumerate}
 改正代码略，读者可自行完成。
 \end{answer}

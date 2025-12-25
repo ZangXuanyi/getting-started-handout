@@ -13,7 +13,7 @@ C++广泛应用于多种需要兼顾性能和抽象的领域，如系统软件�
 
     一种代码有一种代码的写法，一次性代码（如考试和竞赛）和长期维护的代码（如工程项目）是两码事。前者追求速度和简洁，后者追求可读性和可维护性。本文所述的代码风格和建议，都是面向后者的。笔者个人也比较建议同学们从一开始就养成良好的代码习惯，毕竟未来你写的代码很可能会被别人阅读和维护。
 
-    所以说，虽然笔者个人非常厌恶和反对在任何代码中使用诸如 \lstinline[language=C++]|#include <bits/c++.h>| 和 \lstinline[language=C++]|using namespace std;| 之类的东西，以及大量使用全局变量、开巨大的C风格静态数组、滥用宏定义、用无意义的函数和变量名、一点注释不写、通篇魔法数字等行为，但如果你仅是为了应付考试或竞赛，那么使用这些东西也无可厚非，毕竟在考试的时候这些东西确实能帮你节省不少时间——但依然建议避免这种不好的实践。
+    所以说，虽然笔者个人非常厌恶和反对在任何代码中使用诸如 \mintinline{cpp}|#include <bits/c++.h>| 和 \mintinline{cpp}|using namespace std;| 之类的东西，以及大量使用全局变量、开巨大的C风格静态数组、滥用宏定义、用无意义的函数和变量名、一点注释不写、通篇魔法数字等行为，但如果你仅是为了应付考试或竞赛，那么使用这些东西也无可厚非，毕竟在考试的时候这些东西确实能帮你节省不少时间——但依然建议避免这种不好的实践。
     
     但如果要是在大作业或工程项目中这么乱写，\textbf{那就太不负责任了}，被解雇了也是活该。
 \end{caution}
@@ -238,7 +238,7 @@ int main(){
 
 在C语言的章节中，我们已经知道，可以使用\verb|FILE|结构体的指针来操作文件。但是这种操作有一定弊病：需要手动管理文件指针，容易出错。虽然智能指针能够部分解决手动管理文件指针的麻烦，但C++提供了更好的文件操作方式：文件流（file stream）。
 
-文件流和输入输出流类似，也是一个流对象。文件流有两个：\lstinline[language=C++]|std::ifstream|用于从文件读取数据，\lstinline[language=C++]|std::ofstream|用于向文件写入数据，分别对应标准输入输出的\lstinline[language=C++]|std::cin|和\lstinline[language=C++]|std::cout|。这两个流对象提供了和标准输入输出流类似的操作方法，例如使用\texttt{>>}和\texttt{<<}运算符进行读写操作。
+文件流和输入输出流类似，也是一个流对象。文件流有两个：\mintinline{cpp}|std::ifstream|用于从文件读取数据，\mintinline{cpp}|std::ofstream|用于向文件写入数据，分别对应标准输入输出的\mintinline{cpp}|std::cin|和\mintinline{cpp}|std::cout|。这两个流对象提供了和标准输入输出流类似的操作方法，例如使用\texttt{>>}和\texttt{<<}运算符进行读写操作。
 
 下面是一个简单的例子，演示如何使用文件流读取和写入文件：
 \begin{minted}{cpp}
@@ -256,14 +256,14 @@ int main(){
     return 0;
 }
 \end{minted}
-在上述代码中，“读取”和“写入”两个操作被分成两个流对象而不是一个文件。这是因为C++的OOP思想，每一个对象仅负责一个职责。另，在这里也可以看出，文件流应当\textbf{自行定义}，而不是已经定义好的\lstinline[language=C++]|std::cin|和\lstinline[language=C++]|std::cout|。
+在上述代码中，“读取”和“写入”两个操作被分成两个流对象而不是一个文件。这是因为C++的OOP思想，每一个对象仅负责一个职责。另，在这里也可以看出，文件流应当\textbf{自行定义}，而不是已经定义好的\mintinline{cpp}|std::cin|和\mintinline{cpp}|std::cout|。
 
-\lstinline[language=C++]|ofstream|默认是覆盖模式打开文件的，如果想要以追加模式打开文件，可以使用以下方式：
+\mintinline{cpp}|ofstream|默认是覆盖模式打开文件的，如果想要以追加模式打开文件，可以使用以下方式：
 \begin{minted}{cpp}
 std::ofstream outfile("output.txt", std::ios::app); // 以追加模式打开输出文件
 \end{minted}
 
-当然，也可以使用一个统一的文件流对象来同时进行读写操作，这时需要使用\lstinline[language=C++]|std::fstream|类，但这时候需要指定读写模式：
+当然，也可以使用一个统一的文件流对象来同时进行读写操作，这时需要使用\mintinline{cpp}|std::fstream|类，但这时候需要指定读写模式：
 \begin{minted}{cpp}
 std::fstream file("data.txt", std::ios::in | std::ios::out); // 以读写模式打开文件
 \end{minted}
@@ -321,7 +321,7 @@ constexpr double PI = 3.14159;
 constexpr double EPI = E * PI;
 \end{minted}
 
-在现代 \texttt{C++} 中， \texttt{const} 常变量不依靠运行时初始化来确定其值（例如\lstinline[language=c++]|const int b = 1;|），其表现就和 \texttt{constexpr} 常量一样了。因此，在大多数时候，我们也可以把 \texttt{const} 常变量当作 \texttt{constexpr} 常量来使用。但如希望严谨表达意图，仍建议使用 \texttt{constexpr} 来声明常量。
+在现代 \texttt{C++} 中， \texttt{const} 常变量不依靠运行时初始化来确定其值（例如\mintinline{cpp}|const int b = 1;|），其表现就和 \texttt{constexpr} 常量一样了。因此，在大多数时候，我们也可以把 \texttt{const} 常变量当作 \texttt{constexpr} 常量来使用。但如希望严谨表达意图，仍建议使用 \texttt{constexpr} 来声明常量。
 
 \begin{tip}
   还是不懂？可以通过以下例子理解一下变量、运行时常量、编译期常量的区别：
@@ -518,7 +518,7 @@ for (Color c = Color::FIRST; c <= Color::LAST; c = static_cast<Color>(static_cas
 
 我们已经知道C风格的指针是什么了。C++中虽然也能和C一样使用“裸指针”，但是不推荐这么做。C++引入了智能指针的概念，来帮助我们更好地管理内存，不需要再手动malloc/free了。
 
-智能指针有三个\footnote{实际上还有第四种 \lstinline[language=C++]|std::auto\_ptr|，但是因为这个类型存在一些设计缺陷，已经在C++11中被弃用，因此这里不做介绍。}主要类型。这三个主要类型都定义在\lstinline[language=C++]|<memory>| 头文件中，分别是：
+智能指针有三个\footnote{实际上还有第四种 \mintinline{cpp}|std::auto\_ptr|，但是因为这个类型存在一些设计缺陷，已经在C++11中被弃用，因此这里不做介绍。}主要类型。这三个主要类型都定义在\mintinline{cpp}|<memory>| 头文件中，分别是：
 \begin{itemize}
   \item \texttt{std::unique\_ptr} ：表示独占所有权的智能指针，一个对象只能有一个 \texttt{unique\_ptr} 指向它。当这个 \texttt{unique\_ptr} 被销毁时，所指向的对象也会被自动释放。
   \item \texttt{std::shared\_ptr} ：表示共享所有权的智能指针，一个对象可以有多个 \texttt{shared\_ptr} 指向它。对象会在最后一个指向它的 \texttt{shared\_ptr} 被销毁时自动释放。
@@ -536,7 +536,7 @@ void foo() {
     delete ptr; // 释放ptr指向的整数对象
 }
     \end{minted}
-    上述代码中，函数 \texttt{foo} 拥有指针 \texttt{ptr} 指向的整数对象的所有权，因此它负责这个对象的创建和销毁；而在该函数结束时，也要负责销毁所有的对象，也就是释放内存。如果上述代码中没有\lstinline[language=C++]|delete ptr;| 这一行，那么就会导致内存泄漏，因为这个整数对象的内存没有被释放（但上述\lstinline[language=C++]|int a = 42;| 这一行不会导致内存泄漏，因为它是栈上的对象，会在函数结束时自动销毁）。这个实际上就是C的一个大问题：如果程序员忘记释放内存，那就会导致程序内存泄漏。
+    上述代码中，函数 \texttt{foo} 拥有指针 \texttt{ptr} 指向的整数对象的所有权，因此它负责这个对象的创建和销毁；而在该函数结束时，也要负责销毁所有的对象，也就是释放内存。如果上述代码中没有\mintinline{cpp}|delete ptr;| 这一行，那么就会导致内存泄漏，因为这个整数对象的内存没有被释放（但上述\mintinline{cpp}|int a = 42;| 这一行不会导致内存泄漏，因为它是栈上的对象，会在函数结束时自动销毁）。这个实际上就是C的一个大问题：如果程序员忘记释放内存，那就会导致程序内存泄漏。
 
     而有了智能指针，这个问题就迎刃而解了，见下文。
 \end{note}
@@ -580,7 +580,7 @@ public:
 \end{minted}
 
 \begin{note}
-    那两个\lstinline[language=C++]|shared_ptr|为什么会导致循环引用？这是因为智能指针对内存进行管理的方式是通过\textbf{引用计数}来实现的。每有一个\lstinline[language=C++]|unique_ptr|或者\lstinline[language=C++]|shared_ptr|指向一个对象，这个对象的引用计数就会增加1；每当一个\lstinline[language=C++]|unique_ptr|或者\lstinline[language=C++]|shared_ptr|被销毁或者重新指向其他对象时，引用计数就会减少1。当引用计数变为0时，表示没有任何智能指针指向这个对象了，这时对象的内存就会被自动释放。而\lstinline[language=C++]|weak_ptr|不会影响引用计数。
+    那两个\mintinline{cpp}|shared_ptr|为什么会导致循环引用？这是因为智能指针对内存进行管理的方式是通过\textbf{引用计数}来实现的。每有一个\mintinline{cpp}|unique_ptr|或者\mintinline{cpp}|shared_ptr|指向一个对象，这个对象的引用计数就会增加1；每当一个\mintinline{cpp}|unique_ptr|或者\mintinline{cpp}|shared_ptr|被销毁或者重新指向其他对象时，引用计数就会减少1。当引用计数变为0时，表示没有任何智能指针指向这个对象了，这时对象的内存就会被自动释放。而\mintinline{cpp}|weak_ptr|不会影响引用计数。
 
     这就可以看出问题。如果我们写了这样的代码：
 \begin{minted}{cpp}
@@ -592,12 +592,12 @@ struct Node {
 \end{minted}
     那么如果我们创建了两个节点A和B，并且让A的next指向B，B的prev指向A，那么A和B就形成了一个循环引用。即使我们不再使用A和B，它们的引用计数也不会变为0，因为它们互相引用着对方。于是，A和B的内存永远不会被自动释放，因而就会导致内存泄漏。
 
-    为了解决这个问题，我们可以使用\lstinline[language=C++]|weak_ptr|来打破循环引用。例如，我们可以让prev成为一个\lstinline[language=C++]|weak_ptr|，这样就不会增加引用计数，从而避免循环引用的问题。
+    为了解决这个问题，我们可以使用\mintinline{cpp}|weak_ptr|来打破循环引用。例如，我们可以让prev成为一个\mintinline{cpp}|weak_ptr|，这样就不会增加引用计数，从而避免循环引用的问题。
 
-    而为什么在上述\lstinline[language=C++]|List|类中，head和tail使用\lstinline[language=C++]|shared_ptr|呢？这是因为head和tail是链表的入口和出口，它们需要拥有节点的所有权，以确保链表中的节点在链表存在期间\textbf{不会}被销毁。因此，使用\lstinline[language=C++]|shared_ptr|是合适的选择。我们也可以模拟以下销毁整个链表的过程：
+    而为什么在上述\mintinline{cpp}|List|类中，head和tail使用\mintinline{cpp}|shared_ptr|呢？这是因为head和tail是链表的入口和出口，它们需要拥有节点的所有权，以确保链表中的节点在链表存在期间\textbf{不会}被销毁。因此，使用\mintinline{cpp}|shared_ptr|是合适的选择。我们也可以模拟以下销毁整个链表的过程：
     \begin{enumerate}
         \item 在链表的生命周期内：链表头的引用计数是1，链表尾节点的引用计数是2（“链表尾”\footnote{“链表尾”和“链表尾节点”不是一个东西。以一个长度为10的链表为例，链表尾节点是第10个节点，而链表尾是一个指向第10个节点的指针。}指向尾节点，而前一个节点也指向尾节点）。
-        \item 先销毁整个\lstinline[language=C++]|List|。这时候，链表头的引用计数会减少1（变成0），而尾节点的引用计数也会减少1（变成1）。
+        \item 先销毁整个\mintinline{cpp}|List|。这时候，链表头的引用计数会减少1（变成0），而尾节点的引用计数也会减少1（变成1）。
         \item 由于链表头的引用计数变成0，因此头节点会被自动释放。头节点的释放会导致它的next指针指向的下一个节点的引用计数减少1，也就是第二个节点的引用计数变成0。
         \item 于是产生链式反应，整个链表的节点都会被依次释放，直到尾节点。
     \end{enumerate}
@@ -856,7 +856,7 @@ auto str = "Hello, World!";  // 编译器推断str的类型为const char*
 以上代码中，编译器会根据初始值自动推断变量的类型。
 
 \begin{caution}
-  不要滥用 \texttt{auto} ，因为这会使得代码的可读性降低，尤其是当变量的类型不明显时。我们只推荐在\textbf{变量的类型是确定的}、\textbf{类型的名称非常冗长}、\textbf{你知道这个变量的类型是什么或者大概是什么}的情况下使用类型推断，例如\lstinline[language=C++]|auto it = std::max_element(v.begin(), v.end());|中， \texttt{it} 的类型是 \texttt{std::vector<int>::iterator} 是确定的，这个类型名称很长，你也知道它是个迭代器类型，这时候使用 \texttt{auto} 是非常合适的。但是如果你真写了\lstinline[language=C++]|auto x = 5;|这种代码，那就属于滥用了，是不提倡的。
+  不要滥用 \texttt{auto} ，因为这会使得代码的可读性降低，尤其是当变量的类型不明显时。我们只推荐在\textbf{变量的类型是确定的}、\textbf{类型的名称非常冗长}、\textbf{你知道这个变量的类型是什么或者大概是什么}的情况下使用类型推断，例如\mintinline{cpp}|auto it = std::max_element(v.begin(), v.end());|中， \texttt{it} 的类型是 \texttt{std::vector<int>::iterator} 是确定的，这个类型名称很长，你也知道它是个迭代器类型，这时候使用 \texttt{auto} 是非常合适的。但是如果你真写了\mintinline{cpp}|auto x = 5;|这种代码，那就属于滥用了，是不提倡的。
 
   如果变量的类型确实不确定（例如变量类型会随着初始化方式的不同而改变），这时候可以使用模板函数或模板类，而不是使用 \texttt{auto} 。如果你知道变量的类型是一个确定的类型，但是你不知道具体是什么类型，建议你先搞清楚这个变量的类型再写代码，否则几乎必然会出错。
 \end{caution}
@@ -900,7 +900,7 @@ typedef就无法应用于模板类型别名。因此，在C++中，我们推荐�
   \item \textbf{整形等级转换}：提升之后，如果类型仍不匹配，编译器会尝试将较小的整型转换为较大的整型（如 \texttt{int} 转为 \texttt{long} ）。
   \item \textbf{浮点等级转换}：如果涉及浮点数，编译器会尝试将较小的浮点类型转换为较大的浮点类型（如 \texttt{float} 转为 \texttt{double} ）。
   \item \textbf{混合类别转换}：如果操作数类型不同，编译器会尝试将整型转换为浮点型，以避免精度丢失。转换后的类型为与浮点数的类型相同的浮点类型。
-  \item \textbf{其他转换}：包括数组到指针、函数到指针、空指针常量、枚举到整型\footnote{ \texttt{C++11} 起的强枚举不能隐式转换}、类类型的转换\footnote{指的是诸如代码： \lstinline[language=c++]|struct A{ A(int);}; void foo(A); foo(42);| 中， \texttt{foo(42)} 把整数隐式转换为类}等。
+  \item \textbf{其他转换}：包括数组到指针、函数到指针、空指针常量、枚举到整型\footnote{ \texttt{C++11} 起的强枚举不能隐式转换}、类类型的转换\footnote{指的是诸如代码： \mintinline{cpp}|struct A{ A(int);}; void foo(A); foo(42);| 中， \texttt{foo(42)} 把整数隐式转换为类}等。
 \end{enumerate}
 
 在C++中，类型强转被拆成了四个方式（四大金刚）：
@@ -1184,14 +1184,14 @@ int main() {
 \begin{answer}
     以下是上述练习题的错误，改正方法留给读者自行思考。
     \begin{enumerate}
-        \item \lstinline[language=C++]|auto| 用作声明变量时，必须有初始值，否则编译器无法推断类型。改正方法： \lstinline[language=C++]|auto x = 42;| 。
-        \item 范围for循环中， \lstinline[language=C++]|auto v| 是按值传递的，修改 \lstinline[language=C++]|v| 不会影响原数组。改正方法：使用引用传递， \lstinline[language=C++]|for (auto& v : a)| 。
+        \item \mintinline{cpp}|auto| 用作声明变量时，必须有初始值，否则编译器无法推断类型。改正方法： \mintinline{cpp}|auto x = 42;| 。
+        \item 范围for循环中， \mintinline{cpp}|auto v| 是按值传递的，修改 \mintinline{cpp}|v| 不会影响原数组。改正方法：使用引用传递， \mintinline{cpp}|for (auto& v : a)| 。
         \item 函数默认参数值只能在函数声明中指定，不能在函数定义中指定。改正方法：在 \texttt{main.cpp} 中添加函数声明时指定默认参数值：
 \begin{minted}{cpp}
 int add(int a, int b = 0);
 \end{minted}
-        \item \texttt{constexpr} 函数的参数必须是编译时常量， \lstinline[language=C++]|n| 是运行时输入的变量，不能作为 \texttt{constexpr} 变量的初始化值。
+        \item \texttt{constexpr} 函数的参数必须是编译时常量， \mintinline{cpp}|n| 是运行时输入的变量，不能作为 \texttt{constexpr} 变量的初始化值。
         \item C++的标准输出流和C的标准输出使用不同的缓冲区，可能导致输出顺序不确定。改正方法：使用同一种输出方式，或者在 \texttt{printf} 之后调用 \texttt{std::cout.flush()} 。
-        \item \texttt{nullptr} 可以转换为任何指针类型，因此调用 \texttt{f(nullptr)} 时，编译器无法确定调用哪个重载版本。改正方法：显式指定调用的版本，例如 \lstinline[language=C++]|f(static_cast<int*>(nullptr))| 。
+        \item \texttt{nullptr} 可以转换为任何指针类型，因此调用 \texttt{f(nullptr)} 时，编译器无法确定调用哪个重载版本。改正方法：显式指定调用的版本，例如 \mintinline{cpp}|f(static_cast<int*>(nullptr))| 。
     \end{enumerate}
 \end{answer}
