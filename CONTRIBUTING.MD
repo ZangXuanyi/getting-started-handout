@@ -29,12 +29,12 @@
 - 在 `main.tex` 中使用 `\include{编号-章节名}` 引入 Chapter 文件。
 
 ### 代码块
-- 使用 `lstlisting` 环境。
+- 使用 `minted` 环境。
 - 尽可能指定语言类型，如：
   ```latex
-  \begin{lstlisting}[language={[LaTeX]TeX}]
+  \begin{minted}{latex}
     Your Code Here...
-  \end{lstlisting}
+  \end{minted}
   ```
 
 ### 图片

@@ -17,21 +17,21 @@
 \section{从一口气做完到边做边等}
 
 假设我们写了这样一个脚本，顺序抓取100个网页并处理：
-\begin{lstlisting}[language=Python]
+\begin{minted}{python}
 for url in urls:
     html = request.urlopen(url).read()  # 网络往返 200 ms
     process(html)                      # CPU 计算 5 ms
-\end{lstlisting}
+\end{minted}
 我们发现，CPU利用率竟然高达$ 5 \div 205 \approx 2.4 \% $！有高达 97\%的时间被阻塞在 \texttt{read} 这一步：在等待网络数据返回的时候，CPU啥也不干。
 
 那怎么处理这个问题？一拍脑袋，“进程是资源的调度单位”，那我们就开多个进程同时抓取网页吧！
-\begin{lstlisting}[language=Python]
+\begin{minted}{python}
 for url in urls:
     pid = os.fork()          # 经典 Unix 套路
     if pid == 0:             # 子进程
         single_fetch(url)
         os._exit(0)
-\end{lstlisting}
+\end{minted}
 这就是朴素的多进程编程了。
 
 问题貌似解决了，但我们发现：fork瞬间复制父进程内存，100个进程同时跑，内存瞬间爆炸；而且，操作系统调度这么多进程，开销也不小。更捉急的是：子进程把结果存在哪儿？父进程怎么拿到结果？这都没想好，代码就乱成一锅粥了。
@@ -45,12 +45,12 @@ for url in urls:
 单线程内，我们不如换一种思路：遇到IO不睡觉，我们先去做别的；等数据好了，再回来继续处理。这样一来，CPU就不会闲着了。
 
 这就是\textbf{事件循环}的核心：
-\begin{lstlisting}[language=Python]
+\begin{minted}{python}
 loop = get_event_loop()
 for url in urls:
     loop.create_task(fetch(url))   # 立刻返回，不阻塞
 loop.run_forever()
-\end{lstlisting}
+\end{minted}
 
  \texttt{fetch} 内部在真正读写数据时会 \texttt{await} ，也就是“暂时等着”，让出控制权、挂起当前协程：“Nobody blocks, Everybody cooperates”。于是CPU的利用率立刻提升，但内存并无显著提升。
 
@@ -107,7 +107,7 @@ loop.run_forever()
 现代编程中随处可见上述典型架构：Nginx+Flask/uWSGI、Chrome的GPU进程、VS Code的Extension Host，全都是这种异步主控、多进程打工的模式。学会这种模式，才能真正理解现代高性能编程的精髓。
 
 来个简单示范：
-\begin{lstlisting}[language=Python]
+\begin{minted}{python}
 import asyncio, multiprocessing as mp
 
 def cpu_crunch(data):
@@ -121,7 +121,7 @@ async def main():
         print("async 拿到结果:", result)
 
 asyncio.run(main())
-\end{lstlisting}
+\end{minted}
 
 上述代码中，主进程运行一个异步事件循环，负责调度任务；而真正的计算任务则被分配给进程池中的子进程去执行，由 \texttt{run\_in\_executor} 方法把进程池包装成一个异步调用：异步和多进程永远不是二选一，而是组合拳。
 
@@ -207,7 +207,7 @@ asyncio.run(main())
 
 打个比方，一个人进门要先拿钥匙把门锁打开，进去了之后要把门锁上，别人才能进来。这样就保证了同一时间只有一个人能进屋子。
 
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
     std::mutex mtx; // 创建一个互斥量
     int shared_resource = 0; // 共享资源
     void thread_function() {
@@ -216,9 +216,9 @@ asyncio.run(main())
         shared_resource++;
         mtx.unlock(); // 释放锁
     }
-\end{lstlisting}
+\end{minted}
 当然上述代码比较简单粗暴，实践中一般用下面这个，构造函数获取锁，析构函数释放锁，避免忘记释放锁的问题：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
     std::mutex mtx; // 创建一个互斥量
     int shared_resource = 0; // 共享资源
     void thread_function() {
@@ -226,29 +226,29 @@ asyncio.run(main())
         // 访问共享资源
         shared_resource++;
     }
-\end{lstlisting}
+\end{minted}
 
 \subsubsection{条件变量}
 
 有时候，线程需要等待某个条件成立才能继续执行。条件变量（Condition Variable）就是用来实现这种等待机制的。线程可以在条件变量上等待，直到另一个线程通知它条件已经成立。这样就可以避免死锁的发生。
 
-\begin{lstlisting}
-    std::mutex mtx;
-    std::condition_variable cv;
-    bool ready = false;
-    void thread_function() {
-        std::unique_lock<std::mutex> lock(mtx);
-        cv.wait(lock, []{ return ready; }); // 等待条件成立
-        // 继续执行
+\begin{minted}{cpp}
+std::mutex mtx;
+std::condition_variable cv;
+bool ready = false;
+void thread_function() {
+    std::unique_lock<std::mutex> lock(mtx);
+    cv.wait(lock, []{ return ready; }); // 等待条件成立
+    // 继续执行
+}
+void signal_function() {
+    {
+        std::lock_guard<std::mutex> lock(mtx);
+        ready = true; // 设置条件
     }
-    void signal_function() {
-        {
-            std::lock_guard<std::mutex> lock(mtx);
-            ready = true; // 设置条件
-        }
-        cv.notify_all(); // 通知等待的线程
-    }
-\end{lstlisting}
+    cv.notify_all(); // 通知等待的线程
+}
+\end{minted}
 
 通过使用互斥量和条件变量等机制，我们可以有效地解决多线程编程中的并发问题，从而实现高效且正确的并行计算。在实际编程中，还需要根据具体的应用场景选择合适的同步机制，以确保程序的正确性和性能。
 
@@ -257,10 +257,10 @@ asyncio.run(main())
 
 原子操作（Atomic Operation）指的是一种不可分割的操作，即在执行过程中不会被中断。这样，多个线程同时执行原子操作时，从源头上就避免了竞态条件的发生。
 
-\begin{lstlisting}
-    std::atomic<int> shared_resource{0}; // 共享资源
-    shared_resource.fetch_add(1); // 原子加1，不会被中断
-\end{lstlisting}
+\begin{minted}{cpp}
+std::atomic<int> shared_resource{0}; // 共享资源
+shared_resource.fetch_add(1); // 原子加1，不会被中断
+\end{minted}
 这个 \texttt{fetch\_add} 函数会将共享资源加1，并返回加1前的值。由于这是一个原子操作，多个线程同时执行这个操作时，不会发生竞态条件。
 
 \subsubsection{无锁数据结构}
@@ -333,15 +333,15 @@ asyncio.run(main())
 现在有一个文本文件，是UTF-8编码的纯英文文本，大小巨大（GB级别）。统计其中每个单词（连续的字母、数字、下划线）的出现频次，输出频次最高的十个单词以及其出现次数。\textbf{你必须保证结果的正确性}，并使得内存占用尽量可控，不一次性把整个文件读入内存。你自然是可以使用CMake等工具来管理你的项目的。大小写可以不敏感。
 
 测试数据：可以用
-\begin{lstlisting}
-    wget https://git.savannah.gnu.org/cgit/grep.git/plain/README -O sample.txt
-\end{lstlisting}
+\begin{minted}{bash}
+wget https://git.savannah.gnu.org/cgit/grep.git/plain/README -O sample.txt
+\end{minted}
 这个是GNU Grep的README文件，内容比较丰富。
 
 原文档只有2.3KB，我们可以用下面的命令把它重复100次，然后把这个头尾相接，生成一个大文件：
-\begin{lstlisting}
-    for i in {1..100}; do cat sample.txt >> bigfile.txt; done
-\end{lstlisting}
+\begin{minted}{bash}
+for i in {1..100}; do cat sample.txt >> bigfile.txt; done
+\end{minted}
 当然你可以用其他更大的文本文件来测试，也可以调大重复次数，以生成更大的文件。
 
 \subsection{实例：设计思路}
@@ -368,7 +368,7 @@ asyncio.run(main())
 \end{note}
 
 定义项目文件结构，使用CMake管理项目：
-\begin{lstlisting}
+\begin{minted}{text}
 demo/
     CMakeLists.txt
     include/
@@ -376,10 +376,10 @@ demo/
     src/
         wc.cpp
         main.cpp
-\end{lstlisting}
+\end{minted}
 
 wc.hpp
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 #pragma once
 #include <string>
 #include <unordered_map>
@@ -388,10 +388,10 @@ using Freq = std::unordered_map<std::string, std::size_t>;
 
 /* 统计文件，返回全局频次表 */
 Freq count_file(const std::string& path);          // 可能抛 std::system_error
-\end{lstlisting}
+\end{minted}
 
 源文件wc.cpp
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 #include "wc.hpp"
 #include <algorithm>
 #include <cctype>
@@ -501,10 +501,10 @@ Freq count_file(const std::string& path) {
     unsigned cores = std::thread::hardware_concurrency();
     return count_region(file.data(), file.data() + file.size(), cores);
 }
-\end{lstlisting}
+\end{minted}
 
 主程序main.cpp
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 #include "wc.hpp"
 #include <algorithm>
 #include <iostream>
@@ -540,10 +540,10 @@ int main(int argc, char* argv[]) {
     for (const auto& [c, w] : top)
         std::cout << std::setw(10) << w << "  " << c << '\n';
 }
-\end{lstlisting}
+\end{minted}
 
 CMake：
-\begin{lstlisting}
+\begin{minted}{cmake}
 cmake_minimum_required(VERSION 3.10)
 project(wordcount LANGUAGES CXX)
 
@@ -559,23 +559,23 @@ target_include_directories(wordcount PRIVATE include)
 # 需要 pthread
 find_package(Threads REQUIRED)
 target_link_libraries(wordcount PRIVATE Threads::Threads)
-\end{lstlisting}
+\end{minted}
 
 编译运行：
-\begin{lstlisting}
+\begin{minted}{bash}
 mkdir build
 cd build
 cmake ..
 cmake --build . -j --config Release # Release模式编译，开启优化
 ./word_count ../bigfile.txt
-\end{lstlisting}
+\end{minted}
 
 \subsection{线程池}
 
 上述代码中用的是 \texttt{std::async} 来启动线程并行处理任务。这样做的好处是简单易用，但缺点是每次调用都会创建一个新的线程，频繁创建销毁的开销也不小。对此，人们提出了“线程池”（Thread Pool）这个概念。线程池指的是预先创建一组线程，并将它们放入一个池子中。当有任务需要处理时，就从线程池中取出一个空闲的线程来执行任务，任务完成后再将线程放回池子中。这样就能避免频繁创建销毁线程的开销，提高程序的性能。
 
 实现线程池的方式有很多种，下面是一个简单的线程池实现示例：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 #include <condition_variable>
 #include <functional>
 #include <future>
@@ -633,14 +633,14 @@ private:
     std::condition_variable cv;
     bool stop;
 };
-\end{lstlisting}
+\end{minted}
 使用这个线程池：
-\begin{lstlisting}[language=C++]
+\begin{minted}{cpp}
 ThreadPool pool(hardware_threads());
 std::vector<std::future<wc::CountMap>> futures;
 for (const auto& r : ranges)
     futures.push_back(pool.enqueue(wc::count_range, file, r));
-\end{lstlisting}
+\end{minted}
 
 线程池虽然有效地提升了性能，但也增加了代码的复杂性。
 

@@ -48,11 +48,11 @@ Linux内核采用了GPL协议，这使得任何人都可以自由地使用、修
     \bottomrule
     \endlastfoot
 
-    Ubuntu\faUbuntu & 用户友好，社区活跃 & 两年 & Linux新手，桌面用户 \\
+    Ubuntu & 用户友好，社区活跃 & 两年 & Linux新手，桌面用户 \\
     Debian & 稳定，软件包丰富 & 两年 & 服务器等生产环境 \\
-    Fedora\faFedora & 最新技术，社区驱动 & 半年 & 开发者，技术爱好者 \\
-    RHEL \faRedhat& 商业支持，稳定 & 三年 & 企业用户，服务器 \\
-    CentOS\faCentos & RHEL的免费版本 & 死了 & 企业用户，服务器 \\
+    Fedora & 最新技术，社区驱动 & 半年 & 开发者，技术爱好者 \\
+    RHEL & 商业支持，稳定 & 三年 & 企业用户，服务器 \\
+    CentOS & RHEL的免费版本 & 死了 & 企业用户，服务器 \\
     Arch & 滚动更新，极简 & 以天计 & 高级用户，DIY爱好者 \\
     NixOS & 声明式配置，原子升级 & 以天计 & 高级用户，系统管理员 \\
     Rocky & Cent的复活版本 & 三年 & 企业用户，服务器 \\
@@ -67,6 +67,12 @@ Linux内核采用了GPL协议，这使得任何人都可以自由地使用、修
   \end{longtable}
 \end{small}
 
+\begin{tip}
+  现在的CentOS实际上已经被RHEL官方收编并停止维护了，CentOS被收编后的名称叫做CentOS Stream，定位是RHEL的上游测试版。
+
+  另一方面，Alma和Rocky虽然均声称是CentOS的复活版、RHEL的复刻、两者行为基本一致，但也有细微的差别：Alma兼容RHEL的ABI\footnote{ABI：Application Binary Interface，应用二进制接口，是指程序在运行时与操作系统之间的接口规范。}，声称其软件通用，但不承诺代码完全一致，因此其补丁有些时候甚至比RHEL还快24小时；Rocky则是CentOS的“精神继承者”，承诺与RHEL完全一致，但获取源码的路径比较曲折。
+\end{tip}
+
 上述发行版是相对常见的Linux发行版。其中，最出圈的发行版莫过于Ubuntu了，有不少人甚至直接将Ubuntu和Linux划等号（这实际上是不对的）。Ubuntu拥有着庞大的用户群体和丰富的软件资源，非常适合初学者入门。
 
 对于什么都不会的小白而言，我们推荐使用Ubuntu、Mint、Manjaro等用户友好的发行版；如果你愿意折腾，可以尝试Arch、Gentoo等极简主义的发行版；如果你要玩服务器，可以选择Debian、RHEL、CentOS（或其复活版本Rocky、Alma）等稳定的发行版；如果你对网络安全感兴趣，可以尝试Kali等专用发行版。
@@ -75,7 +81,7 @@ Linux内核采用了GPL协议，这使得任何人都可以自由地使用、修
   Linux大致可以分为以下几个“家族”：
   \begin{itemize}
     \item Debian系：包括Debian、Ubuntu、Mint等，特点是稳定，软件包丰富，适合新手和服务器。
-    \item Red Hat系：包括Fedora、RHEL、CentOS、Rocky、Alma等，特点是商业支持，稳定，适合企业用户和服务器。其软件生态又以RHEL为核心，因此也叫做“红帽生态”，具体流程是最新技术给Fedora测试，稳定后给RHEL使用，RHEL再给CentOS等衍生版使用。
+    \item Red Hat系：包括Fedora、RHEL、CentOS、Rocky、Alma等，特点是商业支持，稳定，适合企业用户和服务器。其软件生态又以RHEL为核心，因此也叫做“红帽生态”，具体流程是：Fedora激进上游 $\rightarrow$ CentOS Stream中游测试 $\rightarrow$ RHEL稳定版商业支持 $\rightarrow$ Rocky/Alma下游免费替补。
     \item Arch系：包括Arch、Manjaro等，特点是滚动更新，极简，适合高级用户和DIY爱好者。
     \item 其他系。
   \end{itemize}
@@ -110,9 +116,9 @@ Linux内核采用了GPL协议，这使得任何人都可以自由地使用、修
 
 得了，来了啥也别说，先跑个小火车：
 
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
 sudo apt install -y sl && sl
-\end{lstlisting}
+\end{minted}
 
 执行以上命令，我们就可以看到一个小火车在终端上跑了过去。
 
@@ -132,14 +138,14 @@ sudo apt install -y sl && sl
 我们发现，这个命令和我们在上一章中接触到的那些命令遵循相同的结构。
 
 如果我们用的不是Debian系的Linux发行版，而用的是其他发行版，则需要使用相应的包管理器，例如Red Hat系使用 \texttt{yum} 或 \texttt{dnf}，Arch系使用 \texttt{pacman}。以Arch为例：
-\begin{lstlisting}
+\begin{minted}{bash}
 sudo pacman -S sl && sl
-\end{lstlisting}
+\end{minted}
 
 让我们看看上面内容是怎么发生的。我们刚刚输入的单条命令依然是这样的形式：
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
 程序 [子命令] [选项] [对象]
-\end{lstlisting}
+\end{minted}
 
 我们用 \texttt{apt install -y sl} 来举例说说：apt是程序，install是子命令，-y是选项，sl是对象。于是我们就能看到，一个程序就这么跑起来了，看起来很明确。
 
@@ -227,11 +233,11 @@ Linux还有一个重要的目录：用户的家目录，通常位于 \texttt{/ho
 
 \begin{tip}
   试一试：
-  \begin{lstlisting}[language=bash]
+  \begin{minted}{bash}
     echo "hello" > a # 随便创建一个文件
     ln a b           # 创建硬链接 b 指向 a
     ln -s a c       # 创建软链接 c 指向 a
-  \end{lstlisting}
+  \end{minted}
   现在这里有了b和c两个新的文件。试着利用 \texttt{ls -l} 命令查看它们的属性，看看有什么区别。然后尝试删除a文件，看看b和c会发生什么变化。
 \end{tip}
 
@@ -245,10 +251,10 @@ root 用户是超级用户，拥有着 Linux 系统内最高的权限，在终�
 
 第二种情况，如果你所选择的发行版在安装过程中已经设置了 root 密码，但是自己的账户并没有管理员权限（如 Debian），为了用起来方便一般会用 root 账户给自己的账户添加管理员权限，具体操作如下（\$号后的为输入的命令）：
 
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
     yourusername@yourcomputer$ su
     root@yourcomputer$ /usr/sbin/usermod -aG sudo yourusername
-\end{lstlisting}
+\end{minted}
 
 前者表示切换至 root 账户，后者表示为你指定的账户添加管理员权限。有些发行版中 wheel 组表示有 sudo 权限的用户组（例如Arch），也可以用 visudo 编辑 sudo 配置。
 
@@ -258,27 +264,27 @@ root 用户是超级用户，拥有着 Linux 系统内最高的权限，在终�
 
 以采用 apt 包管理器为例，更新源后需要重新更新软件索引，请执行以下操作：
 
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
 sudo apt-get update
 sudo apt-get upgrade # 如果需要升级软件包
-\end{lstlisting}
+\end{minted}
 
 如果你需要安装软件包，可以使用以下命令：
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
 sudo apt-get install <package-name>
-\end{lstlisting}
+\end{minted}
 
 如果想要卸载软件包，可以使用以下命令：
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
 sudo apt-get remove <package-name>
-\end{lstlisting}
+\end{minted}
 
 有时候，我们不得不使用一些其他安装方式，例如从 \texttt{*.deb} 包安装。对于这些情况，我们可以使用以下命令：
 
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
 sudo dpkg -i <package-name>.deb # 安装 .deb 包
 sudo apt-get install -f # 修复依赖问题
-\end{lstlisting}
+\end{minted}
 
 有时，软件自带安装脚本，我们直接运行这些脚本即可。
 
@@ -355,15 +361,15 @@ WSL，或Windows Subsystem for Linux，是微软为Windows 10及更高版本用�
 \subsection{快速安装}
 
 管理员权限在PowerShell里运行：
-\begin{lstlisting}
+\begin{minted}{bash}
   wsl --install
-\end{lstlisting}
+\end{minted}
 初次运行，微软会自动打开WSL和虚拟机平台功能，并提示重启电脑。重启后，WSL会自动下载并安装Ubuntu发行版（默认最新LTS，也可以手动指定发行版或版本号）。重启后第一次弹出Ubuntu窗口，输入用户名和密码即可。之后就可以愉快地使用Linux了。
 
 怎么验证？只需要输入
-\begin{lstlisting}
+\begin{minted}{bash}
   wsl -l -v
-\end{lstlisting}
+\end{minted}
 看到Version列显示2即可。
 
 关于Win10这种老系统\footnote{在2025年10月14日，Win10正式停止支持。}，情况稍有不同，得先干点别的，具体可以参考微软\href{https://learn.microsoft.com/en-us/windows/wsl/install-manual}{官方文档}，或者网上的各种教程。
@@ -371,15 +377,15 @@ WSL，或Windows Subsystem for Linux，是微软为Windows 10及更高版本用�
 \subsection{换发行版}
 
 如果你不喜欢Ubuntu，可以安装别的发行版。微软商店里有很多发行版可供选择，例如Debian、Kali Linux、openSUSE、Fedora等。只需要打开微软商店，搜索“WSL”，然后选择你喜欢的发行版进行安装即可。或者直接用命令行：
-\begin{lstlisting}
+\begin{minted}{bash}
   wsl --list --online # 列出可用发行版
   wsl --install -d <name> # 安装指定发行版
   wsl --set-default <name> # 设置默认发行版
-\end{lstlisting}
+\end{minted}
 安装完成后，运行
-\begin{lstlisting}
+\begin{minted}{bash}
   wsl -d <name>
-\end{lstlisting}
+\end{minted}
 即可进入该发行版的Linux环境。或者在开始菜单找到该发行版的图标，点击即可启动，多个发行版也并不互相影响。
 
 \subsection{文件互相访问}
@@ -387,23 +393,23 @@ WSL，或Windows Subsystem for Linux，是微软为Windows 10及更高版本用�
 WSL和Windows可以互相随意地访问文件系统，这是WSL往往比虚拟机或双系统好用的一个重要原因。
 
 在WSL的Linux环境中，Windows的文件系统挂载在 \texttt{/mnt/c} （C盘）、 \texttt{/mnt/d} （D盘）等目录下。你可以通过这些目录访问Windows的文件。例如：
-\begin{lstlisting}
+\begin{minted}{bash}
   cd /mnt/c/Users/YourUsername/Documents
-\end{lstlisting}
+\end{minted}
 
 而从Windows访问WSL的文件系统，则可以通过路径 \texttt{\textbackslash \textbackslash wsl\$\textbackslash\$<distro-name>} 来访问，上述目录是WSL的根目录，可以直接拖拽文件出入，或用VS Code等编辑器打开。
 
 \subsection{一口气配好开发环境}
 
 下一步就是和Linux一样的开发环境配置：
-\begin{lstlisting}
+\begin{minted}{bash}
 # 换国内源（清华）+ 更新
 sudo sed -i 's@http://.*.<-URL->@<-URL->' /etc/apt/sources.list
 sudo apt update && sudo apt upgrade -y
 
 # C/C++开发必装三件套
 sudo apt install build-essential gdb cmake ninja-build
-\end{lstlisting}
+\end{minted}
 关于上述那个 \texttt{sed} 命令，具体的URL可以参考清华大学开源软件镜像站的\href{https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/}{帮助页面}。
 
 对于VS Code，怎么让它调用WSL以及里面的工具呢？只需要在Windows端下安装VS Code的WSL扩展，然后 \texttt{Ctrl+Shift+P} ，连接到WSL，下面的内容就和Linux主机或者在docker里开发一模一样。Python、Rust、Golang这堆也同理，包管理器一条就装好，清清爽爽，比先前我们在Windows里折腾环境简单多了！（实际上我们提到过的MSYS2，也是在Windows里模拟Linux环境，但WSL更彻底一些，且更贴近实际Linux使用体验。）
@@ -411,10 +417,10 @@ sudo apt install build-essential gdb cmake ninja-build
 \subsection{图形界面应用}
 
 WSL2的另一个优势是图形界面随便用。这个是基于WSLg的，在Windows的较新版本已经内置。比方说经典Linux记事本 \texttt{gedit} ，直接在WSL里安装并运行：
-\begin{lstlisting}
+\begin{minted}{bash}
 sudo apt install gedit
 gedit test.txt
-\end{lstlisting}
+\end{minted}
 窗口直接弹出，和Windows应用无异。甚至连剪贴板都能互通，复制粘贴完全没问题。这个背后用的是微软自家的RDP协议，性能和兼容性都不错，而用户实际上几乎无感。JB全家桶、Firefox乃至qemu-kvm都能跑图形界面应用，体验极佳。
 
 \subsection{性能调优、踩坑急救}
@@ -422,62 +428,62 @@ gedit test.txt
 一般可能遇到以下问题：
 \begin{itemize}
   \item apt龟速：换源，见上文。当然也可能是没有 \texttt{sudo apt update} 导致的。
-  \item 内存\footnote{指的是RAM！}爆炸：WSL默认分配给Linux的内存是无限制的，会根据需要动态增长，但不会自动释放。对此，你需要建立一个文件： \texttt{\~/.wslconfig} ，内容如下：
-\begin{lstlisting}
+  \item 内存\footnote{指的是RAM！}爆炸：WSL默认分配给Linux的内存是无限制的，会根据需要动态增长，但不会自动释放。对此，你需要建立一个文件： \texttt{\textasciitilde/.wslconfig} ，内容如下：
+\begin{minted}{toml}
 [wsl2]
 memory=4GB # 限制最大内存为4GB，当然一般会更大一些
 processors=2 # 限制使用2个CPU核心
 swap=2GB # 限制交换分区为2GB
-\end{lstlisting}
+\end{minted}
 保存后， \texttt{wsl --shutdown} 重启子系统解决问题。
   \item C盘爆红：如果你能确定你的C盘因WSL而爆红，可以执行：
-\begin{lstlisting}
+\begin{minted}{bash}
   wsl --export <distro-name> distro.tar
   wsl --unregister <distro-name>
   wsl --import <distro-name> <new-location> distro.tar
-\end{lstlisting}
+\end{minted}
   把WSL的虚拟磁盘搬到别的盘去。上述三行命令的意思分别是，导出一个镜像文件、注销当前发行版、从镜像文件导入到新位置。
   \item 网络异常：WSL的网络是虚拟的NAT网络，有时会出问题。这个问题确实相当常见且棘手。如果希望给自己的3000端口暴露给局域网，需要在Windows端运行：
-\begin{lstlisting}
+\begin{minted}{bash}
   netsh interface portproxy add v4tov4 listenport=3000 listenaddress=0.0.0.0 connectport=3000 connectaddress=<WSL_IP_Address>
-\end{lstlisting}
+\end{minted}
   其中 \texttt{<WSL\_IP\_Address>} 可以通过 \texttt{ip addr} 命令查看。倘若网络完全异常，可以尝试重置WSL网络：
-\begin{lstlisting}
+\begin{minted}{bash}
   netsh winsock reset
   netsh int ip reset all
   ipconfig /release
   ipconfig /renew
   ipconfig /flushdns
-\end{lstlisting}
+\end{minted}
   然后重启电脑。
 \end{itemize}
 
 \subsection{进阶玩法}
 
 比方说，可以在Windows命令里面直接调用linux命令：
-\begin{lstlisting}
+\begin{minted}{bash}
   wsl ls -la /home/user
-\end{lstlisting}
+\end{minted}
 或者在Linux里直接调用Windows命令（但是一般人估计不会这么干）：
-\begin{lstlisting}
+\begin{minted}{bash}
   cmd.exe /C dir C:\Users\YourUsername
-\end{lstlisting}
+\end{minted}
 
 WSL还支持systemd服务，2025年微软终于正式支持了这个功能：
-\begin{lstlisting}
+\begin{minted}{bash}
   sudo apt install systemd-genie
   genie -s # 进入systemd环境
-\end{lstlisting}
+\end{minted}
 然后就可以愉快地使用systemd服务了，如docker等。
 
 还可以一键备份和还原WSL发行版：
-\begin{lstlisting}
+\begin{minted}{bash}
   wsl --shutdown
   wsl --export <distro-name> backup.tar
   # 这里需要重启计算机以确保WSL完全关闭
   wsl --unregister <distro-name>
   wsl --import <distro-name> <new-location> backup.tar
-\end{lstlisting}
+\end{minted}
 于是原地复活一个一模一样的WSL发行版。
 
 \subsection{WSL的局限性}
@@ -492,10 +498,10 @@ WSL还支持systemd服务，2025年微软终于正式支持了这个功能：
 对于WSL的进一步了解，可以参考微软的\href{https://learn.microsoft.com/en-us/windows/wsl/}{官方文档}，以及网上的各种教程。
 
 “太长不看”？那记住以下三行：
-\begin{lstlisting}
+\begin{minted}{bash}
   wsl --install
   wsl
   sudo apt install sl && sl
-\end{lstlisting}
+\end{minted}
 小火车跑起来，你就拥有了一台“开机即用”的Linux系统！
 

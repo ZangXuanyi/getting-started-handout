@@ -1,0 +1,646 @@
+\section[实例：帮某位大一同学修改代码]{实例：帮某位大一同学修改代码\protect\footnote{感谢王煜程同学提供的反面教材。}}
+
+下文是某位大一同学写的一段程序，用于进行“亚马逊棋”的游玩。虽然初学者能够把这么冗长的一大段代码写对已经是非常值得肯定的事情了，但是从工程眼光看来，这段代码依然存在巨大的问题。\footnote{我没有检查该实现的正确性，这位同学也没有提供跳出最后循环（游戏结束）的条件，因此我假设该实现是正确的。}下面我将对这段代码进行修改和优化，展示如何将一段初学者代码改造成更优雅、更易维护的代码。
+\begin{minted}{cpp}
+#include <iostream>
+#include <utility>
+#include <math.h>
+
+class Map
+{
+private:
+    static constexpr int WIDTH = 8;
+    static constexpr int HEIGHT = 8;
+    int map[WIDTH][HEIGHT];
+
+public:
+    void init()
+    {
+        for (auto i = 0; i < WIDTH; i++)
+        {
+            for (auto j = 0; j < HEIGHT; j++)
+            {
+                Map::map[i][j] = 0;
+            }
+        }
+        // 初始化棋盘
+        // 这里用1代表白方棋子，2代表黑方棋子
+        // 使用-1代表障碍物
+        // map[i][j]代表第i行第j列，注意此处下标从0开始
+        map[0][2] = 2;
+        map[0][5] = 2;
+        map[2][0] = 2;
+        map[2][7] = 2;
+        map[5][0] = 1;
+        map[5][7] = 1;
+        map[7][2] = 1;
+        map[7][5] = 1;
+        // 上文进行了黑白方棋子的初始化。
+    }
+    void move_chess(std::pair<int, int> start_pos, std::pair<int, int> end_pos)
+    {
+        auto temp = Map::map[start_pos.first][start_pos.second];
+        Map::map[start_pos.first][start_pos.second] = 0;
+        Map::map[end_pos.first][end_pos.second] = temp;
+    }
+    void place_obstacle(std::pair<int, int> obstacle_pos)
+    {
+        Map::map[obstacle_pos.first][obstacle_pos.second] = -1;
+    }
+    // 这里我们引用了一个参数player，来表示当前是哪个玩家在操作
+    // true代表白方，false代表黑方
+    // 这里黑方先行，在初始参数应为false
+    void move(std::pair<int, int> start_pos, std::pair<int, int> end_pos, std::pair<int, int> obstacle_pos, bool &player)
+    {
+        if (player == false && Map::map[start_pos.first][start_pos.second] != 2)
+        {
+            std::cout << "now is black's turn , please move black" << std::endl;
+            return;
+        }
+        else if (player == true && Map::map[start_pos.first][start_pos.second] != 1)
+        {
+            std::cout << "now is white's turn , please move white" << std::endl;
+            return;
+        }
+        // 首先判断是否合法移动
+        if (start_pos.first == end_pos.first) // 横向移动
+        {
+            for (auto i = std::min(start_pos.second, end_pos.second); i <= std::max(start_pos.second, end_pos.second); i++)
+            {
+                if (Map::map[start_pos.first][i] != 0 && i != start_pos.second)
+                {
+                    std::cout << "there is a obstacle in your move way" << std::endl;
+                    return;
+                }
+            }
+        }
+        else if (start_pos.second == end_pos.second) // 纵向移动
+        {
+            for (auto i = std::min(start_pos.first, end_pos.first); i <= std::max(start_pos.first, end_pos.first); i++)
+            {
+                if (Map::map[i][start_pos.second] != 0 && i != start_pos.first)
+                {
+                    std::cout << "there is a obstacle in your move way" << std::endl;
+                    return;
+                }
+            }
+        }
+        else if (std::abs(start_pos.first - end_pos.first) == std::abs(start_pos.second - end_pos.second)) // 斜向移动
+        {
+            for (auto i = 1; i <= std::abs(start_pos.first - end_pos.first); i++)
+            {
+                int check_x = start_pos.first < end_pos.first ? start_pos.first + i : start_pos.first - i;
+                int check_y = start_pos.second < end_pos.second ? start_pos.second + i : start_pos.second - i;
+                if (Map::map[check_x][check_y] != 0)
+                {
+                    std::cout << "there is a obstacle in your move way" << std::endl;
+                    return;
+                }
+            }
+        }
+        else
+        {
+            std::cout << "unavailable move" << std::endl;
+            return;
+        }
+        move_chess(start_pos, end_pos);
+        // 其次检查是否有障碍物
+        if (end_pos.first == obstacle_pos.first) // 横向移动
+        {
+            for (auto i = std::min(end_pos.second, obstacle_pos.second); i <= std::max(end_pos.second, obstacle_pos.second); i++)
+            {
+                if (Map::map[end_pos.first][i] != 0 && i != end_pos.second)
+                {
+                    std::cout << "there is a obstacle in your obstacle way" << std::endl;
+                    move_chess(end_pos, start_pos);
+                    return;
+                }
+            }
+        }
+        else if (end_pos.second == obstacle_pos.second) // 纵向移动
+        {
+            for (auto i = std::min(end_pos.first, obstacle_pos.first); i <= std::max(end_pos.first, obstacle_pos.first); i++)
+            {
+                if (Map::map[i][end_pos.second] != 0 && i != end_pos.first)
+                {
+                    std::cout << "there is a obstacle in your obstacle way" << std::endl;
+                    move_chess(end_pos, start_pos);
+                    return;
+                }
+            }
+        }
+        else if (std::abs(end_pos.first - obstacle_pos.first) == std::abs(end_pos.second - obstacle_pos.second)) // 斜向移动
+        {
+            for (auto i = 1; i <= std::abs(end_pos.first - obstacle_pos.first); i++)
+            {
+                int check_x = end_pos.first < obstacle_pos.first ? end_pos.first + i : end_pos.first - i;
+                int check_y = end_pos.second < obstacle_pos.second ? obstacle_pos.second + i : obstacle_pos.second - i;
+                if (Map::map[check_x][check_y] != 0)
+                {
+                    std::cout << "there is a obstacle in your obstacle way" << std::endl;
+                    move_chess(end_pos, start_pos);
+                    return;
+                }
+            }
+        }
+        else
+        {
+            std::cout << "unavailable move" << std::endl;
+            move_chess(end_pos, start_pos);
+            return;
+        }
+
+        // 最后进行移动
+        player = player ? false : true;
+        place_obstacle(obstacle_pos); // 先放置障碍物
+    }
+    void print()
+    {
+        for (auto i = 0; i < WIDTH; i++)
+        {
+            for (auto j = 0; j < HEIGHT; j++)
+            {
+                std::cout << Map::map[i][j] << " ";
+            }
+            std::cout << std::endl;
+        }
+    }
+};
+int main()
+{
+    Map gamemap;
+    gamemap.init();
+    bool player = false; // 黑方先行
+    int x, y, end_x, end_y, obstacle_x, obstacle_y;
+    while (true)
+    {
+        gamemap.print();
+        std::cin >> x >> y >> end_x >> end_y >> obstacle_x >> obstacle_y;
+        gamemap.move(std::make_pair(x, y), std::make_pair(end_x, end_y), std::make_pair(obstacle_x, obstacle_y), player);
+    }
+    return 0;
+}
+\end{minted}
+
+我们逐段来看。首先这位同学能够利用“面向对象”的思想来封装棋盘相关的操作，这一点非常值得肯定。下面我们来看一看这个代码到底哪里不好。
+
+\subsection{先把代码变得更C++一点}
+
+首先，映入眼帘的是\mintinline{cpp}|#include <math.h>|。这可以看出这位同学以前可能有OI相关经验，习惯性地使用C风格的头文件了。在C++中，应该使用\mintinline{cpp}|#include <cmath>|来替代上述头文件。
+
+然后是这段代码的第10行：
+\begin{minted}{cpp}
+    int map[WIDTH][HEIGHT];
+\end{minted}
+这里使用了C风格的二维数组来存储棋盘数据，这种方式虽然简单，但失去了安全性。我们知道该数组的大小是固定的，因此可以使用C++的标准库容器 \texttt{std::array} 来替代它，从而提高代码的安全性和可读性。改成下面这样：
+\begin{minted}{cpp}
+    std::array<std::array<int, HEIGHT>, WIDTH> map;
+\end{minted}
+当然需要引用的头文件又多了一个，即 \mintinline{cpp}|#include <array>| 。
+
+继续看，然后我们发现这个初始化竟然是写在一个\mintinline{cpp}|void init()|函数里面的。虽然这样做没有错，但是更好的方式是把初始化写在构造函数里面，这样可以确保每次创建对象时都会进行初始化，避免忘记调用初始化函数的问题。而另一条则是，这个类竟然没有构造函数！那么我们就帮他写一个构造函数，替代\mintinline{cpp}|void init()|函数。
+
+但是，看他的注释，“使用1来代表白方棋子，2代表黑方棋子，-1代表障碍物”，这不就是“魔法数字”吗？我们应该使用枚举类型来替代这些魔法数字，从而提高代码的可读性和可维护性。
+
+于是这一大段都要大改特改了。先写一个强枚举\footnote{我这里为了美观压行了，实际上应当拆成多行，后同。}
+\begin{minted}{cpp}
+enum class CellType{ EMPTY, WHITE, BLACK, OBSTACLE };
+\end{minted}
+
+然后把array的类型改成 \mintinline{cpp}|std::array<std::array<CellType, SIZE>, SIZE>| \footnote{由于棋盘是正方形的，因此这里用一个SIZE就够了，节省一个常量的定义。}，并且把初始化函数改成构造函数，代码如下：
+\begin{minted}{cpp}
+// 辅助的Pattern结构体
+struct Pattern{ int row; int col; CellType type; };
+// class Map 改名为 Board 更合适，防止和 std::map 冲突
+static constexpr int INIT_NUM = 8;
+static constexpr std::array<Pattern, INIT_NUM> initial_patterns{
+        Pattern{0, 2, CellType::BLACK},
+        Pattern{0, 5, CellType::BLACK},
+        Pattern{2, 0, CellType::BLACK},
+        Pattern{2, 7, CellType::BLACK},
+        Pattern{5, 0, CellType::WHITE},
+        Pattern{5, 7, CellType::WHITE},
+        Pattern{7, 2, CellType::WHITE},
+        Pattern{7, 5, CellType::WHITE}};
+Board()
+{
+    for (auto &row : board)
+        row.fill(CellType::EMPTY);
+    for (const auto &pattern : initial_patterns)
+        board.at(pattern.row).at(pattern.col) = pattern.type;
+}
+\end{minted}
+这样代码就自解释了，避免了魔法数字、无构造函数等多个问题。当然，在改动到这里的时候，肯定要把剩下的代码里面所有对\mintinline{cpp}|map|的访问都改成使用\mintinline{cpp}|CellType|类型。另外，\mintinline{cpp}|map|这个名字太差了，要是将来用到了STL的\mintinline{cpp}|std::map|容器就冲突了。我们可以把它改成\mintinline{cpp}|board|，更符合语境。
+
+然后我们竟然发现这位同学在用成员函数来访问\mintinline{cpp}|map|的时候，竟然都是直接使用\mintinline{cpp}|Map::map|这种形式来调用的！这说明他并没有理解“面向对象”中的“封装”思想。成员函数应该直接访问成员变量，而不是通过类名来访问成员变量。我们应该把所有的\mintinline{cpp}|Map::map|都改成\mintinline{cpp}|this->board|或者直接\mintinline{cpp}|board|。
+
+然后还有很多输出语句，这里也得改，从以前的输出魔法数字到输出枚举类型对应的字符串。我们可以试着对该枚举类型重载\mintinline{cpp}|operator<<|运算符，从而实现枚举类型到字符串的转换。代码如下：
+\begin{minted}{cpp}
+std::ostream &operator<<(std::ostream &os, const CellType &cell)
+{
+    switch (cell)
+    {
+    case CellType::EMPTY:
+        os << ".";
+        break;
+    case CellType::WHITE:
+        os << "W";
+        break;
+    case CellType::BLACK:
+        os << "B";
+        break;
+    case CellType::OBSTACLE:
+        os << "X";
+        break;
+    default:
+        break;
+    }
+    return os;
+}
+\end{minted}
+这样我们就可以直接输出枚举类型了。
+
+\subsection{重构代码结构：更加OOP、更加模块化}
+
+现在，这个代码总算有一点人的样子了。下一步，我们发现这个代码没有任何的命名空间，而且所有逻辑全都塞进了一个类里面，导致这个类变得臃肿不堪。我们可以把这个类拆成几个小的类，从而提高代码的可维护性和可读性。
+
+面向对象编程的一个宗旨就是“小而美”原则：一个class不应是一大堆功能的耦合，而是应该能够很好地完成一些简单而基本的工作，成为一块合格的“积木”，从而可以和其他“积木”更好地协作，完成更复杂的任务。而这“积木”应该尽可能地小，职责单一，避免“上帝类”的出现。上述代码中的Board就显然是一个“上帝类”，它包含了棋盘的表示、游戏规则的判断、输入输出等多个职责，这实际上是并不合适的。
+
+那么，我们思考有哪些类是可以拆出来的呢？我提供一个思路：
+\begin{description}
+  \item[Board类]：表示棋盘，包含一个二维数组来存储格子的信息，提供初始化棋盘、打印棋盘、移动棋子、放置障碍物等方法。
+  \item[Rule类]：包含游戏的规则，例如判断是否合法移动、判断游戏是否结束等方法。
+  \item[IO类]：负责处理输入输出操作，例如读取玩家的输入、打印游戏状态等。
+\end{description}
+当然，我们发现后面两个“类”不需要任何属性，所以完全可以用命名空间来代替它们，从而避免不必要的类实例化。
+
+为了防止魔法数字，我们再写一个枚举和几个辅助用的结构体：
+\begin{minted}{cpp}
+enum class PlayerType{ WHITE, BLACK };
+struct Pos // 这个结构体用来表示位置，替代先前所说的 using Pos = std::pair<int, int>;
+{
+    int x;
+    int y;
+    constexpr bool operator==(const Pos &other) const
+    {
+        return x == other.x && y == other.y;
+    }
+};
+\end{minted}
+
+然后实现Board class：
+\begin{minted}{cpp}
+class Board // This class represents the game board with necessary methods like moving pieces, placing obstacles and getting cell states
+{
+private:
+    static constexpr int SIZE = 8;
+    std::array<std::array<CellType, SIZE>, SIZE> board;
+    static constexpr std::array<Pattern, 8> initial_patterns{
+        Pattern{0, 2, CellType::BLACK},
+        Pattern{0, 5, CellType::BLACK},
+        Pattern{2, 0, CellType::BLACK},
+        Pattern{2, 7, CellType::BLACK},
+        Pattern{5, 0, CellType::WHITE},
+        Pattern{5, 7, CellType::WHITE},
+        Pattern{7, 2, CellType::WHITE},
+        Pattern{7, 5, CellType::WHITE}};
+
+public:
+    Board()
+    {
+        for (auto &row : board)
+            row.fill(CellType::EMPTY);
+        for (const auto &pattern : initial_patterns)
+            board.at(pattern.row).at(pattern.col) = pattern.type;
+    }
+    // getter and setter for cell
+    const CellType at(const Pos &pos) const { return board.at(pos.x).at(pos.y); }
+    void set_cell(const Pos &pos, CellType type) { board.at(pos.x).at(pos.y) = type; }
+
+    // getter for the whole board, no setter to avoid external modification
+    const auto &get_board() const { return board; }
+
+    // getter for board size, static method, no need to instantiate Board
+    static const int get_size() { return SIZE; }
+
+    // method to move a piece
+    void move_piece(const Pos &start, const Pos &end, CellType type)
+    {
+        board.at(start.x).at(start.y) = CellType::EMPTY;
+        board.at(end.x).at(end.y) = type;
+    }
+
+    // method to place an obstacle
+    void place_obstacle(const Pos &pos) { board.at(pos.x).at(pos.y) = CellType::OBSTACLE; }
+};
+\end{minted}
+
+Rule类：
+\begin{minted}{cpp}
+namespace Rules
+{
+    template <typename T>
+    int sgn(T val){ return (T(0) < val) - (val < T(0));}
+    // 这是一个工具函数，非常有用，可以用来判断一个数的正负，且不必担心类型问题
+
+    inline CellType side_to_cell(PlayerType player) { return player == PlayerType::WHITE ? CellType::WHITE : CellType::BLACK; }
+    void flip_player(PlayerType &player) { player = (player == PlayerType::WHITE) ? PlayerType::BLACK : PlayerType::WHITE; }
+
+    bool path_clean(const Board &board, const Pos &a, const Pos &b)
+    {
+        int dx = sgn(b.first - a.first);
+        int dy = sgn(b.second - a.second);
+        // These are the increments for each step along the path
+        int steps = std::max(std::abs(b.first - a.first), std::abs(b.second - a.second));
+        for (int step = 1; step < steps; ++step)
+        {
+            int x = a.first + step * dx;
+            int y = a.second + step * dy;
+            if (auto cell = board.get_cell({x, y}); cell != CellType::EMPTY)
+            {
+                return false; // Obstacle found
+            }
+        }
+        return true; // Path is clear
+    }
+    bool try_move(Board &board, const Pos &start, const Pos &end, PlayerType player)
+    {
+        CellType self = side_to_cell(player);
+        if (board.get_cell(start) != self)
+        {
+            std::cout << (player == PlayerType::WHITE
+                              ? "now is white's turn, please move white\n"
+                              : "now is black's turn, please move black\n");
+            return false;
+        }
+        if (!(path_clean(board, start, end)))
+        {
+            std::cout << "there is a obstacle in your move way\n";
+            return false;
+        }
+
+        /* 真正执行 */
+        board.move_piece(start, end, self);
+        return true;
+    }
+    bool try_shoot(Board& board, const Pos &piece, const Pos& obstacle)
+    {
+        if (!(path_clean(board, piece, obstacle)))
+        {
+            std::cout << "there is a obstacle in your shooting way\n";
+            return false;
+        }
+        board.place_obstacle(obstacle);
+        return true;
+    }
+};
+\end{minted}
+
+最后是IO：
+\begin{minted}{cpp}
+namespace IO{
+    std::ostream std::ostream &operator<<(std::ostream &os, const CellType &cell) { ... } // 前面已经写过了
+
+    void print_board(const Board &board)
+    {
+        for (const auto &row : board.get_board())
+        {
+            for (const auto &cell : row)
+            {
+                std::cout << cell << " ";
+            }
+            std::cout << "\n";
+        }
+    }
+    
+    void read_move(Pos &start, Pos &end)
+    {
+        std::cout << "Enter your move (start_x start_y end_x end_y): ";
+        int sx, sy, ex, ey;
+        std::cin >> sx >> sy >> ex >> ey;
+        start = {sx, sy};
+        end = {ex, ey};
+    }
+
+    void read_obstacle(Pos &obstacle)
+    {
+        std::cout << "Enter your obstacle position (obstacle_x obstacle_y): ";
+        int ox, oy;
+        std::cin >> ox >> oy;
+        obstacle = {ox, oy};
+    }
+};
+\end{minted}
+
+最后是主函数：
+\begin{minted}{cpp}
+int main()
+{
+    Board game_map;
+    PlayerType current_player = PlayerType::BLACK; // Black starts first
+    Pos start, end, obstacle;
+    while (1)
+    {
+        IO::print_board(game_map);
+
+        do{
+            IO::read_move(start, end);
+        }while(!Rules::try_move(game_map, start, end, current_player));
+
+        do{
+            IO::read_obstacle(obstacle);
+        }while(!Rules::try_shoot(game_map, end, obstacle));
+        Rules::flip_player(current_player);
+    }
+}
+\end{minted}
+
+这样，我们就把这段代码改得更加优雅、易维护了。通过拆分类，我们提高了代码的可读性和可维护性；通过使用枚举类型，我们避免了魔法数字的问题；通过重载运算符，我们简化了输出操作。总之，这样的代码更符合现代C++的编程风格，更容易被其他开发人员理解和维护。
+
+\subsection{下一步：让它更现代、更健壮}
+
+但是目前，这家伙依然是一个“原型机”，根本不够健壮，缺乏错误处理和边界检查等机制。如果要把它变成一个真正的产品级代码，还需要做很多工作。
+
+我们刚刚说过，一个class就是一个积木，那怎样才能让我们知道这个积木搭得对不对呢？答案是在代码中增加异常处理、方法修饰、边界检查等机制，让错误在编译时就爆掉，运行时错误也走到异常处理分支，而不是让程序直接崩溃。而这积木搭得“牢不牢”，直接的检测手段自然是测试，但我们最好尽可能的让这些积木搭上就牢，而不是等到测试阶段才发现问题。
+
+\paragraph{异常处理}
+目前，这段代码没有任何异常处理机制，如果输入无效数据，程序可能会崩溃。我们可以使用C++的异常处理机制来捕获和处理这些异常，从而提高程序的健壮性。例如，在读取玩家输入时，我们可以检查输入是否合法，如果不合法则抛出异常，并在主函数中捕获该异常并提示玩家重新输入。
+
+例如，\mintinline{cpp}|Rules::try_move|函数：
+\begin{minted}{cpp}
+void try_move(Board &board, const Pos &start, const Pos &end, PlayerType player)
+{
+    CellType self = side_to_cell(player);
+    if (board.at(start) != self)
+        throw std::invalid_argument("You are trying to move a piece that is not yours or that does not exist.");
+    if (!(path_clean(board, start, end)))
+        throw std::invalid_argument("There is an obstacle in your moving way.");
+
+    /* 真正执行 */
+    board.move_piece(start, end, self);
+    return;
+}
+\end{minted}
+然后在主函数中捕获异常：
+\begin{minted}{cpp}
+// IO中增加一个print_error函数
+void print_error(const std::exception &e)
+{
+    std::cerr << "Error: " << e.what() << std::endl;
+    std::cerr << "Please try again." << std::endl;
+}
+
+// C++中没有try-until-success的语法糖，我们可以自己写一个模板函数来实现这个功能
+// 最好不要在主函数中直接while(true){try{}catch{}}，这会使得主要函数变得臃肿不堪
+// 因此我们写一个模板函数 retry 来封装这个逻辑
+template <class F>
+auto retry(F&& f) -> decltype(f()) // 根据调用自动推导返回值类型
+{
+    while (true) {
+        try { return f(); } // 尝试调用 f，如果成功则返回结果
+        catch (const std::exception& e) { IO::print_error(e); } // 如果抛出异常，则捕获并打印错误信息
+    }
+} // 这里没有std::forward，因为我们不需要转交f，而是直接调用它，因此不必搞完美转发
+
+// 主函数中改为这样
+while(game){
+    IO::print_board(game_map);
+    retry([&]{
+        IO::read_move(start, end);
+        Rules::try_move(game_map, start, end, current_player);
+    }); // 用Lambda表达式把多个待调用对象包成一个，实际上这一行是retry(lambda)。
+    retry([&]{
+        IO::read_obstacle(obstacle);
+        Rules::try_shoot(game_map, end, obstacle);
+    });
+    Rules::flip_player(current_player);
+}
+\end{minted}
+当然，这样的抛出异常还是太简单了，在实际工程中，我们一般习惯于这样做：
+\begin{minted}{cpp}
+class MoveError : public std::runtime_error
+{
+    using std::runtime_error::runtime_error; // 继承构造函数
+    std::string_view type() const noexcept { return "MoveError"; } // 定义自己的异常类型
+};
+\end{minted}
+然后抛出\mintinline{cpp}|MoveError|异常，从而更好地区分不同类型的异常。但现在的小项目就不必这么复杂了。
+
+\paragraph{边界检查} 
+边界检查主要需要在读取玩家输入时进行。我们可以检查输入的位置是否在棋盘范围内，如果不在则抛出异常。例如，在\mintinline{cpp}|IO::read_move|函数中：
+\begin{minted}{cpp}
+void read_move(Pos &start, Pos &end)
+{
+    std::cout << "Enter your move (start_x start_y end_x end_y): ";
+    int sx, sy, ex, ey;
+    std::cin >> sx >> sy >> ex >> ey;
+    auto lambda = [](int val)
+    { return val >= 0 && val < Board::get_size(); };
+    if (std::cin.fail())
+    {
+        std::cin.clear();                                                   // clear the fail state
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // discard invalid input
+        throw std::invalid_argument("Invalid input format. Please enter integers only.");
+    }
+    else if (!(lambda(sx) && lambda(sy) && lambda(ex) && lambda(ey)))
+    {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        throw std::out_of_range("Input positions are out of board range.");
+    }
+    start = {sx, sy};
+    end = {ex, ey};
+}
+\end{minted}
+其实上述代码中读进引用也并不是特别好的设计，最好是返回一个结构体或者元组，避免引用带来的副作用。不过这里就不改了，再改就太复杂了。
+
+\paragraph{修饰函数}
+对于一些不修改成员变量的成员函数，应该加上\mintinline{cpp}|const|修饰符，从而提高代码的可读性和安全性；对于肯定不抛出异常的函数，应该加上\mintinline{cpp}|noexcept|修饰符，从而提高代码的性能和安全性。例如，在\mintinline{cpp}|Rules::sgn|函数中：
+\begin{minted}{cpp}
+template <typename T>
+[[nodiscard]] constexpr int sgn(T val) noexcept
+{
+    static_assert(std::is_arithmetic_v<T>, "sgn requires an arithmetic type");
+    return (T(0) < val) - (val < T(0));
+}
+\end{minted}
+在这里，我们使用了\mintinline{cpp}|[[nodiscard]]|属性来提示调用者不要忽略返回值，使用了\mintinline{cpp}|constexpr|来表示该函数可以在编译时求值，使用了\mintinline{cpp}|noexcept|来表示该函数不会抛出异常，并且使用了\mintinline{cpp}|static_assert|来确保模板参数是算术类型。这些修饰符大大提高了代码的可读性和安全性，符合现代C++编程“让错误在编译期暴露出来”的理念。
+
+\begin{tip}
+    有的同学可能会好奇：为什么上述静态断言能够确保模板参数是算术类型？这是因为\mintinline{cpp}|std::is_arithmetic_v<T>|是一个类型特征（type trait），它在C++标准库的\texttt{<type\_traits>}头文件中定义。它会在编译时检查类型\texttt{T}是否是算术类型（包括整数类型和浮点类型），如果是则返回\texttt{true}，否则返回\texttt{false}。
+
+    那可能有的同学还有疑问：template不是泛型吗，为什么能在编译时就确定类型？这是因为C++的模板机制是在编译时进行实例化的，这一点和Python的“动态类型”完全不同；与之类似的还有\mintinline{cpp}|auto|关键字，虽然看起来这家伙能接受任何类型的值，但实际上编译器会在编译时根据赋值语句推导出具体的类型，从而确保类型安全。也正因此，C++的模板和\mintinline{cpp}|auto|关键字都能在编译时进行类型检查，从而避免了运行时的类型错误。
+
+    还有的同学可能会问：为什么断言能和noexcept一起用？这是因为静态断言是在编译时进行检查的，如果不满足该断言条件（例如在某次实例化中传入了非算术类型），编译器会报错并停止编译过程，无法实例化模板，编译也被掐断，从而避免了运行时的错误。而\mintinline{cpp}|noexcept|是用来修饰函数的，它表示该方法（模板）\textbf{实例化后}的任何运行时调用都不会抛出异常。因此，这两者并不冲突，反而是相辅相成的。换句话说，如果把断言去掉，那这个noexcept就不成立了，因为传入非算术类型时，函数体内的比较操作会抛出异常，从而违反了noexcept的承诺；但仅把noexcept去掉，断言依然成立，只是编译器不会对这个函数调用进行优化罢了。
+\end{tip}
+
+\paragraph{多文件编程}
+上述代码全都塞进了一个文件，这是非常不好的做法。虽然现在这个代码量满打满算还不到两百行，但是如果将来植入GUI、AI等功能，代码量肯定会大幅增加。我们应该把代码拆成多个文件，从而提高代码的可维护性和可读性。上述几个类（命名空间）都可以拆成单独的头文件和源文件，从而实现模块化编程。
+
+实现多文件的编程还有一个好处，就是可以使用CMake等工具来精细的控制编译过程，从而提高编译效率和代码质量。我们以\mintinline{cpp}|Board|类为例，展示如何把它拆成头文件和源文件。
+
+首先，我们创建一个头文件 \verb|board.hpp|，用于声明\mintinline{cpp}|Board|类：
+
+\begin{minted}{cpp}
+#ifndef BOARD_HPP
+#define BOARD_HPP // 经典编译守卫
+#include <array>
+#include "cell_type.hpp" // 假设我们把 CellType 枚举类型放在了一个单独的头文件中
+#include "pattern.hpp"   // 假设我们把 Pattern 结构体放在了一个单独的头文件中
+struct Pos; // 前向声明 Pos 结构体
+class Board
+{
+private:
+    static constexpr int SIZE = 8;
+    std::array<std::array<CellType, SIZE>, SIZE> board;
+    static constexpr std::array<Pattern, 8> initial_patterns;
+public:
+    Board();
+    const CellType at(const Pos &pos) const;
+    void set_cell(const Pos &pos, CellType type);
+    const auto &get_board() const;
+    static const int get_size();
+    void move_piece(const Pos &start, const Pos &end, CellType type);
+    void place_obstacle(const Pos &pos);
+};
+#endif // BOARD_HPP
+\end{minted}
+
+然后，我们创建一个源文件 \verb|board.cpp|，用于实现\mintinline{cpp}|Board|类：
+\begin{minted}{cpp}
+#include "board.hpp"
+// 初始化 initial_patterns 静态成员
+constexpr std::array<Pattern, 8> Board::initial_patterns{
+    Pattern{0, 2, CellType::BLACK}, ... // 这里直接照着上文抄下来就可以了，后同
+};
+Board::Board()
+{
+    for (auto &row : board)
+        row.fill(CellType::EMPTY);
+    for (const auto &pattern : initial_patterns)
+        board.at(pattern.row).at(pattern.col) = pattern.type;
+}
+const CellType Board::at(const Pos &pos) const { return board.at(pos.x).at(pos.y); }
+void Board::set_cell(const Pos &pos, CellType type) { board.at(pos.x).at(pos.y) = type; }
+const auto &Board::get_board() const { return board; }
+const int Board::get_size() { return SIZE; }
+void Board::move_piece(const Pos &start, const Pos &end, CellType type)
+{
+    board.at(start.x).at(start.y) = CellType::EMPTY;
+    board.at(end.x).at(end.y) = type;
+}
+void Board::place_obstacle(const Pos &pos) { board.at(pos.x).at(pos.y) = CellType::OBSTACLE; }
+\end{minted}
+通过这种方式，我们就把\mintinline{cpp}|Board|类拆成了头文件和源文件，从而实现了模块化编程。其他类（命名空间）也可以采用类似的方式进行拆分。而在CMake中，我们大致需要这样写：
+\begin{minted}{cmake}
+cmake_minimum_required(VERSION 3.10)
+project(AmazonsGame)
+set(CMAKE_CXX_STANDARD 17)
+add_executable(AmazonsGame main.cpp board.cpp rules.cpp io.cpp) # 把所有源文件都加进去
+# 这里因为没有用到第三方库，所以不需要find_package和target_link_libraries等命令
+# 如果用到了第三方库，例如Google Test等，就需要加上这些命令
+\end{minted}
+这样，我们就可以通过CMake来管理我们的项目，从而提高编译效率和代码质量。CMake的使用方式不再赘述，有兴趣的同学可以参考CMake的官方文档或者相关教程进行学习。
+
+\paragraph{测试}
+最后，我们应该为这些类编写测试用例，从而确保代码的正确性和可靠性。我们可以使用Google Test等测试框架来编写测试用例，从而提高测试的效率和质量。这里我也仅仅是提一嘴，真正的测试也需要同学们自己去学习和实践了——实在不行也可以直接翻到下一章。

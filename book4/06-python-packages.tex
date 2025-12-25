@@ -8,32 +8,32 @@ Pandas是一个强大的数据分析库，可以帮助我们处理表格数据�
 
 Pandas比较喜欢的文件是CSV（逗号分隔的值）文件，我们可以使用 \texttt{read\_csv()} 函数来读取CSV文件，并将其转换为DataFrame对象。当然，Pandas也支持其他格式的文件，如Excel、JSON等。
 
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 import pandas as pd
 df = pd.read_csv("data.csv")  # 读取CSV文件
 print(df.head())  # 输出前5行数据
 df.to_csv("output.csv", index=False)  # 将DataFrame保存为CSV文件
-\end{lstlisting}
+\end{minted}
 
 然后，对于这个DataFrame对象，我们可以使用各种方法来处理数据，例如筛选、排序、分组等：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 filtered_df = df[df["age"] > 18]  # 筛选年龄大于18的数据
 sorted_df = df.sort_values(by="name")  # 按照姓名排序
 df[df['朝代'] == '唐']['作者'].value_counts()  # 输出唐代谁被提及最多
 pd.merge(df1, df2, on='书名')  # 合并两个表，随意拼接
-\end{lstlisting}
+\end{minted}
 
 \section{自动分词的结巴：jieba}
 jieba是一个中文分词库，可以帮助我们对中文文本进行分词处理。它可以将一段连续的中文文本切分成一个个单独的词语。
 
 比方说，我想要把一整段《红楼梦》切成“贾宝玉”“林黛玉”“葬花”等词语，并统计频次：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 import jieba
 with open("book.txt", "r", encoding="utf-8") as file:
     text = file.read()
 words = jieba.cut("林黛玉葬花")  # 分词，精确模式
 jieba.add_word("林黛玉葬花")  # 添加新词，这个词会被识别为一个整体
-\end{lstlisting}
+\end{minted}
 
 当然，三件套最好一起用：Pandas读数据$\rightarrow$jieba分词$ \rightarrow $Pandas统计$
 \rightarrow
@@ -53,16 +53,16 @@ PyTorch是一个开源的机器学习框架，广泛应用于科研领域，和�
 如果希望使用PyTorch，一般建议先有一个Python虚拟环境和一个显卡（最好是英伟达）。如果没有显卡，PyTorch也可以在CPU上运行，但速度会慢很多。
 
 首先在终端中运行这个命令，来判断你的显卡是什么CUDA版本：
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
 nvidia-smi
-\end{lstlisting}
+\end{minted}
 
 然后去\href{https://pytorch.org/get-started/locally/}{PyTorch官网}，根据你的CUDA版本和系统环境选择合适的安装命令。（无GPU版本则选CPU。）
 
 安装完毕后，使用以下命令来测试PyTorch是否安装成功：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 python -c "import torch, torch.cuda; print(torch.__version__, torch.cuda.is_available())"
-\end{lstlisting}
+\end{minted}
 要是输出True，说明你的GPU准备好了。即使是没有GPU的电脑，PyTorch也可以正常运行，只是速度会慢很多。
 
 \subsection{张量、梯度下降和自动求导}
@@ -73,7 +73,7 @@ python -c "import torch, torch.cuda; print(torch.__version__, torch.cuda.is_avai
 
 梯度（Gradient）可以通俗理解为“导数”，在机器学习上特指损失函数相对于模型参数的导数，表示损失函数在某一点的变化率。而梯度下降则指，通过计算损失函数相对于模型参数的梯度来更新模型参数，使得损失函数最小化。PyTorch提供了自动求导功能，可以自动计算梯度。自动求导则是指，PyTorch可以自动计算张量的梯度，这样我们就不需要手动计算导数了。
 
-\begin{lstlisting}
+\begin{minted}{python}
 import torch
 
 # 像 NumPy 一样造张量
@@ -93,7 +93,7 @@ z2 = x.pow(2).sum()  # 求平方和
 z2.backward()  # 自动求导，计算 z2 相对于 x 的梯度
 print(x.grad)  # 输出 x 的梯度，输出应当是[2., 4., 6.]
 
-\end{lstlisting}
+\end{minted}
 
 上文中的 \texttt{x\@ y.T} 的意思是矩阵乘法（点乘）， \texttt{y.T} 表示 \texttt{y} 的转置。PyTorch的张量支持广播（Broadcasting）机制，这意味着当两个张量的形状不同时，PyTorch会自动调整它们的形状以进行运算。relu是一个函数，用于将负值变为0，非负值不变。
 
@@ -101,8 +101,8 @@ print(x.grad)  # 输出 x 的梯度，输出应当是[2., 4., 6.]
 
 在机器学习中，我们通常需要处理大量的数据。PyTorch提供了数据集（Dataset）和数据加载器（DataLoader）来帮助我们处理数据，而不是使用for循环来缓慢地加载数据。
 
-\begin{lstlisting}
-    from torch.utils.data import Dataset, DataLoader
+\begin{minted}{python}
+from torch.utils.data import Dataset, DataLoader
 from torchvision import datasets, transforms
 
 transform = transforms.Compose([    # 数据预处理
@@ -115,14 +115,14 @@ train_dl = DataLoader(train_ds, batch_size=256, shuffle=True, num_workers=4)
 
 for x, y in train_dl:        # x.shape == [256, 1, 28, 28]
     ... # 这里应当存在一些代码用于表示训练逻辑，但是这里懒得写了
-\end{lstlisting}
+\end{minted}
 
 \subsection{ \texttt{nn.Module} 搭积木式写网络}
 
 PyTorch的 \texttt{nn.Module} 是一个非常强大的模块化网络构建工具。我们可以通过继承该类来定义自己的网络结构。例如：
 
-\begin{lstlisting}
-    import torch.nn as nn
+\begin{minted}{python}
+import torch.nn as nn
 
 class MLP(nn.Module):
     def __init__(self):
@@ -138,7 +138,7 @@ class MLP(nn.Module):
         return self.net(x)
 
 model = MLP().cuda() if torch.cuda.is_available() else MLP()
-\end{lstlisting}
+\end{minted}
 
 上述代码定义了一个叫做MLP的多层感知机（MLP）模型\footnote{MLP是最基础的神经网络结构之一，适用于处理结构化数据，如图像、文本等。}。它包含了一个输入层、一个隐藏层和一个输出层。我们使用 \texttt{nn.Flatten} 将输入的28x28的图像展平为一维向量，然后通过两个全连接层（ \texttt{nn.Linear} ）进行处理，中间使用ReLU激活函数（ \texttt{nn.ReLU} ）来增加非线性。
 
@@ -148,7 +148,7 @@ model = MLP().cuda() if torch.cuda.is_available() else MLP()
 
 这里的内容实际上应该是科研组干的或者上课讲的。我们在这里举个例子就好了！
 
-\begin{lstlisting}
+\begin{minted}{python}
 opt = torch.optim.Adam(model.parameters(), lr=1e-3)
 loss_fn = nn.CrossEntropyLoss()
 
@@ -163,7 +163,7 @@ for epoch in range(3):
         opt.step()
 
     print(f"epoch {epoch}: loss={loss.item():.4f}")
-\end{lstlisting}
+\end{minted}
 
 上述代码展示了一个简单的训练循环。我们使用Adam优化器（ \texttt{torch.optim.Adam} ）来更新模型参数，使用交叉熵损失函数（ \texttt{nn.CrossEntropyLoss} ）来计算损失。每个epoch中，我们遍历数据加载器（ \texttt{train\_dl} ），获取输入数据和标签，然后进行前向传播、计算损失、反向传播和参数更新。
 
@@ -173,7 +173,7 @@ for epoch in range(3):
 
 MNIST数据集是一个经典的手写数字识别数据集，包含了60000个训练样本和10000个测试样本。我们可以使用PyTorch来加载这个数据集，并训练一个简单的神经网络来进行手写数字识别。当然，想让啥也不会的同学们写个代码帮助计算机识别0到9的数字还是太难了，我们就写个鉴别0和1的二分类器吧。
 
-\begin{lstlisting}
+\begin{minted}{python}
 #!/usr/bin/env python3 # 这是一个shebang行，不写也行
 """
 mnist_01_linear.py
@@ -251,7 +251,7 @@ with torch.no_grad():
 all_pred = torch.cat(all_pred).numpy()
 all_true = torch.cat(all_true).numpy()
 print("Test accuracy:", accuracy_score(all_true, all_pred))
-\end{lstlisting}
+\end{minted}
 
 以上代码使用的是784 to 1的线性分类器（Logistic Regression），通过sigmoid函数将输出转换为概率。我们使用二元交叉熵损失函数（ \texttt{nn.BCEWithLogitsLoss} ）来计算损失，并使用随机梯度下降（SGD）优化器来更新模型参数。
 
@@ -275,13 +275,13 @@ NumPy的核心数据类型是ndarray（N维数组），它可以存储多维数�
 
 对于该数据类型，我们熟悉这两个术语就可以：形状（shape）和步长（stride）。形状表示数组的维度；步长表示每个维度的跨度。
 举例：
-\begin{lstlisting}
+\begin{minted}{python}
 import numpy as np
 a = np.arange(12).reshape(3, 4)
 a.strides        # 每一行 32 字节，因为 int64=8B * 4 列
 
 # 应当是(32, 8)
-\end{lstlisting}
+\end{minted}
 
 \subsubsection{向量化三件套}
 
@@ -290,30 +290,30 @@ NumPy的向量化三件套是指：广播（Broadcasting）、通用函数（ufu
 一个个讲吧：
 \begin{itemize}
   \item 广播：从尾部维度开始比较，长度相等或其中一维为 1 即可兼容。
-    \begin{lstlisting}
+    \begin{minted}{python}
 pts = np.random.randn(1000, 3)
 t   = np.array([1.0, 2.0, 3.0])
 shifted = pts + t       # (1000,3) + (3,)，自动广播
-    \end{lstlisting}
+    \end{minted}
   \item 通用函数：NumPy提供了许多通用函数（ufuncs），可以对数组进行元素级的操作，如加减乘除、三角函数等。
-    \begin{lstlisting}
+    \begin{minted}{python}
 pts = np.random.randn(1000, 3)
 norms = np.linalg.norm(pts, axis=1)  # 计算每个点的范数
-\end{lstlisting}
+\end{minted}
   \item 切片视图：NumPy的切片操作返回的是原数组的视图，而不是复制数据。这意味着对切片的修改会影响原数组。
-    \begin{lstlisting}
+    \begin{minted}{python}
 pts = np.random.randn(1000, 3)
 pts[:, 0] = 0.0  # 将所有点的 x 坐标设为 0
 print(pts[0])  # 输出第一个点的坐标，x 坐标应为 0.0
-    \end{lstlisting}
+    \end{minted}
 \end{itemize}
 
 不如做个性能对比实验：给你一千万（1e7）个点，计算它们的欧氏范数。欧式范数的计算方法是：$\sqrt{x^2 + y^2 + z^2}$。vanilla写法自己去写，我这里只给出NumPy的写法：
-\begin{lstlisting}
+\begin{minted}{python}
 import numpy as np
 pts = np.random.randn(int(1e7), 3)  # 生成一千万个三维点
 norms = np.sqrt(np.einsum('ij,ij->i', pts, pts))  # 使用爱因斯坦求和约定计算欧氏范数
-\end{lstlisting}
+\end{minted}
 运行你的代码和NumPy的代码，比较一下性能。使用爱因斯坦求和约定计算范数应当是最快的算法，预计比基准线快50倍以上。
 
 \subsection{SciPy：科学计算的扩展}
@@ -322,13 +322,13 @@ SciPy是站在NumPy上的科学计算库，提供了更多的科学计算功能�
 
 \subsubsection{优化}
 SciPy提供了许多优化算法，可以用于许多问题，例如梯度下降、牛顿法、共轭梯度等。我们可以使用 \texttt{scipy.optimize} 模块来进行优化，以下函数是一个最小化函数的例子：
-\begin{lstlisting}
+\begin{minted}{python}
 from scipy.optimize import minimize
 
 rosenbrock = lambda x: (1-x[0])**2 + 100*(x[1]-x[0]**2)**2
 result = minimize(rosenbrock, x0=[2,2], method='BFGS', jac='2-point')
 print(result.x, result.nit)   # [1. 1.] 24
-\end{lstlisting}
+\end{minted}
 以上代码使用BFGS算法最小化Rosenbrock函数，初始点为(2, 2)，最终结果应当接近(1, 1)。不知道Rosenbrock函数是什么的同学可以看\href{https://en.wikipedia.org/wiki/Rosenbrock_function}{维基百科}。
 
 比较常见的minimize优化参数包括jac（梯度计算方式）、tol（容忍度）、options（其他选项）等。SciPy还提供了许多其他的优化函数，如 \texttt{scipy.optimize.linprog} 用于线性规划， \texttt{scipy.optimize.curve\_fit} 用于曲线拟合等。这些函数同学们都可以查阅\href{https://docs.scipy.org/doc/scipy/reference/optimize.html}{SciPy官方文档}。
@@ -337,7 +337,7 @@ print(result.x, result.nit)   # [1. 1.] 24
 
 稀疏矩阵在科学计算中非常常见。SciPy提供了 \texttt{scipy.sparse} 模块来处理稀疏矩阵。
 
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 from scipy.sparse import diags
 n = 1000
 k = [-1, 0, 1]
@@ -346,23 +346,23 @@ L = diags(data, k, shape=(n, n), format='csr')  # 三对角稀疏
 
 from scipy.sparse.linalg import spsolve
 x = spsolve(L, np.ones(n))  # 求解 Lx = 1
-\end{lstlisting}
+\end{minted}
 以上代码创建了一个三对角稀疏矩阵L，主对角线为2，次对角线为-1。SciPy的稀疏矩阵支持许多操作，如矩阵乘法、求逆等。例如上述元素代码中使用 \texttt{spsolve} 函数来求解线性方程组$Lx = 1$，其中$1$是一个全1向量。
 
 \subsubsection{数值积分}
 
 有些时候，对于一些积分我们不是很容易求出解析解，这时候就需要数值积分了。SciPy提供了 \texttt{scipy.integrate} 模块来进行数值积分。
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 from scipy.integrate import quad
 val, abserr = quad(lambda x: np.exp(-x**2), 0, np.inf)
 print(np.sqrt(np.pi)/2 - val)  # 输出误差， ~1e-13
-\end{lstlisting}
+\end{minted}
 上述代码使用 \texttt{quad} 函数计算了从0到无穷大的高斯函数的积分，结果应当接近$\sqrt{\pi}/2$。 \texttt{quad} 函数返回两个值：积分值和绝对误差。
 
 \subsection{两个一起，双倍开心}
 
 一般情况下，我们需要将NumPy和SciPy协同使用以实现更强大的功能，前者向量化批处理，后者提供算法和工具，十分快乐。以下是一个示例，利用二次Bezier曲线拟合100个带噪声的二维点，并最小化点到曲线距离的平方和：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 import numpy as np
 from scipy.optimize import minimize
 
@@ -381,7 +381,7 @@ def error(params):
 
 result = minimize(error, x0=np.random.rand(6))
 print(result.x.reshape(3,2))
-\end{lstlisting}
+\end{minted}
 上述代码首先生成了100个带噪声的二维点，然后定义了一个二次Bezier曲线函数，并使用最小化算法拟合这些点。最终输出的结果是拟合曲线的控制点坐标。
 
 \section{Matplotlib：数据可视化的神器}
@@ -391,7 +391,7 @@ print(result.x.reshape(3,2))
 \subsection{基本用法}
 
 Matplotlib的基本用法是通过pyplot模块来实现的。我们可以使用以下代码来绘制一个简单的折线图：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -404,7 +404,7 @@ plt.ylabel('sin(x)')  # 添加坐标轴标签
 plt.title('Simple Plot')  # 添加标题
 plt.legend()  # 添加图例
 plt.show()  # 显示图形
-\end{lstlisting}
+\end{minted}
 上述代码使用 \texttt{plt.plot} 函数绘制了一个简单的折线图，并添加了坐标轴标签、标题和图例。最后使用 \texttt{plt.show()} 函数显示图形。
 
 \begin{figure}[ht]
@@ -414,7 +414,7 @@ plt.show()  # 显示图形
 
 除了使用简洁的 \texttt{pyplot} 以外，还可以使用面向对象风格的API来绘图，便于封装和复用：
 
-\begin{lstlisting}
+\begin{minted}{python}
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -429,7 +429,7 @@ ax.legend()  # 添加图例
 ax.set_title('Matplotlib Example')  # 添加标题
 fig.tight_layout()  # 自动调整布局
 plt.show()  # 显示图形
-\end{lstlisting}
+\end{minted}
 上述代码使用 \texttt{plt.subplots} 函数创建了一个图形和坐标轴对象，然后使用坐标轴对象的 \texttt{plot} 方法绘制曲线。这样可以更灵活地控制图形的各个部分。
 
 \begin{figure}[ht]
@@ -440,7 +440,7 @@ plt.show()  # 显示图形
 \subsection{和其他包协同工作}
 
 Matplotlib可以和NumPy、Pandas等库无缝集成，提供了强大的绘图功能。例如，我们可以使用NumPy生成数据，然后使用Matplotlib绘制图形：
-\begin{lstlisting}
+\begin{minted}{python}
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -456,7 +456,7 @@ plt.title('Contour Plot of Sinc Function')
 plt.xlabel('X-axis')
 plt.ylabel('Y-axis')
 plt.show()
-\end{lstlisting}
+\end{minted}
 
 \begin{figure}[ht]
   \centering
@@ -464,7 +464,7 @@ plt.show()
 \end{figure}
 
 或者使用Pandas绘制数据框的图形：
-\begin{lstlisting}
+\begin{minted}{python}
 import pandas as pd
 
 df = pd.read_csv('experiment.csv')
@@ -472,13 +472,13 @@ ax = df.plot(x='voltage', y='current', kind='scatter', color='k')
 ax.set_xlabel('Voltage (V)')
 ax.set_ylabel('Current (mA)')
 # 这只是一个示例，没有数据是真不行，后面绘图的逻辑自己写就好了
-\end{lstlisting}
+\end{minted}
 
 \subsection{子图布局}
 
 在实际应用中，我们经常需要将多个图形绘制在同一个窗口中，这就需要用到子图的概念。Matplotlib提供了 \texttt{subplot} 和 \texttt{subplots} 函数来创建子图。
 
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -493,7 +493,7 @@ axs[1].plot(x, y2, label='cos(x)', color='tab:orange')
 axs[1].set_title('Cosine Function')
 plt.tight_layout()
 plt.show()
-\end{lstlisting}
+\end{minted}
 上述代码创建了一个包含两个子图的图形窗口，分别绘制了正弦函数和余弦函数。\\使用 \texttt{plt.tight\_layout()} 函数可以自动调整子图之间的间距。
 
 \begin{figure}[ht]
@@ -504,13 +504,13 @@ plt.show()
 \subsection{风格和导出}
 
 Matplotlib支持多种风格，可以通过 \texttt{plt.style.use} 函数来设置风格。例如，我们可以使用 \texttt{science} 和 \texttt{ieee} 风格来绘制图形，使得图形符合IEEE论文的格式要求：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 plt.style.use(['science', 'ieee'])  # 需安装 SciencePlots
-\end{lstlisting}
+\end{minted}
 当然，如使用该风格，则默认需要 \LaTeX 来渲染文本，而这是非常缓慢的。因此可以在该列表中添加 \texttt{no-latex} 选项，以禁用 \LaTeX 渲染：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 plt.style.use(['science', 'ieee', 'no-latex'])  # 需安装 SciencePlots
-\end{lstlisting}
+\end{minted}
 
 \begin{figure}[ht]
   \centering
@@ -519,20 +519,20 @@ plt.style.use(['science', 'ieee', 'no-latex'])  # 需安装 SciencePlots
 \end{figure}
 
 此外，我们还可以将图形导出为各种格式，如PNG等：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 plt.savefig('figure.svg')   # 矢量图
 plt.savefig('figure.png', dpi=600, transparent=True) # PNG图
-\end{lstlisting}
+\end{minted}
 
 \subsection{常见坑与提示}
 
 \begin{itemize}
   \item 中文字体乱码：提前设置rcParams，或者使用 \texttt{matplotlib.font\_manager} 来设置中文字体。
-    \begin{lstlisting}[language=python]
+    \begin{minted}{python}
 import matplotlib.pyplot as plt
 plt.rcParams['font.sans-serif'] = ['SimHei']  # 设置中文字体
 plt.rcParams['axes.unicode_minus'] = False  # 解决负号显示为方块的问题
-    \end{lstlisting}
+    \end{minted}
   \item 在Jupiter中不显示：使用 \texttt{\%matplotlib inline} 命令来确保图形在Jupyter Notebook中显示。
   \item 颜色过多：使用 \texttt{tab:} 前缀来使用Matplotlib内置的颜色表，避免颜色过多导致的混乱。
   \item 图例遮挡：使用 \texttt{plt.legend(loc='best')} 自动解决图例位置问题。
@@ -549,22 +549,22 @@ plt.rcParams['axes.unicode_minus'] = False  # 解决负号显示为方块的问�
 SymPy是一个用于符号计算的Python库。符号计算是指对数学表达式进行符号操作，而不是数值计算；或者说，\textbf{求解析解而不是数值解}。SymPy可以用于求解方程、积分、微分、矩阵运算等多种数学操作。它的语法类似于Mathematica和Maple，但使用Python语言编写，因此更易于学习和使用。
 
 在使用该库之前，我们尽量在文件的靠前位置添加下面这一行，这样可以让SymPy的输出更加美观。
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
   init\_printing(use\_unicode=True)
-\end{lstlisting}
+\end{minted}
 
 \subsection{基本数据类型}
 SymPy的基本数据类型有三个：符号、表达式、等号。符号是SymPy的核心数据类型，用于表示数学符号，如变量、常数等。表达式是由符号和运算符组成的数学表达式，可以进行各种数学操作。等号用于表示等式关系。
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
     x, y = symbols('x y', real=True)  # 定义符号变量 x 和 y
     expr = x**2 + y**2  # 定义表达式
     line = Eq(y, 3*x + 2) # 定义等式
     print(expr)  # 输出表达式
-\end{lstlisting}
+\end{minted}
 上述代码定义了两个符号变量x和y，并定义了一个表达式$x^2 + y^2$和一个等式$y = 3x + 2$。SymPy的符号计算可以对这些符号进行各种操作，如求导、积分、化简等。
 
 比方说：
-\begin{lstlisting}
+\begin{minted}{python}
     expr = (x+1)*(x-2)-(x**2-2)
     simplify(expr)  # 化简表达式, 得到-x
     expand((x+1)**5)  # 展开多项式
@@ -578,13 +578,13 @@ SymPy的基本数据类型有三个：符号、表达式、等号。符号是Sym
     solve(x**4-1, x)  # 求解等式x**4-1=0的解
     solve(a*x**2+b*x+c, x)  # 求解二次方程ax^2+bx+c=0的解，带着参数也能算
     nonlinsolve([x**2+y**2-1, x-y], (x, y))  # 求解非线性方程组
-\end{lstlisting}
+\end{minted}
 
 多元函数也可以使用上述方法来求导和积分，这里就不写了。需要注意的是，这里的求导数都是\textbf{偏导数}。一个非常有趣的事情是：在该库中，使用 \texttt{-oo} 和 \texttt{oo} 来表示负无穷和正无穷，而不是使用 \texttt{float('inf')} 。（疑似有些过于符号化了）
 
 \subsection{矩阵和线性代数}
 SymPy还提供了矩阵和线性代数的功能，可以进行矩阵运算、求逆、求特征值等操作。SymPy的矩阵是一个二维数组，可以进行各种矩阵运算，如加法、乘法、转置等。
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
     A = Matrix([[1, 2], [3, 4]])  # 定义一个矩阵
     b = Matrix([x, y])  # 定义一个列向量
 
@@ -595,18 +595,18 @@ SymPy还提供了矩阵和线性代数的功能，可以进行矩阵运算、求
     linsolve((A, b), [x, y])  # 求解线性方程组 Ax = b
 
     P, D = A.diagonalize()  # 对矩阵对角化，P为特征向量矩阵，D为对角矩阵
-\end{lstlisting}
+\end{minted}
 
 \subsection{输出、可视化}
 在Jupiter里一行搞定输出，贴出来的字符串直接粘到论文里就能编译：
-\begin{lstlisting}
+\begin{minted}{python}
     latex(Integral(exp(-x**2), (x, 0, oo)))
-\end{lstlisting}
+\end{minted}
 
 如果需要将表达式可视化，可以使用SymPy的 \texttt{plot} 函数来绘制函数图像：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
     plot(sin(x)/x, (x, -10, 10))
-\end{lstlisting}
+\end{minted}
 
 \subsection{常见坑}
 \begin{itemize}
@@ -628,7 +628,7 @@ SymPy还提供了矩阵和线性代数的功能，可以进行矩阵运算、求
   \item 存储数据：将提取的数据存储到本地文件或数据库中。
 \end{enumerate}
 以下是一个简单的爬虫示例，使用Requests和BeautifulSoup库来爬取一个网页的标题：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 import requests
 from bs4 import BeautifulSoup
 url = 'https://example.com'
@@ -636,7 +636,7 @@ response = requests.get(url)
 soup = BeautifulSoup(response.text, 'html.parser')
 title = soup.find('title').text
 print(title)
-\end{lstlisting}
+\end{minted}
 上述代码发送了一个HTTP GET请求，获取了网页内容，并使用BeautifulSoup解析HTML，提取了网页的标题并打印出来。
 
 当然，上述代码只是一个非常简单的爬虫示例，实际应用中可能需要处理更多的细节，如处理分页、模拟登录、处理JavaScript渲染等。另一方面，很多网站实际上已经做了反爬虫处理，想要成功爬取数据可能需要更多的技巧和方法。出于个人原因，笔者也很少使用爬虫技术，因此我在这里就不做过多介绍了，感兴趣的同学可以自行查找相关资料进行了解。
@@ -650,7 +650,7 @@ print(title)
 Cherry Studio等软件给了我们一个强大的图形界面，让我们可以通过各种方式来使用LLM。但是涉及到一些自动化的任务时，还是需要自己编写代码来实现。OpenAI官方提供了一个Python SDK，可以让我们方便地使用OpenAI的各种模型和功能。
 
 实际上，OpenAI的Python SDK非常简单易用，甚至可以说是简陋到傻瓜级别的。我们如果希望使用该包，只需要记住代码分为两步：定义client，使用client。以下是一个简单的示例，使用OpenAI的GPT-4模型来生成文本：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 from openai import OpenAI
 
 API_KEY = 'your_api_key' # 这个是必须的
@@ -669,7 +669,7 @@ with client.chat.completions.create(
     # 这里也可以添加 temperature, max_tokens 等参数
 ) as response:
     print(response.choices[0].message.content)
-\end{lstlisting}
+\end{minted}
 
 在上述代码中，我们首先定义了一个OpenAI客户端，然后使用该客户端发送了一个聊天请求，获取了模型的回复并打印出来。使用 \texttt{with} 语句可以确保资源的正确释放，是良好的习惯。
 

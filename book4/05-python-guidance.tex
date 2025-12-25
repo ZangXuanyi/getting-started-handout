@@ -10,10 +10,10 @@
 
 比方说，我们写一个最基本的程序：
 
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 str = "Hello, world!"
 print(str)
-\end{lstlisting}
+\end{minted}
 
 执行以上代码，我们会看到输出：“Hello, world!”。
 
@@ -25,7 +25,7 @@ print(str)
 
 Python的变量非常简单，虽然也需要遵从“先声明再使用”的规则，但是其声明是隐式的，直接给变量赋值就行了。同时，Python的语法也非常宽松，对于变量并不需要指定其类型，一个变量在不同的时间可以是任何类型的值。
 
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 a = 10 # 整数
 a = 3.14 # 浮点数
 a = 1 + 2j # 复数
@@ -36,7 +36,7 @@ a = {1, 2, 3} # 集合
 a = {"name": "Alice", "age": 30} # 字典
 a = True # 布尔值
 a = None # 空值
-\end{lstlisting}
+\end{minted}
 这么直接拿出来就可以用。这里面的等号 \texttt{=} 不是数学上的等号，它的意思是“把右边的值赋给左边的变量”。而且，Python并不需要担心像C++一样的溢出问题，Python会自动处理大数。
 
 一切都比C++简单得多。
@@ -44,13 +44,13 @@ a = None # 空值
 \subsection{Python的运算}
 
 有时候，我们需要计算机帮助我们执行一些运算。例如：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 a = 10
 b = 3
 print(a + b) # 输出13
 print(a - b) # 输出7
 a += b # 相当于a = a + b
-\end{lstlisting}
+\end{minted}
 a+b的意思就是“把a和b相加”，而a+=b的意思是“把b加到a上”。
 
 Python支持许多常见的运算符：
@@ -62,11 +62,11 @@ Python支持许多常见的运算符：
 \end{itemize}
 
 对于字符串类型的变量，使用加法 \texttt{+} 可以连接两个字符串，例如：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 str1 = "Hello, "
 str2 = "world!"
 print(str1 + str2) # 输出"Hello, world!"
-\end{lstlisting}
+\end{minted}
 
 \subsection{输入、输出}
 Python的输入输出非常简单。我们可以使用 \texttt{print()} 函数来输出内容，而使用 \texttt{input()} 函数来获取用户输入。input函数会暂停程序的执行，等待用户输入内容，并将输入的内容作为字符串返回。
@@ -74,25 +74,25 @@ Python的输入输出非常简单。我们可以使用 \texttt{print()} 函数�
 input里面的内容是提示用户输入的文本。
 
 例如：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 name = input("请输入你的名字：")
 print("Hello, " + name + "!")
-\end{lstlisting}
+\end{minted}
 
 我们还可以使用一些格式化字符串的方式来输出内容，例如：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 name = "Alice"
 age = 30
 print(f"Hello, {name}! You are {age} years old.")
-\end{lstlisting}
+\end{minted}
 这会输出“Hello, Alice! You are 30 years old.”。这个f+字符串的语法表示这是一个格式化字符串，可以直接在字符串中使用变量。
 
 我们还可以使用一些参数来进一步格式化输出内容，例如：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 print("Hello, World!", end="") # 不换行输出
 print("Hello, 1", "Hello, 2", sep=", ") # 使用逗号分隔输出
 print("Hello, World!", file=open("output.txt", "w")) # 输出到文件
-\end{lstlisting}
+\end{minted}
 
 上述代码中的第二个print函数使用了 \texttt{sep} 参数来指定输出内容之间的分隔符，默认是空格。它的输出将会是：“Hello,
 1, Hello, 2”。
@@ -103,7 +103,7 @@ World!”写入同目录下的output.txt文件中，这个w的意思是“写入
 \subsection{注释}
 
 注释是代码中用于解释说明的部分，它会被解释器忽略，不会影响程序的运行。Python中的单行注释使用井号 \texttt{\#} 开头，这一行后面的内容都是注释；或者使用三引号来框住注释内容，可以创建多行注释。
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 # 这是一个注释
 print("Hello, world!") # 这也是一个注释
 
@@ -111,7 +111,7 @@ print("Hello, world!") # 这也是一个注释
 这是一个多行注释
 可以包含多行内容
 """
-\end{lstlisting}
+\end{minted}
 
 在阻止部分代码执行的时候，我们一般不习惯于直接删除这些代码，而是使用注释。这样做的好处是可以留痕，便于以后的恢复（解注释）；这就是程序员们常说的“注释掉”代码。在VS
 Code等编辑器中，常用的一键注释是 \texttt{Ctrl + /} ，它会自动将光标所在的一行或多行代码注释掉。
@@ -123,12 +123,12 @@ Code等编辑器中，常用的一键注释是 \texttt{Ctrl + /} ，它会自动
 
 有些时候，我们希望把一些变量的类型转换为其他类型，例如把字符串“12321”转换为整数12321。我们可以使用一些函数来实现类型转换：
 
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
     a = "12321"
     print(a+1)  # 报错，因为a是字符串，1是整数，不能直接相加
     b = int(a)  # 将字符串转换为整数，现在b是整数12321
     print(b+1)  # 能执行，输出12322
-\end{lstlisting}
+\end{minted}
 
 我们可以使用 \texttt{int()} 函数将字符串转换为整数，使用 \texttt{float()} 函数将字符串转换为浮点数，使用 \texttt{str()} 函数将其他类型转换为字符串等。
 
@@ -139,13 +139,13 @@ Code等编辑器中，常用的一键注释是 \texttt{Ctrl + /} ，它会自动
 有时候，我们需要让计算机根据条件来执行不同的操作。Python提供了 \texttt{if} 语句来实现这一点。
 
 例如，我们可以根据用户输入的年龄来判断是否成年：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 age = int(input("请输入你的年龄："))
 if age >= 18:
     print("你是成年人。")
 else:
     print("你是未成年人。")
-\end{lstlisting}
+\end{minted}
 在这个例子中， \texttt{if} 语句后面跟着一个条件表达式（\texttt{age >=
 18}），如果条件为真，则执行冒号后面的代码块；否则，执行 \texttt{else} 后面的代码块。
 
@@ -156,34 +156,34 @@ Python使用\textbf{缩进}来表示代码块的层次结构，且对缩进要�
 有时候，我们需要让计算机重复执行某些操作。Python提供了 \texttt{for} 和 \texttt{while} 两种循环语句。
 
 比方说我们使用for循环来输出1到10的数字：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 for i in range(1, 11):
     print(i)
-\end{lstlisting}
+\end{minted}
 在这个例子中，\texttt{range(1,
 11)}生成了一个从1到10的整数序列， \texttt{for} 循环会依次将每个数字赋值给变量 \texttt{i} ，并执行代码块中的操作。
 
 我们也可以使用 \texttt{while} 循环来实现类似的功能：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 i = 1
 while i <= 10:
     print(i)
     i += 1
-\end{lstlisting}
+\end{minted}
 在这个例子中， \texttt{while} 循环内的代码块会一直循环执行，直到条件 \texttt{i <= 10} 不再满足为止。
 
 可以看到，我们在这个循环内部对i进行了增加操作。如果没有这个操作，循环将会无限进行下去，技术上一般叫做“死循环”。表现在程序上，上述程序会不断地输出1，直到你强制终止程序。而一般for循环则不会出现这种情况，因为它会自动处理循环变量和循环条件。
 
 有时候，我们在使用for循环的时候并不关心循环变量的值，只是想要重复执行某些操作。这时，我们可以使用下划线作为循环变量的占位符：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 for _ in range(5):
     print("Hello, World!")
-\end{lstlisting}
+\end{minted}
 在这个例子中，循环会执行5次，但我们并不关心循环变量的值，只是简单地输出“Hello, World!”，于是使用下划线将其“丢弃”。
 
  \texttt{break} 和 \texttt{continue} 语句可以用来控制循环的执行流程。使用 \texttt{break} 可以提前退出循环，而使用 \texttt{continue} 可以跳过当前迭代，继续下一次循环。
 例如：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 for i in range(1, 11):
     if i == 5:
         break  # 当i等于5时，退出循环
@@ -192,7 +192,7 @@ for i in range(1, 11):
     if i == 5:
         continue  # 当i等于5时，跳过当前迭代
     print(i)
-\end{lstlisting}
+\end{minted}
 上述两个循环中，第一个循环会输出1到4，然后退出循环；第二个循环会输出1到4、6到10，但跳过5。
 
 \section{复合数据类型}
@@ -202,49 +202,49 @@ Python提供了多种复合数据类型，用于存储多个值。最常用的�
 \subsection{列表（list）}
 列表是一个有序的可变集合，可以存储任意类型的元素。我们可以使用方括号 \texttt{[]} 来创建一个列表，并使用索引来访问元素。索引从0开始，如果我们试图访问一个不存在的索引，会抛出 \texttt{IndexError} 异常。
 例如：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 my_list = [1, 2, 3, "Hello", True]
 print(my_list[0])  # 输出1
 print(my_list[3])  # 输出"Hello"
 print(my_list[-1]) # 输出True（负索引从后往前计数）
 print(my_list[5])  # 抛出IndexError异常
-\end{lstlisting}
+\end{minted}
 
 我们可以使用 \texttt{append()} 方法添加元素，使用 \texttt{remove()} 方法删除元素，使用 \texttt{sort()} 方法对列表进行排序等。具体什么是“方法”，详见\ref{sec:functions-and-modules}节。
 例如：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 my_list = [1, 2, 3, "Hello"]
 my_list.append(4)  # 添加元素4
 my_list.remove("Hello")  # 删除元素"Hello"
 my_list.sort()  # 对列表进行排序
 print(my_list)  # 输出[1, 2, 3, 4]
-\end{lstlisting}
+\end{minted}
 
 可以利用加号 \texttt{+} 来连接两个列表，使用乘号 \texttt{*} 来重复列表。例如：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 my_list1 = [1] * 1000 # 创建一个列表，这个列表包含1000个1
 my_list2 = [2, 3, 4]
 print([1]+my_list2)  # 输出[1, 2, 3, 4]
-\end{lstlisting}
+\end{minted}
 
 \subsection{元组（tuple）}
 元组和列表类似，但是它不可以被修改（不可变）。我们可以使用圆括号 \texttt{()} 来创建一个元组。元组的元素也可以通过索引访问。
 例如：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 my_tuple = (1, 2, 3, "Hello", True)
 print(my_tuple[0])  # 输出1
 print(my_tuple[3])  # 输出"Hello"
 print(my_tuple[-1]) # 输出True
 print(my_tuple[5])  # 抛出IndexError异常
-\end{lstlisting}
+\end{minted}
 
 元组的元素不能被修改，但我们可以通过重新赋值来创建一个新的元组。
 例如：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 my_tuple = (1, 2, 3)
 my_tuple_1 = my_tuple + (4,)  # 创建一个新的元组
 print(my_tuple_1)  # 输出(1, 2, 3, 4)
-\end{lstlisting}
+\end{minted}
 
 \subsection{集合（set）}
 集合是一个无序的可变集合，不能包含重复元素。我们可以使用花括号 \texttt{{} }来创建一个集合。集合的元素也可以通过索引访问，但由于集合是无序的，所以集合没有索引这种东西。
@@ -252,41 +252,41 @@ print(my_tuple_1)  # 输出(1, 2, 3, 4)
 集合也有类似于列表的添加和删除元素的方法，例如 \texttt{add()} 和 \texttt{remove()} 。但是集合不支持排序：我们无法对一个本来就没有“顺序”这个定义的东西进行排序。
 
 例如：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 my_set = {1, 2, 3, "Hello", True}
 print(my_set)  # 输出{1, 2, 3, "Hello", True}
 my_set.add(4)  # 添加元素4
 my_set.remove("Hello")  # 删除元素"Hello"
 print(my_set)  # 输出{1, 2, 3, 4, True}
-\end{lstlisting}
+\end{minted}
 
 \subsection{字典（dict）}
 字典是一个无序的可变集合，存储键值对（key-value
 pairs）。我们可以使用花括号 \texttt{{} }来创建一个字典，并使用键来访问值。字典的键必须是不可变类型（如字符串、整数等），而值可以是任意类型。
 例如：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 my_dict = {"name": "Alice", "age": 30, "is_student": False}
 print(my_dict["name"])  # 输出"Alice"
 print(my_dict["age"])   # 输出30
 print(my_dict["is_student"])  # 输出False
 my_dict["age"] = 31  # 修改键"age"对应的值
 print(my_dict)  # 输出{"name": "Alice", "age": 31, "is_student": False}
-\end{lstlisting}
+\end{minted}
 
 对于字典，我们可以使用 \texttt{keys()} 方法获取所有的键，使用 \texttt{values()} 方法获取所有的值，使用 \texttt{items()} 方法获取所有的键值对。每一个键值对都是一个元组。
 例如：
 
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 print(my_dict.keys())  # 输出dict_keys(['name', 'age', 'is_student'])
 print(my_dict.values())  # 输出dict_values(['Alice', 31, False])
 print(my_dict.items())
 # 输出dict_items([('name', 'Alice'), ('age', 31), ('is_student', False)])
-\end{lstlisting}
+\end{minted}
 
 \subsection{高级操作}
 
 我们可以使用for循环来对以上各种复合数据类型进行遍历：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 for item in my_list:
     print(item)  # 遍历列表
 for item in my_tuple:
@@ -297,25 +297,25 @@ for key, value in my_dict.items():
     print(key, value)  # 遍历字典
 for value in my_dict.values():
     print(value)  # 遍历字典的值
-\end{lstlisting}
+\end{minted}
 
 我们还可以使用对这些复合数据类型进行切片。切片的语法是 \texttt{start:end:step} ，其中 \texttt{start} 是起始索引， \texttt{end} 是结束索引（不包含）， \texttt{step} 是步长（可以省略）。
 例如：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 my_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 print(my_list[2:5])  # 输出[3, 4, 5]
 print(my_list[::2])  # 输出[1, 3, 5, 7, 9]（步长为2）
 print(my_list[::-1])  # 输出[10, 9, 8, 7, 6, 5, 4, 3, 2, 1]（反转列表）
-\end{lstlisting}
+\end{minted}
 
 我们还可以使用列表推导式（list comprehension）来创建新的列表。列表推导式是一种简洁的语法，可以在一行代码中创建一个新的列表。
 例如：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 squares = [x**2 for x in range(1, 11)]
 print(squares)  # 输出[1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
 evens = [x for x in range(1, 11) if x % 2 == 0]
 print(evens)  # 输出[2, 4, 6, 8, 10]
-\end{lstlisting}
+\end{minted}
 
 以上代码中，通用语法是 \texttt{[thing for item in iterable if condition]} ，其中 \texttt{thing} 是你要的东西， \texttt{iterable} 是可迭代对象（如列表、元组等）， \texttt{condition} 是可选的条件。
 
@@ -326,29 +326,29 @@ print(evens)  # 输出[2, 4, 6, 8, 10]
 字符串指的是一串字符的序列。Python中的字符串是不可变的，这意味着一旦创建，就不能修改其内容。
 
 比方说一个字符串：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 my_string = "Hello, world!"
-\end{lstlisting}
+\end{minted}
 我们可以使用索引来访问字符串中的字符，索引从0开始。例如：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 print(my_string[0])  # 输出'H'
 print(my_string[7])  # 输出'w'
 print(my_string[-1]) # 输出'!'
 print(my_string[13]) # 抛出IndexError异常
 my_string[0] = 'h'  # 抛出TypeError异常，因为字符串是不可变的
-\end{lstlisting}
+\end{minted}
 
 字符串可以看作是一个字符的元组，因此我们可以使用切片来获取字符串的子串：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 print(my_string[0:5])  # 输出'Hello'
 print(my_string[7:])    # 输出'world!'
 print(my_string[:5])    # 输出'Hello'
 print(my_string[::2])   # 输出'Hlo ol!'
 print(my_string[::-1])  # 输出'!dlrow ,olleH'（反转字符串）
-\end{lstlisting}
+\end{minted}
 
 我们还可以使用字符串的各种特有方法来操作字符串，例如：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 my_string.lower()  # 'hello, world!'（转换为小写）
 my_string.upper()  # 'HELLO, WORLD!'（转换为大写）
 my_string.strip()  # 'Hello, world!'（去除首尾空格）
@@ -358,29 +358,29 @@ my_string.find("world")  # 7（查找子串的位置）
 my_string.startswith("Hello")  # True（检查字符串是否以指定子串开头）
 my_string.endswith("!")  # True（检查字符串是否以指定子串结尾）
 my_string.count("o")  # 2（统计子串出现的次数）
-\end{lstlisting}
+\end{minted}
 
 除了使用双引号来定义字符串，我们还可以使用单引号来定义字符串。两者完全等价。当然，由双引号框起来的字符串中包含单引号是可行的，反过来也可行，这个可以用来避免转义字符的使用。
 
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 my_string = 'Hello, world!'
 print(my_string)  # 输出'Hello, world!'
-\end{lstlisting}
+\end{minted}
 
 我们还可以使用三引号（单引号或双引号）来定义多行字符串，这样就可以在字符串中包含换行符了：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 my_string = """Hello, world!"""
 print(my_string)  # 输出'Hello, world!'
 my_string = '''Hello,
 world!'''
 print(my_string)  # 输出'Hello,\nworld!'
-\end{lstlisting}
+\end{minted}
 
 对于字符串，我们可以使用加号 \texttt{+} 来连接两个字符串，使用乘号 \texttt{*} 来重复字符串。这个操作和列表是一样的。例如：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 print("Hello, " + "world!")  # 输出'Hello, world!'
 print("Hello! " * 3)  # 输出'Hello! Hello! Hello! '
-\end{lstlisting}
+\end{minted}
 
  \texttt{\textbackslash n} 指的是换行。
 
@@ -391,30 +391,30 @@ print("Hello! " * 3)  # 输出'Hello! Hello! Hello! '
 有时候，我们有一个功能需要多次使用，这时我们可以将其封装成一个函数（也叫方法）。Python使用 \texttt{def} 关键字来定义函数。简单地说，函数可以把套路打包成一句话，就像汉语中的成语。
 
 例如，我们可以定义一个函数来计算两个数的和：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 def add(a, b):
     return a + b
-\end{lstlisting}
+\end{minted}
 
 一个函数应该以def开头，后面跟着函数名和参数列表。函数体使用缩进来表示。一个函数应该包含一个返回值，使用 \texttt{return} 关键字来返回结果就可以了。
 
 在定义函数之后，我们可以在任意地方调用它，只需要提供函数希望的参数即可。例如：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 result = add(3, 5)
 print(result)  # 输出8
-\end{lstlisting}
+\end{minted}
 
 我们也可以在函数中使用默认参数，这样在调用函数时可以省略某些参数：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 def greet(name="World"):
     print(f"Hello, {name}!")
 
 greet()  # 输出"Hello, World!"
 greet("Alice")  # 输出"Hello, Alice!"
-\end{lstlisting}
+\end{minted}
 
 函数还可以使用递归来解决问题，即函数在其内部调用自身。例如计算阶乘：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 def factorial(n):
     if n == 0:
         return 1
@@ -422,44 +422,44 @@ def factorial(n):
         return n * factorial(n - 1)
 
 print(factorial(5))  # 输出120
-\end{lstlisting}
+\end{minted}
 
 递归从某种程度上说也可以认为是循环的一种形式。同样的，递归也要有终止条件，否则会导致无限递归。
 
 有些时候，我们希望函数参数只能存入某种类型的数据，或者使得某些函数返回某类特定的值。这个时候，类型注释就派上了用场。类型注释一般遵循冒号+类型或者箭头+类型的形式，例如：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 def add(a: int, b: int) -> int:
     return a + b
-\end{lstlisting}
+\end{minted}
 上述代码的意思是，函数 \texttt{add} 接受两个整数参数 \texttt{a} 和 \texttt{b} ，并返回一个整数。类型注释可以帮助我们更好地理解函数的输入输出类型，也可以在IDE中提供更好的代码提示。
 
 但是我们需要注意一个问题：\textbf{类型注释不会强制执行类型检查}，换句话说它实际上依然是个注释而已——是给人方便开发用的，不是给电脑看的！
 
 \subsection{模块}
-有时候，一些功能大家都在用。这时候，为了防止重复工作，程序员们把这些功能打包成一个模块，供大家使用；而我们使用者只需要使用 \texttt{import} 关键字来导入模块，就可以使用模块中的许多方便的方法了。安装模块的方法参见正文部分\ref{sec:virtualenv}。
+有时候，一些功能大家都在用。这时候，为了防止重复工作，程序员们把这些功能打包成一个模块，供大家使用；而我们使用者只需要使用 \texttt{import} 关键字来导入模块，就可以使用模块中的许多方便的方法了。安装模块的方法参见正文部分\ref{sec:conda}。
 
 例如，我们可以导入Python的内置模块 \texttt{math} 来使用数学模块：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 import math
 print(math.sqrt(16))  # 输出4.0（计算平方根）
 print(math.pi)  # 输出3.141592653589793（圆周率）
 print(math.factorial(5))  # 输出120（计算阶乘）
-\end{lstlisting}
+\end{minted}
 
 有时候，我们只需要导入模块中的某个函数或类，可以使用 \texttt{from ... import ...} 语法：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 from math import sqrt, pi
 print(sqrt(16))  # 输出4.0
 print(pi)  # 输出3.141592653589793
 print(factorial(5))  # 抛出NameError异常，因为factorial没有被导入
-\end{lstlisting}
+\end{minted}
 
 还有一些时候，模块名称太长（例如matplotlib），我们可以使用 \texttt{as} 关键字来给模块起一个别名：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 import matplotlib.pyplot as plt
 plt.plot([1, 2, 3], [4, 5, 6])  # 画一条线
 plt.show()  # 显示图形
-\end{lstlisting}
+\end{minted}
 
 一些特定的模块有着约定俗成的简称，例如 \texttt{numpy} 通常简称为 \texttt{np} ， \texttt{pandas} 通常简称为 \texttt{pd} ， \texttt{matplotlib.pyplot} 通常简称为 \texttt{plt} 等。如果我们希望写出大家都能读懂、易于维护的代码，最好遵循这些约定。
 
@@ -467,7 +467,7 @@ plt.show()  # 显示图形
 
 有时候，我们需要将数据保存到文件中，或者从文件中读取数据。Python提供了简单的文件操作接口。
 例如，我们可以使用 \texttt{open()} 函数打开一个文件，并使用 \texttt{read()} 方法读取文件内容：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 with open("example.txt", "r") as file:
     content = file.read()
     print(content)  # 输出文件内容
@@ -475,7 +475,7 @@ with open("example.txt", "w") as file:
     file.write("Hello, world!")  # 写入内容到文件
 with open("example.txt", "a") as file:
     file.write("\nThis is a new line.")  # 追加内容到文件
-\end{lstlisting}
+\end{minted}
 
 我们可以使用 \texttt{with} 语句来自动管理文件的打开和关闭，这样可以避免忘记关闭文件导致资源泄漏的问题。
 
@@ -487,7 +487,7 @@ Python虽然是一种脚本语言，更倾向于描述过程，但是它也支�
 
 \subsection{类和对象的基本定义}
 一个Python的常见类定义如下：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 class Person:
     def __init__(self, name, age):
         self.name = name  # 属性：姓名
@@ -495,18 +495,18 @@ class Person:
 
     def greet(self):
         print(f"Hello, my name is {self.name} and I am {self.age} years old.")
-\end{lstlisting}
+\end{minted}
 在这个例子中，我们定义了一个名为 \texttt{Person} 的类，它有两个属性（ \texttt{name} 和 \texttt{age} ）和一个方法（ \texttt{greet} ）。 \texttt{\_\_init\_\_()} 方法是类的构造函数，用于初始化对象的属性。如果在类中希望使用自身的属性，我们需要使用 \texttt{self} 关键字来引用当前对象。这个 \texttt{self} 参数是必须的，它指向当前对象的实例。
 
 我们可以使用这个类来创建一个对象，并调用它的方法：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 person = Person("Alice", 30)  # 创建一个Person对象
 person.greet()  # 调用greet方法，输出"Hello, my name is Alice and I am 30 years old."
 person2 = Person("Bob", 25)  # 创建另一个Person对象
-\end{lstlisting}
+\end{minted}
 
 在现代Python中，以上定义可以变得更简单：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 from dataclasses import dataclass
 
 @dataclass # 使用数据类装饰器
@@ -515,7 +515,7 @@ class Person:
     age: int   # 属性：年龄
     def greet(self) -> None:
         print(f"Hello, my name is {self.name} and I am {self.age} years old.")
-\end{lstlisting}
+\end{minted}
 上述例子又被称为“数据类”（dataclass），在Python
 3.7中引入。使用数据类可以更方便地定义类，从而减少重复且意义有限的代码。“装饰器”是Python的一种语法糖，可以在函数或类定义前使用@符号来应用装饰器。数据类装饰器会自动为类生成一些常用方法，如 \texttt{\_\_init\_\_()} 、 \texttt{\_\_repr\_\_()} 等。
 
@@ -524,7 +524,7 @@ class Person:
 继承的意思是创建一个类（子类）来继承另一个类（父类）的属性和方法，子类可以扩展或修改父类的功能。举个例子：“动物”可以是一个类，而“猫”和“狗”都可以是“动物”的子类，它们继承了“动物”的属性和方法，但也有自己的特性。
 
 实际代码表现大概是这样的：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 class Animal:
     def __init__(self, name):
         self.name = name
@@ -549,12 +549,12 @@ mycat.speak()  # 输出"Carol meows."
 mydog = Dog("Dave") # 创建一个Dog对象
 mydog.eat()  # 输出"Dave is eating."
 mydog.speak()  # 输出"Dave barks."
-\end{lstlisting}
+\end{minted}
 
 在这个例子中， \texttt{Dog} 和 \texttt{Cat} 都是 \texttt{Animal} 的子类，它们继承了 \texttt{Animal} 的属性和方法，并重写了 \texttt{speak()} 方法。这样，我们可以通过多态来调用不同子类的同名方法，而不需要关心具体的实现细节。另一方面，子类也可以执行没有被重写的父类方法，例如上文中的 \texttt{eat()} 方法。
 
 在有些时候，我们希望一个子类在重写某方法的时候会先将父类的方法执行一遍，然后再执行自己的逻辑。这时，我们可以使用 \texttt{super()} 函数来调用父类的方法：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 class Dog(Animal):
     def speak(self):
         super().speak()  # 调用父类的speak方法
@@ -562,7 +562,7 @@ class Dog(Animal):
 
 mydog = Dog("Eve")  # 创建一个Dog对象
 mydog.speak()  # 输出"Eve makes a sound."和"Eve barks."两行
-\end{lstlisting}
+\end{minted}
 
 有了OOP，我们就可以更简单地组织代码，便于维护和扩展。
 
@@ -571,7 +571,7 @@ mydog.speak()  # 输出"Eve makes a sound."和"Eve barks."两行
 在实际开发中，我们通常会将代码分成多个文件，以便于管理和复用。Python提供了模块化的机制，可以让我们轻松地在不同文件之间共享代码。
 
 假设我们有一个文件 \texttt{math\_utils.py} ，里面定义了一些数学相关的函数：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 # math_utils.py，同目录下的文件
 def add(a, b):
     return a + b
@@ -588,10 +588,10 @@ class MyClass:
 # src/foo.py，非同目录下的文件
 def foo():
     print("foo")
-\end{lstlisting}
+\end{minted}
 
 然后，我们可以在另一个文件 \texttt{main.py} 中导入这个模块，并使用其中的函数：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 # main.py
 # 如果在同目录下，直接导入即可
 from math_utils import add, MyClass
@@ -608,7 +608,7 @@ print(result)  # 输出8
 # 如果不在同目录下，需要指定路径。实际上src虽然是一个文件夹，但在这里也被看作一个模块
 from src.foo import foo 
 foo()  # 输出"foo"
-\end{lstlisting}
+\end{minted}
 
 Python的多文件极为简单，完全不需要像C++那样使用复杂的头文件和链接器。只要确保文件在同一目录下，或者在Python的搜索路径中，就可以把这些次要文件当作模块来导入，操作甚至和导入内置模块一模一样。
 
@@ -622,22 +622,22 @@ Python的多文件极为简单，完全不需要像C++那样使用复杂的头�
   我们读题，把人类语言逐句地改成Python语言。
 
    \texttt{从任意整数开始，如果他是奇数就乘以3加1，如果是偶数就除以2。} 这句话提示我们要做一个条件判断：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 if n % 2 == 0:  # 如果n是偶数
     n = n // 2  # 除以2
 else:  # 如果n是奇数
     n = n * 3 + 1  # 乘以3加1
-\end{lstlisting}
+\end{minted}
    \texttt{如此反复循环，最终一定会得到1。} 这句话提示我们要使用循环来反复执行这个操作，直到n变成1为止。我们可以使用while循环来实现：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 while n != 1:  # 当n不等于1时
     # 循环体
-\end{lstlisting}
+\end{minted}
 
    \texttt{要求输入一个整数，输出这个整数经过角谷猜想的处理后，最终得到1所需的每一步。} 这句话提示我们输入和输出的处理。
 
   接下来，我们把这些代码像乐高积木一样组合起来，就可以完成这个练习了：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 n = int(input("请输入一个整数："))  # 输入一个整数
 n = print(n)  # 输出初始值
 while n != 1:  # 当n不等于1时
@@ -646,7 +646,7 @@ while n != 1:  # 当n不等于1时
     else:  # 如果n是奇数
         n = n * 3 + 1  # 乘以3加1
     print(n)  # 输出当前的n
-\end{lstlisting}
+\end{minted}
 \end{answer}
 
 \begin{example}
@@ -656,7 +656,7 @@ while n != 1:  # 当n不等于1时
 \begin{answer}
   题目说使用筛法找素数。那么，我们可以创建一个列表来存储1到1000之间的所有整数，然后使用一个循环来筛选出素数。如果不是素数，则删除之。那么可以这样：
 
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 # 创建一个列表来存储整数
 numbers = list(range(2, 1001))
 for i in range(2, 1001):
@@ -665,13 +665,13 @@ for i in range(2, 1001):
             if i * j in numbers:  # 确保i*j还在列表里
                 numbers.remove(j * i)  # 删除j * i
 print(numbers)  # 输出所有素数
-\end{lstlisting}
+\end{minted}
 
   以上算法是正确的，但是执行起来比较慢。这是因为对于2到1000之间的所有数，我们都需要确定它究竟是不是在列表之中，总共判断了近1000次。有没有什么更简单的办法呢？
 
   我们知道，数组的索引天生就是自然数。我们可以创建一个布尔数组来标记每个数是否是素数，初始时假设所有数都是素数。然后，我们从2开始，找到第一个素数，标记它的所有倍数为非素数。对于不是素数的数，我们可以跳过扫描。这样，代码就会快许多了。以下是一个实现：
 
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 numbers = [True] * 1001  # 创建一个布尔数组，初始时假设所有数都是素数
 numbers[0] = numbers[1] = False  # 0和1不是素数
 for i in range(2, 1001):  # 从2开始，遍历所有数
@@ -681,7 +681,7 @@ for i in range(2, 1001):  # 从2开始，遍历所有数
         for j in range(2, 1001 // i):  # 从2开始，标记i的所有倍数为非素数
             numbers[j * i] = False  # 标记为非素数
 print([i for i in range(1001) if numbers[i]])  # 输出所有素数
-\end{lstlisting}
+\end{minted}
 \end{answer}
 
 当然，Python也是一门语言，所有的语言都需要大量的练习和实践才能掌握；仅仅是看完这一章可能只需要一天，但是真正熟练应用语法可能需要一周的时间，熟练玩转Python可能需要一个学期甚至还要多的时间。不过，不用担心：路在脚下，行则将至，只要你坚持下去，就一定能够掌握Python这个强大的工具。
@@ -691,24 +691,24 @@ print([i for i in range(1001) if numbers[i]])  # 输出所有素数
 Jupyter Notebook是一种交互式的计算环境，可以让我们在浏览器或其他前端中编写和运行Python代码。Jupyter Notebook的文件扩展名是 \texttt{.ipynb} ，它可以包含代码、文本、数学公式、图像等多种内容，非常适合用于数据分析、机器学习等领域。
 
 要使用Jupyter Notebook，首先需要安装它。可以使用pip命令来安装：
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
 pip install notebook
-\end{lstlisting}
+\end{minted}
 当然，如果你使用的是Anaconda发行版，那么Jupyter Notebook往往已经预装好了。如果用的是miniconda，则可能需要额外安装类似 \texttt{ipykernel} 这类包。
 
 安装完成后，可以使用以下命令启动Jupyter Notebook服务器：
-\begin{lstlisting}[language=bash]
+\begin{minted}{bash}
 jupyter notebook
-\end{lstlisting}
+\end{minted}
 这会在浏览器中打开Jupyter Notebook的主页，可以在这里创建新的笔记本，或者打开已有的笔记本。当然，我们也可以直接创建一个 \texttt{.ipynb} 文件，然后用Jupyter Notebook或VS Code打开它。
 
 在该环境中，我们可以创建多个单元格（cell），每个单元格可以包含代码或文本。代码单元格可以直接运行Python代码，并显示输出结果；文本单元格可以使用Markdown语法来编写格式化的文本。所有的cell都可以单独运行，互不影响；不过更常见的是把常规的Python代码拆成许多个cell，然后从上到下依次运行，这样在下边的cell中就可以使用上边cell中定义的变量和函数了。两个代码cell中间也可以插入一个文本cell来解释代码的作用。
 
 在运行cell时，其输出不会显示在终端或者控制台中，而是直接显示在cell的下方；matplotlib等绘图库生成的图像也会直接显示在cell下方而不是弹出一个新窗口，非常方便。另外，Jupyter Notebook还支持魔法命令（magic commands），可以用来执行一些特殊的操作，例如：
-\begin{lstlisting}[language=python]
+\begin{minted}{python}
 %timeit sum(range(1000))  # 计算代码运行时间
 %matplotlib inline  # 在notebook中显示matplotlib图像
-\end{lstlisting}
+\end{minted}
 
 Jupyter Notebook在被关闭后不会清空其中的代码输出和可视化结果等，因此我们可以在下次打开时继续查看之前的结果。不过需要注意的是，Jupyter Notebook的内核（kernel）在关闭后会被重置，所有的变量和函数都会被清空。因此，在重新打开notebook后，如果需要使用之前定义的变量和函数，需要重新运行相应的代码cell。
 

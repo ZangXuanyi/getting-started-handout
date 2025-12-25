@@ -1,0 +1,534 @@
+\chapter{现代C++特性}
+
+我们先前已经了解了C++的基本语法，以及OOP、泛型的一些概念。而这些还远远没有触及到现代C++（C++17、20、23）的强大特性，而这些特性可以极大地提升我们的编程效率和代码质量。
+
+\section{string\_view和span：轻量级视图类型}
+
+“视图”，顾名思义，就是对数据的一种“看法”或“表示”，它并不拥有数据本身，而是引用现有的数据。这种方式可以避免不必要的数据拷贝，从而提高性能。现代C++引入了两种重要的视图类型：字符串视图（\verb|std::string_view|）和数组视图（\verb|std::span|）。
+
+\subsection{字符串视图}
+
+字符串视图是C++17引入的另一个重要特性，定义在\verb|<string_view>|头文件中。字符串视图（\verb|std::string_view|）是一种轻量级的字符串表示方式，它并不拥有字符串数据，而是引用现有的字符串数据。这使得我们可以避免不必要的字符串拷贝，从而提高性能。也就是说：
+
+\begin{minted}{cpp}
+#include <string_view>
+
+std::string str1 = "Hello, World!";
+std::string_view str2 = "Hello, World!";
+std::string_view str3 = str1; // 引用str1的数据
+\end{minted}
+上述\verb|str1|是C++11风格的字符串。而\verb|str2|和\verb|str3|则是字符串视图，它们并不拥有字符串数据，而是引用了现有的字符串数据（分别是字面值字符串和\verb|str1|）。这样我们就可以避免不必要的字符串拷贝，从而提高性能。实际上这也是很“惰性”的一种方式。
+
+需要注意的是，字符串视图并不管理其引用的字符串数据的生命周期，因此在使用字符串视图时需要确保其引用的数据在字符串视图的生命周期内是有效的。例如：
+\begin{minted}{cpp}
+std::string_view get_substring() {
+    std::string str = "Hello, World!";
+    return std::string_view(str.c_str(), 5); // 错误！str在函数结束后被销毁
+}
+\end{minted}
+上述代码中，\verb|get_substring|函数返回了一个字符串视图，但它引用的字符串数据\verb|str|在函数结束后被销毁，因此返回的字符串视图将变得无效。正确的做法是确保引用的数据在字符串视图的生命周期内是有效的，例如：
+\begin{minted}{cpp}
+std::string global_str = "Hello, World!";
+std::string_view get_substring() {
+    return std::string_view(global_str.c_str(), 5); // 正确，global_str在函数外部
+}
+\end{minted}
+上述代码中，\verb|global_str|是一个全局变量，其生命周期贯穿整个程序运行，因此返回的字符串视图是有效的。所以说实际上不能彻底抛弃C++11的字符串类型，但在很多情况下，使用字符串视图可以显著提升性能和代码简洁度。
+
+而直接引用字面值的字符串视图则不会有这个问题，因为字面值字符串的生命周期贯穿整个程序运行。
+
+另一方面，字符串视图是\textbf{只读}的，我们不能通过字符串视图来修改其引用的字符串数据。如果需要修改字符串数据，仍然需要使用C++11的字符串类型。但这也有不少好处，例如字符串视图提供了大量方便的成员函数，用于字符串的查找、比较、子串提取等操作。例如：
+\begin{minted}{cpp}
+std::string_view str = "Hello, World!";
+std::cout << str.substr(0, 5); // 输出 "Hello"
+std::cout << str.find("World"); // 输出 7
+\end{minted}
+上述代码中，我们使用了字符串视图的\verb|substr|和\verb|find|成员函数来提取子串和查找子串的位置。这些成员函数的使用方式与C++11的字符串类型类似，但由于字符串视图不拥有数据，因此这些操作通常更高效。
+
+\subsection{span}
+
+C++20引入了\verb|std::span|，它是一种轻量级的数组视图，定义在\verb|<span>|头文件中。与字符串视图类似，\verb|std::span|并不拥有数据，而是引用现有的数组或容器的数据。这使得我们可以方便地操作数组数据，而无需进行拷贝。
+
+这句话是不是很熟悉？没错，实际上这就是字符串视图的推广版本，可以用于任何类型的数组或容器。例如：
+\begin{minted}{cpp}
+#include <span>
+
+std::vector<int> vec = {1, 2, 3, 4, 5};
+std::span<int> s = vec; // 引用vec的数据
+for (int x : s) {
+    std::cout << x << " ";
+}
+\end{minted}
+上述代码中，\verb|s|是一个\verb|std::span<int>|，它引用了\verb|vec|的数据。我们可以像操作普通数组一样操作\verb|s|，而无需进行拷贝。当然，这样写也有风险，因为如果原始容器被销毁或修改，\verb|span|将变得无效。因此，在使用 \verb|span| 时，需要确保其引用的数据的生命周期长于 \verb|span| 本身。自然，字面值数组的生命周期贯穿整个程序运行，因此直接引用字面值数组的\verb|span|是安全的。
+
+\verb|std::span|还提供了一些方便的成员函数，用于获取子视图、大小等操作。例如：
+\begin{minted}{cpp}
+std::vector<int> vec = {1, 2, 3, 4, 5};
+std::span<int> s = vec;
+std::span<int> sub = s.subspan(1, 3); // 获取从索引1开始的3个元素
+for (int x : sub) {
+    std::cout << x << " "; // 输出 2 3 4
+}
+\end{minted}
+上述代码中，我们使用了\verb|subspan|成员函数来获取一个子视图，类似于字符串视图的\verb|substr|成员函数。
+
+\verb|span|和\verb|string_view|的区别在于，前者可能是可写的（取决于模板参数），而后者始终是只读的。例如：
+\begin{minted}{cpp}
+std::vector<int> vec = {1, 2, 3, 4, 5};
+std::span<int> s = vec; // 是可写的
+s[0] = 10; // 修改了vec的数据
+for (int x : vec) {
+    std::cout << x << " "; // 输出 10 2 3 4 5
+}
+
+const std::vector<int> cvec = {1, 2, 3, 4, 5};
+std::span<const int> cs = cvec; // 是只读的
+// cs[0] = 10; // 错误！不能修改只读span
+\end{minted}
+
+\subsection{和引用的异同}
+
+我们知道了\verb|std::string_view|和\verb|std::span|都是轻量级的视图类型，它们并不拥有数据，而是引用现有的数据。这不禁让人想起C++11就有的东西：\verb|std::string&|和\verb|T&|引用。那么它们之间有什么区别和联系呢？
+
+首先，引用本身是一个非常强类型的东西，\verb|T&|只能对应\verb|T|；而这两个视图类型则是模板化或弱类型的，\verb|string_view|可以引用任何符合字符串概念的数据，而\verb|std::span<T>|可以引用任何类型的数组或容器的数据。
+
+其次，引用通常假定生命周期是有效的，而视图类型则更明确地要求我们管理其引用的数据的生命周期，确保在视图存在期间数据是有效的。
+
+最终，引用并没有统一的成员函数接口，而视图类型则提供了丰富的成员函数，用于操作和查询数据，例如长度信息、子范围等。
+
+\section{views和ranges：声明式数据处理}
+
+\subsection{从Rust说开去}
+
+先来看一段Rust代码：
+\begin{minted}{rust}
+let numbers = vec![1, 2, 3, 4, 5];
+let doubled: Vec<i32> = numbers.iter()
+    .map(|x| x * 2)
+    .filter(|x| *x > 5)
+    .collect();
+println!("{:?}", doubled); // 输出 [6, 8, 10]
+\end{minted}
+
+这段代码中，我们首先创建了一个整数向量，然后通过迭代器对其进行映射和过滤操作，最后收集结果。整个过程中没有创建任何中间容器，所有操作都是惰性求值的。所谓\textbf{惰性求值}，就是\textbf{只有在真正需要结果时才进行计算}，这可以显著提高性能。而且也能够看出，上述代码非常\textbf{声明式}，我们只需要描述我们想要的结果，而不需要关心具体的实现细节。
+
+而旧的C++代码则可能是这样的：
+\begin{minted}{cpp}
+std::vector<int> numbers = {1, 2, 3, 4, 5};
+std::vector<int> doubled;
+for (int x : numbers)
+doubled.push_back(x * 2);
+std::vector<int> filtered;
+for (int x : doubled) {
+    if (x > 5)
+    filtered.push_back(x);
+}
+for (int x : filtered) {
+    std::cout << x << " ";
+}
+\end{minted}
+这段代码是很鲜明的C++11风格，使用了多个中间容器来存储映射和过滤的结果，虽然功能正确、语法清晰，但效率较低。另一方面，这段代码是很\textbf{命令式}的，我们需要明确地告诉计算机每一步该做什么，而不是描述我们想要的结果——这是现代编程语言要极力避免的。
+
+\subsection{回到C++：现代C++的views和ranges}
+
+为了解决这种问题，C++20引入了视图（Views），使得我们可以像Rust那样以声明式的方式处理数据序列。
+
+下面是使用C++20视图的等效代码：
+\begin{minted}{cpp}
+#include <ranges> // 需要引入该库，C++20标准
+
+std::vector<int> numbers = {1, 2, 3, 4, 5};
+auto doubled = numbers
+    | std::views::transform([](int x) { return x * 2; })
+    | std::views::filter([](int x) { return x > 5; });
+
+for (int x : doubled) {
+    std::cout << x << " ";
+}
+\end{minted}
+
+可以看出，这些视图实际上定义在\verb|<ranges>|头文件中。与Rust的迭代器类似，C++的视图允许我们以声明式的方式对数据进行转换和过滤，我们使用了\verb|transform|和\verb|filter|两个视图操作来分别进行映射和过滤操作，而传递方式则是通过管道符号\verb+|+连接的。视图也是惰性求值的，只有在我们真正迭代它们时，才会进行计算。上文的\verb|doubled|变量实际上是一个惰性的视图，而不是一个具体的容器。
+
+那ranges哪去了？上文中根本没有任何ranges的影子。实际上，ranges是C++20中更广泛的概念，它定义了一种统一的方式来表示和操作数据序列。视图实际上是ranges的一种特殊形式，专注于惰性求值和转换操作。而ranges则可以包括具体的容器、数组等。换言之，实际上\verb|numbers|变量本身就是一个range，因为它是一个容器，可以被视为一个数据序列。这或许就是“太上，下知有之（ranges），其次亲而誉之（views）”的意思吧。
+
+\subsection{C++视图的基本操作}
+
+C++的视图基本操作如下：
+\begin{itemize}
+    \item \textbf{all}：表示整个序列。
+    \item \textbf{transform}：对每个元素应用一个函数，类似于映射操作。
+    \item \textbf{filter}：根据一个谓词函数过滤元素。
+    \item \textbf{take}：获取前N个元素。
+    \item \textbf{drop}：跳过前N个元素。
+    \item \textbf{join}：将嵌套的序列展开成一个平坦的序列。
+    \item \textbf{reverse}：反转序列中的元素顺序。
+    \item \textbf{split}：将序列按指定分隔符拆分成多个子序列。
+    \item \textbf{unique}：移除序列中连续重复的元素。
+    \item \textbf{sort}：对序列中的元素进行排序。
+\end{itemize}
+
+使用视图的方式，则是通过管道符号，把多个视图操作连接起来，形成一个处理链条，就如上文所示。而这个“谓词函数”则是一个接受元素并返回布尔值的函数，用于决定是否保留该元素。
+
+这里我想重点说说这个\verb|join|。当然，同样是写一个例子就能说明问题了：
+\begin{minted}{cpp}
+std::vector<std::vector<int>> nested = {
+    {1, 2}, {3, 4}, {5}
+};
+auto flat = nested | std::views::join;
+for (int x : flat) {
+    std::cout << x << " ";
+}
+\end{minted}
+实际上在这里的flat也是一个“视图”，它并没有创建一个新的容器，而是提供了一种方式来迭代嵌套容器中的所有元素。这样我们就可以避免创建额外的中间容器，从而提高性能。换句话说，在不创建视图或中间容器的情况下，我们只能通过嵌套循环来访问这些元素，而使用视图则可以让代码更简洁、更高效。
+
+视图有着\textbf{不可变性}，也就是说，无论怎样操作一个视图，都不会改变其引用的原始数据，这使得我们可以极为放心的使用数据。
+
+\subsection{ranges扒开了说}
+
+前文提到，视图实际上是\verb|ranges|的一种特殊形式。那么\verb|ranges|到底是什么呢？简单来说，这是一种数据序列：由\verb|begin|迭代器和\verb|end|哨兵指定的一组可以遍历的项目。所有的STL容器都是\verb|ranges|。
+
+哨兵的类型可以和迭代器的类型不同，这使得我们可以更灵活地定义数据序列。例如，一个字符串的\verb|begin|迭代器可能是一个指向字符的指针，而\verb|end|哨兵则可能是一个表示字符串结尾的特殊值（\verb|\0|）。
+
+\verb|ranges|可以自定义，我们只需要定义\verb|begin|和\verb|end|哨兵即可。例如，我想定义一个非负整数的ranges，\verb|end|哨兵为-1（数值类型的哨兵）：
+\begin{minted}{cpp}
+class NonNegativeRange {
+    public:
+    class Iterator {
+        public:
+        Iterator(int value) : value(value) {}
+        int operator*() const { return value; }
+        Iterator& operator++() { ++value; return *this; }
+        bool operator!=(const Iterator& other) const {
+            return value != other.value;
+        }
+        private:
+        int value;
+    };
+    NonNegativeRange(int start) : start(start) {}
+    Iterator begin() const { return Iterator(start); }
+    Iterator end() const { return Iterator(-1); } // -1作为哨兵
+    private:
+    int start;
+};
+
+NonNegativeRange range(0);
+for (int x : range) {
+    if (x == -1) break; // 遇到哨兵停止
+    std::cout << x << " ";
+}
+\end{minted}
+上述代码中，我们定义了一个\verb|NonNegativeRange|类，它表示从指定起始值开始的非负整数序列，直到遇到哨兵-1为止。我们定义了一个嵌套的\verb|Iterator|类，用于实现迭代器的功能。通过定义\verb|begin|和\verb|end|方法，我们使得\verb|NonNegativeRange|类成为一个可迭代的ranges。
+
+在上文代码（C++20视图示例）中，\verb|numbers|变量本身就是一个ranges，因为它是一个容器，可以被视为一个数据序列。于是我们可以用视图对其进行转换和过滤操作。
+
+\subsection{投影}
+
+在使用视图时，我们经常需要对数据进行某种形式的转换，这就是所谓的“投影”（Projection）。投影实际上就是将数据从一种形式转换为另一种形式，通常是通过一个函数来实现的。例如，假设我们有一个包含学生信息的结构体，我们想要提取学生的姓名列表：
+\begin{minted}{cpp}
+struct Student {
+    std::string name;
+    int age;
+};
+std::vector<Student> students = {
+    {"Alice", 20}, {"Bob", 22}, {"Carol", 21}
+};
+auto names = students
+    | std::views::transform([](const Student& s) { return s.name; });
+for (const auto& name : names) {
+    std::cout << name << " ";
+}
+\end{minted}
+上述代码中，我们使用了\verb|std::views::transform|视图来提取学生的姓名列表。投影函数接受一个\verb|Student|对象，并返回其姓名。这样，我们就可以轻松地从复杂的数据结构中提取所需的信息。
+
+另一个常见的投影是从\verb|std::map|出发：
+\begin{minted}{cpp}
+std::map<std::string, int> score_map = {
+    {"Alice", 90}, {"Bob", 85}, {"Carol", 88}
+};
+auto names = score_map
+| std::views::keys; // 投影出所有的键（姓名）
+for (const auto& name : names) {
+    std::cout << name << " ";
+}
+\end{minted}
+上述代码中，我们使用了\verb|std::views::keys|视图来提取\verb|score_map|中的所有键（学生姓名）。这样，我们就可以方便地获取映射中的键列表，而无需手动遍历整个映射。
+
+\subsection{iota视图：生成序列}
+
+C++20引入了\verb|std::views::iota|视图，用于通过逐渐增加初始值来创建一个元素序列（有限或无限）。这对于生成整数序列或其他类型的递增序列非常有用。例如：
+\begin{minted}{cpp}
+auto numbers = std::views::iota(1, 10); // 生成1到9的整数序列
+for (int x : numbers) {
+    std::cout << x << " ";
+}
+\end{minted}
+上述代码中，我们使用了\verb|std::views::iota|视图来生成从1到9的整数序列。
+无限序列也是可能的：
+\begin{minted}{cpp}
+auto infinite_numbers = std::views::iota(1); // 生成从1开始的无限整数序列
+for (int x : infinite_numbers | std::views::take(10)) { // 只取前10个元素
+    std::cout << x << " ";
+}
+\end{minted}
+
+\verb|iota|有着一些有趣的特性，例如它可以用于生成自定义类型的序列，只要该类型支持递增操作符（\verb|++|）。例如：
+\begin{minted}{cpp}
+struct Point {
+    int x, y;
+    Point& operator++() { ++x; ++y; return *this; } // 支持递增操作
+};
+auto points = std::views::iota(Point{0, 0}, Point{5, 5}); // 生成Point序列
+for (const auto& p : points) {
+    std::cout << "(" << p.x << ", " << p.y << ") ";
+}
+\end{minted}
+
+那么怎样生成一个奇数序列？实际上，我们不要过于将思维过于局限在“一次输出”上，毕竟这东西是惰性的，无需太过担心性能。我们可以结合使用\verb|iota|视图和\verb|transform|视图来实现：
+\begin{minted}{cpp}
+auto odd_numbers = std::views::iota(0)
+    | std::views::transform([](int x) { return x * 2 + 1; });
+for (int x : odd_numbers | std::views::take(10)) { // 只取前10个奇数
+    std::cout << x << " ";
+}
+\end{minted}
+
+\verb|iota|也是懒惰的，故而可以生成无限序列，而不会导致内存溢出（只要我们使用\verb|take|等视图来限制输出的元素数量即可）。
+
+\section{optional、variant和any：类型安全的容器}
+
+现代C++引入了三种类型安全的容器：\verb|std::optional|、\verb|std::variant|和\verb|std::any|，它们分别用于表示可能缺失的值、多种类型的值以及任意类型的值。这三个容器主要用于安全性和灵活性的提升，避免了传统C++中使用裸指针或\verb|void*|带来的类型不安全问题。
+
+例如，某方法可能返回一个整数值，或者什么都不返回（表示失败或无结果）。在传统C++中，我们可能会使用指针或异常来表示这种情况，但这可能导致内存泄漏或类型不安全的问题。而使用\verb|std::optional<int>|则可以更安全地表示这种情况：
+
+\begin{minted}{cpp}
+#include <optional>
+
+std::optional<int> find_value(int key) {
+    if (key == 42) {
+        return 100; // 找到值
+    } else {
+        return std::nullopt; // 未找到值
+    }
+}
+auto result = find_value(42);
+if (result) {
+    std::cout << "Found: " << *result << std::endl;
+} else {
+    std::cout << "Not found" << std::endl;
+}
+\end{minted}
+上述代码中，\verb|find_value|函数返回一个\verb|std::optional<int>|，表示可能存在的整数值。调用者可以通过检查返回值是否有值来决定如何处理结果。
+
+而后两个容器则分别用于更复杂的场景，例如：
+\begin{minted}{cpp}
+#include <variant>
+
+std::variant<int, std::string> get_data(bool flag) {
+    if (flag) {
+        return 42; // 返回整数
+    } else {
+        return "Hello"; // 返回字符串
+    }
+}
+auto data = get_data(true);
+if (std::holds_alternative<int>(data)) {
+    std::cout << "Integer: " << std::get<int>(data) << std::endl;
+} else {
+    std::cout << "String: " << std::get<std::string>(data) << std::endl;
+}
+\end{minted}
+上文中使用了\verb|std::holds_alternative|和\verb|std::get|来检查和获取值。
+
+至于\verb|std::any|，它用于存储任意类型的值，但需要注意的是，使用\verb|std::any|时需要进行类型转换，可能会带来一些性能开销和类型安全问题，因此应谨慎使用。
+\begin{minted}{cpp}
+#include <any>
+
+std::any AnyThing;
+
+AnyThing = 42; // 存储整数
+std::cout << std::any_cast<int>(AnyThing) << std::endl; // 输出 42
+AnyThing = std::string("Hello"); // 存储字符串
+std::cout << std::any_cast<std::string>(AnyThing) << std::endl; // 输出 Hello
+\end{minted}
+上述代码中，我们使用了\verb|std::any|来存储不同类型的值，并通过\verb|std::any_cast|进行类型转换以获取存储的值。Python程序员看到这个估计觉得跟回家了一样，但需要注意，这和Python的动态类型依然有着本质的差别：Python的动态类型指的是在不同的时刻，一个变量的类型可以是不同的；而C++的\verb|std::any|则是一个容器，换句话说，any类型的对象，它的类型永远是any！这两者的区别还是很大的，比如不能直接试图\verb|cout|一个\verb|std::any|对象，因为编译器并不知道它里面装的是什么类型的数据。而Python中就可以随意打印一个动态类型的对象（只要它实现了\verb|__str__|方法）。
+
+\section{模块}
+
+模块旨在改变传统的C++编译模型。
+
+我们写程序，上来第一行几乎都是\verb|#include|。这个预编译指令实际上做的是：把被包含文件的内容直接插入到当前文件中，然后再进行编译。这种方式有几个问题：
+\begin{itemize}
+    \item \textbf{编译时间长}：每次编译时，编译器都需要重新处理所有包含的头文件，导致编译时间显著增加。
+    \item \textbf{命名冲突}：不同的头文件可能定义了相同的名称，导致命名冲突和难以调试的问题。
+    \item \textbf{依赖管理复杂}：头文件之间的依赖关系可能非常复杂，导致编译顺序难以管理。
+\end{itemize}
+
+模块通过引入一个新的编译单元概念，允许我们将代码划分为独立的模块，每个模块可以有自己的接口和实现。这样，编译器只需要处理模块的接口，而不需要重新处理整个头文件，从而显著减少编译时间。
+
+换句话说，我非常抵制的写法：
+\begin{minted}{cpp}
+#include <bits/stdc++.h> // 包含所有标准库头文件
+\end{minted}
+在模块化的C++中，可以被替代为：
+\begin{minted}{cpp}
+import std; // 导入整个标准库模块
+\end{minted}
+后者至少比前者要好很多（虽然我依然不建议这么写）。
+
+模块的定义和使用涉及到一些新的语法和概念，例如：
+\begin{itemize}
+    \item \textbf{模块接口单元}：定义模块的接口，包含导出的声明。
+    \item \textbf{模块实现单元}：包含模块的实现代码。
+        \item \textbf{导入模块}：使用\verb|import|关键字导入模块。
+\end{itemize}
+
+实际上C++的模块化到现在依然在发展中，很多编译器对模块的支持还不完善，因此在实际项目中使用模块时需要谨慎，并确保所使用的编译器版本支持所需的模块特性。而且现在很多现有的C++代码库实际上还在老老实实地使用传统的头文件包含方式，因此在引入模块化时需要考虑与现有代码的兼容性问题，我个人也建议同学们继续老老实实\verb|#include|。
+
+\section{三相比较运算符}
+
+C++20引入了三相比较运算符（\verb|<=>|），也称为“太空船运算符”（Spaceship Operator）。它提供了一种统一的方式来实现对象的比较操作，简化了比较运算符的定义。
+
+传统上，我们需要分别定义多个比较运算符（如\verb|<|、\verb|<=|、\verb|>|、\verb|>=|、\verb|==|和\verb|!=|）来实现对象的比较，这可能导致代码冗长且容易出错。而使用三相比较运算符，我们只需要定义一个运算符，就可以自动生成其他比较运算符。例如：
+\begin{minted}{cpp}
+#include <compare>
+
+struct Point {
+    int x, y;
+    auto operator<=>(const Point& other) const = default; // 使用默认比较
+};
+\end{minted}
+那么什么是“默认比较”呢？其比较顺序是，先比较\verb|x|，如果相等则比较\verb|y|。这样，我们就可以通过定义三相比较运算符来实现对象的比较，而不需要手动定义所有的比较运算符。
+
+而这个运算符的返回类型是一个特殊的类型，称为“比较类别”（Comparison Category），它表示比较的结果。C++20定义了几种比较类别：
+\begin{itemize}
+    \item \textbf{std::strong\_ordering}：表示强排序，支持所有比较运算符。
+    \item \textbf{std::weak\_ordering}：表示弱排序，允许相等的元素。
+    \item \textbf{std::partial\_ordering}：表示部分排序，允许无法比较的元素。
+\end{itemize}
+通过使用三相比较运算符，我们可以简化对象的比较操作，提高代码的可读性和维护性。例如：
+\begin{minted}{cpp}
+struct Person {
+    std::string name;
+    int age;
+    auto operator<=>(const Person& other) const {
+        if (auto cmp = name <=> other.name; cmp != 0) {
+            return cmp; // 先比较姓名
+        }
+        return age <=> other.age; // 再比较年龄
+    }
+};
+\end{minted}
+上述代码中，我们定义了一个\verb|Person|结构体，并实现了三相比较运算符。比较时，先比较姓名，如果姓名相等，则比较年龄。这样，我们就可以通过定义一个运算符来实现复杂的比较逻辑，而不需要手动定义所有的比较运算符。
+
+但是这样实际上并没有省下很多代码量，而且不是很容易看懂，所以大家还是不要写这个了。这个的唯一好处就是省事（例如定义简单的结构体时），但缺点是可读性差，而且不够灵活（例如需要自定义比较逻辑时）。
+
+\section{std::concept}
+
+概念（Concepts）是C++20引入的一种语言特性，用于定义模板参数的约束条件。它们允许我们在编译时检查模板参数是否满足特定的要求，从而提高代码的可读性和可维护性。
+
+这确实是一个非常有用的特性，尤其是在编写泛型代码时。通过使用概念，我们可以明确地表达模板参数的预期行为和属性，从而避免在编译时出现难以理解的错误消息。例如，假设我们想定义一个函数，该函数接受一个容器，并计算其元素的总和。我们可以使用概念来约束模板参数，确保它是一个可迭代的容器：
+\begin{minted}{cpp}
+#include <concepts>
+template <typename T>
+requires std::ranges::range<T> // 约束T必须是一个范围（range）
+auto sum(const T& container) {
+// 具体代码略，但用到了range-for
+}
+\end{minted}
+上述代码中，我们使用了\verb|std::ranges::range|概念来约束模板参数\verb|T|，确保它是一个范围（range）。这样，我们就可以在编译时检查传入的容器是否满足该要求，从而避免运行时错误。
+
+概念有很多，基本上都是围绕STL容器和算法设计的，例如\verb|std::integral|（整数类型）、\verb|std::floating_point|（浮点类型）、\verb|std::sortable|（可排序类型）等。通过使用这些概念，我们可以更清晰地表达模板参数的预期行为，从而提高代码的可读性和可维护性。具体有哪些我也不能完全记住，同学们自行查阅相关文档即可。
+
+\section{std::format}
+
+这个很重要，而且很常用，比前面两个全是未来（模块）、不知所谓（三相比较运算符）的特性要实用得多。
+
+C++20引入了\verb|std::format|，它提供了一种类型安全且灵活的字符串格式化方式，类似于Python的f-string或JavaScript的模板字符串。
+
+\begin{minted}{cpp}
+#include <format>
+
+std::string name = "Alice";
+int age = 30;
+std::string message = std::format("Name: {}, Age: {}", name, age);
+std::cout << message << std::endl; // 输出 "Name: Alice, Age: 30"
+\end{minted}
+上述代码中，我们使用了\verb|std::format|函数来格式化字符串。格式字符串中的花括号\verb|{}|表示占位符，后续的参数将依次填充到这些占位符中。这样，我们就可以方便地创建格式化的字符串，而不需要手动拼接字符串。
+
+有的同学们可能会觉得这玩意和\verb|std::printf|如出一辙，但实际上两者有着本质的区别。首先，\verb|std::format|是类型安全的，它会根据传入参数的类型自动进行格式化，而不需要手动指定格式说明符，这避免了类型不匹配的问题。其次，\verb|std::format|支持更丰富的格式化选项，例如对齐、填充、宽度等，使得我们可以更灵活地控制输出格式。例如：
+\begin{minted}{cpp}
+std::string message = std::format("Name: {:<10}, Age: {:0>3}", name, age);
+std::cout << message << std::endl; // 输出 "Name: Alice     , Age: 030"
+\end{minted}
+上述代码中，我们使用了格式说明符来控制输出的对齐和填充方式。\verb|:<10|表示左对齐并占用10个字符宽度，而\verb|:0>3|表示右对齐并用0填充至3个字符宽度。
+
+以下是格式说明符的一些常见选项：
+\begin{itemize}
+        \item \textbf{对齐}：\verb|<|（左对齐）、\verb|>|（右对齐）、\verb|^|（居中对齐）。
+        \item \textbf{填充}：指定填充字符，例如\verb|0|表示用0填充。
+    \item \textbf{宽度}：指定输出的最小宽度。
+    \item \textbf{精度}：对于浮点数，指定小数点后的位数。
+        \item \textbf{类型}：指定输出的类型，例如\verb|d|（十进制整数）、\verb|f|（浮点数）、\verb|s|（字符串）等。（这玩意怎么又回来了？）
+\end{itemize}
+
+通过使用\verb|std::format|，我们可以更方便地创建格式化的字符串，提高代码的可读性和维护性。相比传统的字符串拼接方式，\verb|std::format|提供了一种更现代、更安全的字符串处理方式，这个确实值得在日常编程中广泛使用。\footnote{唯一美中不足的是，很多在线测评平台还没有支持这东西！}
+
+\section{C++23简介}
+
+C++23实际上是一次比较小的标准更新，也比较受人诟病，因为没什么有趣的内容。不过我还是简单介绍几个比较重要的特性。
+
+\paragraph{std::expected}
+
+这东西是在C++23中引入的。实际上和刚刚说到的，C++17引入、C++20加强的\verb|std::optional|三兄弟极其类似，但这东西是包含错误或数值的类型。换言之，实际上也可以用\verb|std::variant|来实现类似的功能，但\verb|std::expected|提供了一种更专门化、更类型安全的方式来处理可能失败的操作。于是这样我们就可以这样写：
+\begin{minted}{cpp}
+#include <expected>
+
+std::expected<int, std::string> divide(int a, int b) {
+    if (b == 0) {
+        return std::unexpected("Division by zero"); // 返回错误信息
+    }
+    return a / b; // 返回结果
+}
+auto result = divide(10, 0);
+if (result) {
+    std::cout << "Result: " << *result << std::endl;
+} else {
+    std::cout << "Error: " << result.error() << std::endl;
+}
+\end{minted}
+实际上感觉很无趣，因为这玩意完全可以用\verb|std::optional|实现。
+
+\paragraph{std::mdspan}
+
+这玩意也是C++23中引入的。它是一种多维数组视图，定义在\verb|<mdspan>|头文件中。当成\verb|span|用就行了，实际上确实区别不大。
+
+\paragraph{std::print 和 std::println}
+
+这两个东西真可谓是“千呼万唤始出来”，终于在C++23中被引入了。\verb|std::print|和\verb|std::println|提供了一种简洁且类型安全的方式来输出格式化的字符串，类似于Python的\verb|print|函数。前者相当于“打印”，后者相当于“打印一行”。
+\begin{minted}{cpp}
+#include <print>
+
+std::string name = "Alice";
+int age = 30;
+std::print("Name: {}, Age: {}\n", name, age); // 使用std::print
+std::println("Name: {}, Age: {}", name, age); // 使用std::println
+\end{minted}
+与\verb|std::format|类似，格式字符串中的花括号\verb|{}|表示占位符，后续的参数将依次填充到这些占位符中。
+
+Python用户感觉又回家了。
+
+\paragraph{std::ranges::to}
+
+C++23引入了\verb|std::ranges::to|，它提供了一种简洁的方式将范围（ranges）转换为具体的容器类型。例如：
+\begin{minted}{cpp}
+#include <ranges>
+
+std::vector<int> numbers = {1, 2, 3, 4, 5};
+auto even_numbers = numbers
+    | std::views::filter([](int x) { return x % 2 == 0; })
+    | std::ranges::to<std::vector>(); // 转换为std::vector
+for (int x : even_numbers) {
+    std::cout << x << " "; // 输出 2 4
+}
+\end{minted}
+通过这一方法，我们就可以方便地将范围转换为所需的容器类型，而不需要手动创建和填充容器，这也是非常方便的。

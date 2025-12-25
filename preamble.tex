@@ -5,12 +5,13 @@
 %---------- 常用宏包 ----------
 \usepackage{geometry}
 \geometry{b5paper, margin=0.5in}
-\usepackage{amssymb,amsmath}
+\usepackage{amssymb,amsmath,amsthm}
 \usepackage{fontspec}
 \usepackage{xeCJK}
 \usepackage{graphicx}
 \graphicspath{{./images/}}
 \usepackage{longtable,array,booktabs}
+\usepackage{minted}
 \usepackage{multicol}
 \usepackage{subcaption}
 \usepackage{enumitem}
@@ -22,8 +23,10 @@
 \usepackage{url}
 \usepackage{nameref}
 \usepackage{xeCJKfntef}
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
 \usepackage{metalogo}
 \usepackage{hyperref}
+\usepackage{cleveref}
 \usepackage{fontawesome5}
 \usepackage{authblk}
 
@@ -32,19 +35,36 @@
 \setsansfont{Source Sans Pro}[Scale=MatchLowercase]
 \setmonofont{Source Code Pro}[Scale=MatchLowercase]
 \setCJKmainfont[ItalicFont = * ]{Source Han Serif CN}
-\setCJKsansfont{Source Han Sans CN}
-\setCJKmonofont{Source Han Sans CN}
+\setCJKsansfont[ItalicFont = * ]{Source Han Sans CN}
+\setCJKmonofont[ItalicFont = * ]{Source Han Sans CN}
 
 %---------- 列表、代码、脚注 ----------
 \setlist{nosep}
 \lstset{
-  basicstyle=\ttfamily\footnotesize,
+  basicstyle=\ttfamily\small,
   keywordstyle=\color{blue},
   commentstyle=\color{green!50!black},
   stringstyle=\color{red},
-  numbers=left,numberstyle=\tiny\color{gray},stepnumber=1,numbersep=5pt,
+  numbers=left,numberstyle=\small\color{gray},stepnumber=1,numbersep=5pt,
   backgroundcolor=\color{white},
   showspaces=false,showstringspaces=false,breaklines=true,frame=single
+}
+\SetAlFnt{\small}
+
+% 自定义 minted 样式
+\setminted{
+    fontsize=\small,           % 字体大小
+    baselinestretch=1.0,       % 行间距
+    linenos=true,              % 行号
+    frame=lines,               % 边框样式
+    framesep=2mm,              % 边框间距
+    rulecolor=\color{black},   % 边框颜色
+    numbersep=5pt,             % 行号间距
+    breaklines=true,           % 自动换行
+    breakanywhere=false,       % 不在任意位置断行
+    showspaces=false,          % 不显示空格
+    showtabs=false,            % 不显示制表符
+    tabsize=4,                 % 制表符大小
 }
 
 \let\oldnameref\nameref
@@ -135,6 +155,19 @@
   fontupper    = \small,
   before upper = {\setlength{\parindent}{2em}}%
 }
+
+\newtheorem{theorem}{\indent 定理}
+\newtheorem{lemma}[theorem]{\indent 引理}
+\newtheorem{proposition}[theorem]{\indent 命题}
+\newtheorem{corollary}[theorem]{\indent 推论}
+\newtheorem{definition}{\indent 定义}
+
+\crefname{section}{节}{节}
+\crefname{subsection}{小节}{小节}
+\crefname{subsubsection}{子节}{子节}
+\crefname{chapter}{章}{章}
+\crefname{figure}{图}{图}
+\crefname{table}{表}{表}
 
 %---------- 标题信息 ----------
 \title{\Huge\textbf{北京大学计算机基础能力手册}}
