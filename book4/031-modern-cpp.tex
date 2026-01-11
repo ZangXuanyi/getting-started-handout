@@ -464,14 +464,27 @@ std::cout << message << std::endl; // 输出 "Name: Alice     , Age: 030"
 
 以下是格式说明符的一些常见选项：
 \begin{itemize}
-        \item \textbf{对齐}：\verb|<|（左对齐）、\verb|>|（右对齐）、\verb|^|（居中对齐）。
-        \item \textbf{填充}：指定填充字符，例如\verb|0|表示用0填充。
+    \item \textbf{对齐}：\verb|<|（左对齐）、\verb|>|（右对齐）、\verb|^|（居中对齐）。
+    \item \textbf{填充}：指定填充字符，例如\verb|0|表示用0填充。
     \item \textbf{宽度}：指定输出的最小宽度。
     \item \textbf{精度}：对于浮点数，指定小数点后的位数。
-        \item \textbf{类型}：指定输出的类型，例如\verb|d|（十进制整数）、\verb|f|（浮点数）、\verb|s|（字符串）等。（这玩意怎么又回来了？）
+    \item \textbf{类型}：指定输出的类型，例如\verb|d|（十进制整数）、\verb|f|（浮点数）、\verb|s|（字符串）等。（这玩意怎么又回来了？）
 \end{itemize}
 
-通过使用\verb|std::format|，我们可以更方便地创建格式化的字符串，提高代码的可读性和维护性。相比传统的字符串拼接方式，\verb|std::format|提供了一种更现代、更安全的字符串处理方式，这个确实值得在日常编程中广泛使用。\footnote{唯一美中不足的是，很多在线测评平台还没有支持这东西！}
+通过使用\verb|std::format|，我们可以更方便地创建格式化的字符串，提高代码的可读性和维护性。这个特性和\mintinline{cpp}|std::ranges|也可以方便的结合使用，例如快速将一个数组字符串化：
+\begin{minted}{cpp}
+#include <format>
+#include <vector>
+#include <ranges>
+
+std::vector<int> numbers = {1, 2, 3, 4, 5};
+auto joined = numbers 
+    | std::views::transform([](int x) { return std::to_string(x); }) // 把每个整数转换为字符串
+    | std::views::join_with(", "); // 用", "连接字符串
+std::string result = std::format("[{}]", std::ranges::to<std::string>(joined)); // C++23的ranges::to
+\end{minted}
+
+相比传统的字符串拼接方式，\verb|std::format|提供了一种更现代、更安全的字符串处理方式，这个确实值得在日常编程中广泛使用。\footnote{唯一美中不足的是，很多在线测评平台还没有支持这东西！}
 
 \section{C++23简介}
 
@@ -496,7 +509,7 @@ if (result) {
     std::cout << "Error: " << result.error() << std::endl;
 }
 \end{minted}
-实际上感觉很无趣，因为这玩意完全可以用\verb|std::optional|实现。
+实际上感觉很无趣，因为这玩意完全可以用\verb|std::optional|实现。但在较新的代码中，此法能够比旧的写法更清晰地表达意图，因此也不失为一种写法。
 
 \paragraph{std::mdspan}
 
