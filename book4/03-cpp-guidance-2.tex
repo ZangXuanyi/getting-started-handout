@@ -38,7 +38,7 @@ cout << Point2D::count << endl;  // 输出类的静态属性
 
 在类中，你可以看到我打了一个 \texttt{public} ，这说明以下属性和方法是公开的，其他所有类或者类外的东西都可以访问它。如果你不打 \texttt{public} ，那么默认是私有的（private），只有这个类内部可以访问；另一种访问权限是 \texttt{protect} ，它允许子类访问，但不允许类外的东西访问。（至于什么是子类，请先收起疑问，往下看就懂了）
 
-部分属性前面，你可以发现打了 \texttt{static} 符号。这说明这个属性是静态的，属于 \texttt{类本身} ，而不是类的实例（实例指的就是可操作的对象，例如上面的p）。静态属性可以通过类名直接访问，例如 \texttt{Point2D::count} 。静态属性在所有实例之间共享，因此它们的值是全局的。
+部分属性前面，你可以发现打了 \texttt{static} 符号。这说明这个属性是静态的，属于 \textbf{类本身} ，而不是类的实例（实例指的就是可操作的对象，例如上面的p）。静态属性可以通过类名直接访问，例如 \texttt{Point2D::count} 。静态属性在所有实例之间共享，因此它们的值是全局的。
 
 \subsection{自指}
 
@@ -358,6 +358,60 @@ public:
 };
 \end{minted}
 
+需要说明，模板特化虽然确实有和类的继承类似的样子，但必须要注意它们之间的区别：模板特化是针对特定类型提供不同的实现，\textbf{不会继承通用模板的成员}；而类的继承则是子类继承父类的成员，并且可以重写父类的方法。因此，在使用模板特化时，我们需要为特化类型提供完整的实现，而不能依赖于通用模板的成员。
+
+为了保证模板特化的正确性（也就是如果确实需要类似继承的功能），我们需要这样写：
+
+\begin{minted}{cpp}
+template <typename T>
+class BaseBox {
+public:
+    T value;
+    // 在这里写通用的成员函数和属性
+    BaseBox() { /* 构造函数实现 */ }
+}
+
+template <typename T>
+class Box : public BaseBox<T> {
+    // 在这里写针对其他类型的特化实现
+    using BaseBox<T>::BaseBox;  // 继承BaseBox的构造函数
+};
+
+template <>
+class Box<bool> : public BaseBox<bool> {
+    // 在这里写针对bool类型的特化实现
+    using BaseBox<bool>::BaseBox;  // 继承BaseBox的构造函数
+    void toggle() { this->value = !this->value; }  // 特有的方法，切换布尔值
+    // 使用this->value来访问BaseBox<bool>中的value属性
+};  
+\end{minted}
+这样不仅保证了模板特化的正确性，还避免了代码重复，提高了代码的可维护性，是常用的最简单方式。
+
+另一种实现方式是利用C++20提供的新特性：概念（Concepts）来约束模板类中的部分方法，使它们在特定情况下才可用，从而实现类似于模板特化的效果。例如：
+\begin{minted}{cpp}
+template <typename T>
+class Box {
+public:
+    T value;
+    Box(T v) : value(v) {}
+    T getValue() const { return value; }
+    
+    // 只有当T满足概念时，才提供toggle方法
+    // 下列概念的意思是：T和bool是一样的
+    void toggle() requires std::same_as<T, bool> {
+        value = !value;  // 切换布尔值
+    }
+};
+
+Box<bool> boolBox(true);  // 创建一个存储布尔值的Box对象
+boolBox.toggle();  // 调用toggle方法，切换布尔值
+Box<int> intBox(42);  // 创建一个存储整数的Box对象
+// intBox.toggle();  // 编译错误，不满足概念约束
+\end{minted}
+实际上这并没有使用模板特化，而是利用概念来实现了类似的功能。
+
+在实际情形下还可能采取更复杂的实现方式，如CRTP模式（Curiously Recurring Template Pattern）、显式模板实例化法等，这应取决于团队的编码规范和实际需求。
+
 \subsection{非类型模板参数}
 
 非类型模板参数是指模板参数不仅可以是类型，还可以是常量值（如整数、枚举等）。这种特性允许我们在编译时传递一些固定的值，从而实现更灵活的模板设计。
@@ -395,49 +449,28 @@ double mean(Args... args) {
 double result = mean(1, 2, 3, 4, 5);  // result = 3.0
 \end{minted}
 
-\subsection{进阶：模板元编程}
+\subsection{模板元编程}
 
-模板元编程是一种利用模板机制在编译时进行计算的编程技术。通过模板元编程，我们可以在编译阶段执行一些复杂的计算，从而生成高效的代码。模板元编程通常用于实现类型特性检测、类型转换等功能。这是一种高级技巧，不是初学者必需掌握的内容，但是C++模板系统的极限玩法，了解一下也无妨。
-
-例如，我们想编译期就把阶乘算了：
+模板元编程是一种利用模板机制在编译时进行计算的编程技术。通过模板元编程，我们可以在编译阶段执行一些复杂的计算，从而生成高效的代码。模板元编程通常用于实现类型特性检测、类型转换等功能，是C++泛型编程的顶级玩法。比如说，利用模板元编程实现阶乘计算：
 \begin{minted}{cpp}
 template <int N>
-struct Factorial {
-    static const int value = N * Factorial<N - 1>::value;  // 递归计算阶乘
-};
+int fact(){ return N * fact<N - 1>(); }
 
 template <>
-struct Factorial<0> {
-    static const int value = 1;  // 阶乘的基例
-}; // 0的完全特化
+int fact<0>() { return 1; } // 模板特化，处理N=0的基础情况
 
 int main() {
-    std::cout << "Factorial of 5: " << Factorial<5>::value << std::endl;  // 输出120
+    std::cout << "Factorial of 5: " << fact<5>() << std::endl; // 输出120
     return 0;
 }
 \end{minted}
+模板元编程不是打表！它只不过是把计算从运行时挪到了编译期而已。
 
-这个不是打表！仅是在编译期计算而已。用constexpr和consteval也能做到类似的效果。
-
-\subsection{进阶：概念（C++20）}
-
-“概念”是C++20引入的一个新特性，它允许我们为模板参数定义约束条件，从而提高代码的可读性和可维护性。概念可以看作是一种类型特性检测机制，它可以帮助我们确保模板参数满足特定的要求。
+实际上很多人认为这个是多此一举，因为使用constexpr函数更简单：
 \begin{minted}{cpp}
-#include <concepts>
-
-template <std::integral T>  // 约束模板参数为整型
-T add(T a, T b) {
-    return a + b;  // 返回a和b的和
-}
-
-int main() {
-    int x = 5, y = 10;
-    std::cout << add(x, y) << std::endl;  // 调用add函数，输出15
-    // double a = 3.14, b = 2.71;
-    // std::cout << add(a, b) << std::endl;  // 错误，double不满足integral概念
-    return 0;
-}
+constexpr int fact(int n) { return n <= 1 ? 1 : n * fact(n - 1); } // 是常量表达式函数
 \end{minted}
+不过模板元编程在某些场景下仍然有其独特的优势，例如类型计算和编译时断言等。
 
 \section{STL和其他标准库}
 
@@ -577,17 +610,7 @@ std::reverse(v.begin(), v.end());        // 原地翻转
 
 字符串和字符串流是C++中处理文本数据的重要工具。C++提供了两种主要的字符串类型：C风格字符串（以 \texttt{char} 数组表示）和C++字符串（使用 \texttt{std::string} 类）。C++字符串更安全、更易用，推荐优先使用。
 
-C风格字符串（ \texttt{char*} ）在C++中有头文件库 \texttt{<cstring>} ，提供了一些常用的字符串操作函数，例如：
-\begin{itemize}
-  \item  \texttt{strlen} ：计算字符串长度。
-  \item  \texttt{strcpy} ：复制字符串。
-  \item  \texttt{strcat} ：连接字符串。
-  \item  \texttt{strcmp} ：比较字符串。
-  \item  \texttt{strchr} ：查找字符在字符串中的位置。
-  \item  \texttt{strstr} ：查找子字符串在字符串中的位置。
-\end{itemize}
-
-而C++字符串（ \texttt{std::string} ）在头文件库 \texttt{<string>} 中定义，每一个字符串是一个\textbf{对象}，而不是数组。该类提供了许多方便的方法来操作字符串，例如：
+C++字符串（ \texttt{std::string} ）在头文件库 \texttt{<string>} 中定义，每一个字符串是一个\textbf{对象}，而不是数组。该类提供了许多方便的方法来操作字符串，例如：
 \begin{itemize}
   \item  \texttt{size()} 或 \texttt{length()} ：获取字符串长度。
   \item  \texttt{substr(pos, len)} ：获取子字符串。
@@ -634,7 +657,7 @@ int main() {
   \item  \texttt{tellg()} ：获取当前读取位置。
   \item  \texttt{tellp()} ：获取当前写入位置。
 \end{itemize}
-当然，我们很少对流进行直接操作，更多的还是用它配合 \texttt{std::getline} 等函数来处理输入输出。 \texttt{getline} 函数能够接受三个参数：输入流、输出字符串、分隔符（默认为换行符）。它会从输入流中读取一行数据，直到遇到分隔符为止，并将读取的数据存储到输出字符串中，以便于我们进行后续处理。
+当然，我们很少对流进行直接操作，更多的还是用它配合 \texttt{std::getline} 等函数来处理输入输出。 \texttt{getline} 函数能够接受三个参数：输入流、输出字符串、分隔符（默认为换行符）。它会从输入流中不停读取数据，直到遇到分隔符为止，并将读取的数据存储到输出字符串中，以便于我们进行后续处理。
 \begin{minted}{cpp}
 #include <iostream>
 #include <sstream>
