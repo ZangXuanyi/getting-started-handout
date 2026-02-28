@@ -257,7 +257,7 @@ call foo
 
 怎样才能证明上述ELF文件“确实”包括这些内容呢？我们可以这样，先用 C \footnote{这里不用C++，是因为C++会引入一些额外的内容，例如异常处理、虚函数表等，可能会干扰我们的观察。}写一点东西，然后运行下列命令：
 \begin{minted}{bash}
-  gcc -o hello hello.cpp # 编译 C++ 源代码
+  gcc -o hello hello.c # 编译 C 源代码
   objdump -d hello      # 反汇编可执行文件
 \end{minted}
 然后我们就会看到类似下面的输出：

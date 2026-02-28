@@ -331,7 +331,7 @@ g++ main.cpp -O2 -g -o main.exe
 \end{minted}
 上述命令的含义是：使用 \texttt{g++} 编译器编译 \texttt{main.cpp} 文件，开启 \texttt{-O2} 优化，开启调试信息 \texttt{-g} ，并将生成的可执行文件命名为 \texttt{main.exe} 。然后，使用 \texttt{./main.exe} 命令来运行生成的可执行文件。
 
-命令行能提供更高的灵活性，可以随意增删改编译选项，例如添加 \texttt{-Wall} 来开启所有警告等。我个人非常推荐同学们学会使用命令行来编译和运行代码，这样可以更好地理解编译过程，并且能够更好地控制编译选项。
+命令行能提供更高的灵活性，可以随意增删改编译选项，例如添加 \texttt{-Wall} 来开启警告等。我个人非常推荐同学们学会使用命令行来编译和运行代码，这样可以更好地理解编译过程，并且能够更好地控制编译选项。
 
 \section{用WSL配置C/C++环境}\label{sec:wsl-cpp}
 
@@ -552,9 +552,8 @@ print("Their sum is:", a + b)
 
 而它的错误信息是在编译时报出：
 
-\begin{minted}{bash}
-> g++ example.cpp -o example.exe
-
+\begin{minted}{text}
+g++ example.cpp -o example.exe
 ld.exe: *.a(lib64_libmingw32_a-crtexewin.o): in function `main':
 C:/.../crtexewin.c:70: undefined reference to `WinMain'
 collect2.exe: error: ld returned 1 exit status

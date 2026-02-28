@@ -8,7 +8,7 @@
 
 \subsection{字符串视图}
 
-字符串视图是C++17引入的另一个重要特性，定义在\verb|<string_view>|头文件中。字符串视图（\verb|std::string_view|）是一种轻量级的字符串表示方式，它并不拥有字符串数据，而是引用现有的字符串数据。这使得我们可以避免不必要的字符串拷贝，从而提高性能。也就是说：
+字符串视图是C++17引入的一个重要特性，定义在\verb|<string_view>|头文件中。字符串视图（\verb|std::string_view|）是一种轻量级的字符串表示方式，它并不拥有字符串数据，而是引用现有的字符串数据。这使得我们可以避免不必要的字符串拷贝，从而提高性能。也就是说：
 
 \begin{minted}{cpp}
 #include <string_view>
@@ -169,16 +169,21 @@ C++的视图基本操作如下：
 
 使用视图的方式，则是通过管道符号，把多个视图操作连接起来，形成一个处理链条，就如上文所示。而这个“谓词函数”则是一个接受元素并返回布尔值的函数，用于决定是否保留该元素。
 
-这里我想重点说说这个\verb|join|。当然，同样是写一个例子就能说明问题了：
+视图这个东西非常灵活，几乎想做点什么都可以做到。比如说，饱受诟病的“逗号分隔的整数”问题，我们可以用视图来轻松解决：
 \begin{minted}{cpp}
-std::vector<std::vector<int>> nested = {
-    {1, 2}, {3, 4}, {5}
-};
-auto flat = nested | std::views::join;
-for (int x : flat) {
-    std::cout << x << " ";
-}
+#include <string>
+#include <ranges>
+
+std::string str{"1,2,3,4,5"}; // 假装这是输入，实际上getline一下就好了
+auto numbers = str
+    | std::views::split(',') // 按逗号拆分
+    | std::views::transform([](auto&& part) {
+        return std::stoi(std::string(part.begin(), part.end()));
+    }) // 转换为整数
+    | std::ranges::to<std::vector<int>>(); // 收集到vector中
+// 现在numbers的类型是std::vector<int>，包含了整数1到5
 \end{minted}
+
 实际上在这里的flat也是一个“视图”，它并没有创建一个新的容器，而是提供了一种方式来迭代嵌套容器中的所有元素。这样我们就可以避免创建额外的中间容器，从而提高性能。换句话说，在不创建视图或中间容器的情况下，我们只能通过嵌套循环来访问这些元素，而使用视图则可以让代码更简洁、更高效。
 
 视图有着\textbf{不可变性}，也就是说，无论怎样操作一个视图，都不会改变其引用的原始数据，这使得我们可以极为放心的使用数据。
