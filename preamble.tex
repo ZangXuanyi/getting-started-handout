@@ -4,10 +4,11 @@
 
 %---------- 常用宏包 ----------
 \usepackage{geometry}
-\geometry{b5paper, margin=0.5in}
+\geometry{margin=2cm}
 \usepackage{amssymb,amsmath,amsthm}
 \usepackage{fontspec}
-\usepackage{xeCJK}
+% \usepackage{xeCJK}
+\usepackage[bibstyle=alphabetic, backend=biber, sorting=ynt]{biblatex}
 \usepackage{graphicx}
 \graphicspath{{./images/}}
 \usepackage{longtable,array,booktabs}
@@ -15,7 +16,7 @@
 \usepackage{multicol}
 \usepackage{subcaption}
 \usepackage{enumitem}
-\usepackage{listings}
+% \usepackage{listings}
 \usepackage[table]{xcolor}
 \usepackage{tcolorbox}
 \tcbuselibrary{skins,xparse,most,breakable}
@@ -40,23 +41,15 @@
 
 %---------- 列表、代码、脚注 ----------
 \setlist{nosep}
-\lstset{
-  basicstyle=\ttfamily\small,
-  keywordstyle=\color{blue},
-  commentstyle=\color{green!50!black},
-  stringstyle=\color{red},
-  numbers=left,numberstyle=\small\color{gray},stepnumber=1,numbersep=5pt,
-  backgroundcolor=\color{white},
-  showspaces=false,showstringspaces=false,breaklines=true,frame=single
-}
+
 \SetAlFnt{\small}
 
 % 自定义 minted 样式
 \setminted{
-    fontsize=\small,           % 字体大小
+    % fontsize=\small,           % 字体大小
     baselinestretch=1.0,       % 行间距
     linenos=true,              % 行号
-    frame=lines,               % 边框样式
+    frame=single,               % 边框样式
     framesep=2mm,              % 边框间距
     rulecolor=\color{black},   % 边框颜色
     numbersep=5pt,             % 行号间距
@@ -65,13 +58,12 @@
     showspaces=false,          % 不显示空格
     showtabs=false,            % 不显示制表符
     tabsize=4,                 % 制表符大小
-    % url=false,
 }
 
 \let\oldnameref\nameref
 \renewcommand{\nameref}[1]{%
-  《 \oldnameref{#1}%
-  》% 
+    《 \oldnameref{#1}%
+    》%
 }
 
 \DeclareNewFootnote{B}[roman]
@@ -81,8 +73,8 @@
 % 重新定义 \href：正文蓝色下划线 + 外部箭头 + 底部脚注
 \let\oldhref\href
 \renewcommand{\href}[2]{%
-  \oldhref{#1}{#2}%
-  \footnotetextB{\textbf{#2}: \url{#1}}%
+    \oldhref{#1}{#2}%
+    \footnotetextB{\textbf{#2}: \url{#1}}%
 }
 \makeatother
 
@@ -97,65 +89,7 @@
 \newtcolorbox{answer}{enhanced,colback=green!4!white,colframe=green!65!black,coltitle=white,fonttitle=\bfseries,title=答案,top=2mm,bottom=2mm,left=2.5mm,right=2.5mm,boxrule=0.6pt,breakable,fontupper=\small,before upper={\setlength{\parindent}{2em}}}
 \newtcolorbox{exercise}[1][]{enhanced,colback=violet!4!white,colframe=violet!70!black,coltitle=white,fonttitle=\bfseries,title={\IfBlankTF{#1}{练习}{练习：#1}},top=2mm,bottom=2mm,left=2.5mm,right=2.5mm,boxrule=0.6pt,breakable,fontupper=\small,before upper={\setlength{\parindent}{2em}}}
 \newtcolorbox{thinking}{enhanced,colback=yellow!4!white,colframe=yellow!70!black,coltitle=white,fonttitle=\bfseries,title=开放性思考和探索,top=2mm,bottom=2mm,left=2.5mm,right=2.5mm,boxrule=0.6pt,breakable,fontupper=\small,before upper={\setlength{\parindent}{2em}}}
-
-%--------------------------------------------------
-% 1. 阅读材料（可放笑话、历史、吐槽、拓展故事等）
-%--------------------------------------------------
-\newtcolorbox{reading}[1][]{enhanced,
-  colback      = purple!4!white,
-  colframe     = purple!65!black,
-  coltitle     = white,
-  fonttitle    = \bfseries,
-  title        = {\IfBlankTF{#1}{阅读材料}{阅读材料：#1}},
-  top          = 2mm,
-  bottom       = 2mm,
-  left         = 2.5mm,
-  right        = 2.5mm,
-  boxrule      = 0.6pt,
-  breakable,
-  fontupper    = \small,
-  before upper = {\setlength{\parindent}{2em}}%
-}
-
-%--------------------------------------------------
-% 2. 本章概要（章节鸟瞰、知识地图、学习路线）
-%--------------------------------------------------
-\newtcolorbox{outline}{%
-  enhanced,
-  colback      = gray!4!white,
-  colframe     = gray!60!black,
-  coltitle     = white,
-  fonttitle    = \bfseries,
-  title        = 本章概要,
-  top          = 2mm,
-  bottom       = 2mm,
-  left         = 2.5mm,
-  right        = 2.5mm,
-  boxrule      = 0.6pt,
-  breakable,
-  fontupper    = \small,
-  before upper = {\setlength{\parindent}{2em}}%
-}
-
-%--------------------------------------------------
-% 3. 本章前置知识（预备知识、温故提示）
-%--------------------------------------------------
-\newtcolorbox{prerequisite}{%
-  enhanced,
-  colback      = brown!4!white,
-  colframe     = brown!65!black,
-  coltitle     = white,
-  fonttitle    = \bfseries,
-  title        = 本章前置知识,
-  top          = 2mm,
-  bottom       = 2mm,
-  left         = 2.5mm,
-  right        = 2.5mm,
-  boxrule      = 0.6pt,
-  breakable,
-  fontupper    = \small,
-  before upper = {\setlength{\parindent}{2em}}%
-}
+\newtcolorbox{reading}[1][]{enhanced,colback=purple!4!white,colframe=purple!65!black,coltitle=white,fonttitle=\bfseries,title={\IfBlankTF{#1}{阅读材料}{阅读材料：#1}},top=2mm,bottom=2mm,left=2.5mm,right=2.5mm,boxrule=0.6pt,breakable,fontupper=\small,before upper={\setlength{\parindent}{2em}}}
 
 \newtheorem{theorem}{\indent 定理}
 \newtheorem{lemma}[theorem]{\indent 引理}
@@ -172,11 +106,12 @@
 
 %---------- 标题信息 ----------
 \title{\Huge\textbf{北京大学计算机基础能力手册}}
-\author[ ]{可爱大笨蛋}
-% \affil[1]{北京大学学生Linux俱乐部}
-% \affil[ ]{\faGithub\  \texttt{ZangXuanyi/getting-started-handout} }
-% \affil[ ]{\faEnvelope\  \texttt{zangxuanyi@stu.pku.edu.cn} }
+\author[ ]{臧炫懿}
+\affil[ ]{北京大学信息科学技术学院}
+\affil[ ]{北京大学学生Linux俱乐部}
+\affil[ ]{\faGithub\  \texttt{ZangXuanyi/getting-started-handout} }
+\affil[ ]{\faEnvelope\  \texttt{zangxuanyi@stu.pku.edu.cn} }
 \renewcommand*{\Authsep}{, }
 \renewcommand*{\Authand}{, }
 \renewcommand*{\Authands}{, }
-\date{}
+\date{\today}

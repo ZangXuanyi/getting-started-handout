@@ -606,9 +606,9 @@ printf("%d\n", a); // 输出2
 变量的存储类则决定了变量的存储位置、生命周期和可见性。C语言中常见的存储类有以下几种：
 \begin{itemize}
   \item \texttt{auto} ：默认的存储类，表示局部变量，生命周期为代码块执行期间。换句话说，我们常见的 \verb|int a;| 实际上等价于 \verb|auto int a;|。
-  \item \texttt{register} ：建议将变量存储在CPU寄存器中，以提高访问速度，但编译器可以忽略此建议。常用于寄存器优化，但除非写内核或嵌入式，否则一般没有人写这个，而是让编译器自己决定。被 \texttt{register} 关键字修饰的变量不能被取地址。
+  \item \texttt{register} ：建议将变量存储在CPU寄存器中，以提高访问速度，但编译器可以忽略此建议。常用于寄存器优化，但除非写内核或嵌入式，否则一般没有人写这个，而是让编译器自己决定。
   \item \texttt{static} ：表示静态变量，生命周期为整个程序运行期间，但作用域为定义所在的代码块。常用于需要在多次函数调用之间保持值的变量。
-  \item \texttt{global} ：（global 不是关键字）以 \verb|int a;| 形式定义的全局变量，生命周期为整个程序运行期间，作用域为整个 C 程序，通过 \texttt{extern} 关键字来跨文件访问变量。
+  \item \texttt{global} ：表示全局变量，生命周期为整个程序运行期间，作用域为整个文件，甚至可以跨文件访问（通过 \texttt{extern} 关键字）。实际上和全局定义的\verb|int a;|是等价的。
   \item \texttt{extern} ：表示外部变量，声明在其他文件中定义的变量，用于跨文件访问。
   \item \texttt{const} ：表示常变量，值不可修改。
 \end{itemize}
@@ -649,7 +649,7 @@ typedef struct {
 Person person1; // 直接使用别名Person来声明结构体变量person1
 \end{minted}
 
-在特殊情况下甚至允许匿名结构体，例如：
+在特殊情况下甚至允许不具名结构体，例如：
 \begin{minted}{c}
 struct {
     char name[50]; // 姓名
@@ -1296,10 +1296,10 @@ int subtract(int a, int b) {
 
 在编译过程中，编译器会把多个源文件分别处理成多个目标文件。而把多个“目标文件”真正合并成一个可执行文件的过程，叫做“链接”（linking）。链接器会把各个目标文件中的符号（函数和变量）进行解析和合并，从而生成最终的可执行文件。
 
-具体的合并过程大致是这样的。如果我们直接编译上述 \texttt{main.c}，并查看其反汇编，会发现：
+具体的合并过程大致是这样的。如果我们直接编译上述 \texttt{main.c}，并查看其汇编，会发现：
 \begin{minted}{gas}
-    call	0x3d <main+0x3d> # call	add@PLT
-    call	0x4c <main+0x4c> # call subtract@PLT
+    call    add         0x00401000 <add> # 这是胡编的地址，仅作示例
+    call    subtract    0x00401010 <subtract> # 同上
 \end{minted}
 可以看到，编译器并没有把 \texttt{add} 和 \texttt{subtract} 函数的具体实现插入到 \texttt{main} 函数中，而是生成了对这两个函数的调用指令，并且使用了占位符地址。这是因为编译器确实看到了这两个函数的声明，但并不知道这两个函数的具体实现在哪里，故而知道它们是\textbf{外部函数}。故而，编译器会在该源文件的目标文件中，生成对这两个外部函数的“标记”（也就是\textbf{符号}），表示“这里要使用add函数，地址待定”。
 

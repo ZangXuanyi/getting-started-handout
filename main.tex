@@ -1,10 +1,41 @@
-\documentclass[openany,fontset=none]{ctexbook}
+\documentclass[openany,fontset=none, a4paper, oneside]{ctexbook}
 \input{preamble}
 
-% \includeonly{book4/02-c-guidance}
+\includeonly{book3/02-linux}
 
 \begin{document}
 \maketitle
+
+\thispagestyle{empty}  % 无页眉页脚
+\vspace*{\fill}
+\begin{center}
+    \textbf{\Large 版权声明}
+    
+    \vspace{1em}
+    
+    \paragraph{LaTeX 源代码}
+
+    本书的 LaTeX 源代码（包括所有 \texttt{.tex} 文件、宏定义、排版代码）以 \href{https://mozilla.org/MPL/2.0/}{Mozilla Public License 2.0 (MPL-2.0)} 协议发布。
+    
+    \vspace{1.5em}
+    
+    \paragraph{文字内容} 本书的文字内容（包括所有章节正文、说明、例题、练习等）以 \href{https://creativecommons.org/licenses/by/4.0/}{Creative Commons Attribution 4.0 International (CC BY 4.0)} 协议发布。
+    
+    \vspace{1.5em}
+    
+    \paragraph{使用说明} 您可以自由地分享、改编本书内容，但须注明作者及出处。LaTeX 源代码的修改和再分发须遵循 MPL-2.0 协议。
+    
+    \vspace{2em}
+    
+    作者：臧炫懿 
+
+    项目主页：\url{https://github.com/ZangXuanyi/getting-started-handout}
+    
+    协议文本：\url{https://mozilla.org/MPL/2.0/} 和 \url{https://creativecommons.org/licenses/by/4.0/}
+\end{center}
+\vspace*{\fill}
+\newpage
+
 \frontmatter
 \include{introduction}
 \include{quick-check}
