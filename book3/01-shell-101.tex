@@ -72,11 +72,23 @@ apt install git -y
 
 需要注意的是，终端大多不支持鼠标点击，因此需要全程使用键盘输入命令，用方向键的左右键移动光标。方向键的上下键可以用来浏览历史输入过的命令，这对于重复输入相似命令非常有用。有时候，终端会帮我们提前补全一些命令（表现为半透明文字），我们只需要按下Tab键即可自动补全命令或者文件名。
 
-有的命令执行时间很长，或执行时遇到了错误需要掐断。这时，我们可以按下 \texttt{Ctrl+C} 来终止当前命令的执行。而如果我们仅仅是希望暂停而非终止当前命令的执行，可以按下 \texttt{Ctrl+Z} ，这会将当前命令暂停并挂起，然后你可以输入其他命令。要恢复暂停的命令，可以使用  \texttt{fg}  命令将其恢复到前台继续执行，或者使用 \texttt{bg} 命令将其放到后台继续执行。
+有的命令执行时间很长，或执行时遇到了错误需要掐断。这时，我们可以按下 \texttt{Ctrl+C} 来终止当前命令的执行。而如果我们仅仅是希望暂停而非终止当前命令的执行，可以按下 \texttt{Ctrl+Z} ，这会将当前命令暂停并挂起，然后你可以输入其他命令。
 
-有的时候，命令执行时间实在是太长了，我们不想等着这东西一直运行下去。这时，我们可以在命令后面加上一个 \texttt{\&} 符号，表示让这个命令在后台运行，这样我们就可以继续输入其他命令了。
+要恢复暂停的命令，可以使用 \texttt{fg} 命令将其恢复到前台继续执行。
 
-还有的时候，命令会输出大量的信息，我们不想让这些信息全部显示在屏幕上。这时，我们仅需要重定向其输出，也就是在命令的末尾加上 \texttt{> output.txt} ，这样命令的输出就会被写入到一个名为 \texttt{output.txt} 的文件中，而不是显示在屏幕上。如果我们希望将输出追加到文件的末尾，而不是覆盖文件的内容，可以使用 \texttt{>>} 符号。这个output.txt可以是任意文件名。
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{shell-long-cmd.png}
+  \caption{在Linux上运行一个执行时间较长的命令。使用 \texttt{Ctrl+C} 来中断它的执行；使用 \texttt{Ctrl+Z} 来暂停它的执行；使用 \texttt{fg} 来恢复它的执行。}
+\end{figure}
+
+有的时候，命令执行时间实在是太长了，我们不想等着这东西一直运行下去，但是这个命令不跑还不行。这时，我们可以在命令后面加上一个 \texttt{\&} 符号，表示让这个命令在后台运行，这样我们就可以继续输入其他命令了。
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.5\textwidth]{shell-oneko-bg.png}
+  \caption{在Linux上运行 \texttt{oneko} 命令，并让它在后台运行；然后使用 \texttt{killall} 命令来终止它的运行。}
+\end{figure}
 
 有时候，我们从其他地方复制来了一些命令，或希望将命令的输出复制走。我们知道在终端中 \texttt{Ctrl+C} 是用来终止命令的执行的，这时我们该怎么办呢？这时，我们可以使用鼠标左键选中要复制的内容，然后按下 \texttt{Ctrl+Shift+C} 来复制选中的内容。要将内容粘贴到终端中，可以按下 \texttt{Ctrl+Shift+V} 。这一点是和普通的文本编辑器不同的。另外，虽然很多终端不支持鼠标点击光标，但也有一部分终端支持用鼠标选定一些内容并右键，以显示菜单来进行复制和粘贴操作。
 
@@ -258,54 +270,61 @@ ren Your\Path\Here\* *.jpg # CMD 风格，一般Pwsh兼容
 
 \section{进阶：命令联动}
 
-在 Linux 中，重定向、管道、变量和进程替换是四种把“数据”从一条命令挪到另一条命令（或文件）的核心手段。它们常被混用，但机理各不相同。
+在终端中，重定向、管道、进程替换、Here-String、变量是四种把数据从一条命令挪到另一条命令（或文件）的核心手段。它们常被混用，但机理各不相同。
 
-\subsection{重定向}
+\paragraph{重定向} 重定向指的是将命令的输入或输出从默认的终端重新定向到文件或其他设备。例如，使用 \texttt{>} 可以将命令的标准输出重定向到一个文件中，使用 \texttt{<} 可以将一个文件的内容作为命令的标准输入；使用 \texttt{>>} 可以将命令的标准输出追加到一个文件中。
 
-重定向只认识真正的文件（或文件描述符），有两种： \texttt{>}  把标准输出定向到文件（写）； \texttt{<} 把文件内容定向到标准输入（读）。
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.5\textwidth]{shell-redirect.png}
+  \caption{重定向示例：将命令的输出重定向到文件中，或将文件的内容作为命令的输入。}
+\end{figure}
+
+\paragraph{管道} 管道应当很好理解，在日常生活中通常用于描述一头进一头出的东西。在命令行中，管道指的是将一个命令的输出直接作为另一个命令的输入。例如，使用 \texttt{|} 可以将前一个命令的标准输出连接到后一个命令的标准输入。在Linux中，管道是面向字符串的，即只复制文本数据；而在PowerShell中，管道是面向对象的，前一个命令的输出会被转换成对象传递给后一个命令。
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.5\textwidth]{shell-pipe.png}
+  \caption{管道示例：将一个命令的输出直接作为另一个命令的输入。}
+\end{figure}
+
+这里的管道因为不具有名称，所以也被称为匿名管道。它的效率非常高，因为数据直接在内存中传递，不需要经过磁盘等中间介质。匿名管道的速度比重定向等都要快。
+
+最常见的管道莫过于ls-grep组合：
 \begin{minted}{bash}
-echo "Hello, World!" > hello.txt   # 新建或覆盖文件
-cat < hello.txt                    # 把文件当输入
+ls -al # 这会列出当前目录下的所有文件和目录的详细信息
+grep "pattern" # 这会从输入中查找包含 "pattern" 的行
+ls -al | grep "pattern" # 这会列出当前目录下所有包含 "pattern" 的文件和目录的详细信息
 \end{minted}
 
-\subsection{管道}
-
-管道  \texttt{|}  在内核里创建一条匿名管道，让左边进程的标准输出直接成为右边进程的标准输入，两边同时运行。
-
+\paragraph{进程替换} 进程替换指的是将一个命令的输出作为另一个命令的输入，但不通过匿名管道，而是通过一个特殊的文件描述符或者具名管道来实现。例如，在Linux中，使用 \texttt{<(cmd)} 可以将命令 \texttt{cmd} 的输出作为一个临时文件的输入。例如，以下两个命令是等价的：
 \begin{minted}{bash}
-ls | grep "file"          # 边 ls 边 grep，流式处理
+cowsay <(fortune) 
+fortune | cowsay
 \end{minted}
 
-\subsection{ \texttt{Here-String} }
-
- \texttt{<<< word} 是 Bash 的 here-string 语法，shell 会先把  \texttt{word}  的扩展结果写进一个临时文件（或匿名管道），再把该临时对象作为标准输入递给命令。因此它正好弥补了重定向只能读文件的不足。
-
+最常见的进程替换大概莫过于 \texttt{diff} 命令了。我们经常需要比较两个命令的输出是否一致，所以：
 \begin{minted}{bash}
-grep "file" <<< "$(ls)"   # 等价于 ls | grep "file"，但没用管道
+  diff <(cmd1) <(cmd2)
+  diff <(cat file1) <(cat file2) # 这只用于说明问题，实际上相当于diff file1 file2
 \end{minted}
 
- \texttt{Here-String} 和管道有一定的区别。管道是流式的，边产生边消费； \texttt{Here-String} 必须等整个字符串生成完才能开始消费。
+进程替换的本质是具名管道或文件描述符，和常规的管道（匿名管道）不同，常规的管道是直接连接两个命令的输入输出，而进程替换则是通过一个特殊的文件来实现数据传递。因此，进程替换的效率可能会比管道稍微低一些，因为它需要创建一个临时文件或者具名管道来存储数据；但它的优势在于可以让我们在一些不支持管道的命令中使用另一个命令的输出作为输入，例如一些需要文件路径作为参数的命令。
 
-\subsection{进程替换}
-
-进程替换是一种“把命令输出/输入伪装成文件名”的 Bash 特性。 \texttt{<(cmd)}  把命令的标准输出绑定到一个命名管道（或  \texttt{/dev/fd/N} ），返回一个可读文件名； \texttt{>(cmd)}  则把命令的标准输入绑定到一个命名管道，返回一个可写文件名。对任何“只能读文件”的工具（`diff`、`cat`、`sort`…）来说，这就像凭空多了两个临时文件。
-
+\paragraph{Here-String} Here-String指的是将一个字符串直接作为命令的输入，本质是将字符串写入一个临时文件中，然后将这个临时文件作为命令的输入。因此，Here-String的效率可能也比管道慢些。Here-String的语法是 \texttt{cmd <<< "string"}，它会将字符串 "string" 写入一个临时文件中，然后将这个临时文件作为命令 cmd 的输入。例如，以下两个命令是等价的：
 \begin{minted}{bash}
-diff <(cmd1) <(cmd2)      # 比较两条命令的输出，而无需临时落盘
-sort >(uniq > result.txt) # 把排序结果直接丢给 uniq
+cowsay <<< "$(fortune)"
+fortune | cowsay
 \end{minted}
 
-\subsection{变量与命令替换}
+Here-String平常使用较少，但也有一些特殊场景会使用。
 
- \texttt{\$(cmd)}  是“命令替换”，shell 会等待该命令执行结束，把它的全部标准输出当成一段文本收回来，可以赋给变量，也可以直接嵌入命令行。
-
+\paragraph{变量} 变量一般指的是Shell语言编程的时候所用的、\texttt{\$}开头的东西，例如 \texttt{\$str} 就是一个变量。变量的值可以通过命令的输出或者用户输入来赋值。例如，以下命令将 \texttt{cmd1} 的输出赋值给变量 \texttt{str}，然后将 \texttt{str} 的值作为 \texttt{cmd2} 的输入：
 \begin{minted}{bash}
-out=$(ls)                 # 把 ls 的输出存进变量
-grep "file" <<< "$out"    # 这里用 here-string 消费变量
-diff <(echo "$out") <(ls) # 用进程替换再比一次
+str=$(cmd1)
+cmd2 <<< "$str" # 对的，这实际上就是Here-String的最常见用法！
 \end{minted}
-
- \texttt{\$(cmd)}  本身不是管道，也不是重定向。它只是“把命令输出变成字符串”的一种手段。
+利用变量来进行命令间信息传递的情形要比上述情形更少，但因为其灵活的特征，在一些复杂的场景下也会被使用。
 
 \begin{table}[ht]\small
   \centering
@@ -313,8 +332,8 @@ diff <(echo "$out") <(ls) # 用进程替换再比一次
     \toprule
     机制 & 数据形态 & 左侧何时开始 & 右侧何时开始 \\
     \midrule
-     \texttt{cmd1 | cmd2}  & 管道字节流 & 立即 & 立即 \\
-     \texttt{cmd < file}  & 已有文件 & 立即 & - \\
+    管道 & 字符串或对象 & 立即 & 立即 \\
+    重定向 & 已有文件 & 立即 & - \\
      \texttt{cmd <<< "\$str"}  & 临时文件 & 字符串生成完后 & 字符串生成完后 \\
      \texttt{cmd <(cmd1)}  & 命名管道/FD & 立即 & 立即 \\
      \texttt{str=\$(cmd1); cmd2 <<< "\$str"}  & 变量$\rightarrow$临时文件 & cmd1 结束后 & cmd1 结束后 \\
@@ -322,10 +341,7 @@ diff <(echo "$out") <(ls) # 用进程替换再比一次
   \end{tabular}
 \end{table}
 
-掌握这些手法后，你就可以根据各种实际条件，灵活选择最简洁、最高效的写法。同时，这些写法也组成了 shell 脚本的基础：shell 脚本也仅仅比上述指令多出了变量赋值、流程控制和函数定义而已！
-
-
-
+掌握这些手法后，你就可以根据各种实际条件，灵活选择最简洁、最高效的写法。同时，这些写法也组成了 shell 脚本的基础：shell 脚本也仅仅比上述指令多出了变量赋值、流程控制和函数定义而已！这里就留待大家自行探索 shell 脚本的世界了。
 
 \section{进阶：更好的终端}
 
