@@ -651,12 +651,12 @@ for (const auto& r : ranges)
 
 当定位问题确实在多线程部分时，可以尝试以下工具：
 \begin{itemize}
-    \item \textbf{ThreadSanitizer}：这是一个动态检测工具，可以帮助我们检测多线程程序中的数据竞争和死锁等问题。它通过在编译时插入额外的检查代码，在运行时监控线程之间的内存访问，从而发现潜在的并发问题。使用该工具需要在编译时添加相应的编译选项，例如对于GCC和Clang，可以使用 \texttt{-fsanitize=thread} 选项。
+    \item \textbf{ThreadSanitizer}：这是一个动态检测工具，可以帮助我们检测多线程程序中的数据竞争和死锁等问题。它通过在编译时插入额外的检查代码，在运行时监控线程之间的内存访问，从而发现潜在的并发问题。使用该工具需要在编译时添加相应的编译选项，例如对于GCC和Clang，可以使用 \verb|-fsanitize=thread| 选项。
     \item \textbf{Clang-Tidy}：这是一个静态代码分析工具，可以帮助我们发现多线程程序中的潜在问题。它通过分析源代码，检查线程安全性、锁的使用等方面的问题，从而提高代码的质量和可靠性。使用该工具需要安装Clang，并运行相应的命令行工具。
     \item \textbf{Valgrind-Helgrind}：这是Valgrind工具集中的一个子工具，专门用于检测多线程程序中的数据竞争和死锁等问题。它通过在运行时监控线程之间的内存访问，发现潜在的并发问题。使用该工具需要安装Valgrind，并运行相应的命令行工具。
 \end{itemize}
 
-另，也可以用可视化方式调试，例如 \texttt{chrome://tracing/}，可以把程序运行时的线程调度信息导出来，然后用这个工具查看线程的执行情况，从而发现潜在的问题。或者Intel VTune、Windows Concurrency Visualizer等工具，也能帮助我们分析多线程程序的性能瓶颈和并发问题。实在不行，用 \texttt{std::this\_thread::get\_id()} 打印线程ID，结合日志分析也是一种可行的办法。
+另，也可以用可视化方式调试，例如 \verb|chrome://tracing/|，可以把程序运行时的线程调度信息导出来，然后用这个工具查看线程的执行情况，从而发现潜在的问题。或者Intel VTune、Windows Concurrency Visualizer等工具，也能帮助我们分析多线程程序的性能瓶颈和并发问题。实在不行，用 \verb|std::this\_thread::get\_id()| 打印线程ID，结合日志分析也是一种可行的办法。
 
 \subsection{什么时候不能用多线程？}
 

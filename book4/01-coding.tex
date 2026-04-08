@@ -159,6 +159,12 @@ pacman -S mingw-w64-ucrt-x86_64-gcc
 pacman -S mingw-w64-ucrt-x86_64-gdb
 \end{minted}
 
+如果你还需要Git，同样可以通过MSYS2统一安装，无需单独下载Git for Windows：
+\begin{minted}{bash}
+pacman -S mingw-w64-ucrt-x86_64-git
+\end{minted}
+注意应当安装\texttt{mingw-w64-ucrt-x86\_64-git}包，它是原生Windows 版本；而名为\texttt{git}的包是Cygwin版本，性能较差且可能与VS Code等工具兼容性不佳。Git for Windows本身其实也是基于MSYS2构建的精简环境，因此一般在MSYS2中管理时没有必要再单独安装Git for Windows。
+
 在MSYS2中安装完成后，用户如果想要在Windows终端中使用GCC，则需要设置环境变量，以便在命令行中直接使用编译器命令。
 
 一般情况下，用户需要将MSYS2的bin目录添加到系统的PATH环境变量中。具体步骤如下：
@@ -192,7 +198,7 @@ Copyright © 2025 Free Software Foundation, Inc.
 \end{caution}
 
 \begin{caution}
-  有些同学的Windows系统可能不是使用UTF-8编码的（例如使用GBK编码），这会导致GCC无法正确处理包含非ASCII字符的文件名，从而引发各种奇怪的问题。因此，建议将系统的区域设置更改为使用UTF-8编码。具体步骤见第一章\ref{sec:locale}节。如不愿修改该设置项，则务必注意不要使用非ASCII文件名！
+  有些同学的Windows系统可能不是使用UTF-8编码的（例如使用GBK编码），这会导致GCC无法正确处理包含非ASCII字符的文件名，从而引发各种奇怪的问题。因此，建议将系统的区域设置更改为使用UTF-8编码。具体步骤见第一章 \ref{sec:locale} 节。如不愿修改该设置项，则务必注意不要使用非ASCII文件名！
 \end{caution}
 
 \begin{tip}
@@ -320,7 +326,7 @@ brew install gcc gdb
 \end{itemize}
 一般情况下，修正的方法很简单：如果是环境变量、路径等问题，重新设置就可以；如果是误用GCC调试C++代码的问题，只需要改回G++即可；如果是配置文件问题，杀掉当前所有终端，删除 \texttt{.vscode} 文件夹，然后重新编译调试就可以了。
 
-另外，如果希望使用Code的插件来帮助你编译并运行C/C++代码，则需要打开一个工作文件夹。否则，插件无法为你提供编译和运行的功能。当然，\mintinline{bash}|g++ main.cpp -o main.exe && ./main.exe|也并非不可。
+另外，如果希望使用Code的插件来帮助你编译并运行C/C++代码，则需要打开一个工作文件夹。否则，插件无法为你提供编译和运行的功能。当然， \mintinline{bash}|g++ main.cpp -o main.exe && ./main.exe| 也并非不可。
 
 \subsection{不依赖VS Code的编译方式}
 
@@ -603,7 +609,7 @@ TypeError: unsupported operand type(s) for +: 'int' and 'str'
 
 C系有着自己的调试器：GDB（GNU Debugger），它是一个强大的调试工具，可以在命令行中使用。GDB可以让我们逐行执行代码，查看变量的值，设置断点等。VS Code也集成了GDB，可以通过图形界面进行调试。Python也有类似的调试器：PDB（Python Debugger），它同样可以在命令行中使用，也可以通过VS Code进行调试。
 
-纯命令行调试的方式极为困难（尤其是GDB，需要背诵大量的命令），我们在这里不做介绍。然而，VS Code提供了一个非常友好的调试界面，可以通过图形化的方式进行调试。我们可以在代码中设置断点，逐行执行代码，查看变量的值等。这样可以大大提高调试效率。（当然这需要你安装GDB，安装并配置的过程见\ref{sec:configure-cpp}。）
+纯命令行调试的方式极为困难（尤其是GDB，需要背诵大量的命令），我们在这里不做介绍。然而，VS Code提供了一个非常友好的调试界面，可以通过图形化的方式进行调试。我们可以在代码中设置断点，逐行执行代码，查看变量的值等。这样可以大大提高调试效率。（当然这需要你安装GDB，安装并配置的过程见 \ref{sec:configure-cpp} 。）
 
 我们调试主要有以下几个手段：打日志、打断点、写测试代码。
 

@@ -128,7 +128,7 @@ CPU 并不直接认识“鼠标”或“打印机”，它只认“地址”。x
 
 \subsection{性能与瓶颈——为什么USB3.0跑不满5Gbps？}
 \begin{itemize}
-\item \textbf{协议开销：} 每 1024 字节有效数据要附带 20~30 字节包头、CRC、链路控制字，实际速率 ≈ 4 Gbps；
+\item \textbf{协议开销：} 每 1024 字节有效数据要附带 20~30 字节包头、CRC、链路控制字，实际速率仅约4Gbps；
 \item \textbf{块大小：} FAT32 默认 32 KB 簇，写小文件时主控要做“读-改-写”，带宽骤降；
 \item \textbf{CPU 复制：} 若主板 USB 控制器较老，数据必须经 CPU 内存复制，吃掉 10~20\% 核心；
 \item \textbf{闪存限速：} 低端 U 盘使用 TLC/QLC，持续写 1 GB 后触发缓存用尽，速度从 100 MB/s 跌到 20 MB/s。
