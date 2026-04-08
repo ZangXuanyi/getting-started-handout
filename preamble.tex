@@ -8,7 +8,7 @@
 \usepackage{amssymb,amsmath,amsthm}
 \usepackage{fontspec}
 % \usepackage{xeCJK}
-\usepackage[bibstyle=alphabetic, backend=biber, sorting=ynt]{biblatex}
+% \usepackage[bibstyle=alphabetic, backend=biber, sorting=ynt]{biblatex}
 \usepackage{graphicx}
 \graphicspath{{./images/}}
 \usepackage{longtable,array,booktabs}
@@ -23,7 +23,7 @@
 \usepackage{manyfoot,perpage}
 \usepackage{url}
 \usepackage{nameref}
-\usepackage{xeCJKfntef}
+% \usepackage{xeCJKfntef}
 \usepackage[linesnumbered,ruled,vlined]{algorithm2e}
 \usepackage{metalogo}
 \usepackage{hyperref}
@@ -32,12 +32,12 @@
 \usepackage{authblk}
 
 %---------- 页面与字体 ----------
-\setmainfont{Source Serif Pro}
-\setsansfont{Source Sans Pro}[Scale=MatchLowercase]
-\setmonofont{Source Code Pro}[Scale=MatchLowercase]
-\setCJKmainfont[ItalicFont = * ]{Source Han Serif CN}
-\setCJKsansfont[ItalicFont = * ]{Source Han Sans CN}
-\setCJKmonofont[ItalicFont = * ]{Source Han Sans CN}
+\setmainfont{Noto Serif CJK SC}
+\setsansfont{Noto Sans CJK SC}[Scale=MatchLowercase]
+\setmonofont{Noto Sans Mono CJK SC}[Scale=MatchLowercase]
+\setCJKmainfont[ItalicFont = FZKai-Z03]{Noto Serif CJK SC}
+\setCJKsansfont[ItalicFont = *]{Noto Sans CJK SC}
+\setCJKmonofont[ItalicFont = *]{Noto Sans Mono CJK SC}
 
 %---------- 列表、代码、脚注 ----------
 \setlist{nosep}
@@ -62,8 +62,7 @@
 
 \let\oldnameref\nameref
 \renewcommand{\nameref}[1]{%
-    《 \oldnameref{#1}%
-    》%
+    《 \oldnameref{#1} 》%
 }
 
 \DeclareNewFootnote{B}[roman]
