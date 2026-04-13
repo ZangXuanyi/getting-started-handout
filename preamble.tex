@@ -7,23 +7,20 @@
 \geometry{margin=2cm}
 \usepackage{amssymb,amsmath,amsthm}
 \usepackage{fontspec}
-% \usepackage{xeCJK}
-% \usepackage[bibstyle=alphabetic, backend=biber, sorting=ynt]{biblatex}
 \usepackage{graphicx}
 \graphicspath{{./images/}}
 \usepackage{longtable,array,booktabs}
+\usepackage[toc]{multitoc}
 \usepackage{minted}
 \usepackage{multicol}
 \usepackage{subcaption}
 \usepackage{enumitem}
-% \usepackage{listings}
 \usepackage[table]{xcolor}
 \usepackage{tcolorbox}
 \tcbuselibrary{skins,xparse,most,breakable}
 \usepackage{manyfoot,perpage}
 \usepackage{url}
 \usepackage{nameref}
-% \usepackage{xeCJKfntef}
 \usepackage[linesnumbered,ruled,vlined]{algorithm2e}
 \usepackage{metalogo}
 \usepackage{hyperref}
@@ -32,10 +29,10 @@
 \usepackage{authblk}
 
 %---------- 页面与字体 ----------
-\setmainfont{Noto Serif CJK SC}
-\setsansfont{Noto Sans CJK SC}[Scale=MatchLowercase]
-\setmonofont{Noto Sans Mono CJK SC}[Scale=MatchLowercase]
-\setCJKmainfont[ItalicFont = FZKai-Z03]{Noto Serif CJK SC}
+\setmainfont{Noto Serif CJK SC}[AutoFakeSlant]
+\setsansfont{Noto Sans CJK SC}[Scale=MatchLowercase,AutoFakeSlant]
+\setmonofont{Noto Sans Mono CJK SC}[Scale=MatchLowercase,AutoFakeSlant]
+\setCJKmainfont[ItalicFont = FZKai-Z03,ItalicFeatures = {AutoFakeSlant = false},BoldItalicFont = FZKai-Z03,BoldItalicFeatures = {AutoFakeSlant = false,AutoFakeBold = true}]{Noto Serif CJK SC}
 \setCJKsansfont[ItalicFont = *]{Noto Sans CJK SC}
 \setCJKmonofont[ItalicFont = *]{Noto Sans Mono CJK SC}
 
