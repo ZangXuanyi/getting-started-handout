@@ -246,7 +246,7 @@ call foo
 
 刚才，我们知道了程序是怎么从源码转变成可执行文件的。那么，程序是怎么从可执行文件跑起来的呢？
 
-在Linux中，可执行文件叫做ELF（Executable and Linkable Format）文件。ELF文件包含了程序的代码段（text segment）、数据段（data segment）、堆（heap）、栈（stack）等信息。操作系统通过加载器（loader）将ELF文件加载到内存中，并创建一个新的进程来执行该程序。在Windows中，可执行文件叫做PE（Portable Executable）文件，原理类似。
+在Linux中，可执行文件叫做ELF（Executable and Linkable Format）文件。ELF文件包含了程序的代码段（text segment）、数据段（data segment）、栈（stack）等信息。操作系统通过加载器（loader）将ELF文件加载到内存中，并创建一个新的进程来执行该程序。在Windows中，可执行文件叫做PE（Portable Executable）文件，原理类似。
 
 当我们运行一个可执行文件时，操作系统会将文件加载到内存中，并创建一个新的\textbf{进程}来执行该程序。每一个进程中都会有一个或多个\textbf{线程}，线程是进程中的一个执行单元。每个线程都有自己的寄存器状态和栈空间，但多个线程可以共享进程的内存空间。
 操作系统会为该进程分配内存空间，并将程序的代码和数据加载到内存中。然后，操作系统会将CPU的控制权转移到程序的入口点（通常是 \texttt{main} 函数），开始执行程序。

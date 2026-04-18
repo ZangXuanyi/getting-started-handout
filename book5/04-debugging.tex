@@ -63,6 +63,10 @@
 
  \texttt{ulimit -c unlimited} 命令可以设置core dump文件的大小限制为无限制。然后运行崩溃的程序，等着程序再崩溃一次。然后运行： \texttt{gdb ./your\_program core} 。这会加载core dump文件，并且可以使用 \texttt{bt} 命令查看函数调用栈，使用 \texttt{info locals} 查看局部变量等。
 
+ \begin{note}
+ 你的程序崩溃了，但是没见到 core 文件？这可能是因为在你的系统上，core 文件是由 systemd 管理的。可以尝试 \texttt{coredumpctl debug your\_program} 来调试 core，systemd 会自动帮你使用 gdb 等调试器打开 core 文件。
+ \end{note}
+
 \subsubsection{内存泄漏}
 
 内存泄漏可以使用Valgrind来分析。Valgrind是一个开源的内存调试工具，可以检测内存泄漏、未初始化内存读取等问题。使用Valgrind非常简单，只需要在运行程序时加上 \texttt{valgrind} 命令即可，例如：

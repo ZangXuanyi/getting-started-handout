@@ -656,7 +656,7 @@ for (const auto& r : ranges)
     \item \textbf{Valgrind-Helgrind}：这是Valgrind工具集中的一个子工具，专门用于检测多线程程序中的数据竞争和死锁等问题。它通过在运行时监控线程之间的内存访问，发现潜在的并发问题。使用该工具需要安装Valgrind，并运行相应的命令行工具。
 \end{itemize}
 
-另，也可以用可视化方式调试，例如chrome:://tracing/，可以把程序运行时的线程调度信息导出来，然后用这个工具查看线程的执行情况，从而发现潜在的问题。或者Intel VTune、Windows Concurrency Visualizer等工具，也能帮助我们分析多线程程序的性能瓶颈和并发问题。实在不行，用 \texttt{std::this\_thread::get\_id()} 打印线程ID，结合日志分析也是一种可行的办法。
+另，也可以用可视化方式调试，例如 \texttt{chrome://tracing/}，可以把程序运行时的线程调度信息导出来，然后用这个工具查看线程的执行情况，从而发现潜在的问题。或者Intel VTune、Windows Concurrency Visualizer等工具，也能帮助我们分析多线程程序的性能瓶颈和并发问题。实在不行，用 \texttt{std::this\_thread::get\_id()} 打印线程ID，结合日志分析也是一种可行的办法。
 
 \subsection{什么时候不能用多线程？}
 
