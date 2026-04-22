@@ -88,9 +88,9 @@ Linux内核采用了GPL协议，这使得任何人都可以自由地使用、修
   \end{itemize}
   这些系在软件包管理上，采取了不同的策略：
   \begin{itemize}
-    \item Debian系使用APT包管理器，软件包格式为DEB；
-    \item Red Hat系使用YUM或DNF包管理器，软件包格式为RPM；
-    \item Arch系使用Pacman包管理器，软件包格式为Tar.xz。
+    \item Debian系使用APT包管理器，软件包格式为\texttt{.deb}；
+    \item Red Hat系使用YUM或DNF包管理器，软件包格式为\texttt{.rpm}；
+    \item Arch系使用Pacman包管理器，软件包格式为\texttt{.tar.zst}。
   \end{itemize}
   但是，不同系的发行版实际上最大的区别仅在于包管理器和默认配置上，其他方面并没有太大区别，终端命令行等也完全相似，因此我们并不需要过于纠结。
 \end{tip}
@@ -365,7 +365,7 @@ root@yourcomputer$ /usr/sbin/usermod -aG sudo yourusername
 root@yourcomputer$ exit # 退出root账户。
 \end{minted}
 
-前者表示切换至 root 账户，后者表示为你指定的账户添加管理员权限。有些发行版中 wheel 组表示有 sudo 权限的用户组（例如Arch），也可以用 visudo 编辑 sudo 配置。
+前者表示切换至 root 账户，后者表示为你指定的账户添加管理员权限。有些发行版中 wheel 组表示有 sudo 权限的用户组，也可以用 visudo 编辑 sudo 配置。
 
 用 sudo 的另一个好处是，因为Linux是多用户的系统，所以每一个用户用sudo做了什么都会被记录在日志里，这样就可以追踪到每一个用户的操作，增加了系统的安全性；如果直接使用root账户，那么所有操作都无法区分是哪个用户做的了。
 
@@ -622,4 +622,3 @@ WSL还支持systemd服务，2025年微软终于正式支持了这个功能：
   sudo apt install sl && sl
 \end{minted}
 小火车跑起来，你就拥有了一台“开机即用”的Linux系统！
-

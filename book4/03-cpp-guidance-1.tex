@@ -1170,7 +1170,7 @@ g++ main.cpp myheader.cpp -o myprogram
 \end{minted}
 这样，我们就完成了一个简单的多文件编程。在上述编译命令中，两个源文件的顺序无关紧要。
 
-如果源文件数量过多，那么就不应该使用诸如gcc等工具手动地编译。此时，应该使用 \texttt{Makefile} 、 \texttt{CMake} 、 \texttt{XMake} 、 \texttt{Conan} 等构建工具来管理编译过程。关于后三个构建工具的使用，将在下一章中介绍。
+如果源文件数量过多，那么就不应该使用诸如gcc等工具手动地编译。此时，应该使用 \texttt{Make} 、 \texttt{CMake} 、 \texttt{XMake} 、 \texttt{Conan} 等构建工具来管理编译过程。关于后三个构建工具的使用，将在下一章中介绍。
 
 再强调一遍：在多文件编程中，不建议使用 \texttt{using namespace std;} 。尤其是头文件，严格禁止在头文件中使用该语句！
 
