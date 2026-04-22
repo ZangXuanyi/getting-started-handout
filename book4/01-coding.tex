@@ -159,6 +159,12 @@ pacman -S mingw-w64-ucrt-x86_64-gcc
 pacman -S mingw-w64-ucrt-x86_64-gdb
 \end{minted}
 
+如果你还需要Git，同样可以通过MSYS2统一安装，无需单独下载Git for Windows：
+\begin{minted}{bash}
+pacman -S mingw-w64-ucrt-x86_64-git
+\end{minted}
+注意应当安装\texttt{mingw-w64-ucrt-x86\_64-git}包，它是原生Windows 版本；而名为\texttt{git}的包是Cygwin版本，性能较差且可能与VS Code等工具兼容性不佳。Git for Windows本身其实也是基于MSYS2构建的精简环境，因此一般在MSYS2中管理时没有必要再单独安装Git for Windows。
+
 在MSYS2中安装完成后，用户如果想要在Windows终端中使用GCC，则需要设置环境变量，以便在命令行中直接使用编译器命令。
 
 一般情况下，用户需要将MSYS2的bin目录添加到系统的PATH环境变量中。具体步骤如下：
