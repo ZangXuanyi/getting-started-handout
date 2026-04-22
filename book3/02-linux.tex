@@ -228,7 +228,7 @@ Linux还有一个重要的目录：用户的家目录，通常位于 \texttt{/ho
 例如，如果你会写 Python 的话，写一个从输入读取 2 个数字，输出他们和的程序，输出结果到控制台。在本地跑起来这个程序之后，把  \texttt{\#!/usr/bin/env python3}  放在脚本的第一行（这个特殊的一行叫 Shebang）。给这个脚本加上可执行的属性，然后直接运行这个文本！
 
 \begin{warning}
-  不要执行这类抽象的命令： \texttt{chmod 777 /} ，这会导致系统所有成员全部被视同root用户，进而导致系统无法正常工作。
+  不要执行这类抽象的命令： \texttt{chmod 777 -R /} ，这会导致系统所有成员全部被视同root用户，进而导致系统无法正常工作。其实不建议对任何文件设置777权限。
   
   这样就会导致所有用户都可以写根目录，随便替换 \texttt{/usr/bin/sh} 、 \texttt{/etc/passwd} 、 \texttt{/usr/bin/sudo} 等关键文件，乃至随意植入cron、systemd等定时任务，\textbf{等同于整个安全阵地完全失守，自毁长城}。
 \end{warning}

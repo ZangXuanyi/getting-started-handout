@@ -8,9 +8,50 @@ C++最重要的高级特性是面向对象编程和泛型编程，它们使得C+
 
 面向对象编程是C++的最重要特性之一。它允许我们将数据和操作数据的函数封装在一起，形成一个对象。对象是一个包含数据和方法的实体，它可以表示现实世界中的事物。同时，面向对象编程还提供了继承、多态等特性，可以帮助我们更好地组织代码和数据。
 
+这种编程范式可以通俗地理解为“对主体进行描述”。我们以前可能会写“翻书”：
+\begin{minted}{cpp}
+struct Book {
+    std::size_t pages;  // 当前页数
+    std::size_t totalPages;  // 总页数
+};
+
+void flipBook(Book& book, std::size_t pages) {
+    book.pages += pages;  // 翻书
+    if (book.pages > book.totalPages) {
+        book.pages = book.totalPages;  // 不要翻过头了
+    }
+}
+
+Book myBook{0, 100};  // 创建一本书，当前页数为0，总页数为100
+flipBook(myBook, 5);  // 翻myBook的5页
+\end{minted}
+可以把 \verb|Book| 当成结构体看待。此时，上述函数是一个独立的函数。当这样的独立函数很多的时候，就会导致代码的可读性和可维护性变差，因为它们没有明确的归属关系，难以理解它们与数据之间的联系。
+
+现在则写“书被翻了”：
+\begin{minted}{cpp}
+class Book {
+public:
+    std::size_t pages;  // 当前页数
+    std::size_t totalPages;  // 总页数
+    void flip(std::size_t pages) {  // 翻书方法
+        this->pages += pages; 
+        if (this->pages > this->totalPages) {
+            this->pages = this->totalPages; 
+        }
+    }
+};
+
+Book myBook{0, 100};  // 创建一本书，当前页数为0，总页数为100
+myBook.flip(5);  // myBook被翻了5页
+\end{minted}
+
+这里书是主体（即对象），翻书是对主体的描述（即方法），目的是提高代码的可读性、可维护性和可重用性。
+
+于是就抽象出了“类”的概念：一般有相似特征的东西被归为一类，例如“书”是一个类，即上文的 \verb|class Book|；而每个具体的书则是这个类的一个\textbf{实例}，例如上文的 \verb|myBook| 就是 \verb|Book| 类的一个实例。
+
 \subsection{类和属性}
 
-类是面向对象编程的基本操作单位。如果不熟悉类，可以把类当成“超级struct”来理解，这里面除了存储数据（C++叫“属性”）以外，还可以顺便把函数（C++叫“方法”）也打包进去。
+类里面除了存储数据（C++叫“属性”）以外，还可以顺便把函数（C++叫“方法”）也打包进去。
 \begin{minted}{cpp}
 class Point2D{
 public:
@@ -31,14 +72,16 @@ public:
 于是，这下变量和函数成了一家人：
 \begin{minted}{cpp}
 Point2D p(1, 2);  // 创建一个Point2D对象p，x=1, y=2
-p.move(5, -3);  // 移动点p，它自己知道怎么动！
+p.move(5, -3);  // 点p移动
 cout << Point2D::count << endl;  // 输出类的静态属性
 \end{minted}
 这就是“把数据和对数据的操作绑在一起”——面向对象的核心思想。
 
 在类中，你可以看到我打了一个 \texttt{public} ，这说明以下属性和方法是公开的，其他所有类或者类外的东西都可以访问它。如果你不打 \texttt{public} ，那么默认是私有的（private），只有这个类内部可以访问；另一种访问权限是 \texttt{protect} ，它允许子类访问，但不允许类外的东西访问。（至于什么是子类，请先收起疑问，往下看就懂了）
 
-部分属性前面，你可以发现打了 \texttt{static} 符号。这说明这个属性是静态的，属于 \textbf{类本身} ，而不是类的实例（实例指的就是可操作的对象，例如上面的p）。静态属性可以通过类名直接访问，例如 \texttt{Point2D::count} 。静态属性在所有实例之间共享，因此它们的值是全局的。
+部分属性前面，你可以发现打了 \texttt{static} 符号。这说明这个属性是静态的，属于 \textbf{类本身} ，而不是类的实例。静态属性可以通过类名直接访问，例如 \texttt{Point2D::count} 。静态属性在所有实例之间共享，因此它们的值是全局的。
+
+符号 \texttt{->} 是一个语法糖，实际上是把 \texttt{(*p).x} 简化成了 \texttt{p->x} 的形式。
 
 \subsection{自指}
 
@@ -54,6 +97,7 @@ public:
     }
 };
 \end{minted}
+自指的另一个作用是阻止命名冲突，例如形参和成员变量同名时，可以使用 \texttt{this} 来区分它们，实例见上文 \texttt{Book} 类的构造函数。
 
 \subsection{构造、析构、拷贝和赋值}
 
@@ -139,6 +183,26 @@ public:
 \begin{tip}
   在C\#中，封装有一对非常优雅的名词：Getter和Setter。Getter是获取属性值的方法，Setter是设置属性值的方法，同样是上述的代码我们在C\#中可以写成 \texttt{public int Balance \{ get; private set; \} }，意思是只有类内可以设置这个属性的值，而类内外可以获取这个属性的值。这样就实现了封装，同时又不失优雅。C++中没有这个优雅的语法，因此我们只能像上述代码中手动实现getter。
 \end{tip}
+
+\subsection{工厂构造函数}
+
+在有的时候，构造函数会导致问题。例如，如果我们想要创建一个对象，但是这个对象的构造函数需要一些复杂的参数，或者我们想要根据某些条件来决定创建哪个类的对象，那么构造函数就不太适合了。这时，我们可以使用工厂函数来创建对象。工厂函数是一个普通的函数，它返回一个类的实例。现代的C++编程一般也不建议类暴露公共的构造函数，而是通过工厂函数来创建对象，这样可以更好地控制对象的创建过程。
+
+一般情况下，当有公共的工厂函数的时候，其构造函数一般被要求是私有的，从而强制用户只能通过工厂函数来创建对象。例如：
+\begin{minted}{cpp}
+class Shape {
+private:
+    Shape() {}  // 私有构造函数，禁止直接创建对象
+public:
+    static Shape* createCircle() {  // 工厂函数，创建一个圆形对象
+        return new Circle();
+    }
+    static Shape* createSquare() {  // 工厂函数，创建一个正方形对象
+        return new Square();
+    }
+};
+\end{minted}
+工厂函数大多数情况下是静态的，因为它们不需要访问类的实例属性或方法。
 
 \subsection{继承}
 
@@ -244,6 +308,95 @@ void revealSecret(const MyClass& obj) {
 \end{minted}
 
 一般情况下我们很少用到友元函数，因为它破坏了类的封装性。然而，在某些情况下，友元函数可以提供更高效的访问方式，尤其是在需要频繁访问类的私有属性时。
+
+\subsection{单例模式}
+
+有些情况下，我们希望一个类在整个程序执行过程中有且仅有一个实例。这类操作通常见于一些全局管理类，例如日志管理器、配置管理器等。此时，我们一般使用一种特殊的设计模式，即单例模式（Singleton Pattern）。单例模式通过私有构造函数和静态成员函数来实现，确保类只能被实例化一次，并提供一个全局访问点来获取这个实例。
+
+单例模式的具体实现分多种，比如说懒汉式（Lazy Initialization）和饿汉式（Eager Initialization）。懒汉式在第一次访问实例时才创建实例，而饿汉式在程序启动时就创建实例。
+\begin{minted}{cpp}
+class LazySingleton {
+private:
+    static LazySingleton* instance;  // 静态成员变量，存储单例实例
+    LazySingleton() {}  // 私有构造函数，禁止外部创建实例
+public:
+    static LazySingleton* getInstance() {  // 静态成员函数，获取单例实例
+        if (instance == nullptr) {  // 如果实例不存在，则创建实例
+            instance = new LazySingleton();
+        }
+        return instance;  // 返回单例实例
+    }
+};
+LazySingleton* LazySingleton::instance = nullptr;  // 初始化静态成员变量
+\end{minted}
+
+\begin{minted}{cpp}
+class EagerSingleton {
+private:
+    static EagerSingleton instance;  // 静态成员变量，存储单例实例
+    EagerSingleton() {}  // 私有构造函数，禁止外部创建实例
+public:
+    static EagerSingleton& getInstance() {  // 静态成员函数，获取单例实例
+        return instance;  // 返回单例实例
+    }
+};
+EagerSingleton EagerSingleton::instance;  // 初始化静态成员变量
+\end{minted}
+
+单例模式有时候也会引入诸如线程安全等问题。
+
+\subsection{抽象类和Interface}
+
+抽象类是一个不能被实例化的类，它通常包含一个或多个纯虚函数。纯虚函数是指在基类中声明但没有定义的函数，子类必须重写这些函数才能实例化对象。抽象类的主要作用是为子类提供一个公共的接口，强制子类实现某些特定的方法。
+
+接口（Interface）是一个特殊的抽象类，它只包含纯虚函数，没有任何数据成员。接口定义了一组方法，任何实现这个接口的类都必须提供这些方法的具体实现。接口的主要作用是定义一个协议，确保不同类之间可以通过这个协议进行交互。在C++的命名逻辑中，接口大多被要求以大写字母I开头，例如 \texttt{class IShape} 。
+\begin{minted}{cpp}
+class IShape {  // 定义一个接口，包含一个纯虚函数area()
+public:
+    virtual double area() const = 0;  // 纯虚函数，子类必须实现
+};
+class Circle : public IShape {  // Circle类实现了IShape接口
+private:
+    double radius;  // 圆的半径
+public:
+    Circle(double r) : radius(r) {}  // 构造函数
+    double area() const override {  // 实现area()方法
+        return M_PI * radius * radius;  // 计算圆的面积
+    }
+};
+\end{minted}
+
+\subsection{多重继承和虚继承}
+
+多重继承指的是一个类可以同时继承多个父类。这种特性在某些情况下非常有用，例如当一个类需要同时具有多个父类的功能时。这在C++中是允许的。
+\begin{minted}{cpp}
+class A { public: void foo() { cout << "A::foo" << endl; } };
+class B { public: void foo() { cout << "B::foo" << endl; } };
+class C : public A, public B {  // C同时继承A和B
+public:
+    void foo() {  // 重写foo()方法，解决命名冲突
+        A::foo();  // 调用A的foo()方法
+        B::foo();  // 调用B的foo()方法
+    }
+};
+\end{minted}
+
+但这个东西一定要少用，因为它会引入很多问题，例如命名冲突、二义性等。更上层的问题如所谓的“菱形继承”，即一个类同时继承了两个父类，而这两个父类又继承自同一个祖先类，这时就会引入二义性问题，编译器无法确定应该调用哪个祖先类的成员函数，此时必须使用虚继承（Virtual Inheritance）来解决这个问题。
+
+所谓虚继承，就是在继承时使用 \texttt{virtual} 关键字来声明父类为虚基类，这样就可以确保在多重继承中只有一个祖先类的实例被创建，从而避免了二义性问题。
+\begin{minted}{cpp}
+class A { public: void foo() { cout << "A::foo" << endl; } };
+class B : virtual public A { public: void foo() { cout << "B::foo" << endl; } };
+class C : virtual public A { public: void foo() { cout << "C::foo" << endl; } };
+class D : public B, public C {  // D同时继承B和C
+public:
+    void foo() {  // 重写foo()方法，解决命名冲突
+        B::foo();  // 调用B的foo()方法
+        C::foo();  // 调用C的foo()方法
+    }
+};
+\end{minted}
+所以说多重继承虽然降低了架构的复杂度，但使用时必须慎之又慎。
 
 \section{泛型编程}
 

@@ -966,6 +966,8 @@ printf("结果是: %f\n", result); // 输出结果
   \item \texttt{*} ：解引用运算符，用于通过指针访问变量的值，或“门牌号对应房间里的东西”。
 \end{itemize}
 
+不要反复 \verb|*(&(*(&p)))| 多重嵌套乱玩。在嵌套次数过多的时候，编译器不能正确解析。
+
 有一种特殊的指针被称为“空指针”（null pointer），可以理解为“该指针没有指向任何地块”，常用作为指针的初始值或者表示指针不指向任何有效变量。在C中，可以使用宏 \texttt{NULL} 来表示空指针。例如：
 \begin{minted}{c}
 free(p);    // 释放内存，此时p指向的内存不再有效
@@ -1053,6 +1055,20 @@ printf("5 * 3 = %d\n", funcPtr(5, 3)); // 调用multiply函数
 \end{minted}
 
 这样能够让我们在运行时选择要调用的函数，从而实现更灵活的代码结构。
+
+\subsection{指向结构体的指针}
+
+指向结构体的指针和指向基本数据类型的指针类似。例如：
+\begin{minted}{c}
+struct Point {
+    int x;
+    int y;
+};
+struct Point p = {10, 20};
+struct Point* ptr = &p; // 定义一个指向结构体的指针
+printf("Point p: (%d, %d)\n", ptr->x, ptr->y); // 通过指针访问结构体成员
+\end{minted}
+符号 \texttt{->} 是一个语法糖，实际上是把 \texttt{(*p).x} 简化成了 \texttt{p->x} 的形式。当然，\texttt{(*p).x} 也是合法的写法，但要打出来还是较为麻烦的。
 
 \subsection{动态内存分配}
 
