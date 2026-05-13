@@ -98,7 +98,7 @@ Git有三个目录共同完成版本控制：工作区、暂存区、版本库�
 然后你可以使用以下命令来添加文件到Git仓库中（这个命令的实际意义是把文件添加到暂存区）；
 
 \begin{minted}{bash}
-    git add <filename>
+    git add filename
 \end{minted}
 
 如果我们忘记了当前状态下有哪些文件被修改了，我们可以使用以下命令来查看当前状态：
@@ -125,13 +125,13 @@ Git有三个目录共同完成版本控制：工作区、暂存区、版本库�
 找到你希望回退到的版本的哈希值（前几位即可），然后使用以下命令来回退到该版本（这个命令会把指针回退到指定的版本，丢弃之后的所有内容，然后丢弃暂存区和工作区的所有东西）：
 
 \begin{minted}{bash}
-    git reset --hard <commit_hash>
+    git reset --hard commit_hash
     # 请谨慎使用这一命令！该命令不会保留当前的修改！
 \end{minted}
 
 如果你希望回退到某个版本，但是不想丢失当前的修改，你可以使用以下命令来回退到该版本（这个命令会把版本库后面的东西全部丢弃，清空暂存区，但是保留当前工作区）：
 \begin{minted}{bash}
-    git reset --mixed <commit_hash>
+    git reset --mixed commit_hash
     # 我们更加推荐这个回退方式，--mixed可以省略，或者用--soft替代。
     # 用--soft替代时，不会清空暂存区。
 \end{minted}
@@ -146,8 +146,8 @@ Git有三个目录共同完成版本控制：工作区、暂存区、版本库�
 可以看到，回退操作虽然会把指针回退到指定的版本并丢弃之后的版本，但是之后的版本提交依然存在于版本库中，只是被从树上摘下来了。这些提交被称为“孤立提交”。实际上，对于Git分支上的所有删除或回退操作，都是摘下了某些提交，使其成为孤立提交。如果希望恢复或者删除这些孤立提交，可以执行以下命令：
 \begin{minted}{bash}
     git fsck --lost-found # 查看孤立提交、孤立分支等
-    git checkout <commit_hash> # 进入分离头模式
-    git branch <branch_name> # 创建一个分支来恢复孤立提交
+    git checkout commit_hash # 进入分离头模式
+    git branch branch_name # 创建一个分支来恢复孤立提交
 
     git gc --prune=now # 清理孤立提交
 \end{minted}
@@ -163,7 +163,7 @@ Git有三个目录共同完成版本控制：工作区、暂存区、版本库�
 
 如果试图对Git已经跟踪的文件进行排除，Git是不会理会的。此时，我们需要先把这些文件从Git中删除掉（这个命令的实际意义是把文件从暂存区和版本库中删除掉，但是保留工作区中的文件），然后再把这些文件添加到.gitignore中：
 \begin{minted}{bash}
-    git rm --cached <filename>
+    git rm --cached filename
     # 这个命令会把文件从Git中删除掉，但是保留工作区中的文件。
     # 之后再把这些文件添加到.gitignore中。
 \end{minted}
@@ -196,7 +196,7 @@ Git有三个目录共同完成版本控制：工作区、暂存区、版本库�
 \end{minted}
 这会显示所有修改过的文件和具体的修改内容。如果我们希望比较某个文件的差异，可以使用以下命令：
 \begin{minted}{bash}
-    git diff <filename>
+    git diff filename
 \end{minted}
 
 \section{分支管理}
@@ -216,7 +216,7 @@ git checkout -b feature
 
 以上等价于执行
 \begin{minted}{bash}
-git branch feature <commit-hash of C>
+git branch feature commit-hash-of-C
 git checkout feature
 \end{minted}
 
@@ -502,6 +502,34 @@ PR 的工作流程通常如下：
   \item 合并后，PR 会被关闭，相关的分支可以被删除；也可以保留，以便后续的开发和维护。
 \end{enumerate}
 
+而对于自己（仓库的所有者）而言，也应遵循上述流程：
+\begin{enumerate}
+  \item 在自己的仓库中创建一个新的分支。
+  \item 在新的分支上进行开发，完成某个功能或修复某个问题。
+  \item 把该分支推到远程仓库中。
+  \item 创建一个PR，请求将自己的分支合并到主分支。
+  \item 自己审自己（或者其他开发者一起审，提出建议）。
+  \item 合并，删除远端临时分支。
+  \item 本地回到主分支，拉取远程仓库的代码。
+  \item 删除本地临时分支。
+\end{enumerate}
+
+上述自己审自己的流程可以用以下命令来实现：
+\begin{minted}{bash}
+git checkout -b temp-branch
+# coding...
+git add .
+git commit -m "commit message"
+git push -u origin temp-branch
+# 在GitHub上创建PR，审查，合并，删除远端临时分支
+git checkout main
+git pull origin main
+git branch -d temp-branch
+\end{minted}
+只要涉及到多人协作，有一个分支就应当永远禁止直接提交代码，所有的修改都必须通过PR的方式来进行，这样可以保证代码的质量和规范，也可以保证主要分支的整洁和稳定。
+
+如果只有一个人，那么可以轻松一些，直接在主分支上进行开发和提交，不需要创建新的分支和PR。但是，如果项目规模较大或者需要长期维护，建议还是采用分支管理和本地PR（即本地squash merge后删除临时分支）等方式来规范开发流程，保持代码的整洁和稳定。
+
 \subsection{Lint}
 
 在多人协作中，代码风格和规范的一致性非常重要。Lint 工具可以帮助我们检查代码中的潜在问题和不符合规范的地方。常见的 Lint 工具有 ESLint（用于 JavaScript）、Pylint（用于 Python）等。
@@ -526,3 +554,58 @@ Lint 工具通常会在 PR 中自动运行，并将检查结果反馈给开发�
 有时候合并进dev分支的代码可能存在一些问题，而测试和检查又疏忽，导致合并进main分支之后出现了错误。此时，我们需要直接从main分支分出一个hotfix分支来修复问题，可能会采用一些临时的策略来修复问题。修复完成后，hotfix分支会被合并回main分支。在这之后，main分支会被合并进dev分支以同步代码，然后对hotfix分支上出现的问题加以更稳定的修复。在修复完成后，再将dev分支合并进main分支，此时可以删除hotfix分支。
 
 除了Git Flow，还有其他一些分支管理策略，例如GitHub Flow、GitLab Flow等。GitHub Flow 是 GitHub 提出的分支管理策略，主要用于快速迭代和持续集成，其开发非常轻量级，一般只有 main/master 和 feature 分支。GitLab Flow 则是 GitLab 提出的分支管理策略，多出了产品分支和预发布分支等，分别用于生产环境和预发布环境。
+
+\subsection{github-cli}
+
+\verb|github-cli| 是 GitHub 提供的一个命令行工具，可以帮助我们在命令行中进行 GitHub 相关的操作，例如创建 PR、查看 Issues 等。使用 github-cli 可以让我们在命令行中更方便地管理 GitHub 仓库和项目。不同的Linux发行版大多提供了该工具的包，也可以使用winget和Homebrew等包管理器来安装。
+
+在安装后，第一步是进行身份验证，可以使用以下命令：
+\begin{minted}{bash}
+gh auth login
+\end{minted}
+随后便是一些交互式的步骤，指导我们完成身份验证的流程。在身份验证之前，建议先搞一个SSH密钥，并把公钥添加到GitHub账户中，这样在使用github-cli进行操作时，就不需要每次都输入用户名和密码了。
+
+在此之后，我们便可以通过 \verb|github-cli| 来进行一些 GitHub 相关的操作了，例如创建 PR：
+\begin{minted}{bash}
+  gh pr create --title "feat: something" --body "" --base main
+\end{minted}
+该命令会在当前分支上创建一个 PR，标题为 "feat: something"，描述为空，目标分支为 main。实际上描述为空是常规做法。
+
+随后，如果自己已经测过了，觉得这个 PR 没有问题了，可以直接合并：
+\begin{minted}{bash}
+  gh pr merge --squash --delete-branch
+\end{minted}
+当然这需要有权限。该命令会将 PR 合并到目标分支，并且使用 squash 的方式合并（即把多个提交压缩成一个提交），最后删除临时分支。不过在仓库的设置界面如果设置了“自动删除分支”，那么在合并 PR 后，GitHub 会自动删除临时分支。
+
+于是，上述“自己审自己”的流程就可以通过 github-cli 来实现了：
+\begin{minted}{bash}
+git checkout -b temp-branch
+# coding...
+git commit -am "commit message"
+git push -u origin temp-branch
+gh pr create --title "feat: something" --body "" --base main
+gh pr merge --squash --delete-branch
+git checkout main
+git pull origin main
+git branch -d temp-branch
+\end{minted}
+这样全流程都在本地实现，不需要打开浏览器来操作了。
+
+更进一步的，我们还可以使用别名一步到位：
+\begin{minted}{bash}
+git config --global alias.pr '!gh pr create --title "$1" --body "" --base main'
+git config --global alias.merge '!gh pr merge --squash --delete-branch'
+git config --global alias.sync '!git checkout "$1" && git pull origin "$1"'
+\end{minted}
+上述\verb|!| 表示这是一个 shell 命令，而不是 Git 的内置命令；\verb|$1| 表示第一个参数，即 PR 的标题。这样，我们就可以使用以下命令来创建 PR 和合并 PR 了：
+\begin{minted}{bash}
+# 前面照搬照抄
+git pr "feat: something"
+git merge
+git sync main
+# 删除临时分支
+\end{minted}
+
+于是这样便能更加方便的规范化自己的开发流程了。
+
+该工具还提供了很多其他的功能，例如查看 PR 列表、查看 Issues 列表、查看仓库信息等。我们可以使用 \verb|gh help| 命令来查看所有可用的命令和选项，或者直接访问 GitHub CLI 的官方文档来了解更多信息。
