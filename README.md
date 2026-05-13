@@ -31,7 +31,7 @@ lualatex --shell-escape main.tex
 
 如希望知道本项目作者计划干什么、在做什么以及最近做完了一些什么，可以去Project一节查看。
 
-如希望贡献，**请Fork `main` 分支并开PR；PR时需合并进入 `main` 分支**。
+如希望贡献，**请Fork `main` 分支并开PR；PR时需合并进入 `main` 分支**。本项目的 `main` 分支禁止提交。
 
 如果要开新的part或者chapter请先开Issue讨论。
 
