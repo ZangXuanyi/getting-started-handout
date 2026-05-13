@@ -10,12 +10,12 @@
 
 ## 获取手册
 
-如希望获取本手册，可以直接clone仓库并使用XeLaTeX编译源码。可以使用本地的编译器编译，也可以使用OverLeaf进行编译；从main分支编译的版本可以认为是稳定且错误较少的，从dev分支编译的版本一般是最新的，但是可能存在未完成的占位符，也有可能出现一些错误。
+如希望获取本手册，可以直接clone仓库并使用LuaLaTeX编译源码。可以使用本地的编译器编译，也可以使用OverLeaf进行编译；从main分支编译的版本可以认为是稳定且错误较少的，从dev分支编译的版本一般是最新的，但是可能存在未完成的占位符，也有可能出现一些错误。
 
 **特别说明**：由于本手册使用了 `minted` 宏包进行代码高亮，因此在本地编译时需要安装Python和Pygments，并且需要启用shell-escape选项，例如：
 
 ```bash
-lualatex -shell-escape main.tex
+lualatex --shell-escape main.tex
 ```
 将以上命令重复执行三遍即可。
 
@@ -41,4 +41,4 @@ lualatex -shell-escape main.tex
 
 通知交流群（QQ群）：
 
-- 一群：1059423771
+- #0：1059423771
