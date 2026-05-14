@@ -584,13 +584,7 @@ sudo systemctl start snapshot.timer    # 立即启动定时器
 
 Linux生态中的图形界面可比Windows和mac这两个官方提供且仅此一家的图形界面要更加百花齐放：喜欢简单实用的可以玩桌面环境，喜欢深度定制的可以玩窗口管理器，更Geek的甚至可以玩tty（虽然TUI已经脱离GUI的范畴了），且每一种流派都有不同的实现和社区，满足了不同用户的需求。
 
-我们应当厘清两个概念：
-\begin{description}
-  \item[桌面环境] 指的是一套完整的图形界面系统，提供了一整套解决方案，包括窗口管理器、文件管理器、面板、设置中心（虽然大家一般不爱用）、终端模拟器、文本编辑器等各种工具，主打一个开箱即用的体验。常见的桌面环境有KDE、GNOME、XFCE、Cinnamon、MATE等。
-  \item[窗口管理器] 指的是一套管理窗口的程序，通常不包含完整的桌面环境，搞半天还得自己拼装一些工具来使用，主打一个高度定制化的体验。常见的窗口管理器有i3、bspwm、dwm、awesome等。
-\end{description}
-
-\paragraph{桌面环境}
+\paragraph{桌面环境} 桌面环境指的是一套完整的图形界面系统，提供了一整套解决方案，包括窗口管理器、文件管理器、面板、设置中心（虽然大家一般不爱用）、终端模拟器、文本编辑器等各种工具，主打一个开箱即用的体验。常见的桌面环境有KDE、GNOME、XFCE、Cinnamon、MATE等。
 
 Linux下的桌面环境，基本上就是三巨头的天下：
 \subparagraph{KDE Plasma} 目前功能最丰富、可定制性最强的Linux桌面环境之一，基于Qt。其界面设计现代、流畅、华丽，默认布局与Windows相似，近乎零成本迁移。
@@ -628,7 +622,7 @@ Ubuntu默认使用这个，所以很多人从Windows过来的时候会被mac-lik
 \end{table}
 需要注意的是，虽然说KDE、GNOME、XFCE都有自己的组件，但它们之间并不是完全独立的，用户可以根据自己的喜好来选择使用哪个组件。不过跨桌面使用组件需要稀稀拉拉地安些不相关的依赖，有些令人头痛。
 
-\paragraph{窗口管理器}
+\paragraph{窗口管理器} 窗口管理器指的是一套管理窗口的程序，通常是完整桌面环境的一个组成部分，所以不包含完整的桌面环境。搞半天还得自己拼装一些工具来使用，主打一个高度定制化的体验。常见的窗口管理器有i3、bspwm、dwm、awesome等。
 
 窗口管理器目前基本上就是i3和Openbox的天下了，前者是平铺式窗口管理器，后者是堆叠式的。窗口管理器的好处是极端的轻量化，几百MB内存的机器上都能随便跑；另一个好处是极端的可定制化，用户可以根据自己的需求来配置窗口的行为和外观；缺点是需要一定的学习成本，往往需要手写配置文件，且大多需要自己搭配，不擅长设计的人可能会搞出一个丑到爆的界面来。
 \subparagraph{i3/Sway} 所谓“平铺”，指的是窗口会自动分割屏幕空间，互不重叠，像瓷砖一样铺满整个屏幕。其优势在于纯粹键盘驱动，配置文件是纯文本，初学者需要一两个小时来写出自己的第一个配置文件。如果习惯了VIM或Emacs等键盘驱动的编辑器，那么i3的操作方式会非常自然和高效。
@@ -644,6 +638,102 @@ Sway是i3的Wayland版本，功能和配置方式基本上和i3一样，且支�
 所以说，选哪个桌面环境或者窗口管理器，完全取决于个人的喜好和需求。绝大多数Linux发行版都提供了最小安装选项，这样用户就可以在安装完成后，根据自己的喜好来选择安装哪个桌面环境或者窗口管理器了。
 
 而且，桌面环境和窗口管理器也不是鱼和熊掌，完全可以“我全都要”！例如，我可以在同一台机器上安装KDE和i3，然后在登录界面选择使用哪个桌面环境或者窗口管理器来登录，这样就可以同时享受KDE的华丽和i3的高效了。
+
+\subsection{关于中文输入法}
+
+作为中国人，中文输入法几乎是每一台计算机上都要有的东西。虽然我们不建议使用汉字作为文件名，但如果真心希望把Linux当成一个日常系统，那么中文输入法就是必不可少的了：但凡聊个天、回个邮件、写个文档，只要涉及到中文输入，就离不开输入法。
+
+Linux生态中，最常用的中文输入法框架是 \verb|IBus| 和 \verb|Fcitx|，它们都是开源的输入法框架，提供了丰富的功能和插件，可以满足各种需求。
+
+\paragraph{Fcitx} Fcitx是一个轻量级的、可定制的输入法框架，支持多种输入法引擎，包括拼音、五笔、仓颉等；也支持多种框架下的输入法模块，如XIM、DBus、Wayland、Qt、GTK等。它对\textbf{非GNOME}的桌面环境和窗口管理器有着更好的兼容性和稳定性，因此在KDE、XFCE、i3等环境中使用Fcitx会有更好的体验。
+
+fcitx是一个模块化的输入法，我们需要安装引擎本身以及其他模块来实现输入法的功能。例如，中文必然需要安装 \verb|fcitx5-chinese-addons| 模块，以及其他的词库模块（可选，如中文维基百科词库、萌娘百科词库等）；为了能够在Electron应用中阻止候选框的偏移问题，我们还需要安装一些其余模块（如 \verb|fcitx5-qt| 模块）。
+
+安装完毕后，需要设置环境变量，让系统知道我们要使用fcitx作为输入法框架。可以在对应的shell配置文件中（\verb|~/.bashrc|、\verb|~/.zshrc|等）添加以下内容：
+\begin{minted}{bash}
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS="@im=fcitx"
+\end{minted}
+对于KDE用户也可以通过系统设置来设置输入法框架为fcitx5，不需要手动编辑环境变量。然后也可以通过系统设置来设置fcitx5的输入法引擎和其他模块，并不需要更多复杂的配置。这也能体现出KDE的大而全特性。至于其他的桌面环境和窗口管理器，可能就需要手动编辑环境变量了。
+
+在KDE中使用该输入法时，可能遇到闪烁问题。为了解决该问题，我们需要启用虚拟键盘功能。
+
+在GNOME桌面中使用该输入法时要先禁用IBus，否则会有冲突，导致输入法无法正常使用。
+
+\paragraph{IBus} IBus是许多Linux发行版的默认输入法框架，尤其是在GNOME环境中。我们建议使用GNOME的用户都用IBus，但在其他地方使用IBus的集成体验不好，且其自定义能力也比较有限。其配置与Fcitx的配置大同小异，安装完毕后同样需要设置环境变量：
+\begin{minted}{bash}
+export GTK_IM_MODULE=ibus
+export QT_IM_MODULE=ibus
+export XMODIFIERS="@im=ibus"
+\end{minted}
+剩下的配置略，可以通过更多教程和官方文档来完成。
+
+\subsection{关于Office文档}
+
+Office文档……我的看法是这个算是很多人不用Linux的另一个重要原因了。打游戏尚且可以通过Wine来解决，但这玩意实在太糟糕了！
+
+首先我们必须了解一下Office文档的格式，然后我们就知道为什么这玩意糟糕得要死了。
+\begin{description}
+  \item[doc、xls、ppt] 这些是最早期的Office文档格式。两个最让人诟病的点：第一，他们竟然是binary（怎么会有人用binary存储一个需要反复更改的文档的格式？！）；第二，闭源。于是非MS Office软件只能通过逆向工程来解析这些格式，导致兼容性非常差，甚至有些文档根本无法打开。
+  \item[docx、xlsx、pptx] 这些是Office 2007引入的新的文档格式，基于XML和ZIP压缩，理论上应该更开放、更易解析了。但实际上它们依然是闭源的，没有公开的规范；且这里面用的XML甚至不是标准的XML，而是微软自己定义的XML，导致老老实实解析XML的工具也不能正确解析这些文档，很多文档转移到其他计算机上（甚至是同一计算机不同的Office版本）都会出现兼容性问题，文档在不知不觉中就破坏了（因为有的XML解析器在检查到语法错误的时候会自己修复！），所以说这玩意也不是什么好东西。
+\end{description}
+于是我们就知道为啥非MS Office软件的体验相当糟糕了。
+
+\paragraph{LibreOffice} 这东西是绝大多数Linux发行版预装的办公套件，是完全开源的社区项目。界面风格类似于Office 2003，功能上也基本上覆盖了Office的核心功能（文字处理、表格处理、演示文稿等）。
+
+它们主要的目标其实是ODF（但这东西知名度远不如Office文档格式），虽然也能读写简单的Office文档，但兼容性只能说是差强人意。对包含大量嵌套表格、文本框、公式的docx、对包含复杂动效、母版布局的pptx而言，Libre是完全水土不服的。此外，calc（Libre对标Excel的组件）在处理大量数据的性能远远不如Excel。
+
+\paragraph{WPS} 在Windows上我们对这个不闻不问，但在Linux上这个东西的存在感就非常强了，算是国货之光。
+
+比起LibreOffice来，WPS的界面更现代，功能也更丰富了，尤其是对Office文档的兼容性方面，WPS做得相当不错了，虽然说也不是完全兼容，但至少对于大多数文档来说是可以正常打开和编辑的了。问题是这东西在Linux版本上的功能阉割比较严重，缺VBA宏、缺PDF导出的高级选项和云服务集成。而且在笔者自己的电脑上这玩意卡得要命，最终不得不放弃了它，倒向Libre（Libre至少还能正常使用）。
+
+对于以上两个东西，我的评价都是“不好用”，如果MS是100分的话，那么WPS只能打个70分，Libre只能打个及格的分数。他们的不好用并不是源于其设计缺陷，我们完全可以让微软背这口黑锅。MS Office确实是相当优秀的办公套件（当然其存储格式的设计实在是太糟糕了），但它的闭源和不规范导致了Linux上的办公套件无法提供一个良好的兼容性和用户体验，这也是Linux用户在办公方面的一个痛点。
+
+对此，我们有以下两个替代方案。
+\paragraph{直接上更专业的工具} 既然传统的办公套件烂完，那我们都用Linux了，为什么不上一些更专业的工具呢？当然这直接牺牲了所有的兼容性，不过在科研场合还是这些东西更好用，不管是性能还是专业性都比Office强得多。谁拦着你不让用，谁就是大笨蛋。
+
+\subparagraph{Excel的对标：Python} 众所周知，如果仅仅使用Excel来画个表格，那确实有杀鸡焉用牛刀的嫌疑（虽然大多数情况都是这样，而这种操作用Libre都能胜任）。
+
+Excel的杀手锏其实是函数和宏，它们能够高效地进行数据处理和分析。那么在这种领域，Python的pandas库是专门搞这个的。它的功能远远超过了Excel的函数和宏，且性能比Excel好得没边了：Excel行数上限104万，十几万以上就开始卡，而pandas可以轻松处理数百万乃至数千万行的数据。而且用matplotlib等库来画图，效果不比Excel好得多？
+
+当然，这需要你学习一些 Python 基础知识。但一旦跨过这个门槛，你会发现 Excel 里那些让你头疼的“卡死”“公式报错”“格式乱掉”的问题就根本不存在了。
+
+\subparagraph{Word和Powerpoint的对标：LaTeX和Typst} 这玩意真是老祖宗来了。你写的是一种带标记的纯文本，但是编译出来的是一份非常漂亮的PDF文档。这听起来似乎更麻烦，但实际上好处多多：
+\begin{itemize}
+  \item 格式绝对一致，再也没有“我电脑上三页，别人电脑上两页”的问题。
+  \item 数学公式的支持无敌，代码高亮的支持也极佳，基本上吊打Word公式编辑器。
+  \item 对于学术论文来说，LaTeX是事实上的标准了，Biblatex不比Word的那破参考文献强得多？
+\end{itemize}
+当然，这玩意的学习曲线比较陡峭，尤其是对于那些习惯了所见即所得编辑器的用户来说，可能会觉得非常不友好。不过一旦习惯了它的工作方式，你会发现它的效率和质量是无可比拟的，完全可以专注于内容，剩下的交给引擎，唯一的问题是可能在Beamer中一不小心就写多了，一页装不下，且没有PPT那种花里胡哨的动效。
+
+而PPT和Word的格式问题则会像幽灵一样一直缠绕着你。
+
+不用这个，也可以用Typst，效果大差不差，且更现代化一些，语法也更简洁一些。不过笔者是老古董，还是喜欢LaTeX的那种感觉。
+
+\subparagraph{OneNote的对标：MarkDown} OneNote的功能比较特殊，主要是用来做笔记的，支持文本、图片、手写等多种内容的混合编辑。有些人可能喜欢用Word来达成类似的功能。那么这东西的对标工具其实就是MarkDown了。它是一种轻量级的标记语言，使用简单的语法来格式化文本。
+
+和LaTeX的好处类似，我们完全可以专注于内容，不需要担心格式问题，格式交给渲染器来处理了。对于课程笔记和技术文档、会议记录等场景来说，MarkDown完全可以胜任，且有很多优秀的MarkDown编辑器（如Typora、Obsidian等）可以提供所见即所得的编辑体验。
+
+\subparagraph{Powerpoint的另一个对标：HTML+CSS+JS} 这个可能有点出乎意料，因为这玩意是写网页的工具。但实际上，谁说这玩意不能做静态演示文稿的？如果Beamer或Touying（Typst）对部分情形而言过于学术化、古板、“令人头秃”，没有动效，那这老三样足以满足你对演示文稿的所有需求了。你完全可以用HTML来写内容，用CSS来设计样式，用JS来添加动效，甚至可以用一些现成的库（如Reveal.js、Impress.js等）来帮你快速搭建一个漂亮的演示文稿。
+
+当然，这需要你有一定的前端开发基础。不过你都用Linux了，学点这个应该也无所谓，毕竟语法本身并不算难，真正难的其实在怎样设计一个好看的界面来展示内容。
+
+\paragraph{倒反天罡：VMware和VirtualBox} 除了牺牲兼容性改用更专业的工具之外，我们其实还有另一个选择，具体操作是：搞一个虚拟机，安装一个Windows系统，然后在里面安装Office套件来使用。这样就完全解决了兼容性问题了，毕竟是在原生的Windows环境中运行Office了。
+
+当然这看起来确实相当倒反天罡：大家都只听说过在Windows中搞Linux虚拟机，没听说过在Linux中搞Windows虚拟机的，那这还是太荒诞了。
+
+但不得不说，这还真就是兼容性最好的方案，只不过所有的麻烦全都转嫁给用户头上：虚拟机至少得分配足量的资源，启动还慢得要命，感觉Linux不是这样的。
+
+如果你对 MS Office 的兼容性有“强迫症级别的需求”，那这还真就是除了双系统的唯一选择了。
+
+\subparagraph{Wine：折戟沉沙，壮志未酬} 有人会问Wine能不能跑这个。我们之前提过了，Wine虽然能够运行一些Windows应用程序，但对于Office套件来说，老版本（比如07、10）可能还能勉强运行，但新版本（比如365）基本上是完全不兼容的了，甚至连安装都成问题。这是因为，新版本的Office采用的是C2R流式安装器，本质上不是安装到系统，而是挂载一个虚拟的磁盘镜像来运行的，这种安装方式对于Wine来说是一个巨大的挑战。
+
+既然安装都成问题，那运行就更别提了：技术上可行，实际上崩溃。这东西适合拿来当“我今天又折腾成功了”的谈资，但不适合出现在日常使用的工具列表里。
+
+只有一个情况是例外：你用的是deepin-wine，或者说你用的是deepin衍生的发行版（如统信），那倒是可以把版本提升到16。即便如此，更高版本的Office套件（如365）也是远谈不上完美的。试一试总是好的，不行就认栽，然后全面倒向LaTeX或虚拟机。
+
+不过今年年初发布的 Wine 11.0 在架构上有一个重要更新，于是有用户在 Fedora 上成功安装了Office365，虽然 OneNote 无法工作、图形渲染也有些奇怪，但这至少是一个“能装进去”的信号。
 
 \section{WSL速成指南}\label{sec:wsl}
 
@@ -678,12 +768,12 @@ WSL，或Windows Subsystem for Linux，是微软为Windows 10及更高版本用�
 如果你不喜欢Ubuntu，可以安装别的发行版。微软商店里有很多发行版可供选择，例如Debian、Kali Linux、openSUSE、Fedora等。只需要打开微软商店，搜索“WSL”，然后选择你喜欢的发行版进行安装即可。或者直接用命令行：
 \begin{minted}{bash}
   wsl --list --online # 列出可用发行版
-  wsl --install -d <name> # 安装指定发行版
-  wsl --set-default <name> # 设置默认发行版
+  wsl --install -d name # 安装指定发行版
+  wsl --set-default name # 设置默认发行版
 \end{minted}
 安装完成后，运行
 \begin{minted}{bash}
-  wsl -d <name>
+  wsl -d name
 \end{minted}
 即可进入该发行版的Linux环境。或者在开始菜单找到该发行版的图标，点击即可启动，多个发行版也并不互相影响。
 
@@ -693,10 +783,10 @@ WSL和Windows可以互相随意地访问文件系统，这是WSL往往比虚拟�
 
 在WSL的Linux环境中，Windows的文件系统挂载在 \texttt{/mnt/c} （C盘）、 \texttt{/mnt/d} （D盘）等目录下。你可以通过这些目录访问Windows的文件。例如：
 \begin{minted}{bash}
-  cd /mnt/c/Users/<Windows用户名>/Documents
+  cd /mnt/c/Users/Windows-UserName/Documents
 \end{minted}
 
-而从Windows访问WSL的文件系统，则可以通过路径 \texttt{\textbackslash \textbackslash wsl\$\textbackslash\$<distro-name>} 来访问，上述目录是WSL的根目录，可以直接拖拽文件出入，或用VS Code等编辑器打开。
+而从Windows访问WSL的文件系统，则可以通过路径 \texttt{\textbackslash \textbackslash wsl\$\textbackslash\$distro-name} 来访问，上述目录是WSL的根目录，可以直接拖拽文件出入，或用VS Code等编辑器打开。
 
 \subsection{一口气配好开发环境}
 
@@ -730,9 +820,9 @@ gedit test.txt
   \end{figure}
   \item C盘爆红：如果你能确定你的C盘因WSL而爆红，可以执行：
 \begin{minted}{bash}
-  wsl --export <distro-name> distro.tar
-  wsl --unregister <distro-name>
-  wsl --import <distro-name> <new-location> distro.tar
+  wsl --export distro-name distro.tar
+  wsl --unregister distro-name
+  wsl --import distro-name new-location distro.tar
 \end{minted}
   把WSL的虚拟磁盘搬到别的盘去。上述三行命令的意思分别是，导出一个镜像文件、注销当前发行版、从镜像文件导入到新位置。
   \item 网络异常：WSL的网络是虚拟的NAT网络，有时会出问题。这个问题确实相当常见且棘手。如果希望给自己的3000端口暴露给局域网，需要在Windows端运行：
@@ -771,10 +861,10 @@ WSL还支持systemd服务，2025年微软终于正式支持了这个功能：
 还可以一键备份和还原WSL发行版：
 \begin{minted}{bash}
   wsl --shutdown
-  wsl --export <distro-name> backup.tar
+  wsl --export distro-name backup.tar
   # 这里需要重启计算机以确保WSL完全关闭
-  wsl --unregister <distro-name>
-  wsl --import <distro-name> <new-location> backup.tar
+  wsl --unregister distro-name
+  wsl --import distro-name new-location backup.tar
 \end{minted}
 于是原地复活一个一模一样的WSL发行版。
 
