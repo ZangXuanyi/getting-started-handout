@@ -12,3 +12,4 @@
 
 # minted cache
 _minted/
+.directory
