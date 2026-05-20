@@ -568,23 +568,23 @@ Transformer的成功引发了大量的研究和应用，衍生出了许多变体
 GPT生成文本的过程大致是这样的：
 \begin{enumerate}
     \item 输入一个提示（Prompt），例如
-\begin{minted}{plain}
+\begin{minted}{text}
 今天天气怎么样？
 \end{minted}
     \item 通过一个脚本或其他方式，把这个提示进行拼接，形成一个类似这样的输入：
-\begin{minted}{plain}
+\begin{minted}{text}
 用户：今天天气怎么样？
 助手：
 \end{minted}
     这里的“用户”和“助手”是一些特殊的token，用来区分不同角色的对话内容，帮助模型更好地理解对话的结构和语义。
     \item 把这个输入序列丢给GPT的解码器部分，GPT预测下一个token；
     \item 把预测的token拼接到输入序列的末尾，形成新的输入序列，循环直到生成结束标记或者达到最大长度，例如：
-\begin{minted}{plain}
+\begin{minted}{text}
 用户：今天天气怎么样？
 助手：今天天气晴朗。
 \end{minted}
     \item 如果我们要进行连续对话，那么就继续把新的用户输入拼接到对话历史序列的末尾，例如：
-\begin{minted}{plain}
+\begin{minted}{text}
 用户：今天天气怎么样？
 助手：今天天气晴朗。
 用户：明天呢？
