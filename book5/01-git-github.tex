@@ -609,3 +609,147 @@ git sync main
 于是这样便能更加方便的规范化自己的开发流程了。
 
 该工具还提供了很多其他的功能，例如查看 PR 列表、查看 Issues 列表、查看仓库信息等。我们可以使用 \verb|gh help| 命令来查看所有可用的命令和选项，或者直接访问 GitHub CLI 的官方文档来了解更多信息。
+
+\section{实际工作流操作指南}
+
+我们刚才讲了很多独立的命令和概念。在实际工作中，背诵这些命令和概念是没有意义的，我们必须把理论投入实践中才能创造价值。
+
+我们可能会遇到下述一些常见的情况，这些情况有些可能是常规的，有些可能是预期之外的。读者可以先只看小结标题，想一下自己会怎么做；然后再看解释，对比自己的做法和建议的做法，比较其优劣。同时，最好也先将命令遮住，想一想怎样实现这个建议的做法，并加以实操。
+
+\paragraph{线性的提交} 这是最常见的情况。我们在本地完成一些开发，提交到本地仓库，然后推送到远程仓库中。这个过程非常简单，使用以下命令：
+\begin{minted}{bash}
+git add .
+git commit -m "commit message"
+git push origin main
+\end{minted}
+
+\paragraph{提出PR} 现在我们是协助别人开发。我们Fork了一个仓库，在本地做出了一些修改，现在希望把这些修改合并到原仓库中。此时，我们有两个方法。
+
+第一个方法，是使用GitHub（或者其他平台）的界面来创建PR。我们先把修改推送到自己的远程仓库中，然后在GitHub上创建一个PR，选择目标分支和源分支，填写PR的标题和描述，最后提交PR。
+
+另一个方法，是使用github-cli来创建PR。我们先把修改推送到自己的远程仓库中，然后使用以下命令来创建PR：
+\begin{minted}{bash}
+gh pr create --title "feat: something" --body "" --base main
+\end{minted}
+这样会在当前分支上创建一个 PR，标题为 "feat: something"，描述为空，目标分支为 main。如果希望合并到别人的仓库中，可以使用以下命令：
+\begin{minted}{bash}
+gh pr create --title "feat: something" --body "" --base main --repo owner/repo
+\end{minted}
+
+\paragraph{合并PR} 当我们是PR的维护者时，我们需要审查PR，并决定是否合并。如果PR没有问题，我们可以直接在GitHub上点击“Merge”按钮来合并PR。我们非常建议使用变基策略或压缩提交的方式来合并PR，这样可以保持提交历史的整洁。如果我们使用github-cli来合并PR，可以使用以下命令：
+\begin{minted}{bash}
+gh pr merge --squash --delete-branch
+\end{minted}
+这样会将 PR 合并到目标分支，并且使用 squash 的方式合并（即把多个提交压缩成一个提交），最后删除临时分支。有时候可能无需删除该临时分支（例如这个分支是别人的）。
+
+如果想要采用变基的方式来合并PR，则将上述命令中的 \verb|--squash| 替换为 \verb|--rebase|。变基会比合并更好地保持历史的线性，但不直观。
+
+在实际的仓库中，务必保证主要分支提交历史的线性。具体采用变基还是压缩，还是不压缩，取决于维护者的偏好和团队的习惯。无论如何，保持提交历史的整洁和可读性是非常重要的。
+
+\paragraph{维护仓库} 当我们本人是仓库的维护者，且该仓库有很多人使用时，我们依然建议使用PR的方式开发，以与其余人保持一致。
+
+我们建议对主要分支采取保护措施，例如禁止提交代码、PR需要审查才能合并、禁止强制推送等。这样可以保证主要分支的稳定性和整洁性。但作为仓库的维护者，我们有必要持有强制推送的权限，以便在必要的时候进行紧急修复等操作。在自己是开发的绝对主力，且对自己的代码极度信任时，可以允许自己的代码无需审查也能合并。
+
+为了简化操作（所有操作都在本地完成），我们可以使用github-cli来创建PR和合并PR。这样可以避免频繁地打开浏览器来操作，提高效率。
+\begin{minted}{bash}
+git checkout -b temp-branch
+# coding...
+git commit -am "commit message"
+git push -u origin temp-branch
+gh pr create --title "feat: something" --body "" --base main
+gh pr merge --squash --delete-branch
+git checkout main
+git pull origin main
+git branch -d temp-branch
+\end{minted}
+
+\paragraph{修错}
+
+当我们发现先前提交的代码出现未检查出的小错误时，只要这个错误不大（例如只改一个小笔误），我们就可以直接在本地修改这个错误，然后使用以下命令来修改提交：
+\begin{minted}{bash}
+git add .
+git commit --amend
+\end{minted}
+这会将当前的修改添加到上一次提交中，并且允许我们修改提交信息。如果提交信息没有问题，我们可以添加一个 \verb|--no-edit| 。
+
+如果这个错误已经被推送到远程仓库中，并且我们需要修改这个错误，那么我们在持有强制推送权限的情况下，可以使用以下命令来推送提交：
+\begin{minted}{bash}
+git push --force-with-lease origin main
+\end{minted}
+这里的 \verb|--force-with-lease| 是一个安全的强制推送选项，它会在推送前检查远程仓库是否有新的提交，如果有，则拒绝推送，以避免覆盖他人的工作。不建议单用 \verb|--force|，因为它会直接覆盖远程仓库的代码，可能会导致其他工作丢失。
+
+如果不持有强制推送权限，我们则只能创建一个新的提交来修复这个错误了。虽然这样会增加一个无用提交，但这是最安全的方式，不会影响其他人的工作。
+
+如果发现这个错误已经长久存在了，并且已经被很多人使用了，那么我们就不建议利用其他手段修改这个错误了（这个错误确实是可以通过修改很久远的提交修改的）。因为修改这个错误可能会导致其他人的工作受到影响，甚至引入新的错误。我们建议新开一个提交来修复这个错误。
+
+\paragraph{处理合并冲突（本地）} 当我们试图提交PR的时候，可能会遇到合并冲突的情况。这时，除了使用GitHub等给的编辑器之外，我们还可以在本地来解决合并冲突，随后重新提交PR。具体的大致流程是，我们要先把待合并入的分支拉到本地，然后在本地利用更趁手的编辑器来解决冲突，最后再把修改后的代码推送到远程仓库中。以下是具体的命令：
+\begin{minted}{bash}
+git checkout main
+git pull origin main 
+git checkout feature
+git merge main   # 或使用 rebase: git rebase main
+# conflict happens
+# coding...
+# after resolving conflict
+git add .
+git merge --continue   # 如果用 rebase: git rebase --continue
+git push origin feature
+\end{minted}
+
+如果团队偏好线性历史，建议使用rebase。
+
+\paragraph{紧急修改bug} 当我们发现生产环境中的代码出现了紧急问题时，我们需要立即修复这个问题。如果在使用Git Flow的公司中，我们不能容忍常规流程的效率，此时可以特事特办，先签出一个 \verb|hotfix| 分支修复这个问题，然后将其直接合并进 \verb|main| 分支，最后再将 \verb|main| 分支合并进 \verb|develop| 分支以同步代码。此时的修改可以包括临时的、不稳定的处理方式，等到问题彻底解决之后，再在 \verb|develop| 分支上进行更稳定的修复，并将其合并进 \verb|main| 分支。
+
+但特事特办不代表不能代码审查。甚至说，代码审查永远是必要的。
+
+在这里仅列出临时修复的流程。稳定修复依然要走Git Flow的流程。
+\begin{minted}{bash}
+git checkout -b hotfix
+# debugging...
+git commit -am "fix: something"
+git push -u origin hotfix
+# PR, review, merged
+git pull origin main
+git checkout develop
+git merge main
+git push origin develop
+\end{minted}
+
+\paragraph{分支交错} 有时候粗心把一些提交交到了错误的分支上。此时，我们并不需要摘樱桃。我们可以直接在本地使用 \verb|git rebase| 来修改提交的基底，从而把这些提交移到正确的分支上。以下是具体的命令：
+\begin{minted}{bash}
+git checkout feature
+git rebase --onto main feature~3 feature # 这里假设我们要把 feature 分支上最近的 3 个提交移到 main 分支上
+\end{minted}
+
+如果我们这个“正确的分支”本来就不存在，需要手动创建，则我们可以这样：
+\begin{minted}{bash}
+git branch correct-branch main
+git reset --hard HEAD~3 # 这里假设我们要把最近的 3 个提交移到 correct-branch 分支上
+\end{minted}
+这里是利用了创建分支时分支会指向当前提交的特性来实现的。如果把 \verb|HEAD~3| 改成 \verb|origin/main|，则可以把这个分支重置到远程仓库的 main 分支上，尤其多见于忘记了分支保护规则，将一些提交直接提交到该分支上时的补救措施。
+
+\paragraph{暂存} 有时候某个功能写到一半，需要紧急去做一些其他的工作。但我们不希望提交这个写到一半的功能。此时，我们可以这么做：
+\begin{minted}{bash}
+git stash
+# do something else...
+git stash pop
+\end{minted}
+\verb|git stash| 会把当前的修改保存到一个临时的栈里面，并且恢复到上一次提交的状态。这样我们就可以去做其他的工作了。当我们完成其他的工作之后，可以使用 \verb|git stash pop| 来把之前保存的修改恢复回来。
+
+\paragraph{撤销一个已经被Merge的PR} 当我们发现一个已经被合并的PR出现了问题时，我们需要撤销这个PR。此时，我们可以使用以下命令来撤销这个PR：
+\begin{minted}{bash}
+git checkout main
+git pull origin main
+git revert -m 1 hash   # -m 1 表示保留被合并分支的改动，撤消合并
+git push origin main
+\end{minted}
+这里的 \verb|hash| 是指那个合并提交的哈希值。该命令是较为友好的撤销方式，它会创建一个新的提交来撤销之前的合并提交，而不会直接修改提交历史。这样可以保证代码的安全性和稳定性。不建议直接 \verb|reset| 然后强制推送，除非团队很小，全员知情。
+
+\paragraph{意外提交敏感信息} 假设我们在本地有一个 \verb|.env| 文件存储了密钥或密码等敏感信息，却忘记将这个文件添加到 \verb|.gitignore| 文件中，结果不小心把该文件提交到仓库中去了。此时，我们需要立即撤销（或修改）该提交，并将此文件从git缓存中清除，并阻止git跟踪该文件。
+
+\begin{minted}{bash}
+git rm --cached .env
+echo ".env" >> .gitignore # 一般情况下文本文件末尾都会有空行。这样会把该文本写到最后一行，并依然保留末尾的空行。如果没有空行，则会把该文本写到最后一行的末尾，导致该行无法被正确解析。此时建议"\n.env\n"，或用vim手动编辑.gitignore文件来添加该文本。
+git commit --amend --no-edit
+\end{minted}
+如果更早的提交中也有，此时必须用交互式 \verb|rebase| 来修理提交历史，或使用其他手段，如 \verb|filter-branch| 或 \verb|BFG Repo-Cleaner| 来彻底删除该文件的历史记录。无论如何，即使这样做，也可能会清理不干净的情况，建议修改密码或轮转密钥，来确保安全。
