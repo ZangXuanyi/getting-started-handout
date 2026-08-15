@@ -1,40 +1,32 @@
-\documentclass[openany,fontset=none, a4paper, oneside]{ctexbook}
+\documentclass[openany,fontset=none, oneside]{ctexbook}
 \input{preamble}
 
-% \includeonly{book3/01-shell-101, book3/02-linux}
+% \includeonly{book5/06-design-patterns}
 
 \begin{document}
 \maketitle
 
-\thispagestyle{empty}  % 无页眉页脚
-% \vspace*{\fill}
-\begin{center}
-    \textbf{\Large 版权声明}
+\chapter*{版权声明}
     
-    \vspace{1em}
-    
-    \paragraph{LaTeX 源代码}
+\vspace{1em}
 
-    本书的 LaTeX 源代码（包括所有 \texttt{.tex} 文件、宏定义、排版代码）以 \href{https://mozilla.org/MPL/2.0/}{Mozilla Public License 2.0 (MPL-2.0)} 协议发布。
-    
-    \vspace{1.5em}
-    
-    \paragraph{文字内容} 本书的文字内容（包括所有章节正文、说明、例题、练习等）以 \href{https://creativecommons.org/licenses/by/4.0/}{Creative Commons Attribution 4.0 International (CC BY 4.0)} 协议发布。
-    
-    \vspace{1.5em}
-    
-    \paragraph{使用说明} 您可以自由地分享、改编本书内容，但须注明作者及出处。LaTeX 源代码的修改和再分发须遵循 MPL-2.0 协议。
-    
-    \vspace{2em}
-    
-    作者：臧炫懿 
+本书的 LaTeX 源代码（包括所有 \texttt{.tex} 文件、宏定义、排版代码）以 \href{https://mozilla.org/MPL/2.0/}{Mozilla Public License 2.0 (MPL-2.0)} 协议发布。
 
-    项目主页：\url{https://github.com/ZangXuanyi/getting-started-handout}
-    
-    协议文本：\url{https://mozilla.org/MPL/2.0/} 和 \url{https://creativecommons.org/licenses/by/4.0/}
-\end{center}
-% \vspace*{\fill}
-\newpage
+本书的文字内容（包括所有章节正文、说明、例题、练习等）以 \href{https://creativecommons.org/licenses/by/4.0/}{Creative Commons Attribution 4.0 International (CC BY 4.0)} 协议发布。
+
+您可以自由地分享、改编本书内容，但须注明作者及出处。
+
+作者：臧炫懿 
+
+项目主页：\url{https://github.com/ZangXuanyi/getting-started-handout}
+
+协议文本：\url{https://mozilla.org/MPL/2.0/} 和 \url{https://creativecommons.org/licenses/by/4.0/}
+
+友链：
+\begin{description}
+    \item[人工智能基础知识手册] \url{https://github.com/ZangXuanyi/fai-for-dbd}
+    \item[C++基础能力手册] \url{https://github.com/ZangXuanyi/fcpp-for-dbd} 
+\end{description}
 
 \frontmatter
 \include{introduction}
@@ -61,17 +53,17 @@
 \include{book3/01-shell-101}
 \include{book3/02-linux}
 
-\part{开发环境：让代码能编译能跑}
+% \part{开发环境：让代码能编译能跑}
 
-\include{book4/01-coding}
-\include{book4/02-c-guidance}
-\include{book4/03-cpp-guidance-1}
-\include{book4/03-cpp-guidance-2}
-\include{book4/031-modern-cpp}
-\include{book4/03-cpp-guidance-3}
-\include{book4/04-cpp-project}
-\include{book4/05-python-guidance}
-\include{book4/06-python-packages}
+% \include{book4/01-coding}
+% \include{book4/02-c-guidance}
+% \include{book4/03-cpp-guidance-1}
+% \include{book4/03-cpp-guidance-2}
+% \include{book4/031-modern-cpp}
+% \include{book4/03-cpp-guidance-3}
+% \include{book4/04-cpp-project}
+% \include{book4/05-python-guidance}
+% \include{book4/06-python-packages}
 
 \part{实用主义编程：写出更好的代码}
 
@@ -80,6 +72,7 @@
 \include{book5/03-pragmatic-coding}
 \include{book5/04-debugging}
 \include{book5/05-data-exchange}
+% \include{book5/06-design-patterns}
 
 \part{原理速览：知其然，更知其所以然}
 
@@ -95,10 +88,10 @@
 \include{tools/02-latex}
 \include{tools/03-latex-advanced}
 
-\part{延伸进阶阅读}
+% \part{延伸进阶阅读}
 
-\include{advanced/multitask}
-\include{advanced/nn}
+% \include{advanced/multitask}
+% \include{advanced/nn}
 
 \backmatter
 \include{postscript}

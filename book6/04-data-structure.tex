@@ -36,12 +36,12 @@ std::array<int, 10>;  // C++风格的顺序表
 \begin{minted}{cpp}
 struct Node {
     int data;
-    std::shared_ptr<Node> next;
+    std::unique_ptr<Node> next;
     Node(int val) : data(val), next(nullptr) {}
 }; // 平凡且标准的类型，没有自定义析构函数和方法等，因此用结构体更合适
 class LinkedList {
 private:
-    std::shared_ptr<Node> head;
+    std::unique_ptr<Node> head;
 public:
     LinkedList() : head(nullptr) {}
     void insert(int val);

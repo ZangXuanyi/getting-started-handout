@@ -54,9 +54,9 @@ IDE（集成开发环境，Integrated Development Environment）是一种软件�
 但是它们的缺点非常明显：Visual Studio（一般简称VS）和PyCharm都非常臃肿，尤其是前者如果安装全家桶需要大量的磁盘空间和内存资源。同时，它们更注重于超大型项目的开发，这一“超大”往往动辄涉及数十万甚至上百万行代码，我们日常学习使用的代码量远远达不到这个级别，只能说是“杀鸡焉用牛刀”。VS的另一个缺点是它实际上专精于Windows平台和微软的.NET生态系统，虽然它也支持C++和Python等语言，但很笨重。至于DevC++，它的功能少，且只支持C/C++。虽然比较适合初学者，但扩展性极差，完全无法满足更复杂的开发需求。因此，我并不推荐初学阶段就使用这些IDE。从长远来看，使用更加通用的编辑器会更有利于你在编程世界中游刃有余。
 
 \begin{note}
-  Visual Studio 把一个工作目录视为一个“项目”，当用户使用编译功能时会把整个项目编译一遍。而在同一个项目中，不能同时存在多个同名的变量和函数，因此即使我们在VS中新建了不同的C++文件且他们在逻辑上并无任何关联，但是VS依然会把它们视为同一个项目的一部分，从而导致命名冲突的问题。对于初学者来说，这无疑是一个巨大的坑，往往表现为“我这个 \texttt{main} 函数怎么出现了重定义的错误？”。
+  Visual Studio 把一个工作目录视为一个“项目”，当用户使用编译功能时会把整个项目编译一遍。而在同一个项目中，不能同时存在多个同名的变量和函数，因此即使我们在VS中新建了不同的C++文件且他们在逻辑上并无任何关联，但是VS依然会把它们视为同一个项目的一部分，从而导致命名冲突的问题。对于初学者来说，这无疑是一个巨大的坑，往往表现为“我这个 \verb|main| 函数怎么出现了重定义的错误？”。
 
-  另外，VS出于安全性考量，禁用了C系的一部分函数，例如 \texttt{printf} 。当我们试图对这些函数进行调用时，VS会报错并提示我们使用更安全的版本，例如 \texttt{printf\_s} 。这无疑给初学者带来了不必要的困扰。当然这个困扰并非不能解决，只需要在文件开头定义宏 \texttt{\#define \_CRT\_SECURE\_NO\_WARNINGS} 即可，但这无疑增加了学习的难度。另外， \texttt{printf\_s} 等并不是标准函数，这会导致代码的可移植性变差。
+  另外，VS出于安全性考量，禁用了C系的一部分函数，例如 \verb|printf| 。当我们试图对这些函数进行调用时，VS会报错并提示我们使用更安全的版本，例如 \verb|printf_s| 。这无疑给初学者带来了不必要的困扰。当然这个困扰并非不能解决，只需要在文件开头定义宏 \verb|#define _CRT_SECURE_NO_WARNINGS| 即可，但这无疑增加了学习的难度。另外， \verb|printf_s| 等并不是标准函数，这会导致代码的可移植性变差。
 
   综上所述，我非常建议新手远离VS。每一年都会有大量的同学因为使用VS而陷入困境，浪费了大量的时间和精力。
 \end{note}
@@ -138,7 +138,7 @@ VS Code的搜索和替换功能支持正则表达式，可以帮助我们更高�
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.8\textwidth]{103/regex.png}
+  \includegraphics[width=0.5\textwidth]{103/regex.png}
   \caption{VS Code中的正则替换实例}
 \end{figure}
 
@@ -174,7 +174,7 @@ pacman -S mingw-w64-ucrt-x86_64-git
 \begin{itemize}
   \item 找到MSYS2的安装目录，通常是 \texttt{C:\textbackslash msys64} 。
   \item 将 \texttt{C:\textbackslash msys64\textbackslash ucrt64\textbackslash bin} 添加到系统的PATH环境变量中。（请按照你的实际安装路径进行调整，下同）
-  \item 在PowerShell或者CMD中运行以下命令来验证是否配置成功： \texttt{gcc --version} 。如果输出了GCC的版本信息，则说明配置成功。
+  \item 在PowerShell或者CMD中运行以下命令来验证是否配置成功： \mintinline{bash}{gcc --version} 。如果输出了GCC的版本信息，则说明配置成功。
   \item 需要在Windows的PowerShell或者CMD中运行POSIX风格工具时，也可以将下列路径也添加到用户的PATH环境变量中： \texttt{C:\textbackslash msys64\textbackslash usr\textbackslash bin} 。但这样具有环境冲突风险，需要注意保证该变量的查找顺序在比ucrt64的bin目录更靠后，以避免冲突。
 \end{itemize}
 
